@@ -350,85 +350,13 @@
 <blockquote>
 <p>代码</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">    [self addChildViewController:self.leftVc];</div><div class="line">    [self addChildViewController:self.mainVc];</div><div class="line">    </div><div class="line">    [self.mainVc didMoveToParentViewController:self];</div><div class="line">    </div><div class="line">    [self.leftVc didMoveToParentViewController:self];</div><div class="line"></div><div class="line">//添加屏幕边缘平移手势</div><div class="line">    [self.mainVc.view addGestureRecognizer:self.pan1];</div><div class="line">    </div><div class="line">    //添加平移手势</div><div class="line">    [self.mainVc.view addGestureRecognizer:self.pan2];</div><div class="line">    </div><div class="line">    //添加点击手势</div><div class="line">    [self.mainVc.view addGestureRecognizer:self.tap];</div><div class="line">   ``` </div><div class="line"></div><div class="line">关于手势的处理，模拟一个侧滑的临界速度，姑且定位1000.</div></pre></td></tr></table></figure>
-<p>#pragma mark—手势处理<br>-(void)screenGesture:(UIPanGestureRecognizer *)pan{</p>
-<pre><code>//移动的距离
-CGPoint point = [pan translationInView:pan.view];
-//移动的速度
-CGPoint verPoint =  [pan velocityInView:pan.view];
-
-
-
-self.mainVc.view.lx_x += point.x;
-
-//边界限定
-if (self.mainVc.view.lx_x &gt;= MAXLEFTSLIDEWIDTH) {
-    self.mainVc.view.lx_x = MAXLEFTSLIDEWIDTH;
-}
-if (self.mainVc.view.lx_x &lt;= 0) {
-    self.mainVc.view.lx_x = 0;
-}
-
-//蒙版的阴影限定
-self.maskView.alpha = self.mainVc.view.lx_x /MAXLEFTSLIDEWIDTH;
-
-
-if (pan.state == UIGestureRecognizerStateEnded) {
-
-    //判断手势
-    if (pan == self.pan1) {
-
-
-        if (verPoint.x &gt; MAXSPEED) {
-
-             [self showLeftVc];
-
-        }else{
-
-            if (self.mainVc.view.lx_x &gt;= Device_Width/2) {
-
-                [self showLeftVc];
-
-            }else{
-
-                [self hideLeftVc];
-
-            }
-        }
-    }else{
-
-        if (verPoint.x &lt; - MAXSPEED) {
-
-            [self hideLeftVc];
-        }else{
-
-            if (self.mainVc.view.lx_x &gt;= Device_Width/2) {
-
-
-                [self showLeftVc];
-
-            }else{
-
-                [self hideLeftVc];
-
-            }
-        }
-    }
-
-
-}
-
-[pan setTranslation:CGPointZero inView:pan.view];
-</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">关于添加的手势和系统的边缘手势冲突的问题，解决如下:</div><div class="line">在子类化`UINavigationController`</div></pre></td></tr></table></figure></p>
-<ul>
-<li><p>(void)viewDidLoad {<br>  [super viewDidLoad];<br>  // Do any additional setup after loading the view.<br>  self.navigationBar.translucent = YES;</p>
-<p>  self.navigationBar.barTintColor = LXMainColor;</p>
-<p>  self.interactivePopGestureRecognizer.delegate = self;<br>}<br>#pragma mark–防止与添加到tabbar的手势冲突–<br>-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{<br>  if (self.childViewControllers.count &lt;= 1) {</p>
-<pre><code>return NO;
-</code></pre><p>  }<br>  return YES;<br>}<br>```</p>
-</li>
-</ul>
-<p>发现<code>QQ</code>的二级页面添加了全屏手势，所以也把<code>UINavigationController+FDFullscreenPopGesture.h</code>添加了进去，发现原来冲突的手势也不冲突了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[self addChildViewController:self.leftVc];</div><div class="line">[self addChildViewController:self.mainVc];</div><div class="line"></div><div class="line">[self.mainVc didMoveToParentViewController:self];</div><div class="line"></div><div class="line">[self.leftVc didMoveToParentViewController:self];</div><div class="line"></div><div class="line">//添加屏幕边缘平移手势</div><div class="line">[self.mainVc.view addGestureRecognizer:self.pan1];</div><div class="line"></div><div class="line">//添加平移手势</div><div class="line">[self.mainVc.view addGestureRecognizer:self.pan2];</div><div class="line"></div><div class="line">//添加点击手势</div><div class="line">[self.mainVc.view addGestureRecognizer:self.tap];</div></pre></td></tr></table></figure>
+<p>关于手势的处理，模拟一个侧滑的临界速度，姑且定位1000.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">#pragma mark---手势处理</div><div class="line">-(void)screenGesture:(UIPanGestureRecognizer *)pan&#123;</div><div class="line">    </div><div class="line">    //移动的距离</div><div class="line">    CGPoint point = [pan translationInView:pan.view];</div><div class="line">    //移动的速度</div><div class="line">    CGPoint verPoint =  [pan velocityInView:pan.view];</div><div class="line">    </div><div class="line">   </div><div class="line">    </div><div class="line">    self.mainVc.view.lx_x += point.x;</div><div class="line">    </div><div class="line">    //边界限定</div><div class="line">    if (self.mainVc.view.lx_x &gt;= MAXLEFTSLIDEWIDTH) &#123;</div><div class="line">        self.mainVc.view.lx_x = MAXLEFTSLIDEWIDTH;</div><div class="line">    &#125;</div><div class="line">    if (self.mainVc.view.lx_x &lt;= 0) &#123;</div><div class="line">        self.mainVc.view.lx_x = 0;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //蒙版的阴影限定</div><div class="line">    self.maskView.alpha = self.mainVc.view.lx_x /MAXLEFTSLIDEWIDTH;</div><div class="line">   </div><div class="line">    </div><div class="line">    if (pan.state == UIGestureRecognizerStateEnded) &#123;</div><div class="line">        </div><div class="line">        //判断手势</div><div class="line">        if (pan == self.pan1) &#123;</div><div class="line">            </div><div class="line">            </div><div class="line">            if (verPoint.x &gt; MAXSPEED) &#123;</div><div class="line">                </div><div class="line">                 [self showLeftVc];</div><div class="line">                </div><div class="line">            &#125;else&#123;</div><div class="line">                </div><div class="line">                if (self.mainVc.view.lx_x &gt;= Device_Width/2) &#123;</div><div class="line">                    </div><div class="line">                    [self showLeftVc];</div><div class="line">                    </div><div class="line">                &#125;else&#123;</div><div class="line">                    </div><div class="line">                    [self hideLeftVc];</div><div class="line">                    </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;else&#123;</div><div class="line">            </div><div class="line">            if (verPoint.x &lt; - MAXSPEED) &#123;</div><div class="line">                </div><div class="line">                [self hideLeftVc];</div><div class="line">            &#125;else&#123;</div><div class="line">                </div><div class="line">                if (self.mainVc.view.lx_x &gt;= Device_Width/2) &#123;</div><div class="line">                    </div><div class="line">                    </div><div class="line">                    [self showLeftVc];</div><div class="line">                    </div><div class="line">                &#125;else&#123;</div><div class="line">                    </div><div class="line">                    [self hideLeftVc];</div><div class="line">                    </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    [pan setTranslation:CGPointZero inView:pan.view];</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>关于添加的手势和系统的边缘手势冲突的问题，解决如下:在子类化<code>UINavigationController</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">-(void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view.</div><div class="line">    self.navigationBar.translucent = YES;</div><div class="line"></div><div class="line">    self.navigationBar.barTintColor = LXMainColor;</div><div class="line">    </div><div class="line">    self.interactivePopGestureRecognizer.delegate = self;</div><div class="line">&#125;</div><div class="line">#pragma mark--防止与添加到tabbar的手势冲突--</div><div class="line">-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer&#123;</div><div class="line">    if (self.childViewControllers.count &lt;= 1) &#123;</div><div class="line">        return NO;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>发现<code>QQ</code>的二级页面添加了全屏手势,所以也把<code>UINavigationController+FDFullscreenPopGesture.h</code>添加了进去，发现原来冲突的手势也不冲突了。</p>
+</blockquote>
 <p>效果图：<img src="http://upload-images.jianshu.io/upload_images/1694376-b0fae02e3a47c794.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="仿QQ侧滑.gif"></p>
 <p>demo地址：<a href="https://github.com/liuxinixn/LXQQSlide" target="_blank" rel="noopener">仿QQ侧边栏</a></p>
 
@@ -523,6 +451,15 @@ if (pan.state == UIGestureRecognizerStateEnded) {
 
           
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>
