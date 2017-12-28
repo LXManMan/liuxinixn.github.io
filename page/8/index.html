@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/05/01/封装一个UINavgationBar的渐变效果/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/07/iOS-环信3-2-3-离线推送，坑点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -281,7 +281,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/01/封装一个UINavgationBar的渐变效果/" itemprop="url">iOS 封装一个UINavgationBar的渐变效果</a></h1>
+                <a class="post-title-link" href="/2017/02/07/iOS-环信3-2-3-离线推送，坑点/" itemprop="url">iOS -环信3.2.3 离线推送，坑点</a></h1>
         
 
         <div class="post-meta">
@@ -293,8 +293,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-01T20:19:35+08:00">
-                2017-05-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-07T20:19:35+08:00">
+                2017-02-07
               </time>
             
 
@@ -333,17 +333,12 @@
       
         
           
-            <p>效果图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-576161be9612864e.gif?imageMogr2/auto-orient/strip" alt="滚动渐变NavBar.gif"></p>
-<p>在有UIScrollview的页面中，做一个NavBar 的渐变过渡，最好还是抽取出来。</p>
-<p>使用方法,需要注意的是，恢复navbar的颜色最好是放在viewDidDisappear中，否则侧滑返回的时候，Navbar的颜色会出现问题。渐变的处理，就是把UIScrollview传给工具类即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">-(void)viewDidDisappear:(BOOL)animated&#123;</div><div class="line">    [super viewDidDisappear:animated];</div><div class="line">    [LXGradientNavManager resStoreToDefaultNavigationBar];</div><div class="line"></div><div class="line">&#125;</div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view.</div><div class="line">    </div><div class="line">    </div><div class="line">    [self setUp];</div><div class="line">    </div><div class="line">    [LXGradientNavManager managerWithController:self];</div><div class="line">    </div><div class="line">    [LXGradientNavManager setOrignColor:[UIColor clearColor]];</div><div class="line">    </div><div class="line">    [LXGradientNavManager setZeroAlphaOffset:0];</div><div class="line">    [LXGradientNavManager setFullAlphaOffset:self.tableView.tableHeaderView.height];</div><div class="line">    [LXGradientNavManager setDefaultColor:[UIColor hexStringToColor:@&quot;F9F9F9&quot;]];</div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)scrollViewDidScroll:(UIScrollView *)scrollView&#123;</div><div class="line">    [LXGradientNavManager dealGradientWithScrollView:scrollView];</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>工具类如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">@interface LXGradientNavManager : NSObject</div><div class="line">@property(nonatomic,strong)UIColor *defaultColor; //默认的Nav的颜色</div><div class="line"></div><div class="line">@property(nonatomic,strong)UIColor *orignColor; //最开始的颜色</div><div class="line"></div><div class="line">@property(nonatomic,assign)float zeroAlphaOffset;</div><div class="line"></div><div class="line">@property (nonatomic, assign) float fullAlphaOffset;</div><div class="line"></div><div class="line">+(void)setOrignColor:(UIColor *)color;</div><div class="line"></div><div class="line">+ (void)setDefaultColor:(UIColor *)color;</div><div class="line"></div><div class="line">+ (void)setZeroAlphaOffset:(float)offset;</div><div class="line"></div><div class="line">+ (void)setFullAlphaOffset:(float)offset;</div><div class="line"></div><div class="line"></div><div class="line">+(void)managerWithController:(UIViewController *)viewController;</div><div class="line"></div><div class="line">+(void)dealGradientWithScrollView:(UIScrollView *)scrollView;</div><div class="line"></div><div class="line">+(void)reStoreToSystemNavigationBar; //change the navigationBar to system style</div><div class="line"></div><div class="line">+(void)resStoreToDefaultNavigationBar; //恢复到默认的navbar</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line">#import &quot;LXGradientNavManager.h&quot;</div><div class="line"></div><div class="line">@interface LXGradientNavManager()</div><div class="line">@property (nonatomic, strong) UINavigationBar *selfNavigationBar;</div><div class="line">@property (nonatomic, strong) UINavigationController *selfNavigationController;</div><div class="line">@end</div><div class="line">@implementation LXGradientNavManager</div><div class="line">+(LXGradientNavManager *)sharedManager&#123;</div><div class="line">    </div><div class="line">    static LXGradientNavManager *manager = nil;</div><div class="line">    static dispatch_once_t onceToken;</div><div class="line">    dispatch_once(&amp;onceToken, ^&#123;</div><div class="line">        manager = [[LXGradientNavManager alloc]init];</div><div class="line">    &#125;);</div><div class="line">    return manager;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+(void)managerWithController:(UIViewController *)viewController&#123;</div><div class="line">    </div><div class="line">    if (viewController.navigationController) &#123;</div><div class="line">        UINavigationBar *navigationBar = viewController.navigationController.navigationBar;</div><div class="line">        [self sharedManager].selfNavigationBar = navigationBar;</div><div class="line">        [self sharedManager].selfNavigationController = viewController.navigationController;</div><div class="line">        [navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];</div><div class="line">        [navigationBar setShadowImage:[UIImage new]];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+(void)dealGradientWithScrollView:(UIScrollView *)scrollView&#123;</div><div class="line">    CGFloat y = scrollView.contentOffset.y;</div><div class="line">    </div><div class="line">    UIColor *defaultColor = [self sharedManager].defaultColor;</div><div class="line"></div><div class="line">    if (y &gt; [self sharedManager].fullAlphaOffset) &#123;</div><div class="line">        UIImage *image =[self imageWithColor:defaultColor];</div><div class="line"></div><div class="line">        [[self sharedManager].selfNavigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];</div><div class="line">    &#125;else&#123;</div><div class="line">        CGFloat alpha = y /[self sharedManager].fullAlphaOffset;</div><div class="line">        UIImage *image =[self imageWithColor: [defaultColor colorWithAlphaComponent:alpha]];</div><div class="line">        [[self sharedManager].selfNavigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (void)reStoreToSystemNavigationBar &#123;</div><div class="line">    [[self sharedManager].selfNavigationController setValue:[UINavigationBar new] forKey:@&quot;navigationBar&quot;];</div><div class="line">&#125;</div><div class="line">+ (void)resStoreToDefaultNavigationBar&#123;</div><div class="line">    UIImage *image =[self imageWithColor:[self sharedManager].defaultColor];</div><div class="line"></div><div class="line">    [[self sharedManager].selfNavigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];</div><div class="line">&#125;</div><div class="line">+(void)setZeroAlphaOffset:(float)offset&#123;</div><div class="line">    [self sharedManager].zeroAlphaOffset = offset;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">+(void)setFullAlphaOffset:(float)offset&#123;</div><div class="line">    [self sharedManager].fullAlphaOffset = offset;</div><div class="line">&#125;</div><div class="line">+(void)setDefaultColor:(UIColor *)color&#123;</div><div class="line">    [self sharedManager].defaultColor = color;</div><div class="line">    </div><div class="line">   </div><div class="line">    </div><div class="line">&#125;</div><div class="line">+(void)setOrignColor:(UIColor *)color&#123;</div><div class="line">    [self sharedManager].orignColor = color;</div><div class="line">    </div><div class="line">    [[self sharedManager].selfNavigationBar setBackgroundImage:[self imageWithColor:color] forBarMetrics:UIBarMetricsDefault];</div><div class="line">    </div><div class="line"></div><div class="line">    </div><div class="line">&#125;</div><div class="line">+ (UIImage *)imageWithColor:(UIColor *)color &#123;</div><div class="line">    CGRect rect = CGRectMake(0, 0, 1, 1);</div><div class="line">    UIGraphicsBeginImageContext(rect.size);</div><div class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</div><div class="line">    [color setFill];</div><div class="line">    CGContextFillRect(context, rect);</div><div class="line">    UIImage *imgae = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    return imgae;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>关于 UIScrollview的起始偏移量，最好还是处理如下。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">self.view.backgroundColor =[UIColor whiteColor];</div><div class="line">   self.extendedLayoutIncludesOpaqueBars = YES;</div><div class="line">   self.automaticallyAdjustsScrollViewInsets = NO;</div></pre></td></tr></table></figure>
-<p>会保证起始点不会偏移。 </p>
-<p>demo地址：<a href="https://github.com/liuxinixn/LXGradientNavView" target="_blank" rel="noopener">滚动渐变NavBar</a></p>
+            <p>在使用环信做离线推送时，环信文档后台的扩展消息的格式是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">    &quot;target_type&quot;:&quot;users&quot;,</div><div class="line">    &quot;target&quot;:[</div><div class="line">        &quot;6006&quot;</div><div class="line">    ],</div><div class="line">    &quot;msg&quot;:&#123;</div><div class="line">        &quot;type&quot;:&quot;txt&quot;,</div><div class="line">        &quot;msg&quot;:&quot;hello from rest&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;from&quot;:&quot;6001&quot;,</div><div class="line">    &quot;ext&quot;:&#123;</div><div class="line">        &quot;em_apns_ext&quot;:&quot;扩展内容&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>假如你们公司对ext 进行了扩展，类似下面的的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;em_apns_ext&quot; =     &#123;</div><div class="line">        &quot;em_push_title&quot; = &quot;\U5218\U65b0:testing&quot;;</div><div class="line">        &quot;model_type&quot; = 105002;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>######其中em_apns_ext,以及em_push_title 是必须的，字段名字不能变，后面可以扩展你需要的内容，作为跳转使用。</p>
+<p>然后 看一下 环信文档显示消息的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;aps&quot;:&#123;</div><div class="line">        &quot;alert&quot;:&quot;您有一条新消息&quot;,	 </div><div class="line">        &quot;badge&quot;:1,				 </div><div class="line">        &quot;sound&quot;:&quot;default&quot;		 </div><div class="line">    &#125;,</div><div class="line">    &quot;f&quot;:&quot;6001&quot;,					 </div><div class="line">    &quot;t&quot;:&quot;6006&quot;,					 </div><div class="line">    &quot;e&quot;:&quot;扩展内容&quot;,</div><div class="line">    &quot;m&quot;:&quot;14aec1e00ef&quot;			 </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>后台规定的字段em_push_title，是最终展示在消息通知中 的 alert，消息的具体内容。<br>那么扩展的字段在哪里展示呢？ 在上面的字段<code>e</code> 里，是一个字典，字典e 里的字段就是后台在ext 扩展的字段,意义对应。比如这里e里 只有：<br>{<br> “model_type” = 105002;<br>}</p>
+<p>在线消息的通知我们可以自己来实现，但是离线的字段是固定的。需要注意下。</p>
 
           
         
@@ -392,7 +387,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/04/28/封装一个下拉一体效果/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/06/iOS-环信3-0-简单单聊集成/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -411,7 +406,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/04/28/封装一个下拉一体效果/" itemprop="url">iOS封装一个下拉一体效果</a></h1>
+                <a class="post-title-link" href="/2017/02/06/iOS-环信3-0-简单单聊集成/" itemprop="url">iOS -环信3.0简单单聊集成</a></h1>
         
 
         <div class="post-meta">
@@ -423,8 +418,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-28T20:19:35+08:00">
-                2017-04-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-06T20:19:35+08:00">
+                2017-02-06
               </time>
             
 
@@ -463,168 +458,28 @@
       
         
           
-            <p><img src="http://upload-images.jianshu.io/upload_images/1694376-a410f3eb3482518a.gif?imageMogr2/auto-orient/strip" alt="下拉一体‘.gif"></p>
-<p>下拉一体效果，是利用tableview的contentInset。把view添加到tableview上，根据scrollview的滚动实现即可。<br>所以可以封装一个一劳永逸。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line"></div><div class="line">@interface PullDownZoom : NSObject</div><div class="line">-(instancetype)initWithTableview:(UIScrollView *)tableview headerH:(CGFloat)headerH header:(UIView *)header;</div><div class="line"></div><div class="line">-(void)scrollZoom;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p>传入tableview 与需要下拉的view，以及对应的高度,处理如下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">#import &quot;PullDownZoom.h&quot;</div><div class="line">#import &quot;UIView+Frame.h&quot;</div><div class="line">@interface PullDownZoom()&lt;UIScrollViewDelegate&gt;</div><div class="line">@property(nonatomic,strong)UIScrollView *tableview;</div><div class="line">@property(nonatomic,assign)CGFloat headerH;</div><div class="line">@property(nonatomic,strong)UIView *header;</div><div class="line">@end</div><div class="line">@implementation PullDownZoom</div><div class="line">-(instancetype)initWithTableview:(UIScrollView *)tableview headerH:(CGFloat)headerH header:(UIView *)header</div><div class="line">&#123;</div><div class="line">    </div><div class="line">    self = [super init];</div><div class="line">    if (self) &#123;</div><div class="line">        self.tableview = tableview;</div><div class="line">        </div><div class="line">      </div><div class="line">        self.tableview.delegate = self;</div><div class="line">        self.headerH = headerH;</div><div class="line">        self.header = header;</div><div class="line">        </div><div class="line">        self.tableview.contentInset = UIEdgeInsetsMake(self.headerH, 0, 0, 0);</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">-(void)scrollZoom&#123;</div><div class="line">    [self scrollViewDidScroll:self.tableview];</div><div class="line">&#125;</div><div class="line">-(void)scrollViewDidScroll:(UIScrollView *)scrollView&#123;</div><div class="line">    </div><div class="line">    CGFloat y = scrollView.contentOffset.y;</div><div class="line">    </div><div class="line">    if ( y  &lt; - self.headerH) &#123;</div><div class="line">        self.header.y  = y;</div><div class="line">        self.header.height = -y;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p>####所以只需要两步，即可。</p>
-<p>1、第一步：引入，初始化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">self.zoom =  [[PullDownZoom alloc]initWithTableview:self.tableview headerH:300 header:self.header];</div></pre></td></tr></table></figure></p>
-<p>2、第二步：在scrollview滚动的地方设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-(void)scrollViewDidScroll:(UIScrollView *)scrollView&#123;</div><div class="line"></div><div class="line">    [self.zoom scrollZoom];</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>demo地址：<a href="https://github.com/liuxinixn/pullDownStretch" target="_blank" rel="noopener">下拉一体</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/28/仿网易新闻Navbar/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/03/28/仿网易新闻Navbar/" itemprop="url">仿网易新闻Navbar</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-28T20:19:35+08:00">
-                2017-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>效果图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-23621ebabfdce552.gif?imageMogr2/auto-orient/strip" alt="网易导航条.gif"></p>
-<p>在项目中有类似的需求，仿网易新闻Navbar主要借助UIScrollview与 addChildViewController 实现这个效果。<br>在滚动时候有可能会有两个需求</p>
+            <h5 id="1、准备工作，配置证书，绑定APPID，。注意开发证书和生产证书。创建应用，上传p12-文件（证书）到环信后台，环信会返回一个应用标识就是APPKEY，以及你的推送证书的名字。"><a href="#1、准备工作，配置证书，绑定APPID，。注意开发证书和生产证书。创建应用，上传p12-文件（证书）到环信后台，环信会返回一个应用标识就是APPKEY，以及你的推送证书的名字。" class="headerlink" title="1、准备工作，配置证书，绑定APPID，。注意开发证书和生产证书。创建应用，上传p12 文件（证书）到环信后台，环信会返回一个应用标识就是APPKEY，以及你的推送证书的名字。"></a>1、准备工作，配置证书，绑定APPID，。注意开发证书和生产证书。创建应用，上传p12 文件（证书）到环信后台，环信会返回一个应用标识就是APPKEY，以及你的推送证书的名字。</h5><p><img src="http://upload-images.jianshu.io/upload_images/1694376-6eae2c7076ffa2c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="应用标识.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-ce0584cdb16185f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="推送证书.png"></p>
+<p>#####2、下载官方SDK，<br><img src="http://upload-images.jianshu.io/upload_images/1694376-f9b7dbd09fb29f3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="sdk.png"></p>
+<p>#####3、新建个工程，把上面的 HyphenateFullSDK拖到工程里，开始配置。</p>
 <ul>
-<li>点击item 滚动到中间</li>
-<li>在超出屏幕时点击才发生滚动</li>
+<li>设置bitcode  为 No；</li>
+<li>创建pch ，</li>
 </ul>
-<p>所以在自定义SegmentControl的时候 定义一个枚举：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">typedef enum : NSUInteger &#123;</div><div class="line">    LXSegmentedControlTypeCenterScroll, // 中心滚动风格</div><div class="line">    LXSegmentedControlTypeEndScroll, // 超出屏幕滚动风格</div><div class="line">&#125; LXSegmentedControlScrollType;  // 默认为滚动风格</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>第一步 定义一个LXSegmentControl 继承于UIScrollview。接口中暴露以下属性，有类方法构造以及对象方法构造，滚动类型选择，接口方法中已经传入代理UIViewController。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">@protocol LXSegmentControlDelegate&lt;NSObject&gt;</div><div class="line">-(void)LXSegmentControl:(LXSegmentControl *)segmentControl didSelectBtnAtIndex:(NSInteger)index;</div><div class="line">@end;</div><div class="line">@interface LXSegmentControl : UIScrollView</div><div class="line">//对象方法创建 LXSegmentControl</div><div class="line">-(instancetype)initWithFrame:(CGRect)frame delegate:(id &lt;LXSegmentControlDelegate&gt;)delegate titleArr:(NSArray *)titleArr;</div><div class="line">//类方法创建 LXSegmentControl</div><div class="line">+(instancetype)segmentControlWithFrame:(CGRect)frame delegate:(id &lt;LXSegmentControlDelegate&gt;)delegate titleArr:(NSArray *)titleArr;</div><div class="line"></div><div class="line">@property(nonatomic,weak)id &lt;LXSegmentControlDelegate&gt; SeDelegate;</div><div class="line"></div><div class="line">@property(nonatomic,assign)LXSegmentedControlScrollType scrollType;</div><div class="line"></div><div class="line">///** 滚动Conrolller的时候 SegmentControl需要做的处理 */</div><div class="line">- (void)titleBtnSelectedWithScrollView:(UIScrollView *)scrollView;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
-<blockquote>
-<p>第二部 根据传入的title 数组创建button 然后设置UIScrollview的内容大小。button的大小通过API计算出字符串的长度，然后设置margin。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">for (NSUInteger i  = 0; i &lt;_title_Arr.count; i++) &#123;</div><div class="line">        </div><div class="line">        self.title_btn =[UIButton buttonWithType:UIButtonTypeCustom];</div><div class="line">        _title_btn.titleLabel.font = LXFont(btn_fondOfSize);</div><div class="line">        _title_btn.tag = i;</div><div class="line">        </div><div class="line">        //计算内容的size</div><div class="line">        CGSize buttonSize =[self sizeWithText:_title_Arr[i] font:LXFont(btn_fondOfSize) maxSize:CGSizeMake(MAXFLOAT, button_H)];</div><div class="line">        //计算内容的宽度</div><div class="line">        CGFloat button_W = 2 *btn_Margin + buttonSize.width;</div><div class="line">        _title_btn.frame = CGRectMake(button_X, button_Y, button_W, button_H);</div><div class="line">        [_title_btn setTitle:_title_Arr[i] forState:UIControlStateNormal];</div><div class="line">        [_title_btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];</div><div class="line">        [_title_btn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];</div><div class="line">        </div><div class="line">        //计算每个button的 X 值</div><div class="line">        button_X = button_X + button_W;</div><div class="line">        //点击事件</div><div class="line">        [_title_btn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];</div><div class="line">        </div><div class="line">        //默认选中第0 个button</div><div class="line">        if (i == 0) &#123;</div><div class="line">            [self buttonAction:_title_btn];</div><div class="line">        &#125;</div><div class="line">        //存入所有的 title_btn</div><div class="line">        [self.titleBtn_mArr addObject:_title_btn];</div><div class="line">        [self addSubview:_title_btn];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //计算 scrollview 的宽度</div><div class="line">    </div><div class="line">    UIButton *lastButton = self.titleBtn_mArr.lastObject;</div><div class="line">    CGFloat scrollViewWidth = CGRectGetMaxX(lastButton.frame);</div><div class="line">    self.contentSize = CGSizeMake(scrollViewWidth, self.height);</div></pre></td></tr></table></figure>
-<blockquote>
-<p>最关键的处理在于 处理button 的点击方法 在点击时候处理contentoffset，是在点击屏幕最后一个按钮然后滚动UIScrollview，还是选择居中模式。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">#pragma mark - - - 按钮的点击事件</div><div class="line">- (void)buttonAction:(UIButton *)sender</div><div class="line">&#123;</div><div class="line">    [self titleBtnSelectededCenter:sender];</div><div class="line">    </div><div class="line">    // 2、代理方法实现</div><div class="line">    NSInteger index = sender.tag;</div><div class="line">    </div><div class="line">    if ([self.SeDelegate respondsToSelector:@selector(LXSegmentControl:didSelectBtnAtIndex:)]) &#123;</div><div class="line">        </div><div class="line">        [self.SeDelegate LXSegmentControl:self didSelectBtnAtIndex:index];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //3 、 改变指示器的位置</div><div class="line">    [self titleBtnSelected:sender];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">/** 滚动标题选中居中 */</div><div class="line">- (void)titleBtnSelectededCenter:(UIButton *)centerBtn &#123;</div><div class="line">  </div><div class="line">    </div><div class="line">    switch (self.scrollType) &#123;</div><div class="line">        case LXSegmentedControlTypeCenterScroll:</div><div class="line">            </div><div class="line">            [self centerScroll:centerBtn];</div><div class="line">            </div><div class="line">            break;</div><div class="line">        case LXSegmentedControlTypeEndScroll:</div><div class="line">            </div><div class="line">            [self endScroll:centerBtn];</div><div class="line">            </div><div class="line">        default:</div><div class="line">            break;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(void)centerScroll:(UIButton *)centerBtn</div><div class="line">&#123;</div><div class="line">     //计算偏移量</div><div class="line">        CGFloat offsetX = centerBtn.center.x - Device_Width * 0.5;</div><div class="line">    </div><div class="line">        if (offsetX &lt; 0) offsetX = 0;</div><div class="line">    </div><div class="line">        // 获取最大滚动范围</div><div class="line">        CGFloat maxOffsetX = self.contentSize.width - Device_Width;</div><div class="line">    </div><div class="line">        if (offsetX &gt; maxOffsetX) offsetX = maxOffsetX;</div><div class="line">    </div><div class="line">        // 滚动标题滚动条</div><div class="line">        [self setContentOffset:CGPointMake(offsetX, 0) animated:YES];</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void)endScroll:(UIButton *)centerBtn</div><div class="line">&#123;</div><div class="line">    CGFloat offsetX;</div><div class="line">    </div><div class="line">    if (CGRectGetMaxX(centerBtn.frame) &gt;= Device_Width) &#123;</div><div class="line">        </div><div class="line">        offsetX = CGRectGetMaxX(centerBtn.frame) - Device_Width;</div><div class="line">        </div><div class="line">        if (centerBtn.tag &lt;[_title_Arr count]-1) &#123;</div><div class="line">            offsetX = offsetX + centerBtn.frame.size.width;</div><div class="line">        &#125;</div><div class="line">    &#125;else</div><div class="line">    &#123;</div><div class="line">        offsetX = 0 ;</div><div class="line">    &#125;</div><div class="line">    [self setContentOffset:CGPointMake(offsetX, 0) animated:YES];</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>接口中需要暴露 一个方法当我们滚动子控制器的时候item 需要作出的改变</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/** 标题选中颜色改变以及指示器位置变化 */</div><div class="line">- (void)titleBtnSelectedWithScrollView:(UIScrollView *)scrollView &#123;</div><div class="line">    // 1、计算滚动到哪一页</div><div class="line">    NSInteger index = scrollView.contentOffset.x / scrollView.frame.size.width;</div><div class="line">    </div><div class="line">    // 2、把对应的标题选中</div><div class="line">    UIButton *selectedBtn = self.titleBtn_mArr[index];</div><div class="line">    </div><div class="line">    // 3、滚动时，改变标题选中</div><div class="line">    [self titleBtnSelected:selectedBtn];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>接下来是ViewControll中的处理</p>
-</blockquote>
-<p>实现LXSegmentControl的代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-(void)LXSegmentControl:(LXSegmentControl *)segmentControl didSelectBtnAtIndex:(NSInteger)index</div><div class="line">&#123;</div><div class="line">    // 1 计算滚动的位置</div><div class="line">    CGFloat offsetX = index * self.view.frame.size.width;</div><div class="line">    self.mainScrollView.contentOffset = CGPointMake(offsetX, 0);</div><div class="line">    </div><div class="line">    // 2.给对应位置添加对应子控制器</div><div class="line">    [self showVc:index];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>######当我们在添加子视图的view的时候判断是不是该控制器的视图已经进行了懒加载<br><code>vc.isViewLoaded</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 显示控制器的view</div><div class="line">- (void)showVc:(NSInteger)index &#123;</div><div class="line">    </div><div class="line">    CGFloat offsetX = index * self.view.frame.size.width;</div><div class="line">    </div><div class="line">    UIViewController *vc = self.childViewControllers[index];</div><div class="line">    </div><div class="line">    // 判断控制器的view有没有加载过,如果已经加载过,就不需要加载</div><div class="line">    if (vc.isViewLoaded) return;</div><div class="line">    vc.view.backgroundColor =  LBRandomColor;</div><div class="line">    [self.mainScrollView addSubview:vc.view];</div><div class="line">    vc.view.frame = CGRectMake(offsetX, 0, self.view.frame.size.width, self.view.frame.size.height);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>最后 处理在滑动切换子控制器的时候需要LXSegmentControl需要做的处理</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">#pragma mark - UIScrollViewDelegate</div><div class="line">- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView&#123;</div><div class="line">    </div><div class="line">    // 计算滚动到哪一页</div><div class="line">    NSInteger index = scrollView.contentOffset.x / scrollView.frame.size.width;</div><div class="line">    </div><div class="line">    // 1.添加子控制器view</div><div class="line">    [self showVc:index];</div><div class="line">    </div><div class="line">    // 2.把对应的标题选中 接口中已经暴露</div><div class="line">    [self.segmentControl titleBtnSelectedWithScrollView:scrollView];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>demo地址 <a href="https://github.com/liuxinixn/CoarseImitationNetEase/tree/master" target="_blank" rel="noopener">两种Navbar滚动类型</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#ifdef __OBJC__</div><div class="line"></div><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line">#import &lt;Hyphenate/Hyphenate.h&gt;</div><div class="line">#define HUANXINAPPKEY @&quot;1198170313178186#lxchatdemo&quot;  //应用标识</div><div class="line">#define APNSNAME @&quot;LXChatDemo&quot; //证明名字</div><div class="line">#endif</div></pre></td></tr></table></figure>
+<p>配置依赖的静态库：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">CoreMedia.framework</div><div class="line">AudioToolbox.framework</div><div class="line">AVFoundation.framework</div><div class="line">MobileCoreServices.framework</div><div class="line">ImageIO.framework</div><div class="line">libc++.dylib</div><div class="line">libz.dylib</div><div class="line">libstdc++.6.0.9.dylib</div><div class="line">libsqlite3.dylib</div><div class="line">libiconv.dylib</div></pre></td></tr></table></figure></p>
+<p>#####如果编译出现这样的问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dyld: Library not loaded: @rpath/Hyphenate.framework/Hyphenate</div><div class="line">  Referenced from: /Users/liangyi/Library/Developer/CoreSimulator/Devices/F3F0CB24-F891-489D-B71F-1AA6DA17832C/data/Containers/Bundle/Application/8D4D4F2E-A19F-4590-BE80-41403C735448/EMDemo.app/EMDemo</div><div class="line">  Reason: image not found</div></pre></td></tr></table></figure></p>
+<p>//字面意思是嵌入二进制文件<br><img src="http://upload-images.jianshu.io/upload_images/1694376-16bfa3fdd2ababe3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="shezhi.png"></p>
+<p>最后编译command + B  通过即可。</p>
+<p>######4、根据官方视频简单实现单聊：</p>
+<p><code>EMOptions</code> 是SDK的设置选项<br><code>EMClient</code> 是用户选项，大概看一下头文件，基本上包含了单聊，群聊，聊天室：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, strong, readonly) id&lt;IEMChatManager&gt; chatManager;</div><div class="line"></div><div class="line">/*!</div><div class="line"> *  \~chinese </div><div class="line"> *  好友模块</div><div class="line"> *</div><div class="line"> *  \~english </div><div class="line"> *  Contact Management</div><div class="line"> */</div><div class="line">@property (nonatomic, strong, readonly) id&lt;IEMContactManager&gt; contactManager;</div><div class="line"></div><div class="line">/*!</div><div class="line"> *  \~chinese </div><div class="line"> *  群组模块</div><div class="line"> *</div><div class="line"> *  \~english </div><div class="line"> *  Group Management</div><div class="line"> */</div><div class="line">@property (nonatomic, strong, readonly) id&lt;IEMGroupManager&gt; groupManager;</div><div class="line"></div><div class="line">/*!</div><div class="line"> *  \~chinese </div><div class="line"> *  聊天室模块</div><div class="line"> *</div><div class="line"> *  \~english </div><div class="line"> *  Chat room Management</div><div class="line"> */</div><div class="line">@property (nonatomic, strong, readonly) id&lt;IEMChatroomManager&gt; roomManager;</div></pre></td></tr></table></figure></p>
+<p>######直接按照视频实现下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">#import &quot;AppDelegate.h&quot;</div><div class="line">#import &quot;ChatViewController.h&quot;</div><div class="line">@interface AppDelegate ()</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation AppDelegate</div><div class="line"></div><div class="line"></div><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    // Override point for customization after application launch.</div><div class="line">    </div><div class="line">    EMOptions *option =[EMOptions optionsWithAppkey:HUANXINAPPKEY];</div><div class="line">    option.apnsCertName = APNSNAME;</div><div class="line">    </div><div class="line">    EMError *error =[[EMClient sharedClient]initializeSDKWithOptions:option];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;初始化成功&quot;);</div><div class="line">    &#125;</div><div class="line">    error = [[EMClient sharedClient] registerWithUsername:@&quot;111&quot; password:@&quot;111&quot;];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;注册成功&quot;);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">    &#125;</div><div class="line">    error = [[EMClient sharedClient] registerWithUsername:@&quot;222&quot; password:@&quot;222&quot;];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;注册成功&quot;);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    error =[[EMClient sharedClient]loginWithUsername:@&quot;111&quot; password:@&quot;111&quot;];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;登录成功&quot;);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">    &#125;</div><div class="line">//    error =[[EMClient sharedClient]loginWithUsername:@&quot;222&quot; password:@&quot;222&quot;];</div><div class="line">//    if (!error) &#123;</div><div class="line">//        NSLog(@&quot;登录成功&quot;);</div><div class="line">//    &#125;else&#123;</div><div class="line">//        NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">//    &#125;</div><div class="line">    </div><div class="line">    self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];</div><div class="line">    ChatViewController *vc =[[ChatViewController alloc]initWithConversationId:@&quot;222&quot; conversationType:EMConversationTypeChat];</div><div class="line">    UINavigationController *nav =[[UINavigationController alloc]initWithRootViewController:vc];</div><div class="line">    self.window.rootViewController = nav;</div><div class="line">    [self.window makeKeyAndVisible];</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">//接受消息 必须ChatManager 的代理</div><div class="line">@interface ChatViewController ()&lt;EMChatManagerDelegate&gt;</div><div class="line">@property (weak, nonatomic) IBOutlet UITextField *input;</div><div class="line">@property(nonatomic,strong)EMConversation *conversation;</div><div class="line">@property (weak, nonatomic) IBOutlet UILabel *receiveLabel;</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ChatViewController</div><div class="line">-(id)initWithConversationId:(NSString *)conversation conversationType:(EMConversationType)conversationType&#123;</div><div class="line">    self = [super initWithNibName:@&quot;ChatViewController&quot; bundle:nil];</div><div class="line">    if (self) &#123;</div><div class="line">        self.conversation = [[EMClient sharedClient].chatManager getConversation:conversation type:conversationType createIfNotExist:YES];</div><div class="line">        [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">-(void)dealloc&#123;</div><div class="line">    [[EMClient sharedClient] removeDelegate:self];</div><div class="line">&#125;</div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view from its nib.</div><div class="line">&#125;</div><div class="line">#pragma mark --接受消息---</div><div class="line">-(void)messagesDidReceive:(NSArray *)aMessages&#123;</div><div class="line">    EMMessage *message = aMessages[0];</div><div class="line">    EMTextMessageBody *body = (EMTextMessageBody *)message.body;</div><div class="line">    self.receiveLabel.text = body.text;</div><div class="line">&#125;</div><div class="line">#pragma mark ---发送消息---</div><div class="line">- (IBAction)sendAction:(id)sender &#123;</div><div class="line">    EMTextMessageBody *body =[[EMTextMessageBody alloc]initWithText:self.input.text];</div><div class="line">    EMMessage *message =[[EMMessage alloc]initWithConversationID:self.conversation.conversationId from:[EMClient sharedClient].currentUsername to:self.conversation.conversationId body:body ext:nil];</div><div class="line">    [[EMClient sharedClient].chatManager sendMessage:message progress:^(int progress) &#123;</div><div class="line">       </div><div class="line">    &#125; completion:^(EMMessage *message, EMError *error) &#123;</div><div class="line">        if (!error) &#123;</div><div class="line">            NSLog(@&quot;发送成功&quot;);</div><div class="line">        &#125;else&#123;</div><div class="line">            NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">        &#125;</div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-867d697f9d7b2457.gif?imageMogr2/auto-orient/strip" alt="效果图.gif"></p>
+<p> #####最后别忘了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;</div><div class="line">	&lt;dict&gt;</div><div class="line">		&lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;</div><div class="line">		&lt;true/&gt;</div><div class="line">	&lt;/dict&gt;</div></pre></td></tr></table></figure></p>
+<p>简单单聊集成就是这样了。至于消息的存储，排序，提示，还需要借助数据库，推送进行处理，当然也可以使用环信的数据库。<br>最简单的集成单聊页面，就是把EaseUI 拖到项目里，然后定义一个UIViewController继承与EaseMessageViewController即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    // Override point for customization after application launch.</div><div class="line">    </div><div class="line">    EMOptions *option =[EMOptions optionsWithAppkey:HUANXINAPPKEY];</div><div class="line">    option.apnsCertName = APNSNAME;</div><div class="line">    </div><div class="line">    EMError *error =[[EMClient sharedClient]initializeSDKWithOptions:option];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;初始化成功&quot;);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    error =[[EMClient sharedClient]loginWithUsername:@&quot;111&quot; password:@&quot;111&quot;];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;登录成功&quot;);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    </div><div class="line">    self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];</div><div class="line">    ChatViewController *vc =[[ChatViewController alloc]initWithConversationChatter:@&quot;222&quot; conversationType:EMConversationTypeChat];</div><div class="line">                             UINavigationController *nav =[[UINavigationController alloc]initWithRootViewController:vc];</div><div class="line">    self.window.rootViewController = nav;</div><div class="line">    [self.window makeKeyAndVisible];</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后就可以实现简单的单聊了，环信官方建议好友体系由自己管理，当然开发环境环信也提供了好友体系。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-7ca593f1ae1c4fa7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="欧了.png"></p>
 
           
         
@@ -673,7 +528,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/07/appStore打包上线/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/05/iOS-关于懒加载的页面动画进入后台后暂停/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -692,7 +547,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/03/07/appStore打包上线/" itemprop="url">appStore打包上线</a></h1>
+                <a class="post-title-link" href="/2017/02/05/iOS-关于懒加载的页面动画进入后台后暂停/" itemprop="url">iOS --关于懒加载的页面进入后台后暂停</a></h1>
         
 
         <div class="post-meta">
@@ -704,8 +559,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-07T20:19:35+08:00">
-                2017-03-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-05T20:19:35+08:00">
+                2017-02-05
               </time>
             
 
@@ -744,16 +599,8 @@
       
         
           
-            <p>想了想还是总结下：<br>xcode8 之后可以自动管理，当然也可以选择手动。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-cee6f2f5de417958.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-9106ab3a5557c514.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-de4e6316281890bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
-<p>Product里的app 变为黑色后，show in Finder。<br>新建个文件夹，命名为Payload。名字不能错，将app 复制到文件夹里，然后压缩，更改后缀名为ipa。<br><img src="http://upload-images.jianshu.io/upload_images/1694376-fa77095b7b1321d9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-dfbb2f6f713b0e4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5.png"></p>
-<p>如果登陆Application loader的时候 一直登陆不了，可以去appid设置的地方去管理密码的地方 ，设置一个app专用密码。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-106d8a23d2bd2d2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.png"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-44fd26f1f1be3367.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.jpeg"></p>
-<p>然后就按步骤上传即可。</p>
+            <p>对于 UITabarController管理的导航控制器的根界面，如果加入动画，你会发现，当应用退出到后台，然后进入到前台，你就会发现动画停止了。解决办法就是添加通知监听应用进入前台，进入活跃状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterPlayground) name:UIApplicationDidBecomeActiveNotification object:nil];</div><div class="line">&#125;</div><div class="line">-(void)appDidEnterPlayground&#123;</div><div class="line">    [self.heroBtn.layer removeAllAnimations];</div><div class="line">     [self.heroBtn.layer addAnimation:[self groupAnimation] forKey:nil];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
           
         
@@ -802,7 +649,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/06/真机调试一些问题/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/09/10/iOS-在使用全屏返回手势与UIScrollview的冲突问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -821,7 +668,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/03/06/真机调试一些问题/" itemprop="url">真机测试的一些问题</a></h1>
+                <a class="post-title-link" href="/2016/09/10/iOS-在使用全屏返回手势与UIScrollview的冲突问题/" itemprop="url">iOS -在使用全屏返回手势与UIScrollview的冲突问题</a></h1>
         
 
         <div class="post-meta">
@@ -833,8 +680,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-06T20:19:35+08:00">
-                2017-03-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-10T20:19:35+08:00">
+                2016-09-10
               </time>
             
 
@@ -873,9 +720,8 @@
       
         
           
-            <p>(1)Xcode 真机调试报错：<code>This application&#39;s application-identifier entitleme</code></p>
-<p><code>This application&#39;s application-identifier entitlement does not match that of the installed application. These values must match for an upgrade to be allowed</code></p>
-<p>解决方法：<br>1、Xcode－Window-&gt;Devices<br>2、选中你的设备，在右边的installed Apps中删除这个App<br>3、重新编绎即可</p>
+            <p>在使用<code>UINavigationController+FDFullscreenPopGesture</code>全屏手势的时候与UIScrollview发生冲突。在官方的demo里 是这么写的:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer &#123;</div><div class="line">    if (self.contentOffset.x &lt;= 0) &#123;</div><div class="line">        if ([otherGestureRecognizer.delegate isKindOfClass:NSClassFromString(@&quot;_FDFullscreenPopGestureRecognizerDelegate&quot;)]) &#123;</div><div class="line">            return YES;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return NO;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>所以我们只需要新建一个UIScrollview分类，把这个方法放进去即可。</p>
 
           
         
@@ -924,7 +770,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/05/未越狱的手机安装ipa，制作iOS-Ad-Hoc测试线上应用-/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/07/09/iOS-内存检测Instruments之Leaks/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -943,7 +789,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/03/05/未越狱的手机安装ipa，制作iOS-Ad-Hoc测试线上应用-/" itemprop="url">未越狱的手机安装ipa,制作iOS Ad-hoc测试应用</a></h1>
+                <a class="post-title-link" href="/2016/07/09/iOS-内存检测Instruments之Leaks/" itemprop="url">iOS -内存检测Instruments之Leaks</a></h1>
         
 
         <div class="post-meta">
@@ -955,8 +801,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-05T20:19:35+08:00">
-                2017-03-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-09T20:19:35+08:00">
+                2016-07-09
               </time>
             
 
@@ -995,290 +841,161 @@
       
         
           
-            <p>######在上线前通常需要提交给测试，提供ipa，测试待上线的应用，针对未越狱的手机我们可以通过制作一个制作iOS Ad-Hoc测试线上应用 ，xcode 里进行简单配置，然后通过itunes，把描述文件拖进去，点击同步应用即可。 接下来详细说明:</p>
+            <p>动态检测内存工具Leaks，可以和静态分析工具Analyze配合使用。<br><code>cmd + I</code>进入 Leaks 主界面，</p>
+<p>#######第一步：点击左上角的红色录制按钮，会重启模拟器或者手机，点击暂停可以进行测试。<br><img src="http://upload-images.jianshu.io/upload_images/1694376-92dcf784dd366981.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-6a8f6ff5ea01903d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p>#######第二步：然后 点击应用，进入界面，测试，如果出现红X，点击暂停按钮暂停，开始查找内存泄漏的地方。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-9206d4d535f67f4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
+<p>#######第三步：点击Leak Checks按钮，选择要定位的区域，红色❌号标识前后。选择CallTree，会定位到具体的方法。右侧面板配置如图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-01354a2229ee2ec5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
+<p>#######第四步：最后双击需要检测的地方跳转到Xcode，定位代码。</p>
 <blockquote>
-<p>第一步 创建一个Ad-Hoc测试线上应用。</p>
+<p>最后简单使用Time Profiler检测耗时的代码.面板配置同Leaks。</p>
 </blockquote>
-<p>上图： </p>
-<p>###选择环境<br><img src="http://upload-images.jianshu.io/upload_images/1694376-5e34af2404fe2bed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p>###添加描述文件<br><img src="http://upload-images.jianshu.io/upload_images/1694376-cdb4697960c0f44d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
-<p>###选择Ad Hoc<br><img src="http://upload-images.jianshu.io/upload_images/1694376-91ce51f74f29d359.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
-<p>###选择你的App ID 套装<br><img src="http://upload-images.jianshu.io/upload_images/1694376-e35bd95ac059be38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
-<p>###选择正确的证书<br><img src="http://upload-images.jianshu.io/upload_images/1694376-661e21dceaec1e8f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5.png"></p>
-<p>###然后选择done ，会生成一个iOS Distribution的Ad Hoc专用描述文件<br><img src="http://upload-images.jianshu.io/upload_images/1694376-443e7b133fe31a59.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-8f794c0c019ff50f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>之前用Time Profiler 检测过UIImage 加载两种方式的区别。<a href="http://www.jianshu.com/p/a700dcf27b83" target="_blank" rel="noopener">UIImageview加载动画做内存与耗时</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/07/05/ios--UITableView三级展开/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/07/05/ios--UITableView三级展开/" itemprop="url">iOS --UITableView三级展开</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-05T20:19:35+08:00">
+                2016-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>有个多级展开的需求，但不是那种三层嵌套，是这个效果：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-75ffc45cfef9b56f.gif?imageMogr2/auto-orient/strip" alt="多级展开.gif"><br>这样 我们只需要给Tableview的总的header 以及分区header 增加一个展开即可：</p>
 <blockquote>
-<p>第二步  xcode 的配置：</p>
+<p>总的header 不会复用，所以给header 一个展开属性</p>
 </blockquote>
-<h3 id="project配置-，推荐使用Configurations名字：ad-hoc-distribution"><a href="#project配置-，推荐使用Configurations名字：ad-hoc-distribution" class="headerlink" title="project配置 ，推荐使用Configurations名字：ad hoc distribution"></a>project配置 ，推荐使用Configurations名字：ad hoc distribution</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-54a3820dc0c99315.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.png"></p>
-<p>###General 里配置：选择 配置好的描述文件 双击</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-917616d9e11a66d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.png"></p>
-<p>###最后 打包前需要设置 如果是上线 选择release， 上线前测试选择 ad hoc  distribution<br><img src="http://upload-images.jianshu.io/upload_images/1694376-8332d3e6ff3fe63a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="9.png"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-8f58eaac6e180acb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="10.png"></p>
-<h3 id="选择-device，command-b-编译"><a href="#选择-device，command-b-编译" class="headerlink" title="选择 device，command + b 编译"></a>选择 device，command + b 编译</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-b6aca55e7652f772.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="11.png"></p>
-<h3 id="编译通过后-Product里-app-颜色为黑色-，表示编译通过，然后show-in-finder-，复制到一个-Payload的文件夹里，选择压缩，把zip-后缀改为ipa。"><a href="#编译通过后-Product里-app-颜色为黑色-，表示编译通过，然后show-in-finder-，复制到一个-Payload的文件夹里，选择压缩，把zip-后缀改为ipa。" class="headerlink" title="编译通过后 Product里 app 颜色为黑色 ，表示编译通过，然后show in finder  ，复制到一个 Payload的文件夹里，选择压缩，把zip 后缀改为ipa。"></a>编译通过后 Product里 app 颜色为黑色 ，表示编译通过，然后show in finder  ，复制到一个 Payload的文件夹里，选择压缩，把zip 后缀改为ipa。</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-3f9ca96dc32cbedb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="12.png"></p>
-<h3 id="生成ipa"><a href="#生成ipa" class="headerlink" title="生成ipa"></a>生成ipa</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-20ac611478945833.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="13.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">typedef void (^LXExpandBlock)(BOOL isExpand);</div><div class="line">@interface LXTableviewHeader : UIView</div><div class="line">@property(nonatomic, assign)BOOL isExpand;</div><div class="line">@property(nonatomic,copy)LXExpandBlock expandBlock;</div><div class="line">@end</div></pre></td></tr></table></figure>
 <blockquote>
-<p>最后 通过itunes 安装到手机上，准备好 Ad Hoc的描述文件与ipa 包 ，</p>
+<p>分区header 的复用把展开属性设置在对应的model里</p>
 </blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-f9e2c1da84b5d1ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="14.png"></p>
-<p>####最后选择手机 ，然后同步应用即可。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/04/设置Cell选中的颜色-/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/03/04/设置Cell选中的颜色-/" itemprop="url">设置Cell选中的颜色</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T20:19:35+08:00">
-                2017-03-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>需要同时设置高亮与选中状态，先高亮后选择<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (void)setSelected:(BOOL)selected animated:(BOOL)animated &#123;</div><div class="line">    [super setSelected:selected animated:animated];</div><div class="line">    // Configure the view for the selected state</div><div class="line">    </div><div class="line">    if (selected) &#123;</div><div class="line">        self.contentView.backgroundColor = QBBackColor;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated &#123;</div><div class="line">    </div><div class="line">    [super setHighlighted:highlighted animated:animated];</div><div class="line">    if (highlighted) &#123;</div><div class="line">        self.contentView.backgroundColor = QBBackColor;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/04/使用系统的或TTTAttributedLabel检索网址/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/03/04/使用系统的或TTTAttributedLabel检索网址/" itemprop="url">使用系统的或TTTAttributedLabel检索网址</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T20:19:35+08:00">
-                2017-03-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#####先立个flag，在检测网址链接的过程中，不管是使用 NSDataDetector还是TTTAttributedLabel 做检索网址，其实TTTAttributedLabel也是使用系统的检索网址，先记录一下发现的问题。</p>
-<ul>
-<li><p>如果网址是这样的<br><code>http://www.jianshu.com下雨天的</code><br>检索的结果是不准确的 ，结果检索到的网址是<code>http://www.jianshu.com下雨天的</code></p>
-</li>
-<li><p>如果网址是这样的<br><code>http://www.jianshu.com/下雨天的</code><br>检索结果是一样的，不准确</p>
-</li>
-<li><p>如果网址是这样的去掉了协议头，并且网址和文字中间没有空格，<br><code>www.jianshu.com下雨天的</code><br>#####结果检索到的网址是<code>www.jianshu.com</code> 正确</p>
-</li>
-<li><p>如果网址和文字中间#有#空格，有没有协议头都一样<br><code>http://www.jianshu.com 下雨天的</code><br>#####结果检索到的网址是<code>http://www.jianshu.com</code> 正确</p>
-</li>
-</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">@class LXSectionModel;</div><div class="line">typedef void (^LXHeaderViewExpandBlock)(BOOL isExpand);</div><div class="line">@interface LXHeadView : UITableViewHeaderFooterView</div><div class="line">@property(nonatomic,strong)LXSectionModel *model;</div><div class="line">@property(nonatomic,copy)LXHeaderViewExpandBlock enpandBlock;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line"></div><div class="line">@interface LXSectionModel : NSObject</div><div class="line">@property (nonatomic, copy) NSString *sectionTitle;</div><div class="line">// 是否是展开的</div><div class="line">@property (nonatomic, assign) BOOL isExpanded;</div><div class="line"></div><div class="line">@property (nonatomic, strong) NSMutableArray *cellModels;</div><div class="line">@end</div></pre></td></tr></table></figure>
 <blockquote>
-<p>发现好多第三方，都是采用系统自带的检测网址或者电话号码， 电话号码还好点但是网址总是检测不准。</p>
+<p>整体头部展开是这样的 </p>
 </blockquote>
-<p>正确的姿势应该是这样的：<br>检测网址与电话：<br><code>// url链接的规则
-    NSString *urlPattern = @&quot;((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(((http[s]{0,1}|ftp)://|)((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)&quot;;
-    NSString *phoneNumber =@&quot;\\d{3}-\\d{8}|\\d{4}-\\d{7}|\\d{11}&quot;
-    ;</code><br>下一篇分析下如何利用正则检索网址与电话号码，表情，并且实现富文本的多行与完成显示的切换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">LXTableviewHeader *header =[[LXTableviewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];</div><div class="line">__weak ViewController *weakSelf = self;</div><div class="line">header.expandBlock = ^( BOOL isExpand)</div><div class="line">&#123;</div><div class="line">    [weakSelf.tableView reloadData];</div><div class="line">&#125;;</div><div class="line">self.tableView.tableHeaderView = header;</div><div class="line">self.headerView = header;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>分区头部展开处理过程</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section</div><div class="line">&#123;</div><div class="line">    LXHeadView *view =[tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderIdentifier];</div><div class="line">    LXSectionModel *sectionModel = self.sectionDataSources[section];</div><div class="line">    </div><div class="line">    view.model = sectionModel;</div><div class="line">    view.enpandBlock = ^(BOOL isExpanded)</div><div class="line">    &#123;</div><div class="line">        [tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:0];</div><div class="line">    &#125;;</div><div class="line">    return view;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>  返回分区与返回cell个数的处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView</div><div class="line">&#123;</div><div class="line">    return self.headerView.isExpand ?self.sectionDataSources.count:0;</div><div class="line">&#125;</div><div class="line">-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section</div><div class="line">&#123;</div><div class="line">      LXSectionModel *sectionModel = self.sectionDataSources[section];</div><div class="line">    return sectionModel.isExpanded ? sectionModel.cellModels.count:0;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>#####所有的展开与收起  额外计算，只需要刷新整体或者刷新分区即可，改变分区个数与分区内对应cell 个数，不需要对cell 做insert 或者delete操作。</p>
+<p>demo 地址：<a href="https://github.com/liuxinixn/Tableview-/tree/master" target="_blank" rel="noopener">UITableview三级展开</a><br>参考文章：<a href="http://www.jianshu.com/p/fc45624603f6" target="_blank" rel="noopener">UITableView分区展开与收起</a></p>
 
           
         
@@ -1327,7 +1044,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/03/如何利用CoreGraphics绘制一个渐变色图片，渐变色仿QQNavBar/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/06/03/ios--二维码生成（带图标）以及相册识别二维码跳转/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -1346,7 +1063,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/03/03/如何利用CoreGraphics绘制一个渐变色图片，渐变色仿QQNavBar/" itemprop="url">如何利用CoreGraphics绘制一个渐变色仿QQNavbar</a></h1>
+                <a class="post-title-link" href="/2016/06/03/ios--二维码生成（带图标）以及相册识别二维码跳转/" itemprop="url">iOS--二维码生成（带图标）以及相册识别二维码跳转</a></h1>
         
 
         <div class="post-meta">
@@ -1358,8 +1075,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-03T20:19:35+08:00">
-                2017-03-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-03T20:19:35+08:00">
+                2016-06-03
               </time>
             
 
@@ -1398,12 +1115,58 @@
       
         
           
-            <p>之前写过一篇文章，怎样做一个渐变色的NavBar:<a href="http://www.jianshu.com/p/2e2d0b3c904a" target="_blank" rel="noopener">iOS Navbar设置渐变色</a>,可是在使用中会拦截<code>NavBar</code>上按钮的点击事件，最好的办法就是生成一张渐变色的图片，然后设置为<code>bakcGroundImage.</code>(当然，你也可以找UI要一张)<br> 效果图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-617404b6bee41224.gif?imageMogr2/auto-orient/strip" alt="渐变Nav.gif"></p>
-<p>代码如下：</p>
-<p>写一个UIImage的分类，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line"></div><div class="line">@interface UIImage (ColorImage)</div><div class="line">+ (UIImage *)imageWithColor:(UIColor*)color size:(CGSize)size;</div><div class="line"></div><div class="line">//生成渐变色</div><div class="line">+(UIImage*) createGradientImageWithRect:(CGRect)rect startColor:(UIColor *)startColor endColor:(UIColor *)endColor;</div><div class="line">@end</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">#import &quot;UIImage+ColorImage.h&quot;</div><div class="line"></div><div class="line">@implementation UIImage (ColorImage)</div><div class="line">+(UIImage *)imageWithColor:(UIColor*)color size:(CGSize)size&#123;</div><div class="line">    </div><div class="line">    CGRect rect =CGRectMake(0,0, size.width, size.height);</div><div class="line">    </div><div class="line">    UIGraphicsBeginImageContext(rect.size);</div><div class="line">    </div><div class="line">    CGContextRef context =UIGraphicsGetCurrentContext();</div><div class="line">    </div><div class="line">    CGContextSetFillColorWithColor(context, [color CGColor]);</div><div class="line">    </div><div class="line">    CGContextFillRect(context, rect);</div><div class="line">    </div><div class="line">    UIImage *image =UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    </div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    </div><div class="line">    return image;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">+(UIImage*) createGradientImageWithRect:(CGRect)rect startColor:(UIColor *)startColor endColor:(UIColor *)endColor;</div><div class="line">&#123;</div><div class="line">    </div><div class="line">    UIGraphicsBeginImageContext(rect.size);</div><div class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">    drawLinearGradient(context, rect, startColor.CGColor, endColor.CGColor);</div><div class="line">    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    return image;</div><div class="line">&#125;</div><div class="line">void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor, CGColorRef endColor)</div><div class="line">&#123;</div><div class="line">    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();</div><div class="line">    CGFloat locations[] = &#123; 0.0, 1.0 &#125;;</div><div class="line">    </div><div class="line">    NSArray *colors = @[(__bridge id) startColor, (__bridge id) endColor];</div><div class="line">    </div><div class="line">    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef) colors, locations);</div><div class="line">    CGPoint startPoint = CGPointMake(CGRectGetMinX(rect), CGRectGetMinY(rect));</div><div class="line">    CGPoint endPoint = CGPointMake(CGRectGetMaxX(rect), CGRectGetMaxY(rect));</div><div class="line">    </div><div class="line">    CGContextSaveGState(context);</div><div class="line">    CGContextAddRect(context, rect);</div><div class="line">    CGContextClip(context);</div><div class="line">    CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, 0);</div><div class="line">    </div><div class="line">    CGContextRestoreGState(context);</div><div class="line">    </div><div class="line">    CGGradientRelease(gradient);</div><div class="line">    CGColorSpaceRelease(colorSpace);</div><div class="line">    // More coming...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>新建一个类继承与<code>UINavigationControlle</code>r，然后设置<code>backgroundImage</code>.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#import &quot;GradientNavController.h&quot;</div><div class="line">#import &quot;UIColor+Expanded.h&quot;</div><div class="line">#import &quot;UIImage+ColorImage.h&quot;</div><div class="line">#define Device_Width  [[UIScreen mainScreen] bounds].size.width//获取屏幕宽高</div><div class="line">#define Device_Height [[UIScreen mainScreen] bounds].size.height</div><div class="line">#define LBColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]</div><div class="line">@interface GradientNavController ()</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation GradientNavController</div><div class="line"></div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">//     Do any additional setup after loading the view.</div><div class="line"></div><div class="line">    </div><div class="line">    UIImage *image =[UIImage createGradientImageWithRect:CGRectMake(0, 0, Device_Width, 64) startColor:[UIColor hexStringToColor:@&quot;#5F98FC&quot;] endColor:[UIColor hexStringToColor:@&quot;#47BFFC&quot;]];</div><div class="line">    [self.navigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+            <blockquote>
+<p>关于二维码的生成，系统提供了API。</p>
+</blockquote>
+<p>######第一步根据内容生成CIImage<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">//根据url 创建CIImage</div><div class="line">+(CIImage *)QRFromUrl:(NSString *)urlStr&#123;</div><div class="line">    // 1、创建滤镜对象</div><div class="line">    CIFilter *filter = [CIFilter filterWithName:@&quot;CIQRCodeGenerator&quot;];</div><div class="line">    </div><div class="line">    // 恢复滤镜的默认属性</div><div class="line">    [filter setDefaults];</div><div class="line">    </div><div class="line">    // 2、设置数据</div><div class="line">    NSString *info = urlStr;</div><div class="line">    // 将字符串转换成</div><div class="line">    NSData *infoData = [info dataUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    </div><div class="line">    // 通过KVC设置滤镜inputMessage数据</div><div class="line">    [filter setValue:infoData forKeyPath:@&quot;inputMessage&quot;];</div><div class="line">    </div><div class="line">    // 3、获得滤镜输出的图像</div><div class="line">    CIImage *outputImage = [filter outputImage];</div><div class="line">    </div><div class="line">    return outputImage;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#####第二步根据CIImage生成UIImage</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">/** 根据CIImage生成指定大小的UIImage */</div><div class="line">+ (UIImage *)createUIImageFormCIImage:(CIImage *)image withSize:(CGFloat)size &#123;</div><div class="line">    CGRect extent = CGRectIntegral(image.extent);</div><div class="line">    CGFloat scale = MIN(size/CGRectGetWidth(extent), size/CGRectGetHeight(extent));</div><div class="line">    </div><div class="line">    // 1.创建bitmap;</div><div class="line">    size_t width = CGRectGetWidth(extent) * scale;</div><div class="line">    size_t height = CGRectGetHeight(extent) * scale;</div><div class="line">    CGColorSpaceRef cs = CGColorSpaceCreateDeviceGray();</div><div class="line">    CGContextRef bitmapRef = CGBitmapContextCreate(nil, width, height, 8, 0, cs, (CGBitmapInfo)kCGImageAlphaNone);</div><div class="line">    CIContext *context = [CIContext contextWithOptions:nil];</div><div class="line">    CGImageRef bitmapImage = [context createCGImage:image fromRect:extent];</div><div class="line">    CGContextSetInterpolationQuality(bitmapRef, kCGInterpolationNone);</div><div class="line">    CGContextScaleCTM(bitmapRef, scale, scale);</div><div class="line">    CGContextDrawImage(bitmapRef, extent, bitmapImage);</div><div class="line">    </div><div class="line">    // 2.保存bitmap到图片</div><div class="line">    CGImageRef scaledImage = CGBitmapContextCreateImage(bitmapRef);</div><div class="line">    CGContextRelease(bitmapRef);</div><div class="line">    CGImageRelease(bitmapImage);</div><div class="line">    return [UIImage imageWithCGImage:scaledImage];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样就可以生成简单的二维码。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-7b431ed9bb0ee43f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="普通的二维码.png"></p>
+<blockquote>
+<p>如果要在二维码中间加一个logo头像，我们需要给生成的二维码添加水印。</p>
+<p>######假定已经生成了普通的二维码</p>
+<p>######第一步:需要根据二维码图片设置生成水印图片<code>rect</code>：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//根据二维码图片设置生成水印图片rect 这里限制水印的图片为二维码的1/4</div><div class="line">    CGRect waterImageRect = [self getWaterImageRectFromOutputQRImage:orginQRImage];</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">+(CGRect)getWaterImageRectFromOutputQRImage:(UIImage *)orginQRImage&#123;</div><div class="line">    </div><div class="line">     CGSize linkSize = CGSizeMake(orginQRImage.size.width / 4, orginQRImage.size.height / 4); </div><div class="line">    </div><div class="line">    CGFloat linkX = (orginQRImage.size.width -linkSize.width)/2;</div><div class="line">    CGFloat linkY = (orginQRImage.size.height -linkSize.height)/2;</div><div class="line"></div><div class="line">    </div><div class="line">    return CGRectMake(linkX, linkY, linkSize.width, linkSize.height);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>######第二步：根据限制的rect重新生成logo图片</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UIImage *logoImage =[[UIImage imageNamed:logoName]scaleToSize:waterImageRect.size];</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">-(UIImage*)scaleToSize:(CGSize)size</div><div class="line">&#123;</div><div class="line">    size = CGSizeMake(size.width  , size.height );</div><div class="line">    // 创建一个bitmap的context</div><div class="line">    // 并把它设置成为当前正在使用的context</div><div class="line">    UIGraphicsBeginImageContext(size);</div><div class="line">    // 绘制改变大小的图片</div><div class="line">    [self drawInRect:CGRectMake(0, 0, size.width , size.height )];</div><div class="line">    // 从当前context中创建一个改变大小后的图片</div><div class="line">    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    // 使当前的context出堆栈</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    // 返回新的改变大小后的图片</div><div class="line">    return scaledImage;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>#####第三步：为生成的二维码添加水印图片</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//添加水印图片</div><div class="line">   finalImage =[UIImage LX_WaterImageWithImage:orginQRImage waterImage:waterImage waterImageRect:waterImageRect];</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">//添加水印图片</div><div class="line">+ (UIImage *)LX_WaterImageWithImage:(UIImage *)image waterImage:(UIImage *)waterImage waterImageRect:(CGRect)rect&#123;</div><div class="line">    </div><div class="line">    //1.获取图片</div><div class="line">    </div><div class="line">    //2.开启上下文</div><div class="line">    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);</div><div class="line">    //3.绘制背景图片</div><div class="line">    [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];</div><div class="line">    //绘制水印图片到当前上下文</div><div class="line">    [waterImage drawInRect:rect];</div><div class="line">    </div><div class="line">    //4.从上下文中获取新图片</div><div class="line">    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    //5.关闭图形上下文</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    //返回图片</div><div class="line">    return newImage;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后会生成如下的二维码<br><img src="http://upload-images.jianshu.io/upload_images/1694376-0d14832e33c8f20a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="logo二维码.png"></p>
+<p>把方法封装在 分类里面,直接调用即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//普通的二维码</div><div class="line">+(UIImage *)LX_ImageOfQRFromURL:(NSString *)urlStr codeSize:(CGFloat)codeSize;</div><div class="line"></div><div class="line">//带logo 的二维码</div><div class="line">+(UIImage *)LX_ImageOfQRFromURL:(NSString *)urlStr codeSize:(CGFloat)codeSize logoName:(NSString *)logoName  radius: (CGFloat)radius borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>简单介绍一些图片裁剪处理的分类。</p>
+</blockquote>
+<p>1、裁剪图片自定义圆角<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">+ (UIImage *)LX_ClipImageWithImage:(UIImage *)image circleRect:(CGRect)rect radious:(CGFloat) radious;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">+ (UIImage *)LX_ClipImageWithImage:(UIImage *)image circleRect:(CGRect)rect radious:(CGFloat) radious&#123;</div><div class="line">    //1、开启上下文</div><div class="line">    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);</div><div class="line">    //2、设置裁剪区域</div><div class="line">//    UIBezierPath * path = [UIBezierPath bezierPathWithOvalInRect:rect];</div><div class="line">    UIBezierPath * path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radious];</div><div class="line">    [path addClip];</div><div class="line">    //3、绘制图片</div><div class="line">    [image drawAtPoint:CGPointZero];</div><div class="line">    //4、获取新图片</div><div class="line">    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    //5、关闭上下文</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    //6、返回新图片</div><div class="line">    return newImage;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-56387fab3d8917dd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="圆形裁剪.png"></p>
+<p>2、圆形裁剪带边框<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//裁剪带边框的圆形图片</div><div class="line">+ ( UIImage *)LX_ClipCircleImageWithImage:(UIImage *)image circleRect:(CGRect)rect borderWidth:(CGFloat)borderW borderColor:( UIColor *)borderColor;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">//裁剪带边框的圆形图片</div><div class="line">+ (UIImage *)LX_ClipCircleImageWithImage:(UIImage *)image circleRect:(CGRect)rect borderWidth:(CGFloat)borderW borderColor:( UIColor *)borderColor&#123;</div><div class="line">    //1、开启上下文</div><div class="line">    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);</div><div class="line">    </div><div class="line">    //2、设置边框</div><div class="line">    UIBezierPath * path = [UIBezierPath bezierPathWithOvalInRect:rect];</div><div class="line">    [borderColor setFill];</div><div class="line">    [path fill];</div><div class="line">    </div><div class="line">    //3、设置裁剪区域</div><div class="line">    UIBezierPath * clipPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(rect.origin.x + borderW , rect.origin.x + borderW , rect.size.width - borderW * 2, rect.size.height - borderW *2)];</div><div class="line">    [clipPath addClip];</div><div class="line">    </div><div class="line">    //3、绘制图片</div><div class="line">    [image drawAtPoint:CGPointZero];</div><div class="line">    </div><div class="line">    //4、获取新图片</div><div class="line">    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    //5、关闭上下文</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    //6、返回新图片</div><div class="line">    return newImage;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-46bfff18e8bd23fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="圆形裁剪边框.png"></p>
+<p>3、自定义图片圆角</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//裁剪图片自定义圆角</div><div class="line">+ (UIImage *)LX_ClipImageWithImage:(UIImage *)image circleRect:(CGRect)rect radious:(CGFloat) radious;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">+ (UIImage *)LX_ClipImageWithImage:(UIImage *)image circleRect:(CGRect)rect radious:(CGFloat) radious&#123;</div><div class="line">    //1、开启上下文</div><div class="line">    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);</div><div class="line">    //2、设置裁剪区域</div><div class="line">//    UIBezierPath * path = [UIBezierPath bezierPathWithOvalInRect:rect];</div><div class="line">    UIBezierPath * path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radious];</div><div class="line">    [path addClip];</div><div class="line">    //3、绘制图片</div><div class="line">    [image drawAtPoint:CGPointZero];</div><div class="line">    //4、获取新图片</div><div class="line">    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    //5、关闭上下文</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    //6、返回新图片</div><div class="line">    return newImage;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-03e2aa8fc0a1a419.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自定义图片裁剪圆角.png"></p>
+<p>4、自定义图片边框圆角<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//裁剪带边框的图片 可设置圆角 边框颜色</div><div class="line">+(UIImage *)LX_ClipImageRadiousWithImage:(UIImage *)image circleRect:(CGRect)rect radious:(CGFloat)radious borderWith:(CGFloat)borderW borderColor:( UIColor *)borderColor;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">//裁剪带边框的图片 可设置圆角 边框颜色</div><div class="line">+(UIImage *)LX_ClipImageRadiousWithImage:(UIImage *)image circleRect:(CGRect)rect radious:(CGFloat)radious borderWith:(CGFloat)borderW borderColor:( UIColor *)borderColor&#123;</div><div class="line">    </div><div class="line">   </div><div class="line">    //1、开启上下文</div><div class="line">    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);</div><div class="line">    </div><div class="line">    //2、设置边框</div><div class="line">    </div><div class="line">    UIBezierPath *path =[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radious];</div><div class="line">    </div><div class="line">    [borderColor setFill];</div><div class="line">    </div><div class="line">    [path fill];</div><div class="line">    </div><div class="line">    </div><div class="line">    //3、设置裁剪区域</div><div class="line">    </div><div class="line">    </div><div class="line">    UIBezierPath * clipPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(rect.origin.x + borderW , rect.origin.x + borderW , rect.size.width - borderW * 2, rect.size.height - borderW *2) cornerRadius:radious];</div><div class="line">    </div><div class="line">    [clipPath addClip];</div><div class="line">    </div><div class="line">    //3、绘制图片</div><div class="line">    [image drawAtPoint:CGPointZero];</div><div class="line">    </div><div class="line">    //4、获取新图片</div><div class="line">    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    //5、关闭上下文</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    //6、返回新图片</div><div class="line">    return newImage;</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-9a99c31770c1feca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自定义图片边框圆角.png"></p>
+<p>5、图片添加水印</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//添加水印图片</div><div class="line">+ (UIImage *)LX_WaterImageWithImage:(UIImage *)image waterImage:(UIImage *)waterImage waterImageRect:(CGRect)rect;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">//添加水印图片</div><div class="line">+ (UIImage *)LX_WaterImageWithImage:(UIImage *)image waterImage:(UIImage *)waterImage waterImageRect:(CGRect)rect&#123;</div><div class="line">    </div><div class="line">    //1.获取图片</div><div class="line">    </div><div class="line">    //2.开启上下文</div><div class="line">    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);</div><div class="line">    //3.绘制背景图片</div><div class="line">    [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];</div><div class="line">    //绘制水印图片到当前上下文</div><div class="line">    [waterImage drawInRect:rect];</div><div class="line">    </div><div class="line">    //4.从上下文中获取新图片</div><div class="line">    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    //5.关闭图形上下文</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    //返回图片</div><div class="line">    return newImage;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-656f4be13e32f014.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片添加水印.png"></p>
+<p>demo 里简单封装了下。效果图</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-eebbae892a9596a5.gif?imageMogr2/auto-orient/strip" alt="二维码.gif"></p>
+<blockquote>
+<p>最后说明一下访问相册以及识别二维码进行跳转页面。这一块必须用真机测试。</p>
+</blockquote>
+<p>关于二维码扫描使用<a href="https://github.com/liuxinixn/SGQRCode" target="_blank" rel="noopener">SGQRCode</a>,<br>相册选择选择<a href="https://github.com/liuxinixn/TZImagePickerController" target="_blank" rel="noopener">TZImagePickerController</a></p>
+<p>替换掉博主的选择相册。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">TZImagePickerController *pickerController = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];</div><div class="line">   </div><div class="line">   NCWS(weakSelf);</div><div class="line">   </div><div class="line">   [pickerController setDidFinishPickingPhotosHandle:^(NSArray&lt;UIImage *&gt; *photo, NSArray *assets, BOOL isSelectOriginalPhoto)&#123;</div><div class="line">       </div><div class="line">       NSLog(@&quot;%@&quot;,photo);</div><div class="line">       </div><div class="line">       UIImage *image = photo[0];</div><div class="line">              // CIDetector(CIDetector可用于人脸识别)进行图片解析，从而使我们可以便捷的从相册中获取到二维码</div><div class="line">       // 声明一个 CIDetector，并设定识别类型 CIDetectorTypeQRCode</div><div class="line">       CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeQRCode context:nil options:@&#123;CIDetectorAccuracy: CIDetectorAccuracyHigh&#125;];</div><div class="line">       </div><div class="line">       // 取得识别结果</div><div class="line">       NSArray *features = [detector featuresInImage:[CIImage imageWithCGImage:image.CGImage]];</div><div class="line">       </div><div class="line">       if (features.count == 0) &#123;</div><div class="line">           </div><div class="line">       &#125;else&#123;</div><div class="line">           for (int index = 0; index &lt; [features count]; index ++) &#123;</div><div class="line">               CIQRCodeFeature *feature = [features objectAtIndex:index];</div><div class="line">               NSString *resultStr = feature.messageString;</div><div class="line">               weakSelf.detectorString = resultStr;</div><div class="line">              </div><div class="line">           &#125;</div><div class="line">           NSString *result = weakSelf.detectorString;</div><div class="line">           </div><div class="line">               if ([result hasPrefix:@&quot;http&quot;]) &#123;</div><div class="line">                   ScanSuccessJumpVC *jumpVC = [[ScanSuccessJumpVC alloc] init];</div><div class="line">                   jumpVC.jump_URL = result;</div><div class="line">                   [self.navigationController pushViewController:jumpVC animated:YES];</div><div class="line">           </div><div class="line">               &#125; else &#123;</div><div class="line">                   ScanSuccessJumpVC *jumpVC = [[ScanSuccessJumpVC alloc] init];</div><div class="line">                   jumpVC.jump_bar_code = result;</div><div class="line">                   [self.navigationController pushViewController:jumpVC animated:YES];</div><div class="line">               &#125;</div><div class="line"></div><div class="line">           </div><div class="line">       &#125;</div><div class="line"></div><div class="line">   &#125;];</div><div class="line">   [self presentViewController:pickerController animated:YES completion:nil];</div></pre></td></tr></table></figure>
+<p>demo地址:<a href="https://github.com/liuxinixn/LXQRCode/tree/master" target="_blank" rel="noopener">二维码制作与图片处理</a></p>
 
           
         
@@ -1452,7 +1215,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/02/关于AFNetworking多次网络请求后进行的操作/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/06/03/Coregraphics切反向圆角/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -1471,7 +1234,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/03/02/关于AFNetworking多次网络请求后进行的操作/" itemprop="url">关于AFNetworking多次网络请求后进行的操作</a></h1>
+                <a class="post-title-link" href="/2016/06/03/Coregraphics切反向圆角/" itemprop="url">CoreGraphices -切反向圆角</a></h1>
         
 
         <div class="post-meta">
@@ -1483,8 +1246,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-02T20:19:35+08:00">
-                2017-03-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-03T20:19:35+08:00">
+                2016-06-03
               </time>
             
 
@@ -1523,11 +1286,280 @@
       
         
           
-            <p>需求：同时进行两次网络请求，网络请求是异步的，在网络请求成功后进行其它的操作。两个网络请求是这样，一个网络请求中block执行完之后，再进行其它操作，也是一样的原理，只是这时候不需要线程组了，只需要信号量。当然也适用于所有的block。</p>
-<p>接下来就说下，在两次异步请求之后要做的操作。</p>
-<p>利用线程组和信号量来完成，看代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">    dispatch_group_t group = dispatch_group_create();</div><div class="line">    </div><div class="line">    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</div><div class="line">        </div><div class="line">        // 创建信号量</div><div class="line">        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);</div><div class="line">        [LBHTTPTool get:urlOne params:nil success:^(id responseObject) &#123;</div><div class="line">            // 请求成功发送信号量(+1)</div><div class="line">            NSLog(@&quot;第一个&quot;);</div><div class="line">                        dispatch_semaphore_signal(semaphore);</div><div class="line">        &#125; failure:^(NSError *error) &#123;</div><div class="line">//             无论请求成功或失败都发送信号量(+1)</div><div class="line">                        dispatch_semaphore_signal(semaphore);</div><div class="line">        &#125;];</div><div class="line"></div><div class="line">        </div><div class="line">        // 在请求成功之前等待信号量(-1)</div><div class="line">        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);</div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">    dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</div><div class="line">        </div><div class="line">        // 创建信号量</div><div class="line">        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);</div><div class="line">        [LBHTTPTool get:urlTwo params:nil success:^(id responseObject) &#123;</div><div class="line">            // 请求成功发送信号量(+1)</div><div class="line">            NSLog(@&quot;第二个&quot;);</div><div class="line">            dispatch_semaphore_signal(semaphore);</div><div class="line">        &#125; failure:^(NSError *error) &#123;</div><div class="line">            //             无论请求成功或失败都发送信号量(+1)</div><div class="line">            dispatch_semaphore_signal(semaphore);</div><div class="line">        &#125;];</div><div class="line">        </div><div class="line">        </div><div class="line">        // 在请求成功之前等待信号量(-1)</div><div class="line">        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);</div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">    // 请求完成之后</div><div class="line">    dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</div><div class="line">        NSLog(@&quot;最终&quot;);</div><div class="line">    &#125;);</div></pre></td></tr></table></figure></p>
-<p>结果：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-dfbe9a3e5d713d44.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20170531-135647.png"></p>
+            <p>效果图<br><img src="http://upload-images.jianshu.io/upload_images/1694376-efefdd1b6916140a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="E1819704-B84B-4741-BB28-4B87A1883EDF.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">    UIImageView *iamgeview =[[UIImageView alloc]initWithFrame:CGRectMake(20, 100, 200, 200)];</div><div class="line">    UIImage *image = [UIImage imageNamed:@&quot;gougou&quot;];</div><div class="line"></div><div class="line">//    iamgeview.image =</div><div class="line">    iamgeview.image = [self addClipWithImage:image];</div><div class="line"></div><div class="line">    [self.view addSubview:iamgeview];</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">-(UIImage *)addClipWithImage:(UIImage *)image&#123;</div><div class="line">    </div><div class="line">    //1、开启上下文</div><div class="line">    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);</div><div class="line">   </div><div class="line">    //2、设置裁剪区域</div><div class="line">    //    UIBezierPath * path = [UIBezierPath bezierPathWithOvalInRect:rect];</div><div class="line"> </div><div class="line">    </div><div class="line">    UIBezierPath * path = [UIBezierPath bezierPathWithRect:CGRectMake(0,0,image.size.width, image.size.height)];</div><div class="line">    </div><div class="line">    [path addArcWithCenter:CGPointMake(image.size.width, 0) radius:10 startAngle:- M_PI  endAngle:-M_2_PI clockwise:NO];</div><div class="line">    [path closePath];</div><div class="line">    [path addClip];</div><div class="line">    //3、绘制图片</div><div class="line">    [image drawAtPoint:CGPointZero];</div><div class="line">    //4、获取新图片</div><div class="line">    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    //5、关闭上下文</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    //6、返回新图片</div><div class="line">    return newImage;</div><div class="line"></div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/06/02/CoreGraphics-压缩图片的正确姿势/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/06/02/CoreGraphics-压缩图片的正确姿势/" itemprop="url">CoreGraphices -压缩图片的正确姿势</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-02T20:19:35+08:00">
+                2016-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#####压缩图片的几种方法，我们都知道如果在上传的图片过大，上传会很慢，所以客户端这边需要做图片压缩。当然紧紧是对于加载图片的UIImagview 进行等比例压缩是不正确的，要从根本上改变图片的大小。</p>
+<blockquote>
+<p> 1 、NSData *imageData = UIImageJPEGRepresentation(image, 0.5);<br>这个返回的是二进制的data值，可以通过打印知道大小确实减少了好多，通过此方法确实能优化性能，需要注意的是这个0.5，并不是说压缩到之前图片的二分之一<br>，应该是个系数之类的数值，这样的话图片压缩之后性能会好很多，但是不建议这个，因为解压缩的时候很耗费性能建议使用第二种方法</p>
+<p>2、 使用CoreGraphics 重新绘制一张等比例的图片</p>
+</blockquote>
+<p>小小的测试一下： </p>
+<p>原图<br><img src="http://upload-images.jianshu.io/upload_images/1694376-954d3694707bfc3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="原图.png"></p>
+<p>经过下面代码压缩后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">- (UIImage *)imageWithImage:(UIImage*)image</div><div class="line">               scaledToSize:(CGSize)newSize;</div><div class="line">&#123;</div><div class="line">    UIGraphicsBeginImageContext(newSize);</div><div class="line">    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];</div><div class="line">    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    </div><div class="line">    NSString * path = [NSString stringWithFormat:@&quot;%@/Documents/cutSome.jpg&quot;,NSHomeDirectory()];</div><div class="line">    NSData * imagedata = UIImageJPEGRepresentation(newImage, 1);</div><div class="line"></div><div class="line">    if( [imagedata writeToFile:path atomically:YES])&#123;</div><div class="line">        NSLog(@&quot;保存成功%@&quot;,path);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return newImage;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>压缩后 ：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-ec24497911240929.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="压缩后.png"></p>
+<blockquote>
+<p>如果只是单纯的使用第一种方法，图片确实会变小，分辨率也没有变化，但是在解压缩的过程中，会很耗性能，但是第二种方法 会按等比例的缩放像素，不会失真，对性能的耗损也比较小</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/06/01/CoreGraphics-练习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/06/01/CoreGraphics-练习/" itemprop="url">CoreGraphices -</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-01T20:19:35+08:00">
+                2016-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>主要熟悉 一些 基本的API</p>
+</blockquote>
+<p>#####获取上下文的集中方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//创建图片类型的上下文</div><div class="line">UIGraphicsBeginImageContextWithOptions</div><div class="line">//UIView,在drawRect中，Cocoa会为你创建一个图形上下文</div><div class="line">- (void)drawRect:(CGRect)rect</div><div class="line">//CALayer</div><div class="line">- (void)drawInContext:(CGContextRef)ctx</div><div class="line">//delegate回调</div><div class="line">- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx</div></pre></td></tr></table></figure></p>
+<p>#####先从drawRect开始</p>
+<p>先说 一些API的区别 与相同 。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">UIBezierPath 可以 直接 stroke 或者fill ，不需要添加到上下文中，也不需要进行绘制。</div><div class="line"> [pathRect stroke];  //可是设置 添加路径然后进行喷绘 UIBezierPath 本身有stroke 方法</div><div class="line">    //添加路径</div><div class="line">//    CGContextAddPath(contextRef, pathRect.CGPath);</div><div class="line">//    CGContextStrokePath(contextRef);</div></pre></td></tr></table></figure></p>
+<p>关于设置颜色： 描边与填充同样的道理，当然要选取最简单的代码来实现。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[[UIColor blueColor]set]  等于setFill + setStroke</div><div class="line"> [[UIColor redColor]setFill]; //等同于   CGContextSetFillColorWithColor(contextRef, [UIColor redColor].CGColor);</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//kCGPathFill填充非零绕数规则,</div><div class="line">kCGPathEOFill表示用奇偶规则,</div><div class="line">kCGPathStroke路径,</div><div class="line">kCGPathFillStroke路径填充,</div><div class="line">kCGPathEOFillStroke表示描线，不是填充</div><div class="line">CGContextDrawPath(context, kCGPathFillStroke);//绘制路径 加填充</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//画笑脸弧线</div><div class="line">   //左</div><div class="line">   CGContextMoveToPoint(context, 140, 80);//开始坐标p1</div><div class="line">   //CGContextAddArcToPoint(CGContextRef c, CGFloat x1, CGFloat y1,CGFloat x2, CGFloat y2, CGFloat radius)</div><div class="line">   //x1,y1跟p1形成一条线的坐标p2，x2,y2结束坐标跟p3形成一条线的p3,radius半径,注意, 需要算好半径的长度,</div><div class="line">   CGContextAddArcToPoint(context, 148, 68, 156, 80, 10);//⚠️</div><div class="line">   CGContextStrokePath(context);</div></pre></td></tr></table></figure>
+<blockquote>
+<p>下面是一些简单的绘制</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-d73c30d1c781718d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="绘制.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div></pre></td><td class="code"><pre><div class="line">- (void)drawRect:(CGRect)rect &#123;</div><div class="line">    </div><div class="line">    CGContextRef contextRef = UIGraphicsGetCurrentContext();</div><div class="line">    </div><div class="line">    NSLog(@&quot;%s&quot;,__func__);</div><div class="line">    </div><div class="line">    </div><div class="line">    UIBezierPath *path =[UIBezierPath bezierPath];</div><div class="line">    [path moveToPoint:CGPointMake(10, 10)];</div><div class="line">    [path addLineToPoint:CGPointMake(100, 100)];</div><div class="line">    </div><div class="line">//    [[UIColor whiteColor]setStroke];</div><div class="line">    UIColor *color =[UIColor whiteColor];</div><div class="line">    CGContextSetStrokeColorWithColor(contextRef, color.CGColor);</div><div class="line">    CGContextAddPath(contextRef, path.CGPath);</div><div class="line">    CGContextStrokePath(contextRef);</div><div class="line">//    CGContextDrawPath(contextRef, kCGPathStroke);</div><div class="line">    </div><div class="line">    </div><div class="line">    //通过点 做矩形</div><div class="line">    </div><div class="line">    UIBezierPath *pathRect =[UIBezierPath bezierPath];</div><div class="line">    [pathRect moveToPoint:CGPointMake(10, 110)];</div><div class="line">    [pathRect addLineToPoint:CGPointMake(110, 110)];</div><div class="line">    [pathRect addLineToPoint:CGPointMake(110, 210)];</div><div class="line">    [pathRect addLineToPoint:CGPointMake(10, 210)];</div><div class="line">    //闭合路径</div><div class="line">    [pathRect closePath];</div><div class="line">    </div><div class="line">    //设置颜色</div><div class="line">    [[UIColor redColor]setStroke];</div><div class="line">    </div><div class="line">    [pathRect stroke];  //可是设置 添加路径然后进行喷绘 UIBezierPath 本身有stroke 方法</div><div class="line">    //添加路径</div><div class="line">//    CGContextAddPath(contextRef, pathRect.CGPath);</div><div class="line">    </div><div class="line">//    CGContextStrokePath(contextRef);</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">    UIBezierPath *pathRect2 =[UIBezierPath bezierPathWithRect:CGRectMake(110, 10, 100, 100)];</div><div class="line">    CGContextSetFillColorWithColor(contextRef, [UIColor blueColor].CGColor);</div><div class="line">    [pathRect2 fill];</div><div class="line">    </div><div class="line">    </div><div class="line">    //设置颜色</div><div class="line">    [[UIColor brownColor]setStroke];</div><div class="line">    UIBezierPath *pathRect3 =[UIBezierPath bezierPathWithRect:CGRectMake(215, 10, 100, 100)];</div><div class="line"></div><div class="line">    [[UIColor redColor]setFill]; //等同于  [[UIColor redColor]set] CGContextSetFillColorWithColor(contextRef, [UIColor redColor].CGColor);</div><div class="line"></div><div class="line">    //添加路径   这两步等同于 [pathRect3 fill];</div><div class="line">    CGContextAddPath(contextRef, pathRect3.CGPath);</div><div class="line"></div><div class="line">    CGContextFillPath(contextRef);</div><div class="line"></div><div class="line">    </div><div class="line">    //画圆</div><div class="line">    //ArcCenter:中心点</div><div class="line">    //radius:半径</div><div class="line">    //startAngle：起始角度</div><div class="line">    //endAngle：结束角度</div><div class="line">    //clockwise：是否逆时针</div><div class="line">    UIBezierPath *pathCircle =[UIBezierPath bezierPathWithArcCenter:CGPointMake(170, 170) radius:50 startAngle:0 endAngle:M_PI *2 clockwise:NO];</div><div class="line">   </div><div class="line">//    [pathCircle fill];//填充</div><div class="line">    pathCircle.lineWidth = 5;</div><div class="line">    [pathCircle stroke];</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">    //椭圆</div><div class="line">    UIBezierPath *pathOvar =[UIBezierPath bezierPathWithOvalInRect:CGRectMake(230, 120, 150, 100)];</div><div class="line">    </div><div class="line">    pathOvar.lineWidth = 5;</div><div class="line">    [pathOvar fill];</div><div class="line">    </div><div class="line"></div><div class="line">    </div><div class="line">    [[UIColor whiteColor]set];</div><div class="line">    //矩形</div><div class="line">    UIBezierPath *pathText =[UIBezierPath bezierPathWithRect:CGRectMake(10, 220, 100, 100)];</div><div class="line">    </div><div class="line">    pathText.lineWidth = 5;</div><div class="line">    [pathText fill];</div><div class="line">    //矩形中画字</div><div class="line">    NSString *str = @&quot;他大舅他二舅都是他舅&quot;;</div><div class="line">    NSMutableDictionary *dic =[NSMutableDictionary dictionary];</div><div class="line">    dic[NSForegroundColorAttributeName]= [UIColor purpleColor];</div><div class="line">    dic[NSFontAttributeName] = [UIFont systemFontOfSize:15];</div><div class="line">    dic[NSUnderlineStyleAttributeName] = @(NSUnderlineStyleSingle);</div><div class="line">    NSShadow *shadow =[[NSShadow alloc]init];</div><div class="line">    shadow.shadowOffset = CGSizeMake(2, 2);</div><div class="line">    shadow.shadowColor =[UIColor cyanColor];</div><div class="line">    dic[NSShadowAttributeName] = shadow;</div><div class="line">    </div><div class="line">    //字体间距</div><div class="line">    dic[NSKernAttributeName] = @5;</div><div class="line">    [str drawInRect:CGRectMake(10, 220, 100, 100) withAttributes:dic];</div><div class="line">    CGContextStrokePath(contextRef);</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">    //椭圆 贝塞尔曲线</div><div class="line">    UIBezierPath *pathCurver =[UIBezierPath bezierPath];</div><div class="line"></div><div class="line">    [pathCurver moveToPoint:CGPointMake(120, 230)];</div><div class="line">    [pathCurver addQuadCurveToPoint:CGPointMake(200, 300) controlPoint:CGPointMake(150, 200)];</div><div class="line">    pathCurver.lineWidth = 5;</div><div class="line">    [pathCurver stroke];</div><div class="line">    </div><div class="line"></div><div class="line">    </div><div class="line">    </div><div class="line">    //绘制图片</div><div class="line">    UIImage *image =[UIImage imageNamed:@&quot;1&quot;];</div><div class="line">    </div><div class="line">    //设置绘制模式</div><div class="line">    [image drawInRect:CGRectMake(10, 330, 100, 100) blendMode:kCGBlendModeSoftLight alpha:1];</div><div class="line">    CGContextStrokePath(contextRef);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>#####不用贝塞尔曲线的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">- (void)drawRect:(CGRect)rect &#123;</div><div class="line">    </div><div class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</div><div class="line">    </div><div class="line"></div><div class="line">    </div><div class="line">    //只描边</div><div class="line">    [[UIColor blueColor]setStroke];</div><div class="line">    [[UIColor redColor]setFill];</div><div class="line">   </div><div class="line">    CGContextSetLineWidth(context, 5.0);</div><div class="line">    CGContextStrokeRect(context, CGRectMake(100, 120, 100, 100));</div><div class="line"></div><div class="line">    CGContextFillRect(context, CGRectMake(100, 300, 100, 100));</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">    CGContextDrawPath(context, kCGPathFillStroke);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p> 最后详细说明下 CGContextSaveGState CGContextRestoreGState   //保存当前上下文状态，如果做了裁剪就会在裁剪范围内 进行绘制，只有恢复到之前的上下文状态，才可以在裁剪区域之外进行绘制</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-6be7c39c780f2522.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="上下文状态.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">- (void)drawRect:(CGRect)rect &#123;</div><div class="line">    </div><div class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</div><div class="line"></div><div class="line">    </div><div class="line">    //只描边</div><div class="line">    [[UIColor blueColor]setStroke];</div><div class="line">    [[UIColor redColor]setFill];</div><div class="line"></div><div class="line">    </div><div class="line">    //渐变色 采用layer</div><div class="line">    CAGradientLayer *gradient1 = [CAGradientLayer layer];</div><div class="line">    gradient1.frame = CGRectMake(100, 200, 60, 30);</div><div class="line">    gradient1.colors = [NSArray arrayWithObjects:(id)[UIColor whiteColor].CGColor,</div><div class="line">                        (id)[UIColor grayColor].CGColor,</div><div class="line">                        (id)[UIColor blackColor].CGColor,</div><div class="line">                        (id)[UIColor yellowColor].CGColor,</div><div class="line">                        (id)[UIColor blueColor].CGColor,</div><div class="line">                        (id)[UIColor redColor].CGColor,</div><div class="line">                        (id)[UIColor greenColor].CGColor,</div><div class="line">                        (id)[UIColor orangeColor].CGColor,</div><div class="line">                        (id)[UIColor brownColor].CGColor,nil];</div><div class="line">    [self.layer insertSublayer:gradient1 atIndex:0];</div><div class="line">    </div><div class="line"></div><div class="line">    </div><div class="line">    //保存当前上下文状态，如果做了裁剪就会在裁剪范围内 进行绘制，只有恢复到之前的上下文状态，才可以在裁剪区域之外进行绘制</div><div class="line">    CGContextSaveGState(context);</div><div class="line">    </div><div class="line">    CGContextMoveToPoint(context, 250, 300);</div><div class="line">    CGContextAddLineToPoint(context,350, 300);</div><div class="line">    CGContextAddLineToPoint(context, 350, 400);</div><div class="line">    CGContextAddLineToPoint(context, 250, 400);</div><div class="line">    CGContextClip(context);//context裁剪路径,后续操作的路径</div><div class="line"></div><div class="line">    //CGContextDrawLinearGradient(CGContextRef context,CGGradientRef gradient, CGPoint startPoint, CGPoint endPoint,CGGradientDrawingOptions options)</div><div class="line">    //gradient渐变颜色,startPoint开始渐变的起始位置,endPoint结束坐标,options开始坐标之前or开始之后开始渐变</div><div class="line">    CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();</div><div class="line">    CGFloat colors[] =</div><div class="line">    &#123;</div><div class="line">        1,1,1, 1.00,</div><div class="line">        1,1,0, 1.00,</div><div class="line">        1,0,0, 1.00,</div><div class="line">        1,0,1, 1.00,</div><div class="line">        0,1,1, 1.00,</div><div class="line">        0,1,0, 1.00,</div><div class="line">        0,0,1, 1.00,</div><div class="line">        0,0,0, 1.00,</div><div class="line">    &#125;;</div><div class="line">    CGGradientRef gradient = CGGradientCreateWithColorComponents</div><div class="line">    (rgb, colors, NULL, sizeof(colors)/(sizeof(colors[0])*4));//形成梯形，渐变的效果</div><div class="line">    CGColorSpaceRelease(rgb);</div><div class="line">    </div><div class="line">    CGContextDrawLinearGradient(context, gradient, CGPointMake(250, 300), CGPointMake(350, 400), kCGGradientDrawsAfterEndLocation);</div><div class="line"></div><div class="line">    //恢复上下文状态</div><div class="line">    CGContextRestoreGState(context);</div><div class="line">    </div><div class="line">  //如果没有恢复上下文状态，下方的矩形是看不见的</div><div class="line">    CGContextFillRect(context, CGRectMake(100, 450, 100, 100));</div><div class="line">    CGContextDrawPath(context, kCGPathFill);</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
           
         
@@ -1616,7 +1648,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-count">97</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

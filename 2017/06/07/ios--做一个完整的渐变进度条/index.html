@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="效果图： 注意点：1、在设置贝塞尔曲线绘制圆环的时候，半径必须减去线宽的一半。2、蒙版的使用。蒙版与蒙版盖住的layer，最终显示的蒙版的颜色与形状，所以蒙版颜色fillColor设置为透明色。  第一步，绘制背景圆环。   绘制贝塞尔曲线的时候需要注意默认从0 开始，参考坐标系。贴一张图 需要注意的是，绘制圆环，填充色设置为透明，描边色需要设置。贝塞尔曲线的开始的位置为 -0.5 M_PI，结束">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS --做一个完整的渐变进度条">
+<meta property="og:url" content="liuxinixn.github.io/2017/06/07/ios--做一个完整的渐变进度条/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="效果图： 注意点：1、在设置贝塞尔曲线绘制圆环的时候，半径必须减去线宽的一半。2、蒙版的使用。蒙版与蒙版盖住的layer，最终显示的蒙版的颜色与形状，所以蒙版颜色fillColor设置为透明色。  第一步，绘制背景圆环。   绘制贝塞尔曲线的时候需要注意默认从0 开始，参考坐标系。贴一张图 需要注意的是，绘制圆环，填充色设置为透明，描边色需要设置。贝塞尔曲线的开始的位置为 -0.5 M_PI，结束">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-9a52e1e072374670.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-7fbe9e95bf39a556.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-1bcda5b66bafdce6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-09dcb8aa8e19613c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-0896036805f6b039.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-12-28T13:39:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS --做一个完整的渐变进度条">
+<meta name="twitter:description" content="效果图： 注意点：1、在设置贝塞尔曲线绘制圆环的时候，半径必须减去线宽的一半。2、蒙版的使用。蒙版与蒙版盖住的layer，最终显示的蒙版的颜色与形状，所以蒙版颜色fillColor设置为透明色。  第一步，绘制背景圆环。   绘制贝塞尔曲线的时候需要注意默认从0 开始，参考坐标系。贴一张图 需要注意的是，绘制圆环，填充色设置为透明，描边色需要设置。贝塞尔曲线的开始的位置为 -0.5 M_PI，结束">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1694376-9a52e1e072374670.gif?imageMogr2/auto-orient/strip">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2017/06/07/ios--做一个完整的渐变进度条/"/>
+
+
+
+
+
+  <title>iOS --做一个完整的渐变进度条 | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/07/ios--做一个完整的渐变进度条/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS --做一个完整的渐变进度条</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-07T20:19:35+08:00">
+                2017-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>效果图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-9a52e1e072374670.gif?imageMogr2/auto-orient/strip" alt="gif.gif"></p>
+<p>注意点：<br>1、在设置贝塞尔曲线绘制圆环的时候，半径必须减去线宽的一半。<br>2、蒙版的使用。蒙版与蒙版盖住的layer，最终显示的蒙版的颜色与形状，所以蒙版颜色fillColor设置为透明色。</p>
+<blockquote>
+<p>第一步，绘制背景圆环。</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-7fbe9e95bf39a556.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>绘制贝塞尔曲线的时候需要注意默认从0 开始，参考坐标系。贴一张图<br><img src="http://upload-images.jianshu.io/upload_images/1694376-1bcda5b66bafdce6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="20160923141208631.png"></p>
+<p>需要注意的是，绘制圆环，填充色设置为透明，描边色需要设置。贝塞尔曲线的开始的位置为 -0.5 <em>M_PI，结束位置为 1.5 </em>M_PI；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//背景灰色</div><div class="line">   CAShapeLayer *shapeLayer =[[CAShapeLayer alloc]init];</div><div class="line">   </div><div class="line">   shapeLayer.frame = CGRectMake(0, 0, rect.size.width, rect.size.width);</div><div class="line">   shapeLayer.lineWidth = _lineWidth; //线宽</div><div class="line">   </div><div class="line">   shapeLayer.fillColor =[UIColor clearColor].CGColor; //填充颜色</div><div class="line">   shapeLayer.strokeColor = LBColor(50, 50, 50, 1).CGColor; //描边颜色</div><div class="line">   </div><div class="line">   </div><div class="line">   CGPoint center =  CGPointMake((rect.size.width )/2, (rect.size.width)/2);</div><div class="line">   </div><div class="line">   UIBezierPath *bezierPath =[UIBezierPath bezierPathWithArcCenter:center radius:(rect.size.width- _lineWidth)/2 startAngle:-0.5 *M_PI endAngle:1.5 *M_PI clockwise:YES];  //一定要减去线宽的一半</div><div class="line">   shapeLayer.path = bezierPath.CGPath;</div><div class="line">   </div><div class="line">   [self.layer addSublayer:shapeLayer];</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>第二步绘制渐变色</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-09dcb8aa8e19613c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p>如上面，是从上到下的蓝色渐变。</p>
+<p>关于梯度渐变引用一张图<br><img src="http://upload-images.jianshu.io/upload_images/1694376-0896036805f6b039.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="梯度.png"></p>
+<p>根据需要选择轴向渐变还是径向渐变。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">//渐变色，加蒙版，显示的蒙版的区域</div><div class="line">   CAGradientLayer *gradientLayer =[[CAGradientLayer alloc]init];</div><div class="line">   </div><div class="line">   gradientLayer.frame = self.bounds;</div><div class="line">   </div><div class="line">   gradientLayer.colors = @[(id)[UIColor hexStringToColor:@&quot;#5F98FC&quot;].CGColor,(id)[UIColor hexStringToColor:@&quot;#47BFFC&quot;].CGColor];</div><div class="line">   </div><div class="line">   </div><div class="line">   gradientLayer.startPoint = CGPointMake(0, 0);</div><div class="line">   gradientLayer.endPoint = CGPointMake(0, 1); //径向渐变</div><div class="line">   </div><div class="line">   [self.layer addSublayer:gradientLayer];</div></pre></td></tr></table></figure>
+<blockquote>
+<p>为需要添加蒙版的layer添加蒙版</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">self.foreLayer = [CAShapeLayer layer];</div><div class="line">self.foreLayer.frame = self.bounds;</div><div class="line"></div><div class="line">self.foreLayer.fillColor =[UIColor clearColor].CGColor;</div><div class="line"></div><div class="line">self.foreLayer.lineWidth = self.lineWidth;</div><div class="line">self.foreLayer.strokeColor = [UIColor redColor].CGColor; //颜色没用</div><div class="line"></div><div class="line">self.foreLayer.strokeEnd = 0;</div><div class="line">self.foreLayer.lineCap = kCALineCapRound;</div><div class="line"></div><div class="line">self.foreLayer.path = bezierPath.CGPath;</div><div class="line"></div><div class="line">gradientLayer.mask = self.foreLayer;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>因为贝塞尔曲线开始的位置是-0.5 *M_PI，strokeEnd 决定了描边的进度。</p>
+</blockquote>
+<p>demo 地址：<a href="https://github.com/liuxinixn/LXBezierPath/tree/master" target="_blank" rel="noopener">渐变圆环进度</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/06/iOS--怎么做成和微信一样的一体键盘？/" rel="next" title="iOS -- 怎么做成和微信一样的一体键盘？">
+                <i class="fa fa-chevron-left"></i> iOS -- 怎么做成和微信一样的一体键盘？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/12/ios-利用runtime添加属性改变UITextField的光标起始位置/" rel="prev" title="iOS -利用runtime添加属性改变UITextField的光标的起始位置">
+                iOS -利用runtime添加属性改变UITextField的光标的起始位置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">97</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

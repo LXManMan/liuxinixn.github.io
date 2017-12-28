@@ -69,18 +69,18 @@
 
 
 
-<meta name="description" content="Error Domain=com.alamofire.error.serialization.response Code=-1011 &amp;quot;Request failed: internal server error (500)&amp;quot; UserInfo={NSUnderlyingError=0x7f8608dea390 {Error Domain=com.alamofire.error.">
+<meta name="description" content="title: iOS –关于AFNetworking请求报500date: 2017-07-08 20:19:35 tags:Error Domain=com.alamofire.error.serialization.response Code=-1011 &amp;quot;Request failed: internal server error (500)&amp;quot; UserInfo={NSU">
 <meta property="og:type" content="article">
 <meta property="og:title" content="雪晟">
 <meta property="og:url" content="liuxinixn.github.io/2017/12/28/ios-关于AFNetworking请求报500/index.html">
 <meta property="og:site_name" content="雪晟">
-<meta property="og:description" content="Error Domain=com.alamofire.error.serialization.response Code=-1011 &amp;quot;Request failed: internal server error (500)&amp;quot; UserInfo={NSUnderlyingError=0x7f8608dea390 {Error Domain=com.alamofire.error.">
+<meta property="og:description" content="title: iOS –关于AFNetworking请求报500date: 2017-07-08 20:19:35 tags:Error Domain=com.alamofire.error.serialization.response Code=-1011 &amp;quot;Request failed: internal server error (500)&amp;quot; UserInfo={NSU">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-7387d90cb93af2a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-12-28T12:43:14.000Z">
+<meta property="og:updated_time" content="2017-12-28T13:44:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="雪晟">
-<meta name="twitter:description" content="Error Domain=com.alamofire.error.serialization.response Code=-1011 &amp;quot;Request failed: internal server error (500)&amp;quot; UserInfo={NSUnderlyingError=0x7f8608dea390 {Error Domain=com.alamofire.error.">
+<meta name="twitter:description" content="title: iOS –关于AFNetworking请求报500date: 2017-07-08 20:19:35 tags:Error Domain=com.alamofire.error.serialization.response Code=-1011 &amp;quot;Request failed: internal server error (500)&amp;quot; UserInfo={NSU">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1694376-7387d90cb93af2a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -331,7 +331,9 @@
       
 
       
-        <p><code>Error Domain=com.alamofire.error.serialization.response Code=-1011 &quot;Request failed: internal server error (500)&quot; UserInfo={NSUnderlyingError=0x7f8608dea390 {Error Domain=com.alamofire.error.serialization.response Code=-1016 &quot;Request failed: unacceptable content-type: text/html&quot; UserInfo={com.alamofire.serialization.response.error.response= { URL: http://120.76.142.118:8080/nursery/api/login/updateheadportrait } { status code: 500, headers</code></p>
+        <hr>
+<p>title: iOS –关于AFNetworking请求报500<br>date: 2017-07-08 20:19:35</p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><p><code>Error Domain=com.alamofire.error.serialization.response Code=-1011 &quot;Request failed: internal server error (500)&quot; UserInfo={NSUnderlyingError=0x7f8608dea390 {Error Domain=com.alamofire.error.serialization.response Code=-1016 &quot;Request failed: unacceptable content-type: text/html&quot; UserInfo={com.alamofire.serialization.response.error.response= { URL: http://120.76.142.118:8080/nursery/api/login/updateheadportrait } { status code: 500, headers</code></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/1694376-7387d90cb93af2a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="请求.png"></p>
 <p>   <code>NSString * invoiceId = responseObject[@&quot;data&quot;][@&quot;invoiceId&quot;];</code><br>如果是上面这样处理.<br>阐述一种情况，如上图，请求结果 invoiceid 通过返回的结果我们可以用NSString类型接收，显示也是没有问题，（MJExtension已经处理过）但是如果这个结果需要作为参数传给后台，后台限制类型是字符串，这个时候就会报错500，需要处理的是<br><code>NSString * invoiceId = [NSString stringWithFormat:@&quot;%@&quot;,responseObject[@&quot;data&quot;][@&quot;invoiceId&quot;]];</code></p>
 
@@ -358,7 +360,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/28/iOS-关乎使用AFNetworking请求，三种占位图。/" rel="next" title="">
+              <a href="/2017/12/28/CoreAnimation之贝塞尔曲线（加入购物车动画）/" rel="next" title="">
                 <i class="fa fa-chevron-left"></i> 
               </a>
             
@@ -368,7 +370,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/28/iOS-计算富文本，检索网址，号码，表情，并且计算高度，设置最大行数/" rel="prev" title="">
+              <a href="/2017/12/28/CoreAnimation之变换/" rel="prev" title="">
                  <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -422,8 +424,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <img class="site-author-image" itemprop="image"
@@ -441,7 +452,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-count">97</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -493,6 +504,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags"><span class="nav-number">1.</span> <span class="nav-text">tags:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

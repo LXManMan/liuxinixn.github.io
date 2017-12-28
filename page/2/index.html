@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-关乎使用AFNetworking请求，三种占位图。/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-微信支付以及左上角按钮的处理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -281,7 +281,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/28/iOS-关乎使用AFNetworking请求，三种占位图。/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2017/12/28/iOS-微信支付以及左上角按钮的处理/" itemprop="url">iOS 微信支付以及左上角按钮的处理</a></h1>
         
 
         <div class="post-meta">
@@ -293,7 +293,474 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:33:37+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>大概说一下流程。<br>1.去微信开放平台注册应用。<a href="https://open.weixin.qq.com/（大概需要5天左右才能通过。）" target="_blank" rel="noopener">https://open.weixin.qq.com/（大概需要5天左右才能通过。）</a><br>2.应用审批后进一步去获得支付能力。（需要提供营业资格，法人或者负责人的身份证以及开户许可证，如果应用没有上线需要上传应用截图，具体的截图根据指示即可。）<br>3.微信审核后会在第二步提供的银行卡账户扣除小额不等的money，然后会把商户号、密码等等一些重要的信息发到提供的邮箱里。<br>4.登录微信商户平台。<a href="https://pay.weixin.qq.com/" target="_blank" rel="noopener">https://pay.weixin.qq.com/</a>  在商户平台里安装证书，配置一个秘钥（<code>Key</code> 必须是<code>32</code>位的，服务器签名要用）。</p>
+<blockquote>
+<p>签名建议放在后端，前端不存放私钥。</p>
+</blockquote>
+<p>1.配置<code>QueriesSchemes</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;key&gt;LSApplicationQueriesSchemes&lt;/key&gt;</div><div class="line">&lt;array&gt;</div><div class="line">&lt;string&gt;weixin&lt;/string&gt;</div><div class="line">&lt;string&gt;wechat&lt;/string&gt;</div><div class="line">&lt;/array&gt;</div></pre></td></tr></table></figure>
+<p>2.配置URL Types.</p>
+<p>工程 — 》 <code>Targets</code> —-&gt;<code>info</code> —-&gt;<code>URL Types</code>,填写在微信中申请的应用id。(跳转需要)</p>
+<p>3.常用依赖库的添加。</p>
+<p>4.如果项目跑不起来，报错需要设置<code>bitcode</code>为<code>NO</code>，那么设置即可。</p>
+<p>前面的配置如果配置好，</p>
+<p>//注册微信支付信息</p>
+<p>第一步注册<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[WeiXinPayTool  RegistApp];</div></pre></td></tr></table></figure></p>
+<p>第二步设置好跳转<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">#pragma mark - IOS9.0以后废弃了这两个方法的调用</div><div class="line">- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url</div><div class="line">&#123;</div><div class="line">//微信处理</div><div class="line">if ([[WeiXinPayTool shareTool] handleOpenURL:url]) &#123;</div><div class="line">return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">// NOTE: 9.0以后使用新API接口</div><div class="line">- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary&lt;NSString*, id&gt; *)options</div><div class="line">&#123;</div><div class="line">//微信处理</div><div class="line">if ([[WeiXinPayTool shareTool] handleOpenURL:url]) &#123;</div><div class="line">return YES;</div><div class="line">&#125;</div><div class="line">return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接下来只需要调用拿到后台传的一些参数（比如<code>appid，partnerid，prepayid，package，noncestr</code> 等，微信支付需要的参数）调起微信支付即可。<br>如果<code>sendReq</code>为NO，可能是签名不对，或者是参数有误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">NSMutableString *stamp = [programs objectForKey:@&quot;timestamp&quot;];</div><div class="line">//调起微信支付</div><div class="line">PayReq* req            = [[PayReq alloc] init];</div><div class="line">req.partnerId          = [programs objectForKey:@&quot;partnerid&quot;];</div><div class="line">req.prepayId           = [programs objectForKey:@&quot;prepayid&quot;];</div><div class="line">req.nonceStr           = [programs objectForKey:@&quot;noncestr&quot;];</div><div class="line">req.timeStamp          = [stamp intValue];</div><div class="line">req.package            = [programs objectForKey:@&quot;package&quot;];</div><div class="line">req.sign               = [programs objectForKey:@&quot;sign&quot;];</div><div class="line"></div><div class="line">if (![WXApi isWXAppInstalled]) &#123;</div><div class="line">self.failed(ErrorCodeWXAppNotInstalled);</div><div class="line">&#125;</div><div class="line">BOOL isSuccess =  [WXApi sendReq:req];</div><div class="line">NSLog(@&quot;%d&quot;,isSuccess);</div><div class="line"></div><div class="line">`</div></pre></td></tr></table></figure></p>
+<p>正常支付和取消支付都会走下面的回调。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">- (void)onResp:(BaseResp *)resp&#123;</div><div class="line">if([resp isKindOfClass:[PayResp class]])&#123;</div><div class="line">//支付返回结果，实际支付结果需要去微信服务器端查询</div><div class="line"></div><div class="line">NSLog(@&quot;%@&quot;,resp);</div><div class="line">switch (resp.errCode) &#123;</div><div class="line">case WXSuccess:&#123;</div><div class="line">if (self.success) &#123;</div><div class="line">self.success();</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">break;</div><div class="line"></div><div class="line">case WXErrCodeCommon:&#123;</div><div class="line">self.failed(ErrorCodeWxPayError);</div><div class="line">&#125;</div><div class="line">break;</div><div class="line"></div><div class="line">case WXErrCodeUserCancel:&#123;</div><div class="line">self.failed(ErrorCodeWxPayCancle);</div><div class="line">&#125;</div><div class="line">break;</div><div class="line"></div><div class="line">default:</div><div class="line">break;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>关于iOS9 之后应用左上角的返回按钮对微信支付的影响</p>
+</blockquote>
+<p><code>iOS 9</code>之后为了方便应用之间跳转，系统增加了左上角的返回按钮。可是在微信支付时，中途点击了左上角的返回按钮，此时我们就拿不到微信的回调。</p>
+<p>我们需要的就是在下面两个方法里面其中一个方法里面发送通知，然后在通知页面调用微信的接口查询订单通知。如果生成的订单参数都是后台来负责签名的，查询订单也可以由后台来做，我们只需要传一个微信订单号（<code>transaction_id</code>）即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-63736c50d5d6ab9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20171206-145844.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void)applicationWillEnterForeground:(UIApplication *)application &#123;</div><div class="line">// Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.</div><div class="line">发送通知，在通知页面查询微信的支付订单</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)applicationDidBecomeActive:(UIApplication *)application &#123;</div><div class="line">// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-百度地图拖拽更新位置反编码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/28/iOS-百度地图拖拽更新位置反编码/" itemprop="url">iOS 百度地图拖拽更新位置反编码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:32:21+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>类似于微信中的发送位置，拖拽从新定位，以及反编码，列表附近的位置。<br><img src="http://upload-images.jianshu.io/upload_images/1694376-34243d78fe8758a3.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="百度地图拖拽更新位置.gif"></p>
+<p>思路就是将一个UIImageView固定在地图中间，每次更新位置，给UIImageView添加动画即可。<br>代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#import &quot;FTBasicController.h&quot;</div><div class="line"></div><div class="line">typedef void (^SelectBlock) (NSString *address,CLLocationCoordinate2D select);</div><div class="line">@interface FTUploadAddressController : FTBasicController</div><div class="line"></div><div class="line">@property(nonatomic, copy)SelectBlock selectBlock;</div><div class="line">@end</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div></pre></td><td class="code"><pre><div class="line">#import &quot;FTUploadAddressController.h&quot;</div><div class="line">#import &quot;FTBMKPoiInfo.h&quot;</div><div class="line">#import &quot;FTPoiCell.h&quot;</div><div class="line">@interface FTUploadAddressController ()&lt;BMKMapViewDelegate,BMKLocationServiceDelegate,UITableViewDelegate,UITableViewDataSource,BMKGeoCodeSearchDelegate&gt;</div><div class="line">@property(nonatomic,strong)BMKLocationService *locService;</div><div class="line">@property(nonatomic,strong)BMKUserLocation *userLocation;</div><div class="line">@property(nonatomic,strong)BMKMapView *mapView;</div><div class="line">@property(nonatomic,strong)UITableView *tableview;</div><div class="line">@property(nonatomic,strong)BMKGeoCodeSearch *geocodesearch;</div><div class="line">@property(nonatomic,strong)UIImageView *loactionView;</div><div class="line">@property(nonatomic,strong)NSMutableArray *dataA;</div><div class="line">@property(nonatomic,strong)LxButton *poiBackBtn;</div><div class="line"></div><div class="line">@property(nonatomic,assign)CLLocationCoordinate2D selectedCoordinate;</div><div class="line">@property(nonatomic,strong)NSString *selectAddress;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation FTUploadAddressController</div><div class="line">-(void)viewWillAppear:(BOOL)animated&#123;</div><div class="line">[super viewWillAppear:animated];</div><div class="line"></div><div class="line">self.fd_interactivePopDisabled = YES;</div><div class="line"></div><div class="line">if (!([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse) &amp;&amp;[CLLocationManager authorizationStatus] != kCLAuthorizationStatusNotDetermined)&#123;</div><div class="line">[self judgeOpenlocation];</div><div class="line">&#125;else&#123;</div><div class="line">[_mapView viewWillAppear];</div><div class="line">_mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放</div><div class="line"></div><div class="line"></div><div class="line">_locService.delegate = self;</div><div class="line">_geocodesearch.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放</div><div class="line">_mapView.showsUserLocation = NO;//先关闭显示的定位图层</div><div class="line">_mapView.userTrackingMode = 0;</div><div class="line">_mapView.showsUserLocation = YES;//显示定位图层</div><div class="line"></div><div class="line"></div><div class="line">[self.locService startUserLocationService];</div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line">-(void)judgeOpenlocation&#123;</div><div class="line"></div><div class="line">UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@&quot;打开[定位服务]来允许[应用名字]确定您的位置&quot; message:@&quot;请在系统设置中开启定位服务(设置&gt;隐私&gt;定位服务&gt;应用名字&gt;始终)&quot; preferredStyle:UIAlertControllerStyleAlert];</div><div class="line">[alertVC addAction:[UIAlertAction actionWithTitle:@&quot;取消&quot; style:UIAlertActionStyleCancel handler:nil]];</div><div class="line">[alertVC addAction:[UIAlertAction actionWithTitle:@&quot;去设置&quot; style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) &#123;</div><div class="line"></div><div class="line">if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 10.000000) &#123;</div><div class="line">//跳转到定位权限页面</div><div class="line">NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];</div><div class="line">if( [[UIApplication sharedApplication]canOpenURL:url] ) &#123;</div><div class="line">[[UIApplication sharedApplication] openURL:url];</div><div class="line">&#125;</div><div class="line">&#125;else &#123;</div><div class="line">//跳转到定位开关界面</div><div class="line">NSURL *url = [NSURL URLWithString:@&quot;prefs:root=LOCATION_SERVICES&quot;];</div><div class="line">if( [[UIApplication sharedApplication]canOpenURL:url] ) &#123;</div><div class="line">[[UIApplication sharedApplication] openURL:url];</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;]];</div><div class="line">[self presentViewController:alertVC animated:YES completion:nil];</div><div class="line"></div><div class="line">&#125;</div><div class="line">-(void)viewWillDisappear:(BOOL)animated</div><div class="line">&#123;</div><div class="line">self.fd_interactivePopDisabled = NO;</div><div class="line">[_mapView viewWillDisappear];</div><div class="line">_mapView.delegate = nil; // 不用时，置nil</div><div class="line">[self.locService stopUserLocationService];</div><div class="line">_geocodesearch.delegate = nil; // 不用时，置nil</div><div class="line">_locService.delegate = nil;</div><div class="line"></div><div class="line">&#125;</div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">[super viewDidLoad];</div><div class="line">// Do any additional setup after loading the view.</div><div class="line">self.title = @&quot;所在位置&quot;;</div><div class="line"></div><div class="line">self.locService = [[BMKLocationService alloc]init];</div><div class="line">self.geocodesearch =  [[BMKGeoCodeSearch alloc]init];</div><div class="line">[self setup];</div><div class="line"></div><div class="line">self.navigationItem.leftBarButtonItem =[[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@&quot;return&quot;]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(backReturn)];</div><div class="line">&#125;</div><div class="line">-(void)backReturn&#123;</div><div class="line">if (self.selectBlock) &#123;</div><div class="line">self.selectBlock(self.selectAddress, self.selectedCoordinate);</div><div class="line">[self.navigationController popViewControllerAnimated:YES];</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">-(void)setup&#123;</div><div class="line">[self.view addSubview:self.mapView];</div><div class="line"></div><div class="line">[self.view addSubview:self.tableview];</div><div class="line"></div><div class="line">[self.mapView addSubview:self.loactionView];</div><div class="line"></div><div class="line">[self.mapView addSubview:self.poiBackBtn];</div><div class="line"></div><div class="line">[self.poiBackBtn LX_SetShadowPathWith:[UIColor grayColor] shadowOpacity:0.5 shadowRadius:5 shadowSide:LXShadowPathBottom shadowPathWidth:3];</div><div class="line"></div><div class="line">FTWS(weakSelf);</div><div class="line">[self.poiBackBtn addClickBlock:^(UIButton *button) &#123;</div><div class="line"></div><div class="line">[weakSelf.mapView setCenterCoordinate:weakSelf.userLocation.location.coordinate];</div><div class="line"></div><div class="line">&#125;];</div><div class="line">&#125;</div><div class="line">- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation</div><div class="line">&#123;</div><div class="line">//        NSLog(@&quot;didUpdateUserLocation lat %f,long %f&quot;,userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);</div><div class="line">[_mapView updateLocationData:userLocation];</div><div class="line"></div><div class="line"></div><div class="line">self.userLocation = userLocation;</div><div class="line"></div><div class="line">[self.mapView setCenterCoordinate:userLocation.location.coordinate];</div><div class="line"></div><div class="line">BMKReverseGeoCodeOption * option = [[BMKReverseGeoCodeOption alloc]init];</div><div class="line">option.reverseGeoPoint = userLocation.location.coordinate;</div><div class="line">BOOL flag = [_geocodesearch reverseGeoCode:option];</div><div class="line"></div><div class="line">if (flag) &#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">//更新位置之后必须停止定位，</div><div class="line">[_locService stopUserLocationService];</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated&#123;</div><div class="line"></div><div class="line"></div><div class="line">NSLog(@&quot;地图拖动&quot;);</div><div class="line"></div><div class="line">[UIView animateWithDuration:0.30 animations:^&#123;</div><div class="line">self.loactionView.centerY -=8;</div><div class="line">&#125; completion:^(BOOL finished) &#123;</div><div class="line">self.loactionView.centerY +=8;</div><div class="line">&#125;];</div><div class="line"></div><div class="line">CGPoint touchPoint = self.mapView.center;</div><div class="line"></div><div class="line">CLLocationCoordinate2D touchMapCoordinate =</div><div class="line">[self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];//这里touchMapCoordinate就是该点的经纬度了</div><div class="line">NSLog(@&quot;touching %f,%f&quot;,touchMapCoordinate.latitude,touchMapCoordinate.longitude);</div><div class="line"></div><div class="line">//选择的上传地址</div><div class="line">self.selectedCoordinate = touchMapCoordinate;</div><div class="line">BMKReverseGeoCodeOption * option = [[BMKReverseGeoCodeOption alloc]init];</div><div class="line">option.reverseGeoPoint = touchMapCoordinate;</div><div class="line">BOOL flag = [_geocodesearch reverseGeoCode:option];</div><div class="line"></div><div class="line">if (flag) &#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line">#pragma mark---获取反编码的数据---</div><div class="line">-(void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error</div><div class="line">&#123;</div><div class="line">BMKAddressComponent *component=[[BMKAddressComponent alloc]init];</div><div class="line">component=result.addressDetail;</div><div class="line"></div><div class="line">[self.dataA removeAllObjects];</div><div class="line"></div><div class="line">for (int i =0; i&lt; result.poiList.count; i++) &#123;</div><div class="line">BMKPoiInfo *info = result.poiList[i];</div><div class="line">FTBMKPoiInfo *ftInfo =[[FTBMKPoiInfo alloc]init];</div><div class="line">ftInfo.address = info.address;</div><div class="line">ftInfo.seleced = NO;</div><div class="line">if (i == 0) &#123;</div><div class="line">ftInfo.seleced = YES;</div><div class="line">self.selectAddress = ftInfo.address;</div><div class="line">&#125;</div><div class="line">[self.dataA addObject:ftInfo];</div><div class="line">&#125;</div><div class="line">[self.tableview reloadData];</div><div class="line">&#125;</div><div class="line"></div><div class="line">#pragma mark--- 定位的方法--</div><div class="line">- (void)didUpdateUserHeading:(BMKUserLocation *)userLocation</div><div class="line">&#123;</div><div class="line">[_mapView updateLocationData:userLocation];</div><div class="line">//    NSLog(@&quot;heading is %@&quot;,userLocation.heading);</div><div class="line">&#125;</div><div class="line">-(BMKMapView *)mapView&#123;</div><div class="line">if (!_mapView) &#123;</div><div class="line">_mapView =[[BMKMapView alloc]initWithFrame:CGRectMake(0, NAVH, Device_Width, 350)];</div><div class="line">_mapView.zoomLevel = 18;</div><div class="line">_mapView.minZoomLevel = 3;</div><div class="line">_mapView.maxZoomLevel = 21;</div><div class="line">//        BMKLocationViewDisplayParam *displayParam = [[BMKLocationViewDisplayParam alloc]init];</div><div class="line">//        displayParam.isRotateAngleValid = true;//跟随态旋转角度是否生效</div><div class="line">//        displayParam.isAccuracyCircleShow = false;//精度圈是否显示</div><div class="line">//        displayParam.locationViewOffsetX = 0;//定位偏移量(经度)</div><div class="line">//        displayParam.locationViewOffsetY = 0;//定位偏移量（纬度）</div><div class="line">//        [_mapView updateLocationViewWithParam:displayParam];</div><div class="line"></div><div class="line">&#125;</div><div class="line">return _mapView;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section&#123;</div><div class="line">return self.dataA.count;</div><div class="line">&#125;</div><div class="line">-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line">FTPoiCell *cell =[tableView dequeueReusableCellWithIdentifier:@&quot;cell&quot; forIndexPath:indexPath];</div><div class="line">if (!cell) &#123;</div><div class="line">cell =[[FTPoiCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@&quot;cell&quot;];</div><div class="line">&#125;</div><div class="line">FTBMKPoiInfo *info = self.dataA[indexPath.row];</div><div class="line">cell.info = info;</div><div class="line">return cell;</div><div class="line">&#125;</div><div class="line">-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line">[tableView deselectRowAtIndexPath:indexPath animated:YES];</div><div class="line"></div><div class="line">FTBMKPoiInfo *info = self.dataA[indexPath.row];</div><div class="line">self.selectAddress = info.address;</div><div class="line"></div><div class="line">[self.dataA enumerateObjectsUsingBlock:^(FTBMKPoiInfo * obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</div><div class="line"></div><div class="line">if (obj == info) &#123;</div><div class="line">obj.seleced = YES;</div><div class="line">&#125;else&#123;</div><div class="line">obj.seleced = NO;</div><div class="line">&#125;</div><div class="line"></div><div class="line">[self.tableview reloadData];</div><div class="line">&#125;];</div><div class="line"></div><div class="line">if (self.selectBlock) &#123;</div><div class="line">self.selectBlock(self.selectAddress,self.selectedCoordinate);</div><div class="line"></div><div class="line">[self.navigationController popViewControllerAnimated:YES];</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line">-(UITableView *)tableview&#123;</div><div class="line"></div><div class="line">if (!_tableview) &#123;</div><div class="line">_tableview =[[UITableView alloc]initWithFrame:CGRectMake(0, self.mapView.bottom, Device_Width, Device_Height - self.mapView.bottom) style:UITableViewStylePlain];</div><div class="line">_tableview.delegate = self;</div><div class="line">_tableview.dataSource = self;</div><div class="line">_tableview.showsVerticalScrollIndicator = NO;</div><div class="line">_tableview.showsHorizontalScrollIndicator = NO;</div><div class="line">_tableview.tableFooterView = [UIView new];</div><div class="line">_tableview.rowHeight = 44;</div><div class="line">[_tableview registerNib:[UINib nibWithNibName:@&quot;FTPoiCell&quot; bundle:nil] forCellReuseIdentifier:@&quot;cell&quot;];</div><div class="line">//        [_tableview registerClass:[UITableViewCell class] forCellReuseIdentifier:@&quot;cell&quot;];</div><div class="line"></div><div class="line">&#125;</div><div class="line">return _tableview;</div><div class="line">&#125;</div><div class="line">-(NSMutableArray *)dataA&#123;</div><div class="line">if (!_dataA) &#123;</div><div class="line">_dataA =[NSMutableArray array];</div><div class="line">&#125;</div><div class="line">return _dataA;</div><div class="line">&#125;</div><div class="line">-(UIImageView *)loactionView&#123;</div><div class="line">if (!_loactionView) &#123;</div><div class="line">_loactionView =[[UIImageView alloc]initWithImage:[UIImage imageNamed:@&quot;ditu_red&quot;]];</div><div class="line">_loactionView.center = CGPointMake(self.mapView.width/2, self.mapView.height/2);</div><div class="line"></div><div class="line">&#125;</div><div class="line">return _loactionView;</div><div class="line">&#125;</div><div class="line">-(LxButton *)poiBackBtn&#123;</div><div class="line">if (!_poiBackBtn) &#123;</div><div class="line">_poiBackBtn =[LxButton LXButtonWithTitle:nil titleFont:nil Image:nil backgroundImage:nil backgroundColor:[UIColor whiteColor] titleColor:nil frame:CGRectMake(Device_Width - 75, self.mapView.height - 75, 50, 50)];</div><div class="line">[_poiBackBtn setFTCornerdious:25];</div><div class="line">UIImageView *imageView =[[UIImageView alloc]initWithImage:[UIImage imageNamed:@&quot;poi_back&quot;]];</div><div class="line"></div><div class="line">imageView.center = CGPointMake(25, 25);</div><div class="line">[_poiBackBtn addSubview:imageView];</div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line">return _poiBackBtn;</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-实现一个容器视图控制器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/28/iOS-实现一个容器视图控制器/" itemprop="url">iOS 实现一个容器视图控制器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:31:03+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一直以来想写一个抽屉效果，看了一些文章后发现并不是那么简单，网上的一些抽屉效果不是很严谨。看了下<code>MMDrawerController</code>的源码，等于定制了一个<code>Container View Controller</code>。（类似于系统的<code>UINavigationController</code>以及<code>UITabbarController</code>);</p>
+<p>比如下面几个方法就是<code>MMDrawerController</code>实现的：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-d5ed00a5e9b394b0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="WX20171225-105701.png"></p>
+<p>下面的描述是官方文档帮助理解什么是容器控制器，文档中以<code>UINavigationController</code>和<code>UISplitViewController</code>举例。<a href="https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html#//apple_ref/doc/uid/TP40007457-CH11-SW1" target="_blank" rel="noopener">文档</a></p>
+<p>容器视图控制器是将来自多个视图控制器的内容合并到单个用户界面中的一种方法。容器视图控制器通常用于促进导航，并基于现有内容创建新的用户界面类型。<code>UIKit</code>中的容器视图控制器的例子包括<code>UINavigationController</code>，<code>UITabBarController</code>和<code>UISplitViewController</code>，所有这些都方便您的用户界面的不同部分之间的导航。</p>
+<blockquote>
+<p>设计自定义容器视图控制器</p>
+</blockquote>
+<p>几乎在任何情况下，容器视图控制器都像其他任何内容视图控制器一样管理根视图和一些内容。区别在于容器视图控制器从其他视图控制器获取其内容的一部分。它获取的内容仅限于其他视图控制器的视图，它嵌入在其自己的视图层次结构中。容器视图控制器设置任何嵌入视图的大小和位置，但原始视图控制器仍然管理这些视图内的内容。</p>
+<p>在设计自己的容器视图控制器时，请始终了解容器和包含的视图控制器之间的关系。视图控制器的关系可以帮助告知他们的内容应该如何显示在屏幕上，以及你的容器如何在内部管理它们。在设计过程中，问自己以下问题：</p>
+<p>1 .容器的作用是什么？它的孩子扮演什么样的角色？<br>2.多少个孩子同时显示？<br>3.兄弟视图控制器之间有什么关系（如果有的话）？<br>4.子视图控制器如何添加到容器或从容器中移除？<br>5.孩子的大小或位置能改变吗？这些变化在什么情况下发生？<br>6.容器是否提供任何装饰或导航相关的视图？<br>7.集装箱和子公司之间需要什么样的沟通？容器是否需要向小孩报告特定事件，而不是由<code>UIViewController</code>班级定义的标准事件？<br>8.容器的外观是否可以用不同的方式配置？如果是这样，怎么样？</p>
+<p>在定义了各种对象的角色之后，容器视图控制器的实现相对简单。<code>UIKit</code>唯一的要求就是在容器视图控制器和任何子视图控制器之间建立正式的父子关系。亲子关系确保孩子们收到任何相关的系统消息。除此之外，大部分实际工作都发生在包含视图的布局和管理过程中，对于每个容器来说都是不同的。您可以将视图放置在容器的内容区域的任何位置，然后根据需要调整视图的大小。您还可以将自定义视图添加到视图层次结构中，以提供修饰或辅助导航。</p>
+<blockquote>
+<p>示例：导航控制器</p>
+</blockquote>
+<p>UINavigationController对象通过分层数据集支持导航。导航界面一次显示一个子视图控制器。界面顶部的导航栏显示数据层次结构中的当前位置，并显示后退按钮以向后移动一个级别。向下导航到数据层次结构留给子视图控制器，可以涉及使用表或按钮。</p>
+<p>视图控制器之间的导航由导航控制器及其子节点联合管理。当用户与子视图控制器的按钮或表格行交互时，孩子要求导航控制器将新的视图控制器推入视图。孩子处理新的视图控制器的内容的配置，但导航控制器管理过渡动画。导航控制器还管理导航栏，该导航栏显示关闭最上面的视图控制器的后退按钮。</p>
+<p>图5-1显示了导航控制器及其视图的结构。大多数内容区域由最顶层的子视图控制器填充，只有一小部分被导航栏占用。<br><img src="http://upload-images.jianshu.io/upload_images/1694376-725f82cc37caeca7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="VCPG_structure-of-navigation-interface_5-1_2x.png"></p>
+<p>在紧凑和常规的环境中，导航控制器一次只显示一个子视图控制器。导航控制器调整其子以适应可用空间。</p>
+<blockquote>
+<p>示例：分割视图控制器</p>
+</blockquote>
+<p>一个UISplitViewController对象以主 - 细节布局显示两个视图控制器的内容。在这种安排中，一个视图控制器（主视图）的内容决定了其他视图控制器显示的细节。两个视图控制器的可见性是可配置的，但也受当前环境的支配。在规则的水平环境中，分割视图控制器可以同时显示两个子视图控制器，也可以隐藏主控并根据需要显示。在紧凑的环境中，分割视图控制器一次只显示一个视图控制器。</p>
+<p>图5-2显示了在一个常规的水平环境中的分割视图界面及其视图的结构。分割视图控制器本身只有默认的容器视图。在这个例子中，两个子视图是并排显示的。子视图的大小是可配置的，主视图的可见性也是可配置的。<br><img src="http://upload-images.jianshu.io/upload_images/1694376-fae3d24d79bc272e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="VCPG-split-view-inerface_5-2_2x.png"></p>
+<p><strong>在界面构建器中配置容器</strong></p>
+<p>要在设计时创建父子容器关系，请将容器视图对象添加到故事板场景中，如图5-3所示。容器视图对象是代表子视图控制器内容的占位符对象。使用该视图来调整和定位与容器中其他视图相关的子视图。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-4edfcd6a606ecd5a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="container_view_embed_2x.png"></p>
+<p>当您使用一个或多个容器视图加载视图控制器时，Interface Builder还会加载与这些视图关联的子视图控制器。孩子必须与父母同时实例化，以便建立适当的亲子关系。</p>
+<p>如果您不使用Interface Builder设置父 - 子容器关系，则必须通过将每个子项添加到容器视图控制器来以编程方式创建这些关系，如将子视图控制器添加到您的内容中所述。</p>
+<blockquote>
+<p>实现自定义容器视图控制器</p>
+</blockquote>
+<p>要实现一个容器视图控制器，你必须建立你的视图控制器和它的子视图控制器之间的关系。在尝试管理任何子视图控制器的视图之前，建立这些父子关系是必需的。这样做让UIKit知道你的视图控制器正在管理孩子的大小和位置。您可以在Interface Builder中创建这些关系，或以编程方式创建它们。以编程方式创建父子关系时，您明确地添加和删除子视图控制器作为视图控制器设置的一部分。</p>
+<p>将子视图控制器添加到您的内容<br>要以编程方式将子视图控制器合并到内容中，请执行以下操作，在相关的视图控制器之间创建父子关系：</p>
+<p>调用<code>addChildViewController:</code>你的容器视图控制器的方法。</p>
+<p>这个方法告诉<code>UIKit</code>你的容器视图控制器现在正在管理子视图控制器的视图。</p>
+<p>将孩子的根视图添加到容器的视图层次结构中。</p>
+<p>一定要记住设置孩子框架的大小和位置，作为这个过程的一部分。</p>
+<p>添加任何约束来管理子视图的大小和位置。</p>
+<p>调用didMoveToParentViewController:子视图控制器的方法。</p>
+<p>清单5-1展示了一个容器如何在其容器中嵌入一个子视图控制器。建立父子关系后，容器设置其子的框架，并将子视图添加到自己的视图层次结构中。设置子视图的框架大小很重要，并确保视图在容器中正确显示。在添加视图后，容器调用<code>didMoveToParentViewController:</code>子视图的方法，使子视图控制器有机会响应视图所有权的更改。</p>
+<p>清单5-1将一个子视图控制器添加到一个容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (void) displayContentController: (UIViewController*) content &#123;</div><div class="line">[self addChildViewController:content];</div><div class="line">content.view.frame = [self frameForContentController];</div><div class="line">[self.view addSubview:self.currentClientView];</div><div class="line">[content didMoveToParentViewController:self];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在前面的例子中，注意你只调用<code>didMoveToParentViewController:</code>子方法。那是因为该方法为你<code>addChildViewController:</code>调用孩子的<code>willMoveToParentViewController:</code>方法。您必须<code>didMoveToParentViewController:</code>自己调用方法的原因是，只有在将子视图嵌入到容器的视图层次结构中之后，方法才能被调用。</p>
+<p>使用自动布局时，在将子对象添加到容器的视图层次结构后，在容器和子对象之间设置约束。你的约束应该只影响孩子的根视图的大小和位置。请勿更改子视图层次结构中的根视图或任何其他视图的内容。</p>
+<blockquote>
+<p>删除子视图控制器</p>
+</blockquote>
+<p>要从内容中删除子视图控制器，请通过执行以下操作来删除视图控制器之间的父子关系：</p>
+<p><code>willMoveToParentViewController:</code>用值 调用孩子的方法<code>nil</code>。</p>
+<p>删除您使用该子视图的配置的任何约束。</p>
+<p>从容器的视图层次结构中移除孩子的根视图。</p>
+<p>调用孩子的<code>removeFromParentViewController</code>方法来完成亲子关系的结束。</p>
+<p>删除子视图控制器会永久切断父级和子级之间的关系。只有当您不再需要引用子视图控制器时，才能移除子视图控制器。例如，当新导航控制器被推入导航堆栈时，导航控制器不会移除其当前的子视图控制器。只有当它们从堆栈中弹出时才会被删除。</p>
+<p>清单5-2显示了如何从容器中删除子视图控制器。<code>willMoveToParentViewController:</code>使用该值调用该方法nil使子视图控制器有机会为更改做准备。该<code>removeFromParentViewController</code>方法还调用孩子的<code>didMoveToParentViewController:</code>方法，传递该方法的值<code>nil</code>。设置父视图控制器以<code>nil</code>完成从容器中删除子视图。</p>
+<p>清单5-2从容器中删除一个子视图控制器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (void) hideContentController: (UIViewController*) content &#123;</div><div class="line">[content willMoveToParentViewController:nil];</div><div class="line">[content.view removeFromSuperview];</div><div class="line">[content removeFromParentViewController];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>子视图控制器之间的过渡</p>
+</blockquote>
+<p>当您想要用另一个子视图控制器替换动画时，将子视图控制器的添加和删除合并到转换动画过程中。在动画之前，确保两个子视图控制器都是你的内容的一部分，但让当前的孩子知道它即将消失。在您的动画中，将新的孩子的视图移动到位并移除旧的孩子的视图。完成动画后，完成子视图控制器的移除。</p>
+<p>清单5-3显示了如何使用过渡动画将一个子视图控制器交换为另一个子视图控制器的示例。在这个例子中，新的视图控制器被动画为现有的子视图控制器当前占用的矩形，该控制器被移出屏幕。动画完成后，完成块从容器中删除子视图控制器。在这个例子中，该transitionFromViewController:toViewController:duration:options:animations:completion:方法自动更新容器的视图层次，所以你不需要自己添加和删除视图。</p>
+<p>清单5-3两个子视图控制器之间的转换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">- (void)cycleFromViewController: (UIViewController*) oldVC</div><div class="line">toViewController: (UIViewController*) newVC &#123;</div><div class="line">// Prepare the two view controllers for the change.</div><div class="line">[oldVC willMoveToParentViewController:nil];</div><div class="line">[self addChildViewController:newVC];</div><div class="line"></div><div class="line">// Get the start frame of the new view controller and the end frame</div><div class="line">// for the old view controller. Both rectangles are offscreen.</div><div class="line">newVC.view.frame = [self newViewStartFrame];</div><div class="line">CGRect endFrame = [self oldViewEndFrame];</div><div class="line"></div><div class="line">// Queue up the transition animation.</div><div class="line">[self transitionFromViewController: oldVC toViewController: newVC</div><div class="line">duration: 0.25 options:0</div><div class="line">animations:^&#123;</div><div class="line">// Animate the views to their final positions.</div><div class="line">newVC.view.frame = oldVC.view.frame;</div><div class="line">oldVC.view.frame = endFrame;</div><div class="line">&#125;</div><div class="line">completion:^(BOOL finished) &#123;</div><div class="line">// Remove the old view controller and send the final</div><div class="line">// notification to the new view controller.</div><div class="line">[oldVC removeFromParentViewController];</div><div class="line">[newVC didMoveToParentViewController:self];</div><div class="line">&#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>管理儿童的外观更新</p>
+</blockquote>
+<p>在将容器添加到容器后，容器会自动将外观相关的消息转发给子容器。这通常是您想要的行为，因为它确保所有事件都能正确发送。但是，有时默认行为可能会以对您的容器无意义的顺序发送这些事件。例如，如果多个孩子同时改变其视图状态，则可能需要合并这些更改，以使外观回调都以更合理的顺序同时发生。</p>
+<p>为了接管外观回调的责任，重写<code>shouldAutomaticallyForwardAppearanceMethods</code>容器视图控制器中的方法并返回<code>NO</code>，如清单5-4所示。返回<code>NO</code>让<code>UIKit</code>知道你的容器视图控制器通知其子的外观变化。</p>
+<p>清单5-4禁用自动外观转发<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (BOOL) shouldAutomaticallyForwardAppearanceMethods &#123;</div><div class="line">return NO;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>当出现外观转换时，根据需要调用子对象beginAppearanceTransition:animated:或endAppearanceTransition方法。例如，如果您的容器有一个由<code>child</code>属性引用的单个子项，那么您的容器会将这些消息转发给子项，如清单5-5所示。</p>
+<p>清单5-5当容器出现或消失时转发外观消息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">-(void) viewWillAppear:(BOOL)animated &#123;</div><div class="line">[self.child beginAppearanceTransition: YES animated: animated];</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void) viewDidAppear:(BOOL)animated &#123;</div><div class="line">[self.child endAppearanceTransition];</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void) viewWillDisappear:(BOOL)animated &#123;</div><div class="line">[self.child beginAppearanceTransition: NO animated: animated];</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void) viewDidDisappear:(BOOL)animated &#123;</div><div class="line">[self.child endAppearanceTransition];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>建立一个容器视图控制器的建议</p>
+</blockquote>
+<p>设计，开发和测试新的容器视图控制器需要时间。虽然个人行为是直截了当的，但整个控制者可能相当复杂。在实现自己的容器类时，请考虑以下提示：</p>
+<p>只访问子视图控制器的根视图。一个容器只能访问每个孩子的根视图，也就是孩子<code>view</code>属性返回的视图。它不应该访问任何孩子的其他意见。</p>
+<p>子视图控制器应该对其容器有最少的了解。子视图控制器应该关注自己的内容。如果容器允许其行为受到孩子的影响，则应该使用委托设计模式来管理这些交互。</p>
+<p>首先使用常规视图设计您的容器。使用常规视图（而不是来自子视图控制器的视图）使您有机会在简化的环境中测试布局约束和动画过渡。当常规视图按预期工作时，将它们交换为您的子视图控制器的视图。</p>
+<blockquote>
+<p>将控制委派给子视图控制器</p>
+</blockquote>
+<p>容器视图控制器可以将其自身外观的某些方面委托给其一个或多个子级。您可以通过以下方式委托控制：</p>
+<p>1.让一个子视图控制器确定状态栏的样式。要委派状态栏外观小孩，覆盖的一个或两个<code>childViewControllerForStatusBarStyle</code>，并<code>childViewControllerForStatusBarHidden</code>在你的容器视图控制器的方法。</p>
+<ol>
+<li>让孩子指定自己喜欢的尺寸。具有灵活布局的容器可以使用孩子自己的<code>preferredContentSize</code>财产来帮助确定孩子的大小。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS仿微信输入框，限制最大行数，一体键盘/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/28/iOS仿微信输入框，限制最大行数，一体键盘/" itemprop="url">iOS仿微信输入框，限制最大行数，一体键盘</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:19:35+08:00">
                 2017-12-28
               </time>
             
@@ -334,24 +801,31 @@
         
           
             <blockquote>
-<p>1、等待网络请求的占位图。</p>
+<p>缘由</p>
 </blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-e89790e3062ad6f9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p>借助MBProgressHUD自定义view实现。</p>
-<p><code>[MBProgressHUD show:@&quot;&quot; icon:@&quot;矢量智能对象&quot; view:self.view];</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">+ (void)show:(NSString *)text icon:(NSString *)icon view:(UIView *)view</div><div class="line">&#123;</div><div class="line">    if (view == nil) view = [UIApplication sharedApplication].keyWindow;</div><div class="line">    // 快速显示一个提示信息</div><div class="line">    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];</div><div class="line">//    hud.label.text = text;</div><div class="line">      hud.mode = MBProgressHUDModeCustomView;</div><div class="line">    // 设置图片</div><div class="line">    UIImage *image =[UIImage imageNamed:icon];</div><div class="line">    hud.customView = [[UIImageView alloc] initWithImage:image];    // 再设置模式</div><div class="line">  </div><div class="line">    hud.bezelView.backgroundColor =[UIColor whiteColor];</div><div class="line">    hud.backgroundView.backgroundColor =[UIColor whiteColor];</div><div class="line">    // 隐藏时候从父控件中移除</div><div class="line">    hud.removeFromSuperViewOnHide = YES;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看了很多输入框，处理的最好的，就是微信，QQ，以及支付宝，其他的看了不少，包括百思，简书，same.微信，QQ，支付宝的就不做gif了。百思之前的版本输入框做的也不好，后来反馈了之后换了一种方式而已。拿简书和same举个列子。（ps:same 是同事推荐，我也不知道是什么软件，此处没有打广告）</p>
+<p><strong>简书：</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-1d2c4e1581e8a803.gif" alt="简书"></p>
+<p>可以看到在返回的时候输入框会跳跃到键盘下方，然后很快再出来。（做的好的会一体返回）</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-45ad0a9cd29730e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="E5EF4AD0-F34D-43E8-83D7-FA903777CCA0.png"></p>
+<p>问题2：在限制多行之后，就会出现最上面的一行显示不全。</p>
+<p><strong>same</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-528cd2eb6ecf0ad3.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="same.gif"></p>
+<p>问题：same的输入框和简书的如出一辙，在侧滑返回的时候会跳跃。</p>
 <blockquote>
-<p>网络异常重新加载的占位图,以及无数据的占位图。</p>
+<p>利用textview自定义键盘，限制多行输入。</p>
 </blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-c769ccb3fb04aeba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-82f6673e6ba7a2e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
-<p>对比了一下<code>Reachability</code>以及<code>AFNetWorking</code>中 <code>AFNetworkReachabilityManager</code>两种检测网路的方法，感觉都不是很准。<br>只能借助网络请求之后的错误码<code>code</code>，当<code>code</code> 为<code>-1099</code>时，<code>AFNetWorking</code>提示网络断开连接。可以根据 返回code码做文章。</p>
-<p>使用分类来给view扩展占位图。关于扩展属性,可以了解运行时。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">typedef void (^ReGetNetwork)(void);</div><div class="line">@interface UIView (NCPlaceholder)</div><div class="line">@property(nonatomic,copy)ReGetNetwork reGetwork; //重新刷新网络的回调</div><div class="line">-(void)showNoNetworkViewWithBlock:(ReGetNetwork)reGetwork;//无网络时点击重新刷新网络</div><div class="line">-(void)showNoDataView;//无数据view</div><div class="line"></div><div class="line">-(void)hideNoNetworkView;</div><div class="line">-(void)hideNoDataView;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">#import &quot;UIView+NCPlaceholder.h&quot;</div><div class="line">#import &lt;objc/runtime.h&gt;</div><div class="line">#import &quot;NCNoNetWorkView.h&quot;</div><div class="line">#define Device_Width  [[UIScreen mainScreen] bounds].size.width//获取屏幕宽高</div><div class="line">#define Device_Height [[UIScreen mainScreen] bounds].size.height</div><div class="line">@implementation UIView (NCPlaceholder)</div><div class="line">-(void)showNoNetworkViewWithBlock:(ReGetNetwork)reGetwork&#123;</div><div class="line">    </div><div class="line">    </div><div class="line">    NCNoNetWorkView *noView =[[NSBundle mainBundle]loadNibNamed:@&quot;NCNoNetWorkView&quot; owner:self options:nil].firstObject;</div><div class="line">    noView.tag = 2593;</div><div class="line">    noView.frame = CGRectMake(0, 64, Device_Width, Device_Height - 64);</div><div class="line">    </div><div class="line">    noView.imageView.image =[UIImage imageNamed:@&quot;nothing&quot;];</div><div class="line">    noView.noticeTitle.text = @&quot;当前网络无连接&quot;;</div><div class="line">    noView.reLoadBtn.hidden = NO;</div><div class="line">    [noView.reLoadBtn addTarget:self action:@selector(reLoadBtnAction) forControlEvents:UIControlEventTouchUpInside];</div><div class="line">    [self addSubview:noView];</div><div class="line">    </div><div class="line">    self.reGetwork = reGetwork;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)reLoadBtnAction&#123;</div><div class="line">    </div><div class="line">    if (self.reGetwork) &#123;</div><div class="line">        self.reGetwork();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(void)showNoDataView&#123;</div><div class="line">    </div><div class="line">    NCNoNetWorkView *noView =[[NSBundle mainBundle]loadNibNamed:@&quot;NCNoNetWorkView&quot; owner:self options:nil].firstObject;</div><div class="line">    </div><div class="line">    noView.frame = CGRectMake(0, 64, Device_Width, Device_Height - 64);</div><div class="line">    noView.tag = 2592;</div><div class="line">    noView.imageView.image =[UIImage imageNamed:@&quot;nothing&quot;];</div><div class="line">    noView.noticeTitle.text = @&quot;无数据&quot;;</div><div class="line">    noView.reLoadBtn.hidden = YES;</div><div class="line">    [self addSubview:noView];</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)hideNoNetworkView&#123;</div><div class="line">     NCNoNetWorkView *noView = (NCNoNetWorkView *)[self viewWithTag:2593];</div><div class="line">    if (noView) &#123;</div><div class="line">        [noView removeFromSuperview];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(void)hideNoDataView&#123;</div><div class="line">    NCNoNetWorkView *noDataView = (NCNoNetWorkView *)[self viewWithTag:2592];</div><div class="line">    if (noDataView) &#123;</div><div class="line">        [noDataView removeFromSuperview];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(ReGetNetwork)reGetwork&#123;</div><div class="line">    </div><div class="line">    return objc_getAssociatedObject(self, @selector(reGetwork));</div><div class="line">&#125;</div><div class="line">-(void)setReGetwork:(ReGetNetwork)reGetwork&#123;</div><div class="line">    objc_setAssociatedObject(self, @selector(reGetwork), reGetwork, OBJC_ASSOCIATION_COPY_NONATOMIC);</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p>使用方法：</p>
-<p>#####1、网络异常重新加载的占位图：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[self.view showNoNetworkViewWithBlock:^&#123;</div><div class="line">       </div><div class="line">       NSLog(@&quot;%@&quot;,[weakSelf class]); //可重新请求网络</div><div class="line">       </div><div class="line">       [weakSelf.view hideNoNetworkView];</div><div class="line">       </div><div class="line">     </div><div class="line">   &#125;];</div></pre></td></tr></table></figure></p>
-<p>#####2、网络无数据的占位图：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[self.view showNoDataView];</div></pre></td></tr></table></figure></p>
+<p>关于跳跃问题，实现一体键盘，参考文章：<a href="http://www.jianshu.com/p/596a0fe39985" target="_blank" rel="noopener">iOS 怎么做成和微信一样的一体键盘？</a></p>
+<p>限制多行问题，讨论一下。</p>
+<p><code>UITextView</code>有默认的上下间距是<code>8</code>，打印<code>textContainerInset</code>是可以测出来的。微信的输入框在单行的时候保持了默认的上下间距8，但是在大于一行文字后上下间距就会变化。</p>
+<p>为了做的和微信输入框很像，我们在限制了最大行数之后，可以设置<code>textView</code>的<code>setContentOffset</code>属性，滚动距离为（当前行数 - 限制的最大行数）* lineHeight + 上边距。即可。为了过渡效果，在超出限制最大行数时候关闭掉系统的默认动画<code>[self.textView setContentOffset:point animated:NO]</code>,否则在回退的时候会很丑，在小于最大行数是使用系统的动画效果<code>[self.textView setContentOffset:CGPointZero animated:YES];</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">if (line &gt;self.maxLine) &#123;</div><div class="line"></div><div class="line">CGPoint point = CGPointMake(0, (line -self.maxLine) *lineH +8 );</div><div class="line">[self.textView setContentOffset:point animated:NO];</div><div class="line">self.textView.lx_height = ceil(self.maxLine *lineH +8);</div><div class="line"></div><div class="line">&#125;else&#123;</div><div class="line">self.textView.lx_height = contentSizeH;</div><div class="line">[self.textView setContentOffset:CGPointZero animated:YES];</div></pre></td></tr></table></figure>
+<p>还有一点需要说明，输入框的初始高度，因为textView的默认上下间距，我们需要计算好初始高度，经过测试，如果textView font大小为16时，系统的默认高度最好设置为36. 当textView font大小为16时，lineHeight为19.09，加上上下间距为35.09，系统取了36.<br>所以初始化高度为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">CGFloat orignTextH  = ceil (TEXTFONT.lineHeight + 16);</div><div class="line">self.frame =  CGRectMake(0, Device_Height - orignTextH, Device_Width, orignTextH);</div></pre></td></tr></table></figure></p>
+<p>一体键盘的处理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">-(void)keyboardWillChangeFrame:(NSNotification *)notification&#123;</div><div class="line"></div><div class="line">NSDictionary *userInfo = notification.userInfo;</div><div class="line">// 动画的持续时间</div><div class="line">double duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];</div><div class="line"></div><div class="line">// 键盘的frame</div><div class="line">CGRect keyboardF = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];</div><div class="line">//        NSLog(@&quot;%@&quot;,NSStringFromCGRect(keyboardF));</div><div class="line">keyboardY = keyboardF.origin.y;</div><div class="line"></div><div class="line">if (!_isDisappear) &#123;</div><div class="line"></div><div class="line">[self dealKeyBoardWithKeyboardF:keyboardY duration:duration];</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void)keyboardDidChangeFrame:(NSNotification *)notification&#123;</div><div class="line"></div><div class="line">NSDictionary *userInfo = notification.userInfo;</div><div class="line">// 动画的持续时间</div><div class="line">double duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];</div><div class="line">// 键盘的frame</div><div class="line">CGRect keyboardF = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];</div><div class="line">//        NSLog(@&quot;%@&quot;,NSStringFromCGRect(keyboardF));</div><div class="line"></div><div class="line">keyboardY = keyboardF.origin.y;</div><div class="line">//    // 工具条的Y值 == 键盘的Y值 - 工具条的高度</div><div class="line">if (_isDisappear) &#123;</div><div class="line">[self dealKeyBoardWithKeyboardF:keyboardY duration:duration];</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line">#pragma mark---处理高度---</div><div class="line">-(void)dealKeyBoardWithKeyboardF:(CGFloat)keyboardY duration:(CGFloat)duration &#123;</div><div class="line"></div><div class="line">if (!_isDisappear) &#123;</div><div class="line">[UIView animateWithDuration:duration animations:^&#123;</div><div class="line">// 工具条的Y值 == 键盘的Y值 - 工具条的高度</div><div class="line"></div><div class="line">if (keyboardY &gt; Device_Height) &#123;</div><div class="line">self.lx_y = Device_Height- self.lx_height;</div><div class="line">&#125;else</div><div class="line">&#123;</div><div class="line">self.lx_y = keyboardY - self.lx_height;</div><div class="line">&#125;</div><div class="line">&#125;];</div><div class="line">&#125;else&#123;</div><div class="line">if (keyboardY &gt; Device_Height) &#123;</div><div class="line">self.lx_y = Device_Height- self.lx_height;</div><div class="line">&#125;else</div><div class="line">&#123;</div><div class="line">self.lx_y = keyboardY - self.lx_height;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>补充一点：为了适配<code>iOS11</code>以下，需要处理<code>textView</code>,否则<code>xcode9</code>写的代码在<code>iOS11</code>以下的设备上跑的时候回跳动。<br>textView做如下处理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (@available(iOS 11.0, *)) &#123;</div><div class="line">self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>控制器中添加处理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">if (@available(iOS 11.0, *)) &#123;</div><div class="line"></div><div class="line">&#125; else &#123;</div><div class="line">#pragma clang diagnostic push</div><div class="line">#pragma clang diagnostic ignored &quot;-Wdeprecated-declarations&quot;</div><div class="line">// 这部分使用到的过期api</div><div class="line">self.automaticallyAdjustsScrollViewInsets = NO;</div><div class="line">#pragma clang diagnostic pop</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>效果图：<img src="http://upload-images.jianshu.io/upload_images/1694376-182ba1a681a2b225.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="输入框.gif"></p>
+<p>demo 地址：<a href="https://github.com/liuxinixn/LXKeyBoardTextView/tree/master" target="_blank" rel="noopener">一体键盘，限制最大行数</a></p>
 
           
         
@@ -400,7 +874,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-几种图片或Gif异步加载/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/仿朋友圈下拉刷新动画（基础动画）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -419,7 +893,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/28/iOS-几种图片或Gif异步加载/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2017/12/28/仿朋友圈下拉刷新动画（基础动画）/" itemprop="url">仿朋友圈下拉刷新动画</a></h1>
         
 
         <div class="post-meta">
@@ -431,7 +905,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:19:35+08:00">
                 2017-12-28
               </time>
             
@@ -471,165 +945,30 @@
       
         
           
-            <p>iOS 加载加载图片的方式主流的有两种（本地图片略过）：<br>1、SDWebImage。<br>2、YYWebImage。</p>
-<p>######区别：主流框架主要使用SDWebImage进行处理图片，这点不用说明，但是SDWebImage在处理Gif的时候不是很友好，在github上SDWebImage 是这样说明的，需要额外pod ‘SDWebImage/Gif’.<br><img src="http://upload-images.jianshu.io/upload_images/1694376-7df605e3a582d996.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="提示.png"></p>
-<p>附上地址：<a href="https://github.com/Flipboard/FLAnimatedImage" target="_blank" rel="noopener">FLAnimatedImage</a></p>
-<p>FLAnimatedImage 加载网络GIF方法:</p>
-<p><code>cell.icon1.animatedImage =[[FLAnimatedImage alloc]initWithAnimatedGIFData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@&quot;http://images2015.cnblogs.com/blog/607542/201601/607542-20160123090832343-133952004.gif&quot;]]];</code><br>icon 的类型是<code>FLAnimatedImageView</code>；</p>
-<p>所以看得出来SDWebImage在支持Gif处理不是很好。</p>
-<p>接下来简单介绍一下YYWebImage：</p>
-<p>YYWebImage 是一个异步图片加载框架 (YYKit 组件之一).<br>其设计目的是试图替代 SDWebImage、PINRemoteImage、FLAnimatedImage 等开源框架，它支持这些开源框架的大部分功能，同时增加了大量新特性、并且有不小的性能提升。<br>它底层用 YYCache 实现了内存和磁盘缓存, 用 YYImage 实现了 WebP/APNG/GIF 动图的解码和播放。你可以查看这些项目以获得更多信息。</p>
-<p>异步的图片加载，支持 HTTP 和本地文件。<br>支持 GIF、APNG、WebP 动画（动态缓存，低内存占用）。<br>支持逐行扫描、隔行扫描、渐进式图像加载。<br>UIImageView、UIButton、MKAnnotationView、CALayer 的 Category 方法支持。<br>常见图片处理：模糊、圆角、大小调整、裁切、旋转、色调等。<br>高性能的内存和磁盘缓存。<br>高性能的图片设置方式，以避免主线程阻塞。<br>每个类和方法都有完善的文档注释。</p>
-<p>从 URL 加载图片：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 加载网络图片</div><div class="line">imageView.yy_imageURL = [NSURL URLWithString:@&quot;http://github.com/logo.png&quot;];</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 加载本地图片</div><div class="line">imageView.yy_imageURL = [NSURL fileURLWithPath:@&quot;/tmp/logo.png&quot;];</div></pre></td></tr></table></figure>
-<p>加载动图<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 只需要把 `UIImageView` 替换为 `YYAnimatedImageView` 即可。</div><div class="line">UIImageView *imageView = [YYAnimatedImageView new];</div><div class="line">imageView.yy_imageURL = [NSURL URLWithString:@&quot;http://github.com/ani.webp&quot;];</div></pre></td></tr></table></figure></p>
-<p>渐进式图片加载<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 渐进式：边下载边显示</div><div class="line">[imageView yy_setImageWithURL:url options:YYWebImageOptionProgressive];</div><div class="line">	</div><div class="line">// 渐进式加载，增加模糊效果和渐变动画 （见本页最上方的GIF演示）</div><div class="line"></div><div class="line">[imageView yy_setImageWithURL:url options:YYWebImageOptionProgressiveBlur ｜ YYWebImageOptionSetImageWithFadeAnimation];</div></pre></td></tr></table></figure></p>
-<p>加载、处理图片</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">// 1. 下载图片</div><div class="line">// 2. 获得图片下载进度</div><div class="line">// 3. 调整图片大小、加圆角</div><div class="line">// 4. 显示图片时增加一个淡入动画，以获得更好的用户体验</div><div class="line">	</div><div class="line">[imageView yy_setImageWithURL:url</div><div class="line">   placeholder:nil</div><div class="line">   options:YYWebImageOptionSetImageWithFadeAnimation</div><div class="line">   progress:^(NSInteger receivedSize, NSInteger expectedSize) &#123;</div><div class="line">       progress = (float)receivedSize / expectedSize;</div><div class="line">   &#125;</div><div class="line">   transform:^UIImage *(UIImage *image, NSURL *url) &#123;</div><div class="line">       image = [image yy_imageByResizeToSize:CGSizeMake(100, 100) contentMode:UIViewContentModeCenter];</div><div class="line">       return [image yy_imageByRoundCornerRadius:10];</div><div class="line">   &#125;</div><div class="line">   completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) &#123;</div><div class="line">       if (from == YYWebImageFromDiskCache) &#123;</div><div class="line">           NSLog(@&quot;load from disk cache&quot;);</div><div class="line">       &#125;</div><div class="line">   &#125;];</div></pre></td></tr></table></figure>
-<p>图片缓存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">YYImageCache *cache = [YYWebImageManager sharedManager].cache;</div><div class="line">    </div><div class="line">// 获取缓存大小</div><div class="line">cache.memoryCache.totalCost;</div><div class="line">cache.memoryCache.totalCount;</div><div class="line">cache.diskCache.totalCost;</div><div class="line">cache.diskCache.totalCount;</div><div class="line">    </div><div class="line">// 清空缓存</div><div class="line">[cache.memoryCache removeAllObjects];</div><div class="line">[cache.diskCache removeAllObjects];</div><div class="line">    </div><div class="line">// 清空磁盘缓存，带进度回调</div><div class="line">[cache.diskCache removeAllObjectsWithProgressBlock:^(int removedCount, int totalCount) &#123;</div><div class="line">   // progress</div><div class="line">&#125; endBlock:^(BOOL error) &#123;</div><div class="line">   // end</div><div class="line">&#125;];</div></pre></td></tr></table></figure></p>
-<p>关于YYWebImage 加载GIF补充一点，如果是加载本地Gif:<br><code>YYImage *image = [YYImage imageNamed:name];
-YYAnimatedImageView *imageView = [[YYAnimatedImageView alloc] initWithImage:image];</code></p>
-<p>加载网络Gif：<br>简单介绍两种：<br>1、同步方法，会卡顿（FLAnimatedImage在处理的时候卡顿会好很多，很流畅）。<br><code>imageView.yy_imageURL = [NSURL URLWithString:@&quot;http://upload-images.jianshu.io/upload_images/1694376-b9646eecf2139f87.gif&quot;];</code><br>2、异步方法：<br>```<br>imageView yy_setImageWithURL:[NSURL URLWithString:@”<a href="http://i.imgur.com/8KHKhxI.gif" target="_blank" rel="noopener">http://i.imgur.com/8KHKhxI.gif</a>“]<br>                          placeholder:nil<br>                              options:YYWebImageOptionProgressiveBlur | YYWebImageOptionShowNetworkActivity | YYWebImageOptionSetImageWithFadeAnimation<br>                             progress:^(NSInteger receivedSize, NSInteger expectedSize) {<br>                                 if (expectedSize &gt; 0 &amp;&amp; receivedSize &gt; 0) {</p>
-<pre><code>      }
-  }
- transform:nil
-completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) {
-
-    NSLog(@&quot;%ld&quot;,stage);
-}];
-</code></pre><p>`</p>
-<p>总结：<br>1、单独加载网络图片SDWebImage基本符合常用需求。<br>2、FLAnimatedImage在处理Gif的时候很流畅。至于SDWebImage配合FLAnimatedImage暂时没有发现，官网demo的事例可以参考一下。FLAnimatedImage到是可以单独加载Gif。<br>3、YYWebImage 可以加载网络图片以及良好的支持Gif，可以自定义多种过渡效果。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-内存检测Instruments之Leaks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/28/iOS-内存检测Instruments之Leaks/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
-                2017-12-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>动态检测内存工具Leaks，可以和静态分析工具Analyze配合使用。<br><code>cmd + I</code>进入 Leaks 主界面，</p>
-<p>#######第一步：点击左上角的红色录制按钮，会重启模拟器或者手机，点击暂停可以进行测试。<br><img src="http://upload-images.jianshu.io/upload_images/1694376-92dcf784dd366981.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-6a8f6ff5ea01903d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
-<p>#######第二步：然后 点击应用，进入界面，测试，如果出现红X，点击暂停按钮暂停，开始查找内存泄漏的地方。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-9206d4d535f67f4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
-<p>#######第三步：点击Leak Checks按钮，选择要定位的区域，红色❌号标识前后。选择CallTree，会定位到具体的方法。右侧面板配置如图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-01354a2229ee2ec5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
-<p>#######第四步：最后双击需要检测的地方跳转到Xcode，定位代码。</p>
+            <p>示意图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-db5166069f123884.gif?imageMogr2/auto-orient/strip" alt="2.0.gif"><br>demo地址：<a href="https://github.com/liuxinixn/LX_WXChatCirleRresh" target="_blank" rel="noopener">仿朋友圈下拉刷新动画</a></p>
 <blockquote>
-<p>最后简单使用Time Profiler检测耗时的代码.面板配置同Leaks。</p>
+<p> <strong>动画的起源源于好奇</strong></p>
 </blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-8f794c0c019ff50f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p>之前用Time Profiler 检测过UIImage 加载两种方式的区别。<a href="http://www.jianshu.com/p/a700dcf27b83" target="_blank" rel="noopener">UIImageview加载动画做内存与耗时</a></p>
+<p>因为刚开是学动画，恨不得把所有的都实现一遍，试了一下微信朋友圈的下拉刷新动画。<br>如果ViewController的第一个子视图为UIScrollview的子类，系统会默认有个偏移量 ，如果不想这样可以设置<br><code>self.automaticallyAdjustsScrollViewInsets = NO;</code><br>下面所有的Navbar 都是默认透明的，设置为不透明就需要处理下。</p>
+<ul>
+<li>首先我们需要自定义一个headerView，但是不要设置<strong>self.layer.masksToBounds = Yes</strong> ,这样超出的部分都会被剪掉。<br>header 的组成部分：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    UIImageView *_backgroundImageView; </div><div class="line">    UIImageView *_iconView;</div><div class="line">    UILabel *_nameLabel;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>因为要做成微信朋友圈的效果我们需要这样处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//背景图 y 设置为 负的。</div><div class="line">_backgroundImageView.frame = CGRectMake(0, -60, KWidth, CGRectGetHeight(self.frame)+60);</div><div class="line">  </div><div class="line">    _iconView.frame = CGRectMake(KWidth - 70 -15, CGRectGetHeight(self.frame)-40, 70, 70);</div><div class="line">   </div><div class="line">    _nameLabel.frame = CGRectMake(KWidth - 70 -15 -20-200, CGRectGetHeight(self.frame)-20-10, 200, 20);</div></pre></td></tr></table></figure></p>
+<ul>
+<li>接下来处理下拉刷新的部分<br>tableview是Viewcontroller的第一个子视图，所以默认的Contentoffset.y为-64，我们需要的就是在下拉刷新的时候给headerview添加动画。<br>可以将监听contentoffset抽取出来，减少Viewcontroller的冗杂。</li>
+</ul>
+<ol>
+<li><strong>自定义一个view，给其一些属性：</strong></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">typedef enum &#123;</div><div class="line">    LXWXRefreshViewStateNormal,</div><div class="line">    LXWXRefreshViewStateWillRefresh,</div><div class="line">    LXWXRefreshViewStateRefreshing,</div><div class="line">&#125; LXWXRefreshViewState;</div><div class="line"></div><div class="line">@interface LX_RefreshView : UIView &lt;CAAnimationDelegate&gt;</div><div class="line"></div><div class="line"></div><div class="line">+ (instancetype)refreshHeaderWithCenter:(CGPoint)center;</div><div class="line"></div><div class="line">//传入我们需要的处理下拉刷新的UIscrollview的子类</div><div class="line">@property(nonatomic,strong)UIScrollView *scrollView;</div><div class="line">//刷新ing的回调，用来处理数据</div><div class="line">@property (nonatomic, copy) void(^refreshingBlock)();</div><div class="line"></div><div class="line">@property (nonatomic, assign) LXWXRefreshViewState refreshState;</div><div class="line">//结束刷新，回到主线程刷新tableview</div><div class="line">- (void)endRefreshing;</div></pre></td></tr></table></figure>
+<p>2  <strong>.m文件中的处理</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (void)setupView</div><div class="line">&#123;</div><div class="line">    self.backgroundColor = [UIColor clearColor];</div><div class="line">    //动态添加到 headerview上，做动画处理</div><div class="line">    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@&quot;AlbumReflashIcon&quot;]];</div><div class="line">    self.bounds = imageView.bounds;</div><div class="line">    [self addSubview:imageView];</div><div class="line">    </div><div class="line"> //刷新时请求数据等待动画</div><div class="line">    _rotateAnimation = [[CABasicAnimation alloc] init];</div><div class="line">    _rotateAnimation.keyPath = @&quot;transform.rotation.z&quot;;</div><div class="line">    _rotateAnimation.fromValue = @0;</div><div class="line">    _rotateAnimation.toValue = @(M_PI * 2);</div><div class="line">    _rotateAnimation.duration = 1.0;</div><div class="line">    _rotateAnimation.repeatCount = MAXFLOAT;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p> 将viewcontroller中监听contentoffset属性迁移到这里，在设置属性的时候开始监听<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">- (void)setScrollView:(UIScrollView *)scrollView</div><div class="line">&#123;</div><div class="line">    _scrollView = scrollView;</div><div class="line">    </div><div class="line"></div><div class="line">    [scrollView addObserver:self forKeyPath:ObserveKeyPath options:NSKeyValueObservingOptionNew context:nil];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSString *,id&gt; *)change context:(void *)context</div><div class="line">&#123;</div><div class="line">   </div><div class="line">    if (keyPath != ObserveKeyPath) return;</div><div class="line">    </div><div class="line">    [self updateRefreshHeaderWithOffsetY:self.scrollView.contentOffset.y];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在更新contentoffset.y 的时候做一些判断，处理旋转角度，可以自己调整。在拖拽以及停止拖拽的时候判断刷新状态，进而进行不同的动画处理。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">- (void)updateRefreshHeaderWithOffsetY:(CGFloat)y</div><div class="line">&#123;</div><div class="line">   </div><div class="line">    CGFloat rotateValue = y / 47.0 * M_PI;</div><div class="line">   </div><div class="line">    if (y &lt; contentOffetY) &#123;</div><div class="line">        y = contentOffetY;</div><div class="line">               if (self.scrollView.isDragging &amp;&amp; self.refreshState != LXWXRefreshViewStateWillRefresh) &#123;</div><div class="line">            self.refreshState = LXWXRefreshViewStateWillRefresh;</div><div class="line">            </div><div class="line">        &#125; else if (!self.scrollView.isDragging &amp;&amp; self.refreshState == LXWXRefreshViewStateWillRefresh) &#123;</div><div class="line">            </div><div class="line">            self.refreshState = LXWXRefreshViewStateRefreshing;</div><div class="line">        &#125;    &#125;</div><div class="line">    </div><div class="line">    if (self.refreshState == LXWXRefreshViewStateRefreshing) return;</div><div class="line">    </div><div class="line">    CGAffineTransform transform = CGAffineTransformIdentity;</div><div class="line">//这里处理纵向偏移是因为 tableview为第一个子视图，我们需要设向下偏移，所以取负值。否则是看不到这个视图的。</div><div class="line">    transform = CGAffineTransformTranslate(transform, 0, -y);</div><div class="line">    transform = CGAffineTransformRotate(transform, rotateValue);</div><div class="line">    </div><div class="line">    self.transform = transform;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对不同刷新状态的处理 在刷新完成时我们需要再做一个动画，使其纵向消失，然后在动画完成后移除。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">- (void)setRefreshState:(LXWXRefreshViewState)refreshState</div><div class="line">&#123;</div><div class="line">    _refreshState =  refreshState;</div><div class="line"></div><div class="line">    if (refreshState  == LXWXRefreshViewStateWillRefresh) &#123;</div><div class="line">        </div><div class="line">        self.hidden = NO;</div><div class="line">    &#125;</div><div class="line">    if (refreshState == LXWXRefreshViewStateRefreshing) &#123;</div><div class="line">        if (self.refreshingBlock) &#123;</div><div class="line">            self.refreshingBlock();</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        [self.layer addAnimation:_rotateAnimation forKey:AnimationKey];</div><div class="line">    &#125; else if (refreshState == LXWXRefreshViewStateNormal) &#123;</div><div class="line">        </div><div class="line">        [self.layer removeAnimationForKey:AnimationKey];</div><div class="line">        self.transform = CGAffineTransformIdentity;</div><div class="line">        CABasicAnimation *basic =[CABasicAnimation animation];</div><div class="line">        basic.keyPath = @&quot;position&quot;;</div><div class="line">        basic.fromValue =[NSValue valueWithCGPoint:self.center];</div><div class="line">        basic.toValue = [NSValue valueWithCGPoint:CGPointMake(self.center.x, -self.center.y)];</div><div class="line">        basic.duration = 0.5;</div><div class="line">        basic.delegate = self;</div><div class="line">        [self.layer addAnimation:basic forKey:PositionKey];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(void)animationDidStop:(CABasicAnimation *)anim finished:(BOOL)flag</div><div class="line">&#123;</div><div class="line">    if ([anim.keyPath isEqualToString:PositionKey]) &#123;</div><div class="line">        [self.layer removeAnimationForKey:PositionKey];</div><div class="line">        self.hidden = YES;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>刷新view 封装完成，接下来 我们在Viewcontroller中引用下即可</strong></p>
+</blockquote>
 
           
         
@@ -678,7 +1017,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-ping++支付/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/-Swift之集合类型-(Collection-Types)（数组篇）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -697,7 +1036,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/28/iOS-ping++支付/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2017/12/28/-Swift之集合类型-(Collection-Types)（数组篇）/" itemprop="url">Swift之集合类型-(Collection-Types)(数组篇)</a></h1>
         
 
         <div class="post-meta">
@@ -709,7 +1048,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:19:35+08:00">
                 2017-12-28
               </time>
             
@@ -749,20 +1088,59 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
       
         
           
-            <p><code>ping++</code>支付不需要你去各个平台去申请，支付宝支付好像现在第一版是不能接入支付的，初版上线才可以。<code>ping++</code>支付接入的大部分平台的支付功能，接入文档也足够简单。</p>
-<p><a href="https://www.pingxx.com/docs/client/sdk/ios" target="_blank" rel="noopener">ios  接入文档</a></p>
-<p>1、<code>pod &#39;Pingpp&#39;, &#39;~&gt; 2.2.13&#39;</code><br>2、默认会包含支付宝、微信、银联，你也可以自己选择渠道。<br>3、如果要加入其他的渠道支付 ，可以如下这样配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pod &apos;Pingpp/Alipay&apos;, &apos;~&gt; 2.2.13&apos;</div><div class="line">pod &apos;Pingpp/UnionPay&apos;, &apos;~&gt; 2.2.13&apos;</div><div class="line">pod &apos;Pingpp/One&apos;, &apos;~&gt; 2.2.13&apos;</div></pre></td></tr></table></figure></p>
-<p>4、配置URL Schemes，后面会用到。便于区分即可</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-1387e64ab8f547c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p>5、appdelegate里引入<code>#import &lt;Pingpp.h&gt;</code>,<br>6、两个跳转方法的配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// iOS 8 及以下请用这个</div><div class="line">- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation &#123;</div><div class="line">    if ([Pingpp handleOpenURL:url withCompletion:nil]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// iOS 9 以上请用这个</div><div class="line">- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options &#123;</div><div class="line">    if ([Pingpp handleOpenURL:url withCompletion:nil]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return YES;&#125;</div></pre></td></tr></table></figure></p>
-<p>7、调用支付：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[Pingpp createPayment:charge</div><div class="line">       viewController:viewController</div><div class="line">         appURLScheme:kUrlScheme</div><div class="line">       withCompletion:^(NSString *result, PingppError *error) &#123;</div><div class="line">    if ([result isEqualToString:@&quot;success&quot;]) &#123;</div><div class="line">        // 支付成功</div><div class="line">    &#125; else &#123;</div><div class="line">        // 支付失败或取消</div><div class="line">        NSLog(@&quot;Error: code=%lu msg=%@&quot;, error.code, [error getMsg]);</div><div class="line">    &#125;</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
-<p>这里面就会用到前面用到的appURLScheme,payment是后台返回的订单字典。</p>
-<p>我们需要给后台传的两个必须的字段是<br> <code>NSDictionary* dict = @{
-        @&quot;channel&quot; : self.channel,
-        @&quot;amount&quot;  : amountStr
-    };</code><br>确切的说这个是后台调用ping++支付时必须传的两个字段。<br>拿到后台返回的payment就可以调用上面的方法了。</p>
-<p>#####这样简单的ping++ 支付继承完毕了。</p>
+            <p><code>Swift</code> 语言提供<code>Arrays</code> 、 <code>Sets</code> 和 <code>Dictionaries</code> 三种基本的 集合类型用来存储集合数据。数组<code>(Arrays)</code>是有序<br>数据的 集。 集合<code>(Sets)</code>是无序无重复数据的集 。字典<code>(Dictionaries)</code>是无序的键值对的集 。<br><code>Swift</code> 语言中的<code>Arrays</code> 、 <code>Sets</code> 和 <code>Dictionaries</code> 中存储的数据值类型必须明确。这意味着我们不能把不正确的数 据类型插入其中。同时这也说明我们完全可以对取回值的类型非常自信。</p>
+<blockquote>
+<p>集合的可变性</p>
+</blockquote>
+<p>如果创建一个<code>Arrays</code> 、 <code>Sets</code>或<code>Dictionaries</code> 并且把它分配成一个变量，这个 集合将会是可变的。这意味着我们 可以在创建之后添加更多或移除已存在的数据项，或者改变 集合中的数据项。如果我们把<code>Arrays</code> 、 <code>Sets</code>或 <code>Dictionaries</code> 分配成常量，那么它就是不可变的，它的大小和内容都不能被改变。</p>
+<blockquote>
+<p>数组(Arrays)</p>
+</blockquote>
+<p>数组使用有序列表存储同一类型的多个值。相同的值可以多次出现在一个数组的不同位置中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">注意: Swift 的 Array 类型被桥接到 Foundation 中的 NSArray 类。</div></pre></td></tr></table></figure></p>
+<p><strong>数组的简单语法</strong></p>
+<p>写<code>Swift</code>数组应该遵循像 <code>Array&lt;Element&gt;</code>这样的形式，其中 <code>Element</code> 是这个数组中唯一允许存在的数据类 型。我们也可以使用像 <code>[Element]</code> 这样的简单语法。尽管两种形式在功能上是一样的，但是推荐较短的那种，而 且在本文中都会使用这种形式来使用数组。</p>
+<p><strong>创建一个空数组</strong></p>
+<p>我们可以使用构造语法来创建一个由特定数据类型构成的空数组:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var someInts = [Int]()</div><div class="line">print(&quot;someInts is of type [Int] with \(someInts.count) items.&quot;)</div><div class="line"> // 打印 &quot;someInts is of type [Int] with 0 items.&quot;</div></pre></td></tr></table></figure>
+<p>或者，如果代码上下文中已经提供了类型信息，例如一个函数参数或者一个已经定义好类型的常量或者变量，我 们可以使用空数组语句创建一个空数组，它的写法很简单: [] (一对空方括号):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">someInts.append(3)</div><div class="line">// someInts 现在包含一个 Int 值</div><div class="line">someInts = []</div><div class="line">// someInts 现在是空数组，但是仍然是 [Int] 类型的。</div></pre></td></tr></table></figure>
+<p><strong>创建一个带有默认值的数组</strong></p>
+<p><code>Swift</code> 中的 <code>Array</code> 类型还提供一个可以创建特定大小并且所有数据都被默认的构造方法。我们可以把准备加入新 数组的数据项数量( <code>count</code> )和适当类型的初始值( <code>repeating</code>)传入数组构造函数:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var threeDoubles = Array(repeating: 0.0, count: 3)</div><div class="line">// threeDoubles 是一种 [Double] 数组，等价于 [0.0, 0.0, 0.0]</div></pre></td></tr></table></figure></p>
+<p><strong>通过两个数组相加创建一个数组</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var anotherThreeDoubles = Array(repeating: 2.5, count: 3)</div><div class="line">// anotherThreeDoubles 被推断为 [Double]，等价于 [2.5, 2.5, 2.5]</div><div class="line">var sixDoubles = threeDoubles + anotherThreeDoubles</div><div class="line">// sixDoubles 被推断为 [Double]，等价于 [0.0, 0.0, 0.0, 2.5, 2.5, 2.5]</div></pre></td></tr></table></figure>
+<p><strong>用数组字面量构造数组</strong></p>
+<p>我们可以使用数组字面量来进行数组构造，这是一种用一个或者多个数值构造数组的简单方法。数组字面量是一<br>系列由逗号分割并由方括号包含的数值:</p>
+<p><code>[value 1, value 2, value 3] 。</code></p>
+<p>下面这个例子创建了一个叫做<code>shoppingList</code> 并且存储<code>String</code> 的数组:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var shoppingList: [String] = [&quot;Eggs&quot;, &quot;Milk&quot;]</div><div class="line"> // shoppingList 已经被构造并且拥有两个初始项。</div></pre></td></tr></table></figure></p>
+<p><code>shoppingList</code> 变量被声明为“字符串值类型的数组“，记作 <code>[String]</code>。 因为这个数组被规定只有<code>String</code>一种 数据结构，所以只有<code>String</code> 类型可以在其中被存取。 在这里， <code>shoppingList</code>数组由两个 <code>String</code> 值( <code>&quot;Eggs&quot;</code> 和 <code>&quot;Milk&quot;</code>)构造，并且由数组字面量定义。</p>
+<p><code>注意: shoppingList 数组被声明为变量( var 关键字创建)而不是常量( let 创建)是因为以后可能会有更多的数据
+项被插入其中。</code></p>
+<p>在这个例子中，字面量仅仅包含两个 <code>String</code> 值。匹配了该数组的变量声明(只能包含<code>String</code> 的数组)，所以这 个字面量的分配过程可以作为用两个初始项来构造 <code>shoppingList</code> 的一种方式。<br>由于<code>Swift</code>的类型推断机制，当我们用字面量构造只拥有相同类型值数组的时候，我们不必把数组的类型定义清 楚。 <code>shoppingList</code> 的构造也可以这样写:</p>
+<p><code>var shoppingList = [&quot;Eggs&quot;, &quot;Milk&quot;]</code><br>因为所有数组字面量中的值都是相同的类型，<code>Swift</code>可以推断出 <code>[String]</code> 是<code>shoppingList</code>中变量的正确类型。</p>
+<p><strong>访问和修改数组</strong></p>
+<p>我们可以通过数组的方法和属性来访问和修改数组，或者使用下标语法。</p>
+<p>可以使用数组的只读属性 count 来获取数组中的数据项数量:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(&quot;The shopping list contains \(shoppingList.count) items.&quot;) </div><div class="line">// 输出 &quot;The shopping list contains 2 items.&quot;(这个数组有2个项)</div></pre></td></tr></table></figure>
+<p>使用布尔属性<code>isEmpty</code> 作为一个缩写形式去检查 count 属性是否为 <code>0</code> :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if shoppingList.isEmpty &#123;</div><div class="line">     print(&quot;The shopping list is empty.&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;The shopping list is not empty.&quot;)</div><div class="line">&#125;</div><div class="line">// 打印 &quot;The shopping list is not empty.&quot;(shoppinglist 不是空的)</div></pre></td></tr></table></figure></p>
+<p>也可以使用 <code>append(_:)</code> 方法在数组后面添加新的数据项:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">shoppingList.append(&quot;Flour&quot;)</div><div class="line">// shoppingList 现在有3个数据项，有人在摊煎饼</div></pre></td></tr></table></figure></p>
+<p>除此之外，使用加法赋值运算符( <code>+=</code> )也可以直接在数组后面添加一个或多个拥有相同类型的数据项:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">shoppingList += [&quot;Baking Powder&quot;]</div><div class="line">// shoppingList 现在有四项了</div><div class="line">shoppingList += [&quot;Chocolate Spread&quot;, &quot;Cheese&quot;, &quot;Butter&quot;]</div><div class="line"> // shoppingList 现在有七项了</div></pre></td></tr></table></figure>
+<p>可以直接使用下标语法来获取数组中的数据项，把我们需要的数据项的索引值放在直接放在数组名称的方括号<br>中:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var firstItem = shoppingList[0] // 第一项是 &quot;Eggs&quot;</div></pre></td></tr></table></figure></p>
+<p>我们也可以用下标来改变某个已有索引值对应的数据值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">shoppingList[0] = &quot;Six eggs&quot;</div><div class="line">// 其中的第一项现在是 &quot;Six eggs&quot; 而不是 &quot;Eggs&quot;</div></pre></td></tr></table></figure></p>
+<p>还可以利用下标来一次改变一系列数据值，即使新数据和原有数据的数量是不一样的。下面的例子把 “Chocolate Spread” ， “Cheese” ，和 “Butter” 替换为 “Bananas” 和 “Apples” :</p>
+<p>只能说Swift的语法真的很简洁。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">shoppingList[4...6] = [&quot;Bananas&quot;, &quot;Apples&quot;] </div><div class="line">// shoppingList 现在有6项</div></pre></td></tr></table></figure></p>
+<p>调用数组的 <code>insert(_:at:)</code>方法来在某个具体索引值之前添加数据项:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">shoppingList.insert(&quot;Maple Syrup&quot;, at: 0) </div><div class="line">// shoppingList 现在有7项</div><div class="line">// &quot;Maple Syrup&quot; 现在是这个列表中的第一项</div></pre></td></tr></table></figure>
+<p>这次<code>insert(_:at:)</code> 方法调用把值为 <code>&quot;Maple Syrup&quot;</code> 的新数据项插入列表的最开始位置，并且使用<code>0</code> 作为索引 值。</p>
+<p>类似的我们可以使用 <code>remove(at:)</code>方法来移除数组中的某一项。这个方法把数组在特定索引值中存储的数据项移 除并且返回这个被移除的数据项(我们不需要的时候就可以无视它):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let mapleSyrup = remove(at: 0)</div><div class="line">// 索引值为0的数据项被移除</div><div class="line">// shoppingList 现在只有6项，而且不包括 Maple Syrup</div><div class="line">// mapleSyrup 常量的值等于被移除数据项的值 &quot;Maple Syrup&quot;</div></pre></td></tr></table></figure>
+<p><code>注意: 如果我们试着对索引越界的数据进行检索或者设置新值的操作，会引发一个运行期错误。我们可以使用索引值和 数组的 count 属性进行比较来在使用某个索引之前先检验是否有效。除了当 count 等于 0 时(说明这是个空数 组)，最大索引值一直是 count - 1 ，因为数组都是零起索引。</code></p>
+<p>如果我们只想把数组中的最后一项移除，可以使用 <code>removeLast()</code>方法而不是 <code>remove(at:)</code>方法来避免我们需要获 取数组的 <code>count</code> 属性。就像后者一样，前者也会返回被移除的数据项:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let apples = shoppingList.removeLast()</div><div class="line">// 数组的最后一项被移除了</div><div class="line">// shoppingList 现在只有5项，不包括 Apples // apples 常量的值现在等于 &quot;Apples&quot; 字符串</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">**数组的遍历**</div><div class="line"></div><div class="line">我们可以使用` for-in `循环来遍历所有数组中的数据项:</div></pre></td></tr></table></figure>
+<p> for item in shoppingList {<br>     print(item)<br> }<br> // Six eggs<br> // Milk<br> // Flour<br> // Baking Powder<br> // Bananas</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">如果我们同时需要每个数据项的值和索引值，可以使用 `enumerated() `方法来进行数组遍历。 `enumerated()` 返回 一个由每一个数据项索引值和数据值组成的元组。我们可以把这个元组分解成临时常量或者变量来进行遍历:</div></pre></td></tr></table></figure>
+<p> for (index, value) in shoppingList. enumerated() {<br>     print(“Item (String(index + 1)): (value)”)<br> }<br> // Item 1: Six eggs<br> // Item 2: Milk<br> // Item 3: Flour<br> // Item 4: Baking Powder<br> // Item 5: Bananas<br>```</p>
 
           
         
@@ -811,7 +1189,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-雷达扩散动画，给view添加分类/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-仿侧边栏/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -830,7 +1208,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/28/iOS-雷达扩散动画，给view添加分类/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2017/12/28/iOS-仿侧边栏/" itemprop="url">iOS 仿侧边栏</a></h1>
         
 
         <div class="post-meta">
@@ -842,7 +1220,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T00:13:14+08:00">
                 2017-12-28
               </time>
             
@@ -882,13 +1260,32 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
       
         
           
-            <p>动画有点抖s<br><img src="http://upload-images.jianshu.io/upload_images/1694376-e32db327583392fd.gif?imageMogr2/auto-orient/strip" alt="gif.gif"></p>
-<p>####给UIView添加一个分类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line"></div><div class="line">@interface UIView (RadarAnimation)</div><div class="line"></div><div class="line">@property(nonatomic,strong)UIColor *radarColor; //扩散颜色</div><div class="line">@property(nonatomic,assign)UIColor *radarBorderColor; //扩散边界颜色</div><div class="line">-(void)addRadarAnimation;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p>调用方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">button.radarColor = LBColor(237, 174, 130, 1);</div><div class="line">button.radarBorderColor = LBColor(237, 174, 130, 0.5);</div><div class="line"> [button addRadarAnimation];</div></pre></td></tr></table></figure></p>
-<p>添加动画的方法,创建三个layer，只不过，开始动画的时间要错开形成这个效果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">-(void)Animation&#123;</div><div class="line">    NSInteger pulsingCount = 3;</div><div class="line">    double animationDuration = 2;</div><div class="line">    </div><div class="line">    CALayer * animationLayer = [[CALayer alloc]init];</div><div class="line">    </div><div class="line">    for (int i = 0; i &lt; pulsingCount; i++) &#123;</div><div class="line">        CALayer * pulsingLayer = [[CALayer alloc]init];</div><div class="line">        pulsingLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);</div><div class="line">        pulsingLayer.backgroundColor = self.radarColor.CGColor;</div><div class="line">        pulsingLayer.borderColor = self.radarBorderColor.CGColor;</div><div class="line"></div><div class="line"></div><div class="line">        pulsingLayer.borderWidth = 1.0;</div><div class="line">        pulsingLayer.cornerRadius = self.frame.size.height/2;</div><div class="line">        </div><div class="line">        CAMediaTimingFunction * defaultCurve = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];</div><div class="line">        </div><div class="line">        CAAnimationGroup * animationGroup = [[CAAnimationGroup alloc]init];</div><div class="line">        animationGroup.fillMode = kCAFillModeBoth;</div><div class="line">        animationGroup.beginTime = CACurrentMediaTime() + (double)i * animationDuration/(double)pulsingCount;</div><div class="line">        animationGroup.duration = animationDuration;</div><div class="line">        animationGroup.repeatCount = HUGE_VAL;</div><div class="line">        animationGroup.timingFunction = defaultCurve;</div><div class="line">        </div><div class="line">        CABasicAnimation * scaleAnimation = [CABasicAnimation animationWithKeyPath:@&quot;transform.scale&quot;];</div><div class="line">        scaleAnimation.autoreverses = NO;</div><div class="line">        scaleAnimation.fromValue = [NSNumber numberWithDouble:1];</div><div class="line">        scaleAnimation.toValue = [NSNumber numberWithDouble:1.5];</div><div class="line">        </div><div class="line">        CAKeyframeAnimation * opacityAnimation = [CAKeyframeAnimation animationWithKeyPath:@&quot;opacity&quot;];</div><div class="line">        opacityAnimation.values = @[[NSNumber numberWithDouble:1.0],[NSNumber numberWithDouble:0.5],[NSNumber numberWithDouble:0.3],[NSNumber numberWithDouble:0.0]];</div><div class="line">        opacityAnimation.keyTimes = @[[NSNumber numberWithDouble:0.0],[NSNumber numberWithDouble:0.25],[NSNumber numberWithDouble:0.5],[NSNumber numberWithDouble:1.0]];</div><div class="line">        animationGroup.animations = @[scaleAnimation,opacityAnimation];</div><div class="line">        </div><div class="line">        [pulsingLayer addAnimation:animationGroup forKey:@&quot;pulsing&quot;];</div><div class="line">        [animationLayer addSublayer:pulsingLayer];</div><div class="line">    &#125;</div><div class="line">        animationLayer.zPosition = -1;//重新加载时，使动画至底层</div><div class="line">    [self.layer addSublayer:animationLayer];</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>为了防止动画进入后台假死，需要监听通知：<br><code>[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterPlayground) name:UIApplicationDidBecomeActiveNotification object:nil];</code></p>
-<p>demo 地址：<a href="https://github.com/liuxinixn/LXRadarAnimationDemo" target="_blank" rel="noopener">漫漫的demo</a></p>
+            <blockquote>
+<p>粗仿QQ侧边栏</p>
+</blockquote>
+<p>分析：<code>QQ</code>侧边栏都用了哪些手势，有哪些效果？</p>
+<ol>
+<li><code>QQ</code>的主页是个<code>UITabbarController</code>，暂且称为<code>MainVc</code>左侧边缘添加的手势为边缘手势<code>UIScreenEdgePanGestureRecognizer</code></li>
+<li>当边缘手势滑动到屏幕中间时判断<code>MainVc</code>移动的距离超过屏幕中间，超过就显示侧边栏，没超过会自动归位。</li>
+<li><code>MainVc</code>移动的时候会有一层黑色的遮罩，遮罩的透明度和<code>MainVc</code>移动的距离有关。</li>
+<li>当侧边栏出现的时候，此时<code>MainVc</code>添加的手势更换为平移手势<code>UIPanGestureRecognizer</code>。判断<code>MainVc</code>移动的距离和第二步一样。</li>
+<li>添加的手势和系统的边缘手势冲突如何处理。</li>
+<li>当侧边栏隐藏的时候，给<code>MainVc</code>一个很大的速度，会立即显示侧边栏。当侧边栏出现的时候，给侧边栏一个很大的速度，会立即显示<code>MainVc</code>。</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-4d3ef4fdf977eb6d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="E016F97C-320C-4F2F-A66F-D0832750A893.png"></p>
+<p>层级关系如上图：MainVc 在侧边栏 上面，只需要添加手势来控制侧边栏的显示与隐藏即可。</p>
+<blockquote>
+<p>代码</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[self addChildViewController:self.leftVc];</div><div class="line">[self addChildViewController:self.mainVc];</div><div class="line"></div><div class="line">[self.mainVc didMoveToParentViewController:self];</div><div class="line"></div><div class="line">[self.leftVc didMoveToParentViewController:self];</div><div class="line"></div><div class="line">//添加屏幕边缘平移手势</div><div class="line">[self.mainVc.view addGestureRecognizer:self.pan1];</div><div class="line"></div><div class="line">//添加平移手势</div><div class="line">[self.mainVc.view addGestureRecognizer:self.pan2];</div><div class="line"></div><div class="line">//添加点击手势</div><div class="line">[self.mainVc.view addGestureRecognizer:self.tap];</div></pre></td></tr></table></figure>
+<p>关于手势的处理，模拟一个侧滑的临界速度，姑且定位1000.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">#pragma mark---手势处理</div><div class="line">-(void)screenGesture:(UIPanGestureRecognizer *)pan&#123;</div><div class="line">    </div><div class="line">    //移动的距离</div><div class="line">    CGPoint point = [pan translationInView:pan.view];</div><div class="line">    //移动的速度</div><div class="line">    CGPoint verPoint =  [pan velocityInView:pan.view];</div><div class="line">    </div><div class="line">   </div><div class="line">    </div><div class="line">    self.mainVc.view.lx_x += point.x;</div><div class="line">    </div><div class="line">    //边界限定</div><div class="line">    if (self.mainVc.view.lx_x &gt;= MAXLEFTSLIDEWIDTH) &#123;</div><div class="line">        self.mainVc.view.lx_x = MAXLEFTSLIDEWIDTH;</div><div class="line">    &#125;</div><div class="line">    if (self.mainVc.view.lx_x &lt;= 0) &#123;</div><div class="line">        self.mainVc.view.lx_x = 0;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //蒙版的阴影限定</div><div class="line">    self.maskView.alpha = self.mainVc.view.lx_x /MAXLEFTSLIDEWIDTH;</div><div class="line">   </div><div class="line">    </div><div class="line">    if (pan.state == UIGestureRecognizerStateEnded) &#123;</div><div class="line">        </div><div class="line">        //判断手势</div><div class="line">        if (pan == self.pan1) &#123;</div><div class="line">            </div><div class="line">            </div><div class="line">            if (verPoint.x &gt; MAXSPEED) &#123;</div><div class="line">                </div><div class="line">                 [self showLeftVc];</div><div class="line">                </div><div class="line">            &#125;else&#123;</div><div class="line">                </div><div class="line">                if (self.mainVc.view.lx_x &gt;= Device_Width/2) &#123;</div><div class="line">                    </div><div class="line">                    [self showLeftVc];</div><div class="line">                    </div><div class="line">                &#125;else&#123;</div><div class="line">                    </div><div class="line">                    [self hideLeftVc];</div><div class="line">                    </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;else&#123;</div><div class="line">            </div><div class="line">            if (verPoint.x &lt; - MAXSPEED) &#123;</div><div class="line">                </div><div class="line">                [self hideLeftVc];</div><div class="line">            &#125;else&#123;</div><div class="line">                </div><div class="line">                if (self.mainVc.view.lx_x &gt;= Device_Width/2) &#123;</div><div class="line">                    </div><div class="line">                    </div><div class="line">                    [self showLeftVc];</div><div class="line">                    </div><div class="line">                &#125;else&#123;</div><div class="line">                    </div><div class="line">                    [self hideLeftVc];</div><div class="line">                    </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    [pan setTranslation:CGPointZero inView:pan.view];</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>关于添加的手势和系统的边缘手势冲突的问题，解决如下:在子类化<code>UINavigationController</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">-(void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view.</div><div class="line">    self.navigationBar.translucent = YES;</div><div class="line"></div><div class="line">    self.navigationBar.barTintColor = LXMainColor;</div><div class="line">    </div><div class="line">    self.interactivePopGestureRecognizer.delegate = self;</div><div class="line">&#125;</div><div class="line">#pragma mark--防止与添加到tabbar的手势冲突--</div><div class="line">-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer&#123;</div><div class="line">    if (self.childViewControllers.count &lt;= 1) &#123;</div><div class="line">        return NO;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>发现<code>QQ</code>的二级页面添加了全屏手势,所以也把<code>UINavigationController+FDFullscreenPopGesture.h</code>添加了进去，发现原来冲突的手势也不冲突了。</p>
+</blockquote>
+<p>效果图：<img src="http://upload-images.jianshu.io/upload_images/1694376-b0fae02e3a47c794.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="仿QQ侧滑.gif"></p>
+<p>demo地址：<a href="https://github.com/liuxinixn/LXQQSlide" target="_blank" rel="noopener">仿QQ侧边栏</a></p>
 
           
         
@@ -937,7 +1334,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/UIView动画之阻尼动画/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/12/UIView动画之阻尼动画/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -956,7 +1353,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/28/UIView动画之阻尼动画/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2017/11/12/UIView动画之阻尼动画/" itemprop="url">iOS -UIView动画之阻尼动画</a></h1>
         
 
         <div class="post-meta">
@@ -968,8 +1365,8 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
-                2017-12-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-12T20:19:35+08:00">
+                2017-11-12
               </time>
             
 
@@ -1061,7 +1458,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/Strong-与Copy的区别/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/11/Swift之字符串和字符/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -1080,7 +1477,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/28/Strong-与Copy的区别/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2017/11/11/Swift之字符串和字符/" itemprop="url">iOS -Swift之字符串和字符</a></h1>
         
 
         <div class="post-meta">
@@ -1092,8 +1489,8 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
-                2017-12-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-11T20:19:35+08:00">
+                2017-11-11
               </time>
             
 
@@ -1132,19 +1529,79 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
       
         
           
-            <p>什么时候使用Strong与copy一直分不清，其实这个和浅拷贝和深拷贝有关系。参考：<a href="http://www.cocoachina.com/ios/20150512/11805.html" target="_blank" rel="noopener">参考</a>，文章中有一点不足，稍后会做补充。</p>
+            <p>字符串是例如 “hello, world” ， “albatross” 这样的有序的<code>Character</code> (字符)类型的值的集合。通过<code>String</code> 类型来表示。 一个 <code>String</code> 的内容可以用许多方式读取，包括作为一个 <code>Character</code>值的集合。<br><code>Swift 的 String 类型与</code>Foundation<code>NSString</code> 类进行了无缝桥接。<code>Foundation</code> 也可以对<code>String</code>进行扩 展，暴露在 <code>NSString</code> 中定义的方法。 这意味着，如果你在 <code>String</code> 中调用这些 <code>NSString</code>的方法，将不用进行 转换。`</p>
 <blockquote>
-<p>当对NSString进行strong 与copy 时，会有什么不同呢：</p>
+<p>字符串字面量</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">#import &quot;ViewController.h&quot;</div><div class="line"></div><div class="line">@interface ViewController ()</div><div class="line">@property(nonatomic,strong)NSString *strongString;</div><div class="line">@property(nonatomic,copy)NSString *copyedString;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line">    [self test];</div><div class="line">&#125;</div><div class="line">-(void)test&#123;</div><div class="line">    NSString *string =[NSString stringWithFormat:@&quot;abcshshsrhjrshsrjhsrhjs&quot;];</div><div class="line"></div><div class="line">    self.strongString = string;</div><div class="line">    self.copyedString = string;</div><div class="line"></div><div class="line">    NSLog(@&quot;%lu&quot;,[string retainCount]);</div><div class="line">    NSLog(@&quot;orign string:%p,%p&quot;,string,&amp;string);</div><div class="line">    NSLog(@&quot;strong string:%p,%p&quot;,_strongString,&amp;_strongString);</div><div class="line">    NSLog(@&quot;copy string:%p,%p&quot;,_copyedString,&amp;_copyedString);</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>打印截图如下：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-ac1e01ce60b34c10.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Nsstring.png"></p>
-<p><strong>可以很直观的看到，引用计数为3 ，strong和copy后指针指向的地址是相同的，所以说对NSString进行操作时，strong与copy都是对字符串进行了浅拷贝，只是拷贝了指针指向。（补充下参考文章中没有指明的一点，亲测, 当format后面的字符串长度大于等于12时, 引用计数为1. 这个现象存在于initWithFormat:和stringWithFormat:方法, 至于有没有其他方法也会有这种情况不敢确定，当只有很少的字符时，引用计数为-1，有兴趣的可以测试下，只是对文章中进行补充）</strong></p>
+<p>字符串字面量是由双引号 ( “” ) 包裹着的具 有固定顺序的文本字符 。 字符串字面量可以用于为常量和变量提供初始值:</p>
+<p><code>let someString = &quot;Some string literal value&quot;</code></p>
+<p>注意 <code>someString</code> 常量通过字符串字面量进行初始化，<code>Swift</code> 会推断该常量为 <code>String</code> 类型。</p>
 <blockquote>
-<p>对不可变字符串进行strong与copy时会有什么不同呢</p>
+<p>初始化空字符串</p>
 </blockquote>
-<p>修改一行代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">NSMutableString *string =[NSMutableString stringWithFormat:@&quot;agagagagagagaegagaga&quot;];</div><div class="line"></div><div class="line">    self.strongString = string;</div><div class="line">    self.copyedString = string;</div><div class="line"></div><div class="line">    NSLog(@&quot;%lu&quot;,[string retainCount]);</div><div class="line">    NSLog(@&quot;%lu&quot;,[_strongString retainCount]);</div><div class="line">    NSLog(@&quot;%lu&quot;,[_copyedString retainCount]);</div><div class="line"></div><div class="line">    NSLog(@&quot;orign string:%p,%p&quot;,string,&amp;string);</div><div class="line">    NSLog(@&quot;strong string:%p,%p&quot;,_strongString,&amp;_strongString);</div><div class="line">    NSLog(@&quot;copy string:%p,%p&quot;,_copyedString,&amp;_copyedString);</div></pre></td></tr></table></figure></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-14c6e3c0d50fd789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="MustableStiring2.png"></p>
-<p><strong>可以很明显的看到string 与_strongString的引用计数为2，_copyString的引用计数为1，string 与_strongString的地址是相同的，而_copyString指向的新的地址，所以对于可变字符串，strong使用了浅拷贝，copy使用了深拷贝</strong></p>
+<p>要创建一个空字符串作为初始值，可以将空的字符串字面量赋值给变量，也可以初始化一个新的 <code>String</code>实例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var emptyString = &quot;&quot; // 空字符串字面量 </div><div class="line">var anotherEmptyString = String() // 初始化方法</div><div class="line">// 两个字符串均为空并等价。</div></pre></td></tr></table></figure>
+<p>您可以通过检查其 <code>Bool</code>类型的 <code>isEmpty</code> 属性来判断该字符串是否为空:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">if emptyString.isEmpty &#123;</div><div class="line">    print(&quot;Nothing to see here&quot;)</div><div class="line">&#125;</div><div class="line">// 打印输出:&quot;Nothing to see here&quot;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>字符串可变性</p>
+</blockquote>
+<p>您可以通过将一个特定字符串分配给一个变量来对其进行修改，或者分配给一个常量来保证其不会被修改:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var variableString = &quot;Horse&quot;</div><div class="line">variableString += &quot; and carriage&quot;</div><div class="line">// variableString 现在为 &quot;Horse and carriage&quot;</div><div class="line">let constantString = &quot;Highlander&quot;</div><div class="line">constantString += &quot; and another Highlander&quot;</div><div class="line">// 这会报告一个编译错误 (compile-time error) - 常量字符串不可以被修改。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>字符串是值类型</p>
+</blockquote>
+<p><code>Swift</code> 的<code>String</code>类型是值类型。 如果您创建了一个新的字符串，那么当其进行常量、变量赋值操作，或在函数/ 方法中传递时，会进行值拷贝。 任何情况下，都会对已有字符串值创建新副本，并对该新副本进行传递或赋值操作,<code>这一点和OC有很大不同</code>。</p>
+<p><code>Swift</code> 默认字符串拷贝的方式保证了在函数/方法中传递的是字符串的值。 很明显无论该值来自于哪里，都是您 独自拥有的。 您可以确信传递的字符串不会被修改，除非你自己去修改它。</p>
+<blockquote>
+<p>使用字符</p>
+</blockquote>
+<p>可以通过forin 来遍历字符串<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">for character in &quot;Dog!?&quot;.characters &#123;</div><div class="line">    print(character)</div><div class="line">&#125;</div><div class="line">// D</div><div class="line">// o</div><div class="line">// g</div><div class="line">// !</div><div class="line">// ?</div></pre></td></tr></table></figure></p>
+<p>另外，通过标明一个 <code>Character</code> 类型并用字符字面量进行赋值，可以建立一个独立的字符常量或变量:<br><code>let exclamationMark: Character = &quot;!&quot;</code><br>字符串可以通过传递一个值类型为 <code>Character</code>的数组作为自变量来初始化:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let catCharacters: [Character] = [&quot;C&quot;, &quot;a&quot;, &quot;t&quot;, &quot;!&quot;, &quot;?&quot;] let catString = String(catCharacters)</div><div class="line">print(catString)</div><div class="line">// 打印输出:&quot;Cat!?&quot;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>连接字符串和字符</p>
+</blockquote>
+<p>字符串可以通过加法运算符( + )相加在一起(或称“连接”)创建一个新的字符串:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let string1 = &quot;hello&quot;</div><div class="line">let string2 = &quot; there&quot;</div><div class="line">var welcome = string1 + string2 // welcome 现在等于 &quot;hello there&quot;</div></pre></td></tr></table></figure></p>
+<p>您也可以通过加法赋值运算符 ( += ) 将一个字符串添加到一个已经存在字符串变量上:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var instruction = &quot;look over&quot;</div><div class="line">instruction += string2</div><div class="line">// instruction 现在等于 &quot;look over there&quot;</div></pre></td></tr></table></figure></p>
+<p>您可以用 append() 方法将一个字符附加到一个字符串变量的尾部:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let exclamationMark: Character = &quot;!&quot; welcome.append(exclamationMark)</div><div class="line">// welcome 现在等于 &quot;hello there!&quot;</div></pre></td></tr></table></figure></p>
+<p><code>注意:
+ 您不能将一个字符串或者字符添加到一个已经存在的字符变量上，因为字符变量只能包含一个字符。</code></p>
+<blockquote>
+<p>字符串插值</p>
+</blockquote>
+<p>字符串插值是一种构建新字符串的方式，可以在其中包含常量、变量、字面量和表达式。 您插入的字符串字面量 的每一项都在以反斜线为前缀的圆括号中:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let multiplier = 3</div><div class="line">let message = &quot;\(multiplier) times 2.5 is \(Double(multiplier) * 2.5)&quot; // message 是 &quot;3 times 2.5 is 7.5&quot;</div></pre></td></tr></table></figure></p>
+<p>在上面的例子中，<code>multiplier</code> 作为<code>\(multiplier)</code>被插入到一个字符串常量量中。 当创建字符串执行插值计算 时此占位符会被替换为 <code>multiplier</code> 实际的值。<code>multiplier</code>的值也作为字符串中后面表达式的一部分。 该表达式计算 <code>Double(multiplier) * 2.5</code>的值并将结果<code>( 7.5 )</code> 插入到字符串中。 在这个例子中，表达式写为<code>\(Double(multiplier) * 2.5)</code> 并包含在字符串字面量中。</p>
+<blockquote>
+<p>计算字符数量</p>
+</blockquote>
+<p>如果想要获得一个字符串中 <code>Character</code>值的数量，可以使用字符串的 <code>characters</code> 属性的 <code>count</code> 属性:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let unusualMenagerie = &quot;Koala ?, Snail ?, Penguin ?, Dromedary ?&quot; </div><div class="line"></div><div class="line">print(&quot;unusualMenagerie has \(unusualMenagerie.characters.count) characters&quot;) </div><div class="line">// 打印输出 &quot;unusualMenagerie has 40 characters&quot;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>访问和修改字符串</p>
+</blockquote>
+<p>你可以通过字符串的属性和方法来访问和修改它，当然也可以用下标语法完成。</p>
+<p><strong>字符串索引</strong><br>每一个 值都有一个关联的索引(<code>index</code>)类型，String.index    ，它对应着字符串中的每一个 Character 的位置。<br>前面提到，不同的字符可能会占用不同数量的内存空间，所以要知道   的确定位置，就必须从   开 头遍历每一个 <code>Unicode</code> 标量直到结尾。因此，<code>Swift</code>的字符串不能用整数(<code>integer</code>)做索引。</p>
+<p>使用 startIndex属性可以获取一个 <code>String</code>的第一个<code>Character</code>   的索引。使用<code>endIndex</code>  属性可以获取最后一个 <code>Character</code>的后一个位置的索引。因此，<code>endIndex</code> 属性不能作为一个字符串的有效下标。如果   <code>String</code>是空串，<code>`startIndex</code>和 <code>endIndex</code> 是相等的.</p>
+<p>通过调用 <code>String</code> 的 <code>index(before:)</code>或 <code>index(after:)</code> 方法，可以立即得到前面或后面的一个索引。您还 可以通过调用 <code>index(_:offsetBy:)</code>方法来获取对应偏移量的索引，这种方式可以避免多次调用 <code>index(befor e:</code>) 或 <code>index(after:)</code>方法。</p>
+<p>你可以使用下标语法来访问 <code>String</code>特定索引的 `Character 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">let greeting = &quot;Guten Tag!&quot;</div><div class="line">greeting[greeting.startIndex]</div><div class="line">// G</div><div class="line">greeting[greeting.index(before: greeting.endIndex)]</div><div class="line">// !</div><div class="line">greeting[greeting.index(after: greeting.startIndex)]</div><div class="line">// u</div><div class="line">let index = greeting.index(greeting.startIndex, offsetBy: 7)</div><div class="line">greeting[index]</div><div class="line">// a</div></pre></td></tr></table></figure>
+<p>试图获取越界索引对应的<code>Character</code>，将引发一个运行时错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">greeting[greeting.endIndex] // error</div><div class="line">greeting.index(after: endIndex) // error</div></pre></td></tr></table></figure></p>
+<p>使用 <code>characters</code>属性的<code>indices</code> 属性会创建一个包含全部索引的范围(<code>Range</code>)，用来在一个字符串中访问单 个字符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> for index in greeting.characters.indices &#123;</div><div class="line">    print(&quot;\(greeting[index]) &quot;, terminator: &quot;&quot;)</div><div class="line">&#125;</div><div class="line">// 打印输出 &quot;G u t e n T a g ! &quot;</div></pre></td></tr></table></figure>
+<p><strong>插入和删除</strong></p>
+<p>调用<code>insert(_:at:)</code> 方法可以在一个字符串的指定索引插入一个字符，调用 <code>insert(contentsOf:at:)</code> 方法可 以在一个字符串的指定索引插入一个段字符串。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var welcome = &quot;hello&quot;</div><div class="line">welcome.insert(&quot;!&quot;, at: welcome.endIndex) // welcome 变量现在等于 &quot;hello!&quot;</div><div class="line">welcome.insert(contentsOf:&quot; there&quot;.characters, at: welcome.index(before: welcome.endIndex)) // welcome 变量现在等于 &quot;hello there!&quot;</div></pre></td></tr></table></figure>
+<p>调用<code>remove(at:)</code> 方法可以在一个字符串的指定索引删除一个字符，调用 <code>removeSubrange(_:)</code>方法可以在一 个字符串的指定索引删除一个子字符串。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">welcome.remove(at: welcome.index(before: welcome.endIndex)) </div><div class="line">// welcome 现在等于 &quot;hello there&quot;</div><div class="line">let range = welcome.index(welcome.endIndex, offsetBy: -6)..&lt;welcome.endIndex welcome.removeSubrange(range)</div><div class="line">// welcome 现在等于 &quot;hello&quot;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>比较字符串</p>
+</blockquote>
+<p><code>Swift</code> 提供了三种方式来比较文本值:字符串字符相等、前缀相等和后缀相等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">let quotation = &quot;We&apos;re a lot alike, you and I.&quot;</div><div class="line">let sameQuotation = &quot;We&apos;re a lot alike, you and I.&quot;</div><div class="line">if quotation == sameQuotation &#123;</div><div class="line">    print(&quot;These two strings are considered equal&quot;)</div><div class="line">&#125;</div><div class="line">// 打印输出 &quot;These two strings are considered equal&quot;</div></pre></td></tr></table></figure>
+<p>通过调用字符串的 <code>hasPrefix(_:) / hasSuffix(_:)</code>方法来检查字符串是否拥有特定前缀/后缀，两个方法均接收一 个 <code>String</code> 类型的参数，并返回一个布尔值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> let romeoAndJuliet = [</div><div class="line">     &quot;Act 1 Scene 1: Verona, A public place&quot;,</div><div class="line">     &quot;Act 1 Scene 2: Capulet&apos;s mansion&quot;,</div><div class="line">     &quot;Act 1 Scene 3: A room in Capulet&apos;s mansion&quot;,</div><div class="line">     &quot;Act 1 Scene 4: A street outside Capulet&apos;s mansion&quot;,</div><div class="line">     &quot;Act 1 Scene 5: The Great Hall in Capulet&apos;s mansion&quot;,</div><div class="line">     &quot;Act 2 Scene 1: Outside Capulet&apos;s mansion&quot;,</div><div class="line">     &quot;Act 2 Scene 2: Capulet&apos;s orchard&quot;,</div><div class="line">     &quot;Act 2 Scene 3: Outside Friar Lawrence&apos;s cell&quot;,</div><div class="line">     &quot;Act 2 Scene 4: A street in Verona&quot;,</div><div class="line">     &quot;Act 2 Scene 5: Capulet&apos;s mansion&quot;,</div><div class="line">     &quot;Act 2 Scene 6: Friar Lawrence&apos;s cell&quot;</div><div class="line">]</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var act1SceneCount = 0</div><div class="line"> for scene in romeoAndJuliet &#123;</div><div class="line">     if scene.hasPrefix(&quot;Act 1 &quot;) &#123;</div><div class="line">         act1SceneCount += 1</div><div class="line">&#125; &#125;</div><div class="line">print(&quot;There are \(act1SceneCount) scenes in Act 1&quot;) // 打印输出 &quot;There are 5 scenes in Act 1&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var mansionCount = 0</div><div class="line"> var cellCount = 0</div><div class="line"> for scene in romeoAndJuliet &#123;</div><div class="line">     if scene.hasSuffix(&quot;Capulet&apos;s mansion&quot;) &#123;</div><div class="line">         mansionCount += 1</div><div class="line">     &#125; else if scene.hasSuffix(&quot;Friar Lawrence&apos;s cell&quot;) &#123;</div><div class="line">         cellCount += 1</div><div class="line">&#125; &#125;</div><div class="line"></div><div class="line">print(&quot;\(mansionCount) mansion scenes; \(cellCount) cell scenes&quot;)</div><div class="line"> // 打印输出 &quot;6 mansion scenes; 2 cell scenes&quot;</div></pre></td></tr></table></figure>
 
           
         
@@ -1193,7 +1650,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-通联支付/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/10/Swift之数据类型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -1212,7 +1669,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/28/iOS-通联支付/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2017/11/10/Swift之数据类型/" itemprop="url">iOS -Swift之数据类型</a></h1>
         
 
         <div class="post-meta">
@@ -1224,8 +1681,8 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
-                2017-12-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-10T20:19:35+08:00">
+                2017-11-10
               </time>
             
 
@@ -1264,308 +1721,52 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
       
         
           
-            <p>本版本是基于V4.5 版的。<br>目前的 SDK 版的所有版本必须以会员模式对接。</p>
-<p>一共两个步骤，把下面的依赖库直接拖进去即可，至于一些Build Settings选项的修改，你只需要对照文档看一下xcode的配置一致不。（xcode8.3.2的配置不需要做任何改变，只需要把下面的库拖进去即可）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">a)</div><div class="line">iOS 平台开发步骤</div><div class="line">APay.h</div><div class="line">APayRes.bundle</div><div class="line">libAPayLib.a</div><div class="line">APMPPassGuardCtrlBundle.bundle TrustDefenderMobile.framework</div><div class="line">文件拷贝到需要引用通联支付插件的工程目录下;`</div><div class="line">f) 工程中添加以下依赖库:</div><div class="line">CoreTelephony.framework CoreLocation.framework Security.framework SystemConfiguration.framework</div><div class="line">QuarzCore.framework</div><div class="line"> CoreText.framework AudioToolbox.framework CoreGraphics.framework libstdc++.6.0.9.dylib</div></pre></td></tr></table></figure></p>
-<p>通联支付id 由后台注册。前段对应的通联id的字段为 ext1</p>
-<p>只说明针对md5验签。<br>MD5加密的key 给后台要即可。<br>商户需通过 mode 字段切换测试环境和生产环境<br>当前连接的通联支付环境。<br> mode=”01” 测试环境<br>mode=”00” 生产环境</p>
-<p>需要注意的是所有的参数必须按照文档的顺序填写，00环境才可以支付。（通联支付的支付插件真的很垃圾）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div></pre></td><td class="code"><pre><div class="line">-(void)rechargeCard&#123;</div><div class="line">    </div><div class="line">    NSInteger amount =  1; //以分为计算单位</div><div class="line">    </div><div class="line">    //商户订单生成日期</div><div class="line">    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];</div><div class="line">    [dateFormatter setDateFormat:@&quot;yyyyMMddHHmmss&quot;];</div><div class="line">    NSDate *workDate = [NSDate dateWithTimeIntervalSinceReferenceDate:[NSDate timeIntervalSinceReferenceDate]];</div><div class="line">    NSString *timeStr = [dateFormatter stringFromDate:workDate];</div><div class="line">    </div><div class="line">    //商户订单号</div><div class="line">    NSString *orderStr = [NSString stringWithFormat:@&quot;%ld&quot;,[NSString getNowInterVal]];</div><div class="line">    </div><div class="line">    //####################################  计算外卡扩展信息字段签名  ######################################//</div><div class="line">    NCUserInfoModel *infoModel = [NCUserInfoManager getUserInfo];</div><div class="line">    NSString *ext1 = [NSString stringWithFormat:@&quot;&lt;USER&gt;%@&lt;/USER&gt;&quot;,infoModel.tonglianUserId];</div><div class="line">    </div><div class="line">    //##################################################################################################//</div><div class="line">    </div><div class="line">    NSArray *paaDic = @[</div><div class="line">                        </div><div class="line">                        ////协议字符集 1-UTF-8  2-GBK; 3-GB2312</div><div class="line">                        @&quot;1&quot;, @&quot;inputCharset&quot;,</div><div class="line">                        </div><div class="line">                        //支付通知结果以此为准,后台通知商户网站支付结 果的 url 地址</div><div class="line">                        //                         @&quot;http://www&quot;, @&quot;receiveUrl&quot;,</div><div class="line">                        @&quot;http://119.28.62.27:8080/ytr/appcard/orderPayment&quot;, @&quot;receiveUrl&quot;,</div><div class="line">                        </div><div class="line">                        ////协议版本,固定填 v1.0</div><div class="line">                        @&quot;v1.0&quot;, @&quot;version&quot;,</div><div class="line">                        </div><div class="line">                        //指定当前语言</div><div class="line">                        //固定选择值:1-简体中文 2-繁体中文 3-英文</div><div class="line">                        //可不填</div><div class="line">                        //非外卡支付只支持简体中文</div><div class="line">                        //外卡支付若未指定语言则默认为系统语言，若系统语言不被支持则默认为英文</div><div class="line">                        @&quot;1&quot;, @&quot;language&quot;,</div><div class="line">                        </div><div class="line">                        //订单信息签名方式</div><div class="line">                        @&quot;0&quot;, @&quot;signType&quot;,</div><div class="line">                        </div><div class="line">                        //通联分配给商户的ID</div><div class="line">                        @&quot;xxxxx&quot;, @&quot;merchantId&quot;,                                    //商户当前支付订单号</div><div class="line">                        orderStr, @&quot;orderNo&quot;,</div><div class="line">                        </div><div class="line">                        //订单支付金额</div><div class="line">                        //分做单位</div><div class="line">                        //最小0.01元</div><div class="line">                        @&quot;1&quot;, @&quot;orderAmount&quot;,</div><div class="line">                        </div><div class="line">                        //针对非跨境和非外卡支付</div><div class="line">                        //payType=27</div><div class="line">                        //支持以下币种: 默认[人民币]-0 人民币-156</div><div class="line">                        @&quot;0&quot;, @&quot;orderCurrency&quot;,</div><div class="line">                        </div><div class="line">                        //商户生成订单时间戳</div><div class="line">                        //必须允许的订单时间范围内</div><div class="line">                        timeStr, @&quot;orderDatetime&quot;,</div><div class="line">                        </div><div class="line">                        //商品名称</div><div class="line">                        @&quot;会员卡&quot;, @&quot;productName&quot;,</div><div class="line">                        </div><div class="line">                        //对于非外卡支付</div><div class="line">                        //商户用户号在通联会员系统对应的会员号</div><div class="line">                        ext1, @&quot;ext1&quot;,//若商户用户未注册通联会员号,该行不需要,可以注释掉</div><div class="line">                        self.cardIdModel.ID ,@&quot;ext2&quot;,</div><div class="line">                        @&quot;33&quot;, @&quot;payType&quot;,</div><div class="line">                        @&quot;1234567890&quot;, @&quot;key&quot;,</div><div class="line">                        ];</div><div class="line">    NSString *paaStr = [self formatPaa:paaDic];</div><div class="line">    </div><div class="line">    //        paaStr = [NSString stringWithFormat:@&quot;&amp;%@&amp;&quot;,paaStr];</div><div class="line">    [APay startPay:paaStr viewController:self delegate:self mode:@&quot;00&quot;];</div><div class="line"></div><div class="line">    </div><div class="line">&#125;</div><div class="line">- (void)APayResult:(NSString *)result &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;%@&quot;, result);</div><div class="line">    NSArray *parts = [result componentsSeparatedByString:@&quot;=&quot;];</div><div class="line">    NSError *error;</div><div class="line">    NSData *data = [[parts lastObject] dataUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&amp;error];</div><div class="line">    NSInteger payResult = [dic[@&quot;payResult&quot;] integerValue];</div><div class="line">    //    NSString *format_string = @&quot;支付结果::支付%@&quot;;</div><div class="line">    if (payResult == APayResultSuccess) &#123;</div><div class="line">        </div><div class="line">        [LXNotificationCenter postNotificationName:UPDATEORDERSTATUE object:nil];</div><div class="line">        [self.view makeToast:@&quot;支付成功&quot;];</div><div class="line">        [self delayAction];</div><div class="line">    &#125; else if (payResult == APayResultFail) &#123;</div><div class="line">        </div><div class="line">        [self.view makeToast:@&quot;支付失败&quot;];</div><div class="line">    &#125; else if (payResult == APayResultCancel) &#123;</div><div class="line">        </div><div class="line">        [self.view makeToast:@&quot;支付被取消&quot;];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (NSString *)formatPaa:(NSArray *)array &#123;</div><div class="line">    </div><div class="line">    NSMutableDictionary *mdic = [NSMutableDictionary dictionary];</div><div class="line">    </div><div class="line">    NSMutableString *paaStr = [[NSMutableString alloc] init];</div><div class="line">    for (int i = 0; i &lt; array.count; i++) &#123;</div><div class="line">        [paaStr appendFormat:@&quot;%@=%@&amp;&quot;, array[i+1], array[i]];</div><div class="line">        mdic[array[i+1]] = array[i];</div><div class="line">        i++;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    NSString *signMsg = [self md5:[paaStr substringToIndex:paaStr.length - 1]];</div><div class="line">    mdic[@&quot;signMsg&quot;] = signMsg.uppercaseString;</div><div class="line">    </div><div class="line">    //############################  卡号回显请参考以下部分  ##############################################//</div><div class="line">    </div><div class="line">    //卡号回显需要在订单信息中传入该字段</div><div class="line">    //该字段不参与订单信息的签名计算</div><div class="line">    //若不需要卡号回显的功能该字段可不传入</div><div class="line">    //    NSString *cardNo = @&quot;4391880000000004&quot;;//测试用信用卡</div><div class="line">    //                       @&quot;6225882120759623&quot;;//测试用借记卡</div><div class="line">    //    mdic[@&quot;cardNo&quot;] = cardNo;</div><div class="line">    </div><div class="line">    //##################################################################################################//</div><div class="line">    </div><div class="line">    //############################  外卡支付订单添加扩展信息字段  ###########################################//</div><div class="line">    </div><div class="line">    //    [mdic addEntriesFromDictionary:[self extPart]];</div><div class="line">    </div><div class="line">    //##################################################################################################//</div><div class="line">    </div><div class="line">    if (mdic[@&quot;key&quot;]) &#123;//商户私有签名密钥 通联后台持有不传入插件</div><div class="line">        [mdic removeObjectForKey:@&quot;key&quot;];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    NSError *error;</div><div class="line">    NSData *data = [NSJSONSerialization dataWithJSONObject:mdic options:NSJSONWritingPrettyPrinted error:&amp;error];</div><div class="line">    NSString *jsonStr = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];</div><div class="line">    </div><div class="line">    [paaStr setString:jsonStr];</div><div class="line">    </div><div class="line">    return paaStr;</div><div class="line">&#125;</div><div class="line">- (NSString *)md5:(NSString *)string &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;%@&quot;, string);</div><div class="line">    </div><div class="line">    if (string == nil) &#123; return nil; &#125;</div><div class="line">    </div><div class="line">    const char *str = [string cStringUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    CC_LONG strLen = (CC_LONG)[string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    unsigned char *result = calloc(CC_MD5_DIGEST_LENGTH, sizeof(unsigned char));</div><div class="line">    CC_MD5(str, strLen, result);</div><div class="line">    </div><div class="line">    NSMutableString *hash = [NSMutableString string];</div><div class="line">    for (int i = 0; i &lt; CC_MD5_DIGEST_LENGTH; ++i) &#123;</div><div class="line">        [hash appendFormat:@&quot;%02x&quot;, result[i]];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    free(result);</div><div class="line">    </div><div class="line">    return hash;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/Strong-与weak的区别/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/28/Strong-与weak的区别/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
-                2017-12-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>关于属性，我们声明的时候会使用Strong与Weak。但是二者在使用的时候有什么区别呢。</p>
-<p>1、在使用xib 或者SB 拖控件的时候我们都会看到系统帮我们声明的是：<code>@property (weak, nonatomic) IBOutlet UILabel *lalbel;</code>,首先这个控件是用weak来声明的。所以一旦执行了<code>[self.lalbel removeFromSuperview];</code>lalbel的地址为nil,只要在使用该控件过程中，没有执行<code>removeFromSuperview</code>，该控件会一直存在在内存里，不会被释放。</p>
-<p>当我们用使用代码来声明一个weak属性时，<br><img src="http://upload-images.jianshu.io/upload_images/1694376-050c5be64787f979.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"><br>系统会自动识别，在分配好内存好因为没有强引用，只有weak引用，会直接释放掉，所以此刻打印self.label 是nil。<br>我们需要这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UILabel *lable =[[UILabel alloc]init];</div><div class="line">    self.label = lable;</div></pre></td></tr></table></figure></p>
-<p>此刻 打印self.label 是有地址的。</p>
-<p>但是 如果该控件没有被加到父视图中，出了该作用域，依然是没有地址的。</p>
-<p>2、 使用strong 来修饰，不管有没有加到父视图里，该控件的地址会一直存在。因为它一直被 该ViewController强引用。只有ViewController 执行了delloc 之后，才会释放。</p>
-<p>3、weak 与assign 的区别：</p>
-<ul>
-<li>assign 可以修饰基本数据类型和对象，但是修饰对象后，对象被释放，指针不会被释放。对象释放后访问该指针会显示<code>[UILabel retain]: message sent to deallocated instance 0x7fc0eec0c1d0
-(lldb)</code> 对已经dealloc 的对象进行了访问</li>
-<li>weak   只能修饰对象 ，对象释放后，指针为nil，对nil 访问不会造成崩溃。代理声明使用weak。</li>
-</ul>
-<p>总结：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">如果要严格控制内存管理，对于不常用或者中间可能不需要被释放内存的属性，我们使用weak来修饰，但是要严格注意是不是被父视图所引用。</div><div class="line"></div><div class="line">如果不是那么严格，所有的控件属性通过strong来修饰，地址就会永远存在，不用担心突然被释放的问题。</div><div class="line"></div><div class="line">如果控件在使用过程中一直存在，那么使用strong即可。如果控件在使用过程中会被移除，那么使用weak，可以节省内存。</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-block-捕获外部变量以及注意点/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/28/iOS-block-捕获外部变量以及注意点/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:13+08:00">
-                2017-12-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>参考文章：<a href="http://www.jianshu.com/p/ee9756f3d5f6#" target="_blank" rel="noopener">深入研究Block捕获外部变量和__block实现原理</a><br>做一些简单的总结说明：</p>
-<blockquote>
-<p>（1）对于四种非对象变量：</p>
+            <blockquote>
+<p>数据类型</p>
 </blockquote>
-<ul>
-<li>自动变量(局部变量)</li>
-<li>静态变量</li>
-<li>静态全局变量</li>
-<li>全局变量</li>
-</ul>
-<p>首先： Block会捕获哪些变量？如果Block外面还有很多<code>自动变量</code>，<code>静态变量</code>，等等，这些变量<code>在Block里面并不会被使用到</code>。那么这些变量并不会被Block捕获进来，也就是说并不会在构造函数里面传入它们的值。Block捕获外部变量<code>仅仅只捕获Block闭包里面会用到的值</code>，其他用不到的值，它并不会去捕获。</p>
-<p>其次：<code>全局变量</code>和<code>静态全局变量</code>可以在Block内值被修改是为什么呢？<code>全局变量</code>和<code>静态全局变量</code>在执行Block语法的时候，它们被Block捕获进去，这一点很好理解，因为是<code>全局</code>的，作用域很广，所以Block捕获了它们进去之后，在Block里面进行++操作，Block结束之后，它们的值依旧可以得以保存下来。</p>
-<p>然后：对于<code>静态变量</code>Block是如何捕获的呢？静态变量传递给Block是<code>内存地址值</code>，所以能在Block里面直接改变值。在执行Block语法的时候，Block语法表达式所使用的静态变量的<code>地址</code>是被保存进了Block的结构体实例中，也就是Block自身中。所以能够在Block 内部修改静态变量的值。</p>
-<p>最后：为什么<code>自动变量</code>无法在Block内部修改值呢？类似静态变量，自动变量也是在执行Block语法的时候，被block捕获成为Block的结构体实例中，但是Block仅仅捕获了val的值，并没有捕获val的内存地址，所以在Block内部是无法修改自动变量的值。OC可能是基于这一点，在编译的层面就防止开发者可能犯的错误，因为自动变量没法在Block中改变外部变量的值，所以编译过程中就报编译错误。错误：<code>Variable is not assignable(missing __block type specifier)</code><br>后面会说明。</p>
-<p>######总结一下在Block中改变变量值有2种方式，一是传递内存地址指针到Block中，二是改变存储区方式(__block)。</p>
+<p>有常量<code>let</code>，变量<code>var</code>，可以声明类型标注（需要在常量或者变量名后面加上一个冒号和空格，然后加上类型名称）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var welcomeMessage: String</div><div class="line">let maximumNumberOfLoginAttempts = 10</div></pre></td></tr></table></figure></p>
 <blockquote>
-<p>1 传递内存地址</p>
+<p>输出</p>
 </blockquote>
-<p>对于对象变量，在被Block捕获后，在Block的结构体实例变量会增加一个指针，所以传递的是指针，所以成功改变了变量的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">你可以用 print(_:separator:terminator:) 函数来输出当前常量或变量的值: print(friendlyWelcome)</div><div class="line">// 输出 &quot;Bonjour!&quot;</div><div class="line">print(_:separator:terminator:) 是一个用来输出一个或多个值到适当输出区的全局函数。</div><div class="line">如果你用 Xcode， int(_:separator:terminator:) 将会输出内容到“console”面板上。</div><div class="line">separator 和 terminator 参数具有默认 值，因此你调用这个函数的时候可以忽略它们。</div><div class="line">默认情况下，该函数通过添加换行符来结束当前行。</div><div class="line">如果不想换 行，可以传递一个空字符串给 terminator 参数--例如， print(someValue, terminator:&quot;&quot;) 。</div><div class="line"></div><div class="line">Swift 用字符串插值(string interpolation)的方式把常量名或者变量名当做占位符加入到长字符串中，Swift 会用当前常量或变量的值替换这些占位符。</div><div class="line">将常量或变量名放入圆括号中，并在开括号前使用反斜杠将其转义:</div><div class="line"></div><div class="line">print(&quot;The current value of friendlyWelcome is \(friendlyWelcome)&quot;) // 输出 &quot;The current value of friendlyWelcome is Bonjour!</div></pre></td></tr></table></figure>
 <blockquote>
-<p>2  __block 改变存储方式。</p>
+<p>整数,浮点数以及转换(同OC)。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">整数就是没有小数部分的数字，比如 42 和 -23 。整数可以是 有符号 (正、负、零)或者 无符号 (正、零)。</div><div class="line">Swift 提供了8，16，32和64位的有符号和无符号整数类型。</div><div class="line">这些整数类型和 C 语言的命名方式很像，比如8位无 符号整数类型是 UInt8 ，32位有符号整数类型是 Int32 。</div><div class="line">就像 Swift 的其他类型一样，整数类型采用大写命名 法。</div><div class="line">除非你需要特定长度的整数，一般来说使用 Int 就够了。</div><div class="line">这可以提高代码一致性和可复用性。</div><div class="line">即使是在32位平 台上，Int 可以存储的整数范围也可以达到 -2,147,483,648 ~ 2,147,483,647 ，大多数时候这已经足够大 了。</div></pre></td></tr></table></figure></p>
 </blockquote>
-<p>_block修饰自动变量后，<code>_block的变量也被转化成了一个结构体</code>:__Block_byref_i_0,这个结构体有5个成员变量。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">struct __Block_byref_i_0 &#123;</div><div class="line">  void *__isa;   指针</div><div class="line">__Block_byref_i_0 *__forwarding; 指向自身类型的__forwarding指针</div><div class="line"> int __flags; 标记flag</div><div class="line"> int __size;大小</div><div class="line"> int i; 变量值</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p><code>MRC</code>环境下，只有<code>copy</code>，_block才会被复制到堆上，否则，_block一直都在栈上，block也只是 _NSStackBlock，这个时候_forwarding指针就只指向自己了。<br><code>ARC</code>环境下，一旦Block赋值就会触发copy，_block就会copy到堆上，Block也是_NSMallocBlock。<code>ARC</code>环境下也是存在_NSStackBlock的时候，这种情况下，_block就在栈上</p>
-<p><code>在ARC环境下，Block也是存在__NSStackBlock的时候的，平时见到最多的是_NSConcreteMallocBlock，是因为我们会对Block有赋值操作，所以ARC下，block 类型通过=进行传递时，会导致调用objc_retainBlock-&gt;_Block_copy-&gt;_Block_copy_internal方法链。并导致 __NSStackBlock__ 类型的 block 转换为 __NSMallocBlock__ 类型</code></p>
-<p><code>_forwarding</code>指针初始化传递的是自己的地址,在执行Block的时候，堆上的Block会持有对象。 当我们把Block复制到堆上，堆上的Block也会持有_block.当Block释放的时候，_block没有被任何对象引用，也会被释放销毁。堆上的<code>_forwarding</code>指针也指向自己，只不过一个指针是_NSConcreteStackBlock，一个是_NSConcreteMallocBlock，两份_block ，_block各自有一个<code>_forwarding</code>指向自己，所以这样不管_block怎么复制到堆上，还是在栈上，都可以通过(i-&gt;__forwarding-&gt;i)来访问到变量值。</p>
+<p>注释<br>整数，浮点数 </p>
 <blockquote>
-<p>Block 分类</p>
+<p>类型安全和类型推断</p>
 </blockquote>
-<p>OC中，一般Block就分为以下3种，_NSConcreteStackBlock，_NSConcreteMallocBlock，_NSConcreteGlobalBlock。<br>先来说明一下3者的区别。</p>
-<ul>
-<li>_NSConcreteStackBlock：<br>只用到外部局部变量、成员属性变量，且没有强指针引用的block都是StackBlock。<br>StackBlock的生命周期由系统控制的，一旦返回之后，就被系统销毁了。</li>
-<li><p>_NSConcreteMallocBlock：<br>有强指针引用或copy修饰的成员属性引用的block会被复制一份到堆中成为MallocBlock，没有强指针引用即销毁，生命周期由程序员控制</p>
-</li>
-<li><p>_NSConcreteGlobalBlock：<br>没有用到外界变量或只用到全局变量、静态变量的block为<br>_NSConcreteGlobalBlock，生命周期从创建到应用程序结束。<br>没有用到外部变量肯定是_NSConcreteGlobalBlock，这点很好理解。不过只用到全局变量、静态变量的block也是_NSConcreteGlobalBlock。</p>
-</li>
-</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Swift 是一个类型安全(type safe)的语言。类型安全的语言可以让你清楚地知道代码要处理的值的类型。如果</div><div class="line">你的代码需要一个 String ，你绝对不可能不小心传进去一个 Int 。</div><div class="line"></div><div class="line">由于 Swift 是类型安全的，所以它会在编译你的代码时进行类型检查(type checks)，并把不匹配的类型标记 为错误。</div><div class="line">这可以让你在开发的时候尽早发现并修复错误。</div></pre></td></tr></table></figure>
+<p>######布尔值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Swift 有一个基本的布尔(Boolean)类型，叫做 Bool 。</div><div class="line">布尔值指逻辑上的值，因为它们只能是真或者假。</div><div class="line">Swift 有两个布尔常量，true 和 false.</div><div class="line"></div><div class="line">当你编写条件语句比如   语句的时候，布尔值非常有用:</div><div class="line">if turnipsAreDelicious &#123;</div><div class="line">     print(&quot;Mmm, tasty turnips!&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;Eww, turnips are horrible.&quot;)</div><div class="line">&#125;</div><div class="line">// 输出 &quot;Eww, turnips are horrible.&quot;</div><div class="line"></div><div class="line">但是在配合if语句的时候，判断结果必须为bool值，否则会报错，这点比oc的语法严谨了很多。</div></pre></td></tr></table></figure>
 <blockquote>
-<p>weakSelf  StrongSelf 的使用</p>
+<p>元组</p>
 </blockquote>
-<p>解决循环应用的问题一定要分析清楚哪里出现了循环引用，只需要把其中一环加上weakSelf这类似的宏，就可以解决循环引用。_weak的实现原理，在原对象释放之后，_weak对象就会变成null，防止野指针。所以就输出了null了。</p>
-<p>那么我们怎么才能在weakSelf之后，block里面还能继续使用weakSelf之后的对象呢？</p>
-<p>究其根本原因就是weakSelf之后，无法控制什么时候会被释放，为了保证在block内不会被释放，需要添加_strong。</p>
-<p>在block里面使用的_strong修饰的weakSelf是为了在函数生命周期中防止self提前释放。strongSelf是一个自动变量当block执行完毕就会释放自动变量strongSelf不会对self进行一直进行强引用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">__weak typeof(student) weakSelf = student;</div><div class="line"></div><div class="line">   student.study = ^&#123;</div><div class="line">       __strong typeof(student) strongSelf = weakSelf;</div><div class="line">       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</div><div class="line">           NSLog(@&quot;my name is = %@&quot;,strongSelf.name);</div><div class="line">       &#125;);</div><div class="line"></div><div class="line">   &#125;;</div></pre></td></tr></table></figure>
-<p>####_block 与_weak 的区别<br>1._block不管是ARC还是MRC模式下都可以使用，可以修饰对象，还可以修饰基本数据类型。<br>2._weak只能在ARC模式下使用，也只能修饰对象（NSString），不能修饰基本数据类型（int）。<br>3._block对象可以在block中被重新赋值，_weak不可以。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">元组(tuples)把多个值组合成一个复合值。</div><div class="line">元组内的值可以是任意类型，并不要求是相同类型。</div><div class="line">你可以把任意顺序的类型组合成一个元组，这个元组可以包含所有类型。只要你想，你可以创建一个类型为或者其他任何你想要的组合的元组。</div><div class="line">（常用于异常处理，组合显示，可自定义参数名）</div><div class="line">元祖的使用在临时组织值时是比oc便利的。</div><div class="line"></div><div class="line">let http200Status = (statusCode: 200, description: &quot;OK&quot;)</div><div class="line">print(&quot;The status code is \(http200Status.statusCode)&quot;)</div><div class="line">// 输出 &quot;The status code is 200&quot;</div><div class="line">print(&quot;The status message is \(http200Status.description)&quot;) // 输出 &quot;The status message is OK&quot;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>可选类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">使用可选类型(optionals)来处理值可能缺失的情况.</div><div class="line">可选类型表示:有值，等于 x或者没有值</div><div class="line">类似于Objective-C 中的nil，但是有很大不同，Objective-C 中的nil只针对于对象，Swift 的可选类型可以让 你暗示任意类型的值缺失，并不需要一个特殊值。</div><div class="line">在 Swift 中， nil 不是指针——它是一个确定的值，用来表示值缺失。任何类型的可选状态都可以被设 置为 nil ，不只是对象类型</div><div class="line">使用方法：在类型标注后面添加一个&apos;?&apos;号</div><div class="line">如果你声明一个可选常量或者变量但是没有赋值，它们会自动被设置为 nil :</div></pre></td></tr></table></figure></p>
+<p>可选绑定(if let使用)</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">使用可选绑定(optional binding)来判断可选类型是否包含值，如果包含就把值赋给一个临时常量或者变 量。</div><div class="line">可选绑定可以用在 if 和 while 语句中，这条语句不仅可以用来判断可选类型中是否有值，同时可以将 可选类型中的值赋给一个常量或者变量。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"> if let actualNumber = Int(possibleNumber) &#123;</div><div class="line">     print(&quot;\&apos;\(possibleNumber)\&apos; has an integer value of \(actualNumber)&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;\&apos;\(possibleNumber)\&apos; could not be converted to an integer&quot;)</div><div class="line">&#125;</div><div class="line">// 输出 &quot;&apos;123&apos; has an integer value of 123&quot;</div><div class="line">这段代码可以被理解为:</div><div class="line">“如果 Int(possibleNumber) 返回的可选 Int 包含一个值，创建一个叫做 actualNumber 的新常量并将可选 包含的值赋给它。”</div><div class="line">如果转换成功， actualNumber 常量可以在 if 语句的第一个分支中使用。</div><div class="line">它已经被可选类型 包含的 值初始化 过，所以不需要再使用 ! 后缀来获取它的值。在这个例子中，actualNumber 只被用来输出转换结果。</div><div class="line">你可以在可选绑定中使用常量和变量。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">如果你想在if语句的第一个分支中操作 actualNumber 的值，你可以改 成 if var actualNumber ，这样可选类型包含的值就会被赋给一个变量而非常量。</div><div class="line">你可以包含多个可选绑定或多个布尔条件在一个 if 语句中，只要使用逗号分开就行。</div><div class="line">只要有任意一个可选绑定 的值为nil，或者任意一个布尔条件为false，则整个if条件判断为false，这时你就需要使用嵌套 if 条 件语句来处理</div></pre></td></tr></table></figure>
+<blockquote>
+<p>隐式解析可选类型</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">可选类型暗示了常量或者变量可以“没有值”。</div><div class="line">可选可以通过 if 语句来判断是否有值，如果有值的 话可以通过可选绑定来解析值。</div><div class="line">有时候在程序架构中，第一次被赋值之后，可以确定一个可选类型总会有值。在这种情况下，每次都要判断和解</div><div class="line">析可选值是非常低效的，因为可以确定它总会有值。</div><div class="line">这种类型的可选状态被定义为隐式解析可选类型(implicitly unwrapped optionals)。</div><div class="line">把想要用作可选的类型 的后面的问号( String? )改成感叹号( String! )来声明一个隐式解析可选类型。</div><div class="line">当可选类型被第一次赋值之后就可以确定之后一直有值的时候，隐式解析可选类型非常有用。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">一个隐式解析可选类型其实就是一个普通的可选类型，但是可以被当做非可选类型来使用，并不需要每次都使用 解析来获取可选值。</div><div class="line">下面的例子展示了可选类型 String 和隐式解析可选类型 String 之间的区别:</div><div class="line">let possibleString: String? = &quot;An optional string.&quot;</div><div class="line">let forcedString: String = possibleString! // 需要感叹号来获取值</div><div class="line">let assumedString: String! = &quot;An implicitly unwrapped optional string.&quot; let implicitString: String = assumedString // 不需要感叹号</div><div class="line">你可以把隐式解析可选类型当做一个可以自动解析的可选类型。</div><div class="line">你要做的只是声明的时候把感叹号放到类型的结</div><div class="line">尾，而不是每次取值的可选名字的结尾。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>错误处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">你可以使用 错误处理(error handling) 来应对程序执行中可能会遇到的错误条件。</div><div class="line">相对于可选中运用值的存在与缺失来表达函数的成功与失败，错误处理可以推断失败的原因，并传播至程序的其</div><div class="line">他部分。</div><div class="line">当一个函数遇到错误条件，它能报错。</div><div class="line">调用函数的地方能抛出错误消息并合理处理。</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func canThrowAnError() throws &#123; // 这个函数有可能抛出错误</div><div class="line">&#125;</div><div class="line">一个函数可以通过在声明中添加   关键词来抛出错误消息。当你的函数能抛出错误消息时, 你应该在表达式 中前置 关键词。</div><div class="line">do &#123;</div><div class="line">try canThrowAnError() // 没有错误消息抛出</div><div class="line">&#125; catch &#123;</div><div class="line">// 有一个错误消息抛出</div><div class="line">&#125;</div><div class="line">一个 语句创建了一个新的包含作用域,使得错误能被传播到一个或多个从句。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>断言</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">可选类型可以让你判断值是否存在，你可以在代码中优 地处理值缺失的情况。</div><div class="line">然而，在某些情况下，如果值缺 失或者值并不满足特定的条件，你的代码可能没办法继续执行。</div><div class="line">这时，你可以在你的代码中触发一个 断言(asse rtion) 来结束代码运行并通过调试来找到值缺失的原因</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">使用断言进行调试</div><div class="line">断言会在运行时判断一个逻辑条件是否为 true 。</div><div class="line">从字面意思来说，断言“断言”一个条件是否为真。你可以使 用断言来保证在运行其他代码之前，某些重要的条件已经被满足。</div><div class="line">如果条件判断为 true ，代码运行会继续进 行;如果条件判断为 false ，代码执行结束，你的应用被终止。</div><div class="line">如果你的代码在调试环境下触发了一个断言，比如你在 Xcode 中构建并运行一个应用，你可以清楚地看到不合法 的状态发生在哪里并检查断言被触发时你的应用的状态。</div><div class="line">此外，断言允许你附加一条调试信息。</div><div class="line">你可以使用全局 assert(_:_:file:line:) 函数来写一个断言。向这个函数传入一个结果为 true 或者 false 的表达式以及一条信息，当表达式的结果为 false 的时候这条信息会被显示:</div><div class="line"></div><div class="line">let age = -3</div><div class="line">assert(age &gt;= 0, &quot;A person&apos;s age cannot be less than zero&quot;) // 因为 age &lt; 0，所以断言会触发</div><div class="line">在这个例子中，只有 age &gt;= 0 为 true 的时候，即 age 的值非负的时候，代码才会继续执行。</div><div class="line">如果 age 的值是负数，就像代码中那样， age &gt;= 0 为 false ，断言被触发，终止应用。</div><div class="line">如果不需要断言信息，可以省略，就像这样: assert(age &gt;= 0)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">注意:</div><div class="line">当代码使用优化编译的时候，断言将会被禁用，例如在 Xcode 中，使用默认的 target Release 配置选项来 bu ild 时，断言会被禁用</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">何时使用断言</div><div class="line"></div><div class="line">当条件可能为假时使用断言，但是最终一定要保证条件为真，这样你的代码才能继续运行。断言的适用情景:</div><div class="line">• 整数类型的下标索引被传入一个自定义下标实现，但是下标索引值可能太小或者太大。</div><div class="line">• 需要给函数传入一个值，但是非法的值可能导致函数不能正常执行。</div><div class="line">• 一个可选值现在是 nil ，但是后面的代码运行需要一个非 nil 值。</div></pre></td></tr></table></figure>
+<p>参考文章：<a href="https://github.com/numbbbbb/the-swift-programming-language-in-chinese" target="_blank" rel="noopener">中文版 Apple 官方 Swift 教程《The Swift Programming Language》</a></p>
 
           
         
@@ -1654,7 +1855,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-count">97</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

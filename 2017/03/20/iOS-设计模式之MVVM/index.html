@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="先借鉴一个demo，看完demo，基本上就大概理解是什么意思了，demo地址：MVVMDemo  只是个人的一点理解。其实说明白了，MVVM的设计模式也只是在MVC模式上的更进一步的封装，解耦，增加了代码量，但是方便了测试，分层更加细致，模块更加具体。好的代码应该是易于读取，方便测试，尽量解耦。  可以看到上图的层级，其实tableView的代理也可以作为ViewModel，因为都是我们抽出来的和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS -设计模式之MVVM">
+<meta property="og:url" content="liuxinixn.github.io/2017/03/20/iOS-设计模式之MVVM/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="先借鉴一个demo，看完demo，基本上就大概理解是什么意思了，demo地址：MVVMDemo  只是个人的一点理解。其实说明白了，MVVM的设计模式也只是在MVC模式上的更进一步的封装，解耦，增加了代码量，但是方便了测试，分层更加细致，模块更加具体。好的代码应该是易于读取，方便测试，尽量解耦。  可以看到上图的层级，其实tableView的代理也可以作为ViewModel，因为都是我们抽出来的和">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-0f5161eafe8e121d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-0d335ec25d4d5a13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-d887bb3179b3d535.gif?imageMogr2/auto-orient/strip">
+<meta property="og:updated_time" content="2017-12-28T13:55:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS -设计模式之MVVM">
+<meta name="twitter:description" content="先借鉴一个demo，看完demo，基本上就大概理解是什么意思了，demo地址：MVVMDemo  只是个人的一点理解。其实说明白了，MVVM的设计模式也只是在MVC模式上的更进一步的封装，解耦，增加了代码量，但是方便了测试，分层更加细致，模块更加具体。好的代码应该是易于读取，方便测试，尽量解耦。  可以看到上图的层级，其实tableView的代理也可以作为ViewModel，因为都是我们抽出来的和">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1694376-0f5161eafe8e121d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2017/03/20/iOS-设计模式之MVVM/"/>
+
+
+
+
+
+  <title>iOS -设计模式之MVVM | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/20/iOS-设计模式之MVVM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS -设计模式之MVVM</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-20T20:19:35+08:00">
+                2017-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>先借鉴一个demo，看完demo，基本上就大概理解是什么意思了，demo地址：<a href="https://github.com/coderyi/MVVMDemo" target="_blank" rel="noopener">MVVMDemo</a></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-0f5161eafe8e121d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="View Model.png"></p>
+<p>只是个人的一点理解。<br>其实说明白了，MVVM的设计模式也只是在MVC模式上的更进一步的封装，解耦，增加了代码量，但是方便了测试，分层更加细致，模块更加具体。好的代码应该是易于读取，方便测试，尽量解耦。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-0d335ec25d4d5a13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="层级.png"></p>
+<p>可以看到上图的层级，其实tableView的代理也可以作为ViewModel，因为都是我们抽出来的和View进行交互。Controller中，就剩下一些简单的交互。</p>
+<p>抽取的思路：关于网络请求我们需要对数据进行处理，可以放在ViewModel里，对于UITabelView的抽取，重要的就是两个代理方法的抽取，使用继承与NSObject的两个model， 分别继承与<uitableviewdatasource><uitableviewdelegate>这两个代理，即可完成抽取。View 与 Model的抽取就不用说明了。</uitableviewdelegate></uitableviewdatasource></p>
+<p>######因为我们抽取了继承与<uitableviewdelegate>的model，在界面跳转的时候，我们需要明确知道当前的控制器，所以我们需要额外提供一个接口：<code>@property(nonatomic,weak)LXTableViewController *controller;</code>,接口的属性声明为weak，防止循环引用，因为在Controller已经拥有了该model。<br>返回的时候可以看到该控制器已经释放。<br>代码如下:</uitableviewdelegate></p>
+<p>######Controller: （可以看到Controller 里的代码更加精简）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">@interface LXTableViewController ()</div><div class="line">&#123;</div><div class="line">    </div><div class="line">    MJRefreshNormalHeader *refreshHeader;</div><div class="line">    MJRefreshAutoNormalFooter *refreshFooter;</div><div class="line">    NSMutableArray *totalSource;</div><div class="line">    LBViewModel *tableViewModel;</div><div class="line">    UITableView *tableView;</div><div class="line">    LBTableViewDataSource *tableViewDataSource;</div><div class="line">    LBTableViewDelegate *tableViewDelegate;</div><div class="line">&#125;</div><div class="line">/** 用来显示的假数据 */</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation LXTableViewController</div><div class="line">-(void)dealloc&#123;</div><div class="line">    NSLog(@&quot;%s&quot;,__func__ );</div><div class="line">&#125;</div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    self.view.backgroundColor=[UIColor whiteColor];</div><div class="line">    </div><div class="line">    tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 0, Device_Width, Device_Height-64) style:UITableViewStylePlain];</div><div class="line">    tableView.tableFooterView =[UIView new];</div><div class="line">    [self.view addSubview:tableView];</div><div class="line">    tableViewDataSource=[[LBTableViewDataSource alloc] init];</div><div class="line">    tableViewDelegate=[[LBTableViewDelegate alloc] init];</div><div class="line">    tableView.dataSource=tableViewDataSource;</div><div class="line">    tableView.delegate=tableViewDelegate;</div><div class="line">    </div><div class="line">    tableViewDelegate.controller = self;</div><div class="line">    tableViewModel=[[LBViewModel alloc] init];</div><div class="line">    totalSource=0;</div><div class="line">    </div><div class="line">    __weak typeof(self) weakSelf = self;</div><div class="line"></div><div class="line">    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）</div><div class="line">    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^&#123;</div><div class="line">        __strong typeof(self) strongSelf = weakSelf;</div><div class="line"></div><div class="line">        [strongSelf loadNewData];</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    // 马上进入刷新状态</div><div class="line">    [self.tableView.mj_header beginRefreshing];</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void)loadNewData&#123;</div><div class="line">    </div><div class="line">    [tableViewModel headerRefreshRequestWithCallback:^(NSArray *array)&#123;</div><div class="line">        totalSource=(NSMutableArray *)array;</div><div class="line">        tableViewDataSource.array=totalSource;</div><div class="line">        tableViewDelegate.array=totalSource;</div><div class="line">        [self.tableView.mj_header endRefreshing];</div><div class="line">        [tableView reloadData];</div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#####Model<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line"></div><div class="line">@interface FeedbackModel : NSObject</div><div class="line">@property(nonatomic,strong)NSString *content;</div><div class="line">@property(nonatomic,strong)NSString *answerTime;</div><div class="line">@property(nonatomic,strong)NSString *answer;</div><div class="line"></div><div class="line">@property(nonatomic,strong)NSString *createTime;</div><div class="line">@property(nonatomic,strong)NSString *status;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure></p>
+<p>######View (使用的还是原demo的)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">@interface CustomTableViewCell : UITableViewCell</div><div class="line">@property(nonatomic,strong) UILabel *titleLabel;</div><div class="line">@end</div><div class="line"></div><div class="line">#import &quot;CustomTableViewCell.h&quot;</div><div class="line"></div><div class="line">@implementation CustomTableViewCell</div><div class="line"></div><div class="line">- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier</div><div class="line">&#123;</div><div class="line">    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];</div><div class="line">    if (self) &#123;</div><div class="line">        self.backgroundColor = LBRandomColor;</div><div class="line">        // Initialization code</div><div class="line">        _titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, Device_Width, 50)];</div><div class="line">        [self.contentView addSubview:_titleLabel];</div><div class="line">        _titleLabel.backgroundColor=[UIColor whiteColor];</div><div class="line">        _titleLabel.font=[UIFont systemFontOfSize:14];</div><div class="line">       </div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure></p>
+<p>######TableViewprotocol的封装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">@interface LBTableViewDataSource : NSObject&lt;UITableViewDataSource&gt;</div><div class="line">@property (nonatomic,strong) NSArray *array;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation LBTableViewDataSource</div><div class="line">-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section&#123;</div><div class="line">    return self.array.count;</div><div class="line">&#125;</div><div class="line">-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line">    CustomTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@&quot;Cell&quot;];</div><div class="line">    if (cell == nil) &#123;</div><div class="line">        cell = [[CustomTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@&quot;Cell&quot;];</div><div class="line">    &#125;</div><div class="line">    NSString *content=((FeedbackModel *)[_array objectAtIndex:indexPath.row]).content;</div><div class="line">   NSString *newContent =  [NSString stringWithFormat:@&quot;%@ %@&quot;,@&quot;Q :&quot;,[LBService stringFromUnicode:content]];</div><div class="line">    cell.textLabel.text = newContent;</div><div class="line">    return cell;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">-------------------------------------------------------------------------------------------</div><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line">@class LXTableViewController;</div><div class="line">@interface LBTableViewDelegate : NSObject&lt;UITableViewDelegate&gt;</div><div class="line">@property (nonatomic,strong) NSArray *array;</div><div class="line">@property(nonatomic,weak)LXTableViewController *controller;</div><div class="line">@end</div><div class="line">@implementation LBTableViewDelegate</div><div class="line">- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath</div><div class="line">&#123;</div><div class="line">    if (_array.count&gt;0) &#123;</div><div class="line"></div><div class="line">        [self.controller.navigationController pushViewController:[[LBNextViewController alloc]init] animated:YES];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line">    return 50.0;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#####ViewModel (主要封装了获取数据源，最好有回调block)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">typedef void(^callback)(NSArray *array);</div><div class="line">@interface LBViewModel : NSObject</div><div class="line"></div><div class="line">-(void)headerRefreshRequestWithCallback:(callback)callback;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation LBViewModel</div><div class="line">- (instancetype)init</div><div class="line">&#123;</div><div class="line">    self = [super init];</div><div class="line">    if (self) &#123;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">-(void)headerRefreshRequestWithCallback:(callback)callback&#123;</div><div class="line">    NSString *url = @&quot;https://139.129.165.192:8443/lbjy-project/findInfoFeedback.action?userId=33A971DAE942BEB3E050190AE10D552C&quot;;</div><div class="line">    [LBHTTPTool get:url params:nil success:^(id responseObject) &#123;</div><div class="line">        </div><div class="line">//        NSLog(@&quot;%@&quot;,responseObject);</div><div class="line">        NSMutableArray *arr=[NSMutableArray array];</div><div class="line"></div><div class="line">        NSMutableArray *responseArray =[FeedbackModel mj_keyValuesArrayWithObjectArray:responseObject[@&quot;FeedbackList&quot;]];</div><div class="line">        for (NSDictionary *paramDic in responseArray) &#123;</div><div class="line">            FeedbackModel *model =[FeedbackModel mj_objectWithKeyValues:paramDic];</div><div class="line">            [arr addObject:model];</div><div class="line">        &#125;</div><div class="line">        callback(arr);</div><div class="line">    &#125; failure:^(NSError *error) &#123;</div><div class="line">        </div><div class="line">        </div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-d887bb3179b3d535.gif?imageMogr2/auto-orient/strip" alt="show.gif"></p>
+<blockquote>
+<p>以上只是个人一点理解。</p>
+</blockquote>
+<p>demo 地址： <a href="https://github.com/liuxinixn/LXMVVMExample" target="_blank" rel="noopener">MVVMDemo</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/12/iOS-计算富文本，检索网址，号码，表情，并且计算高度，设置最大行数/" rel="next" title="iOS -计算富文本，检索网址，表情，计算高度，限制最大行数">
+                <i class="fa fa-chevron-left"></i> iOS -计算富文本，检索网址，表情，计算高度，限制最大行数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/28/仿网易新闻Navbar/" rel="prev" title="仿网易新闻Navbar">
+                仿网易新闻Navbar <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">97</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
