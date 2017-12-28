@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="demo地址 :    属性动画在做属性动画的时候，先了解下动画继承关系： ####CAAnimation ：父类 遵守了CAMediaTiming协议  CAMediaTiming媒体时间类协议  12345678910111213CAMediaTiming中的协议内容 1.beginTime 动画开始的时间 默认为0 2.duration 动画的持续时间 默认为0 持续时间 受速度的影响 实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="雪晟">
+<meta property="og:url" content="liuxinixn.github.io/2017/12/28/CoreAnimation之动画继承/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="demo地址 :    属性动画在做属性动画的时候，先了解下动画继承关系： ####CAAnimation ：父类 遵守了CAMediaTiming协议  CAMediaTiming媒体时间类协议  12345678910111213CAMediaTiming中的协议内容 1.beginTime 动画开始的时间 默认为0 2.duration 动画的持续时间 默认为0 持续时间 受速度的影响 实">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-5bbcf21b1ece3a71.gif?imageMogr2/auto-orient/strip">
+<meta property="og:updated_time" content="2017-12-28T12:43:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="雪晟">
+<meta name="twitter:description" content="demo地址 :    属性动画在做属性动画的时候，先了解下动画继承关系： ####CAAnimation ：父类 遵守了CAMediaTiming协议  CAMediaTiming媒体时间类协议  12345678910111213CAMediaTiming中的协议内容 1.beginTime 动画开始的时间 默认为0 2.duration 动画的持续时间 默认为0 持续时间 受速度的影响 实">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1694376-5bbcf21b1ece3a71.gif?imageMogr2/auto-orient/strip">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2017/12/28/CoreAnimation之动画继承/"/>
+
+
+
+
+
+  <title> | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/CoreAnimation之动画继承/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://upload-images.jianshu.io/upload_images/1694376-5bbcf21b1ece3a71.gif?imageMogr2/auto-orient/strip" alt="1.gif"><br> demo地址 :    <a href="https://github.com/liuxinixn/CoreAnimation-" target="_blank" rel="noopener">属性动画</a><br>在做属性动画的时候，先了解下动画继承关系：</p>
+<p>####CAAnimation ：父类 遵守了<strong>CAMediaTiming</strong>协议</p>
+<blockquote>
+<p>CAMediaTiming媒体时间类协议</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">CAMediaTiming中的协议内容</div><div class="line"> 1.beginTime 动画开始的时间 默认为0</div><div class="line"> 2.duration 动画的持续时间 默认为0 持续时间 受速度的影响 实际动画完成时间 = 持续时间/速度</div><div class="line"> 3.speed 动画的播放速度 默认为1 速度设置为0 可以暂停动画 如果speed 2秒 duration 60秒 那么动画真正播放完成的时间 30秒 </div><div class="line"> 4.timeOffset 动画播放时间的偏移量</div><div class="line"> 5.repeatCount 动画的循环次数 默认是0 只播放一次 </div><div class="line"> 6.repeatDuration 动画循环的持续时间 repeatCount/repeatDuration 只能设置其中的一个属性 </div><div class="line"> 7.autoreverses 是否以动画的形式返回 返回到播放之前的状态 </div><div class="line"> 8.fillMode 设置当前对象在非活动时间段的状态 要想fillMode有效 需设置removedOnCompletion = NO</div><div class="line">  kCAFillModeForwards 当动画结束后，layer会一直保持着动画最后的状态 </div><div class="line">  kCAFillModeBackwards 立即进入动画的初始状态并等待动画开始 </div><div class="line">  kCAFillModeBoth 动画加入后开始之前 layer处于动画初始状态 动画结束后layer保持动画最后的状态</div><div class="line">  kCAFillModeRemoved 默认值 动画结束后 layer会恢复到之前的状态</div></pre></td></tr></table></figure>
+<blockquote>
+<p>CAAnimation动画属性方法介绍</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">1.初始化的方法 animation </div><div class="line">2.timingFunction 速度控制类 控制动画运行的节奏 </div><div class="line">初始化:functionWithName:</div><div class="line"> kCAMediaTimingFunctionLinear 匀速 </div><div class="line">kCAMediaTimingFunctionEaseIn 慢进快出 </div><div class="line">kCAMediaTimingFunctionEaseOut 快进慢出 </div><div class="line">kCAMediaTimingFunctionEaseInEaseOut 慢进慢出 中间加速 </div><div class="line">kCAMediaTimingFunctionDefault 默认 </div><div class="line">3.delegate 代理</div><div class="line">4.removedOnCompletion 完成动画的时候 是否移除动画效果 </div><div class="line">5.代理方法 </div><div class="line">- (void)animationDidStart:(CAAnimation *)anim</div><div class="line">- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag</div></pre></td></tr></table></figure>
+<blockquote>
+<p>#####三个常用个子类</p>
+</blockquote>
+<ul>
+<li><p>CAPropertyAnimation</p>
+<ul>
+<li><p>CABasicAnimation 扩充属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">介绍：通过改变某个属性的值 到某个值 只能设置两个值 产生的动画</div><div class="line">fromValue 开始值 如果不设置不会返回到初始位置</div><div class="line">toValue 结束值</div><div class="line">byValue 通过哪个值</div><div class="line">@property(nullable, strong) id fromValue;</div><div class="line">@property(nullable, strong) id toValue;</div><div class="line">@property(nullable, strong) id byValue;</div></pre></td></tr></table></figure>
+</li>
+<li><p>CAKeyframeAnimation</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> 属性解析：</div><div class="line"></div><div class="line">- values：就是上述的NSArray对象。里面的元素称为”关键帧”(keyframe)。动画对象会在指定的时间(duration)内，依次显示values数组中的每一个关键帧</div><div class="line"></div><div class="line">- path：可以设置一个CGPathRef\CGMutablePathRef,让层跟着路径移动。path只对CALayer的anchorPoint和position起作用。如果你设置了path，那么values将被忽略</div><div class="line"></div><div class="line">- keyTimes：可以为对应的关键帧指定对应的时间点,其取值范围为0到1.0,keyTimes中的每一个时间值都对应values中的每一帧.当keyTimes没有设置的时候,各个关键帧的时间是平分的</div><div class="line"></div><div class="line">- 说明：CABasicAnimation可看做是最多只有2个关键帧的CAKeyframeAnimation</div></pre></td></tr></table></figure>
+<ul>
+<li><p>CAAnimationGroup<br><code>@property(nullable, copy) NSArray&lt;CAAnimation *&gt; *animations;//组动画</code></p>
+</li>
+<li><p>CATransition 提供渐变效果:(推拉push效果,消退fade效果,揭开reveal效果)。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">type：动画过渡的类型</div><div class="line">subtype：动画过渡的方向</div><div class="line">@property(copy) NSString *type;</div><div class="line">@property(nullable, copy) NSString *subtype;</div><div class="line">@property float startProgress;</div><div class="line">@property float endProgress;</div><div class="line"></div><div class="line">/* Common transition types. */</div><div class="line"></div><div class="line">CA_EXTERN NSString * const kCATransitionFade</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionMoveIn</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionPush</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionReveal</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line"></div><div class="line">/* Common transition subtypes. */</div><div class="line"></div><div class="line">CA_EXTERN NSString * const kCATransitionFromRight</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionFromLeft</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionFromTop</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionFromBottom</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div></pre></td></tr></table></figure>
+<blockquote>
+<h5 id="keyPath可以使用的key-可以做动画的属性，包括虚拟属性"><a href="#keyPath可以使用的key-可以做动画的属性，包括虚拟属性" class="headerlink" title="keyPath可以使用的key ,可以做动画的属性，包括虚拟属性"></a>keyPath可以使用的key ,可以做动画的属性，包括虚拟属性</h5></blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">- #define angle2Radian(angle) ((angle)/180.0*M_PI)</div><div class="line">- transform.rotation.x 围绕x轴翻转 参数：角度 angle2Radian(4)</div><div class="line"></div><div class="line">transform.rotation.y 围绕y轴翻转 参数：同上</div><div class="line"></div><div class="line">transform.rotation.z 围绕z轴翻转 参数：同上</div><div class="line"></div><div class="line">transform.rotation 默认围绕z轴</div><div class="line"></div><div class="line">transform.scale.x x方向缩放 参数：缩放比例 1.5</div><div class="line"></div><div class="line">transform.scale.y y方向缩放 参数：同上</div><div class="line"></div><div class="line">transform.scale.z z方向缩放 参数：同上</div><div class="line"></div><div class="line">transform.scale 所有方向缩放 参数：同上</div><div class="line"></div><div class="line">transform.translation.x x方向移动 参数：x轴上的坐标 100</div><div class="line"></div><div class="line">transform.translation.y x方向移动 参数：y轴上的坐标</div><div class="line"></div><div class="line">transform.translation.z x方向移动 参数：z轴上的坐标</div><div class="line"></div><div class="line">transform.translation 移动 参数：移动到的点 （100，100）</div><div class="line"></div><div class="line">opacity 透明度 参数：透明度 0.5</div><div class="line"></div><div class="line">backgroundColor 背景颜色 参数：颜色 (id)[[UIColor redColor] CGColor]</div><div class="line"></div><div class="line">cornerRadius 圆角 参数：圆角半径 5</div><div class="line"></div><div class="line">borderWidth 边框宽度 参数：边框宽度 5</div><div class="line"></div><div class="line">bounds 大小 参数：CGRect</div><div class="line"></div><div class="line">contents 内容 参数：CGImage</div><div class="line"></div><div class="line">contentsRect 可视内容 参数：CGRect 值是0～1之间的小数</div><div class="line"></div><div class="line">hidden 是否隐藏</div><div class="line"></div><div class="line">position</div><div class="line"></div><div class="line">shadowColor</div><div class="line"></div><div class="line">shadowOffset</div><div class="line"></div><div class="line">shadowOpacity</div><div class="line"></div><div class="line">shadowRadius</div></pre></td></tr></table></figure>
+<blockquote>
+<p>#####基础动画 基础动画可以看做只有两帧。</p>
+</blockquote>
+<p>经常做的有个  心跳动画，可以尝试一波，有两个方法： </p>
+<ol>
+<li>改变bounds</li>
+<li><p>改变 transform.scale </p>
+<ul>
+<li>第一种</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 创建动画对象</div><div class="line">       CABasicAnimation *anim = [CABasicAnimation animation];</div><div class="line">   </div><div class="line">       anim.keyPath = @&quot;bounds&quot;;  // transform.scale 表示长和宽都缩放</div><div class="line">       anim.fromValue = [NSValue valueWithCGRect:self.subLayer.bounds];</div><div class="line">       anim.toValue = [NSValue valueWithCGRect:CGRectMake(0, 0, self.bounds.size.width , self.bounds.size.height )];                  // @0 缩放到最小</div><div class="line">   </div><div class="line">       anim.duration = 0.5;                // 设置动画执行时间</div><div class="line">       anim.repeatCount = MAXFLOAT;        // MAXFLOAT 表示动画执行次数为无限次</div><div class="line">   </div><div class="line">       anim.autoreverses = YES;            // 控制动画反转 默认情况下动画从尺寸1到0的过程中是有动画的，但是从0到1的过程中是没有动画的，设置autoreverses属性可以让尺寸0到1也是有过程的</div><div class="line">   </div><div class="line">       [self.subLayer addAnimation: anim forKey: nil];</div></pre></td></tr></table></figure>
+<ul>
+<li>第二种<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// 创建动画对象</div><div class="line">       CABasicAnimation *anim = [CABasicAnimation animation];</div><div class="line">   </div><div class="line">       anim.keyPath = @&quot;transform.scale&quot;;  // transform.scale 表示长和宽都缩放</div><div class="line">       anim.toValue = @0;                  // @0 缩放到最小</div><div class="line">   </div><div class="line">       anim.duration = 0.5;                // 设置动画执行时间</div><div class="line">       anim.repeatCount = MAXFLOAT;        // MAXFLOAT 表示动画执行次数为无限次</div><div class="line">   </div><div class="line">       anim.autoreverses = YES;            // 控制动画反转 默认情况下动画从尺寸1到0的过程中是有动画的，但是从0到1的过程中是没有动画的，设置autoreverses属性可以让尺寸0到1也是有过程的</div><div class="line">   </div><div class="line">       [self.icon.layer addAnimation: anim forKey: nil];</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>#####关键帧动画  tranfrom.rotation 其实是虚拟属性</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#define angle2Radio(angle) ((angle) * M_PI / 180.0)</div><div class="line">   CAKeyframeAnimation *animation =[CAKeyframeAnimation animationWithKeyPath:@&quot;transform.rotation&quot;];</div><div class="line">   animation.values = @[@(angle2Radio(-5)), @(angle2Radio(5)), @(angle2Radio(-5))]; // 把度数转换为弧度  度数/180*M_PI</div><div class="line">   animation.repeatCount = HUGE;</div><div class="line">   [self.subLayer addAnimation:animation forKey:nil];</div></pre></td></tr></table></figure>
+<blockquote>
+<p>#####过渡动画  在平常imageview切换时是没有动画的，我们可以在图片切换过程中增加个过渡动画</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">- (IBAction)btnAction:(UIButton *)sender &#123;</div><div class="line">    </div><div class="line">    // 0、切换图片</div><div class="line">    a++;</div><div class="line">    if (a&gt; 3) &#123;</div><div class="line">        a = 1;</div><div class="line">    &#125;</div><div class="line">     sender.userInteractionEnabled = NO;</div><div class="line">    self.icon.image = [UIImage imageNamed: [NSString stringWithFormat: @&quot;%d.jpg&quot;, a]];</div><div class="line">    CATransition *animation =[CATransition animation];</div><div class="line">    animation.type = @&quot;rippleEffect&quot;;</div><div class="line">    animation.duration = 2;</div><div class="line">    animation.delegate = self;</div><div class="line">    animation.timingFunction =[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];</div><div class="line">    [self.icon.layer addAnimation:animation forKey:nil];</div><div class="line">    sender.userInteractionEnabled = NO;</div><div class="line">&#125;</div><div class="line">-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag</div><div class="line">&#123;</div><div class="line">    //动画执行完后打开按钮的交互</div><div class="line">    self.button.userInteractionEnabled = YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/28/CoreAnimation之图层时间/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/28/CoreAnimation之图层树/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#keyPath可以使用的key-可以做动画的属性，包括虚拟属性"><span class="nav-number">1.</span> <span class="nav-text">keyPath可以使用的key ,可以做动画的属性，包括虚拟属性</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

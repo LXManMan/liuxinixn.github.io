@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="集合(Sets)   集合(Set)用来存储相同类型并且没有确定顺序的值。当 合元素顺序不重要时或者希望确保每个元素只出现一次 时可以使用 合而不是数组。注意:Swift的 Set 类型被桥接到 Foundation 中的 NSSet 类。  集合类型的哈希值一个类型为了存储在 集合中，该类型必须是可哈希化的–也就是说，该类型必须提供一个方法来计算它的哈希 值。一个哈希值是 Int 类型的，相等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="雪晟">
+<meta property="og:url" content="liuxinixn.github.io/2017/12/28/-Swift之集合类型-(Collection-Types)（集合篇）/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="集合(Sets)   集合(Set)用来存储相同类型并且没有确定顺序的值。当 合元素顺序不重要时或者希望确保每个元素只出现一次 时可以使用 合而不是数组。注意:Swift的 Set 类型被桥接到 Foundation 中的 NSSet 类。  集合类型的哈希值一个类型为了存储在 集合中，该类型必须是可哈希化的–也就是说，该类型必须提供一个方法来计算它的哈希 值。一个哈希值是 Int 类型的，相等">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-28T12:43:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="雪晟">
+<meta name="twitter:description" content="集合(Sets)   集合(Set)用来存储相同类型并且没有确定顺序的值。当 合元素顺序不重要时或者希望确保每个元素只出现一次 时可以使用 合而不是数组。注意:Swift的 Set 类型被桥接到 Foundation 中的 NSSet 类。  集合类型的哈希值一个类型为了存储在 集合中，该类型必须是可哈希化的–也就是说，该类型必须提供一个方法来计算它的哈希 值。一个哈希值是 Int 类型的，相等">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2017/12/28/-Swift之集合类型-(Collection-Types)（集合篇）/"/>
+
+
+
+
+
+  <title> | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/-Swift之集合类型-(Collection-Types)（集合篇）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:13+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>集合(Sets)</p>
+</blockquote>
+<p> 集合(Set)用来存储相同类型并且没有确定顺序的值。当 合元素顺序不重要时或者希望确保每个元素只出现一次 时可以使用 合而不是数组。<br><code>注意:Swift的 Set 类型被桥接到 Foundation 中的 NSSet 类。</code></p>
+<p> 集合类型的哈希值<br>一个类型为了存储在 集合中，该类型必须是可哈希化的–也就是说，该类型必须提供一个方法来计算它的哈希 值。一个哈希值是 <code>Int</code> 类型的，相等的对象哈希值必须相同，比如 <code>a==b</code>,因此必须 <code>a.hashValue == b.hashValu e</code>。</p>
+<p><code>Swift</code>的所有基本类型(比如 <code>String</code>,<code>Int</code> , <code>Double</code> 和 <code>Bool</code>)默认都是可哈希化的，可以作为 合的值的类型或 者字典的键的类型。没有关联值的枚举成员值(在枚举有讲述)默认也是可哈希化的。</p>
+<p><strong>合类型语法</strong></p>
+<p><code>Swift</code> 中的 <code>Set</code> 类型被写为<code>Set&lt;Element&gt;</code> ，这里的 <code>Element</code> 表示 <code>Set</code>中允许存储的类型，和数组不同的是，  合没有等价的简化形式。</p>
+<p><strong>创建和构造一个空的 集合</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var letters = Set&lt;Character&gt;()</div><div class="line">print(&quot;letters is of type Set&lt;Character&gt; with \(letters.count) items.&quot;) // 打印 &quot;letters is of type Set&lt;Character&gt; with 0 items.&quot;</div></pre></td></tr></table></figure>
+<p><code>注意:通过构造器，这里的 letters 变量的类型被推断为 Set&lt;Character&gt; 。</code></p>
+<p>此外，如果上下文提供了类型信息，比如作为函数的参数或者已知类型的变量或常量，我们可以通过一个空的数 组字面量创建一个空的 <code>Set</code> :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">letters.insert(&quot;a&quot;)</div><div class="line">// letters 现在含有1个 Character 类型的值</div><div class="line">letters = []</div><div class="line">// letters 现在是一个空的 Set, 但是它依然是 Set&lt;Character&gt; 类型</div></pre></td></tr></table></figure>
+<p><strong>用数组字面量创建集合</strong></p>
+<p>你可以使用数组字面量来构造 合，并且可以使用简化形式写一个或者多个值作为 合元素。<br>下面的例子创建一个称之为<code>favoriteGenres</code> 的 合来存储 <code>String</code>类型的值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var favoriteGenres: Set&lt;String&gt; = [&quot;Rock&quot;, &quot;Classical&quot;, &quot;Hip hop&quot;] </div><div class="line">// favoriteGenres 被构造成含有三个初始值的 集合</div></pre></td></tr></table></figure></p>
+<p>这个<code>favoriteGenres</code>变量被声明为“一个 <code>String</code>值的 合”，写为 <code>Set&lt;String&gt;</code>。由于这个特定的 合含有指 定 <code>String</code> 类型的值，所以它只允许存储 <code>String</code>类型值。这里的 <code>favoriteGenres</code>变量有三个 String 类型的初始 值(<code>&quot;Rock&quot;</code> ，<code>&quot;Classical&quot;</code> 和 <code>&quot;Hip hop&quot;</code> )，并以数组字面量的方式出现。</p>
+<p><code>注意:
+favoriteGenres 被声明为一个变量(拥有 var 标示符)而不是一个常量(拥有 let 标示符),因为它里面的元素将 会在下面的例子中被增加或者移除。</code></p>
+<p>一个 <code>Set</code> 类型不能从数组字面量中被单独推断出来，因此<code>Set</code> 类型必须显式声明。然而，由于 <code>Swift</code> 的类型推 断功能，如果你想使用一个数组字面量构造一个<code>Set</code> 并且该数组字面量中的所有元素类型相同，那么你无须写出<br><code>Set</code> 的具体类型。 <code>favoriteGenres</code> 的构造形式可以采用简化的方式代替:</p>
+<p><code>var favoriteGenres: Set = [&quot;Rock&quot;, &quot;Classical&quot;, &quot;Hip hop&quot;]</code></p>
+<p>由于数组字面量中的所有元素类型相同，<code>Swift</code>可以推断出 <code>Set&lt;String&gt;</code> 作为 <code>favoriteGenres</code>变量的正确类型。</p>
+<p><strong>访问和修改一个集合</strong><br>你可以通过 <code>Set</code> 的属性和方法来访问和修改一个 <code>Set</code> 。</p>
+<p>为了找出一个<code>Set</code> 中元素的数量，可以使用其只读属性<code>count</code> :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">print(&quot;I have \(favoriteGenres.count) favorite music genres.&quot;) // 打印 &quot;I have 3 favorite music genres.</div></pre></td></tr></table></figure>
+<p>使用布尔属性 <code>isEmpty</code>作为一个缩写形式去检查 <code>count</code>属性是否为 <code>0</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> if favoriteGenres.isEmpty &#123;</div><div class="line">     print(&quot;As far as music goes, I&apos;m not picky.&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;I have particular music preferences.&quot;)</div><div class="line">&#125;</div><div class="line">// 打印 &quot;I have particular music preferences.&quot;</div></pre></td></tr></table></figure>
+<p>你可以通过调用 <code>Set</code> 的 <code>insert(_:)</code>方法来添加一个新元素:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">favoriteGenres.insert(&quot;Jazz&quot;)</div><div class="line">// favoriteGenres 现在包含4个元素</div></pre></td></tr></table></figure></p>
+<p>你可以通过调用 <code>Set</code> 的 <code>remove(_:)</code>方法去删除一个元素，如果该值是该 <code>Set</code>的一个元素则删除该元素并且返回 被删除的元素值，否则如果该<code>Set</code> 不包含该值，则返回 <code>nil</code> 。另外， <code>Set</code> 中的所有元素可以通过它的<code>removeAl l()</code>方法删除。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> if let removedGenre = favoriteGenres.remove(&quot;Rock&quot;) &#123;</div><div class="line">     print(&quot;\(removedGenre)? I&apos;m over it.&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;I never much cared for that.&quot;)</div><div class="line">&#125;</div><div class="line">// 打印 &quot;Rock? I&apos;m over it.&quot;</div></pre></td></tr></table></figure>
+<p>使用<code>contains(_:)</code> 方法去检查<code>Set</code> 中是否包含一个特定的值:</p>
+<p><strong>遍历一个集合</strong></p>
+<p>你可以在一个<code>for-in</code>循环中遍历一个 <code>Set</code>中的所有值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">for genre in favoriteGenres &#123;</div><div class="line">    print(&quot;\(genre)&quot;)</div><div class="line">&#125;</div><div class="line">// Classical</div><div class="line">// Jazz</div><div class="line">// Hip hop</div></pre></td></tr></table></figure>
+<p><code>Swift</code>的 <code>Set</code>类型没有确定的顺序，为了按照特定顺序来遍历一个 <code>Set</code> 中的值可以使用 <code>sorted()</code> 方法，它将返<br>回一个有序数组，这个数组的元素排列顺序由操作符<code>&#39;&lt;&#39;</code>对元素进行比较的结果来确定.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">for genre in favoriteGenres.sorted() &#123;</div><div class="line">    print(&quot;(genre)&quot;)</div><div class="line">&#125;</div><div class="line">// prints &quot;Classical&quot;</div><div class="line">// prints &quot;Hip hop&quot;</div><div class="line">// prints &quot;Jazz</div></pre></td></tr></table></figure>
+<blockquote>
+<p>集合操作</p>
+</blockquote>
+<p>你可以高效地完成 Set 的一些基本操作，比如把两个 集合组合到一起，判断两个 合共有元素，或者判断两个  集合是否全包含，部分包含或者不相交。</p>
+<p><strong>基本集合操作</strong><br>• 使用 intersection(<em>:) 方法根据两个 合中都包含的值创建的一个新的 集合。<br>• 使用 symmetricDifference(</em>:) 方法根据在一个 集合中但不在两个 合中的值创建一个新的 集合。 • 使用 union(<em>:) 方法根据两个集合的值创建一个新的集 合。<br>• 使用 subtracting(</em>:) 方法根据不在该 合中的值创建一个新的 集合。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let oddDigits: Set = [1, 3, 5, 7, 9]</div><div class="line">let evenDigits: Set = [0, 2, 4, 6, 8]</div><div class="line">let singleDigitPrimeNumbers: Set = [2, 3, 5, 7]</div><div class="line">oddDigits.union(evenDigits).sort()</div><div class="line">// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</div><div class="line">oddDigits. intersection(evenDigits).sorted()</div><div class="line">// []</div><div class="line">oddDigits.subtracting(singleDigitPrimeNumbers).sorted()</div><div class="line">// [1, 9]  以 singleDigitPrimeNumbers集合为标准，取出oddDigits集合中不在singleDigitPrimeNumbers的值</div><div class="line">oddDigits. symmetricDifference(singleDigitPrimeNumbers).sorted()</div><div class="line">// [1, 2, 9] 取出两个集合的并集去掉交集的集合</div></pre></td></tr></table></figure>
+<p><strong>集合成员关系和相等</strong></p>
+<p>• 使用“是否相等”运算符( == )来判断两个 集合是否包含全部相同的值。<br>• 使用 isSubset(of:) 方法来判断一个集 合中的值是否也被包含在另外一个 合中。<br>• 使用 isSuperset(of:) 方法来判断一个 集合中包含另一个集合中所有的值。<br>• 使用 isStrictSubset(of:) 或者 isStrictSuperset(of:) 方法来判断一个 合是否是另外一个集 合的子集 合或 者父集 合并且两个集 合并不相等。<br>• 使用 isDisjoint(with:) 方法来判断两个集 合是否不含有相同的值(是否没有交集)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">let houseAnimals: Set = [&quot;?&quot;, &quot;?&quot;]</div><div class="line">let farmAnimals: Set = [&quot;?&quot;, &quot;?&quot;, &quot;?&quot;, &quot;?&quot;, &quot;?&quot;]</div><div class="line">let cityAnimals: Set = [&quot;?&quot;, &quot;?&quot;]</div><div class="line">houseAnimals.isSubset(of: farmAnimals)</div><div class="line">// true</div><div class="line">farmAnimals.isSuperset(of: houseAnimals)</div><div class="line">// true</div><div class="line">farmAnimals.isDisjoint(with: cityAnimals)</div><div class="line">// true</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/28/Swift之数据类型/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/28/ios--做一个完整的渐变进度条/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="时间和空间最大的区别在于，时间不能被复用 – 弗斯特梅里克  在上面两章中，我们探讨了可以用CAAnimation和它的子类实现的多种图层动画。动画的发生是需要持续一段时间的，所以计时对整个概念来说至关重要。在这一章中，我们来看看CAMediaTiming，看看Core Animation是如何跟踪时间的。 #####CAMediaTiming协议CAMediaTiming协议定义了在一段动画内">
+<meta property="og:type" content="article">
+<meta property="og:title" content="雪晟">
+<meta property="og:url" content="liuxinixn.github.io/2017/12/28/CoreAnimation之图层时间/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="时间和空间最大的区别在于，时间不能被复用 – 弗斯特梅里克  在上面两章中，我们探讨了可以用CAAnimation和它的子类实现的多种图层动画。动画的发生是需要持续一段时间的，所以计时对整个概念来说至关重要。在这一章中，我们来看看CAMediaTiming，看看Core Animation是如何跟踪时间的。 #####CAMediaTiming协议CAMediaTiming协议定义了在一段动画内">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-96df4a0597b27c80.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-275ccb9e9af8fc04.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-4a83c5d46df16476.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-12-28T12:43:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="雪晟">
+<meta name="twitter:description" content="时间和空间最大的区别在于，时间不能被复用 – 弗斯特梅里克  在上面两章中，我们探讨了可以用CAAnimation和它的子类实现的多种图层动画。动画的发生是需要持续一段时间的，所以计时对整个概念来说至关重要。在这一章中，我们来看看CAMediaTiming，看看Core Animation是如何跟踪时间的。 #####CAMediaTiming协议CAMediaTiming协议定义了在一段动画内">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1694376-96df4a0597b27c80.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2017/12/28/CoreAnimation之图层时间/"/>
+
+
+
+
+
+  <title> | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/CoreAnimation之图层时间/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:43:14+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>时间和空间最大的区别在于，时间不能被复用 – 弗斯特梅里克</p>
+</blockquote>
+<p>在上面两章中，我们探讨了可以用CAAnimation和它的子类实现的多种图层动画。动画的发生是需要持续一段时间的，所以计时对整个概念来说至关重要。在这一章中，我们来看看CAMediaTiming，看看Core Animation是如何跟踪时间的。</p>
+<p>#####CAMediaTiming协议<br>CAMediaTiming协议定义了在一段动画内用来控制逝去时间的属性的集合，CALayer和CAAnimation都实现了这个协议，所以时间可以被任意基于一个图层或者一段动画的类控制。</p>
+<p><strong>持续和重复</strong></p>
+<p>我们在第八章“显式动画”中简单提到过duration（CAMediaTiming的属性之一），duration是一个CFTimeInterval的类型（类似于NSTimeInterval的一种双精度浮点类型），对将要进行的动画的一次迭代指定了时间。</p>
+<p>这里的一次迭代是什么意思呢？CAMediaTiming另外还有一个属性叫做repeatCount，代表动画重复的迭代次数。如果duration是2，repeatCount设为3.5（三个半迭代），那么完整的动画时长将是7秒。</p>
+<p>duration和repeatCount默认都是0。但这不意味着动画时长为0秒，或者0次，这里的0仅仅代表了“默认”，也就是0.25秒和1次，你可以用一个简单的测试来尝试为这两个属性赋多个值，如清单9.1，图9.1展示了程序的结果。</p>
+<p>#####清单9.1 测试duration和repeatCount<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">@interface ViewController ()</div><div class="line"></div><div class="line">@property (nonatomic, weak) IBOutlet UIView *containerView;</div><div class="line">@property (nonatomic, weak) IBOutlet UITextField *durationField;</div><div class="line">@property (nonatomic, weak) IBOutlet UITextField *repeatField;</div><div class="line">@property (nonatomic, weak) IBOutlet UIButton *startButton;</div><div class="line">@property (nonatomic, strong) CALayer *shipLayer;</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (void)viewDidLoad</div><div class="line">&#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    //add the ship</div><div class="line">    self.shipLayer = [CALayer layer];</div><div class="line">    self.shipLayer.frame = CGRectMake(0, 0, 128, 128);</div><div class="line">    self.shipLayer.position = CGPointMake(150, 150);</div><div class="line">    self.shipLayer.contents = (__bridge id)[UIImage imageNamed: @&quot;Ship.png&quot;].CGImage;</div><div class="line">    [self.containerView.layer addSublayer:self.shipLayer];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)setControlsEnabled:(BOOL)enabled</div><div class="line">&#123;</div><div class="line">    for (UIControl *control in @[self.durationField, self.repeatField, self.startButton]) &#123;</div><div class="line">        control.enabled = enabled;</div><div class="line">        control.alpha = enabled? 1.0f: 0.25f;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (IBAction)hideKeyboard</div><div class="line">&#123;</div><div class="line">    ￼[self.durationField resignFirstResponder];</div><div class="line">    [self.repeatField resignFirstResponder];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (IBAction)start</div><div class="line">&#123;</div><div class="line">    CFTimeInterval duration = [self.durationField.text doubleValue];</div><div class="line">    float repeatCount = [self.repeatField.text floatValue];</div><div class="line">    //animate the ship rotation</div><div class="line">    CABasicAnimation *animation = [CABasicAnimation animation];</div><div class="line">    animation.keyPath = @&quot;transform.rotation&quot;;</div><div class="line">    animation.duration = duration;</div><div class="line">    animation.repeatCount = repeatCount;</div><div class="line">    animation.byValue = @(M_PI * 2);</div><div class="line">    animation.delegate = self;</div><div class="line">    [self.shipLayer addAnimation:animation forKey:@&quot;rotateAnimation&quot;];</div><div class="line">    //disable controls</div><div class="line">    [self setControlsEnabled:NO];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag</div><div class="line">&#123;</div><div class="line">    //reenable controls</div><div class="line">    [self setControlsEnabled:YES];</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-96df4a0597b27c80.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="9.1.png"><br>创建重复动画的另一种方式是使用repeatDuration属性，它让动画重复一个指定的时间，而不是指定次数。你甚至设置一个叫做autoreverses的属性（BOOL类型）在每次间隔交替循环过程中自动回放。这对于播放一段连续非循环的动画很有用，例如打开一扇门，然后关上它（图9.2）。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-275ccb9e9af8fc04.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="9.2.png"><br> 对门进行摆动的代码见清单9.2。我们用了autoreverses来使门在打开后自动关闭，在这里我们把repeatDuration设置为INFINITY，于是动画无限循环播放，设置repeatCount为INFINITY也有同样的效果。注意repeatCount和repeatDuration可能会相互冲突，所以你只要对其中一个指定非零值。对两个属性都设置非0值的行为没有被定义。</p>
+<p>#####清单9.2 使用autoreverses属性实现门的摇摆<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">@interface ViewController ()</div><div class="line">  </div><div class="line">  @property (nonatomic, weak) UIView *containerView;</div><div class="line">  </div><div class="line">  @end</div><div class="line">  </div><div class="line">  @implementation ViewController</div><div class="line">  </div><div class="line">  - (void)viewDidLoad</div><div class="line">  &#123;</div><div class="line">      [super viewDidLoad];</div><div class="line">      //add the door</div><div class="line">      CALayer *doorLayer = [CALayer layer];</div><div class="line">      doorLayer.frame = CGRectMake(0, 0, 128, 256);</div><div class="line">      doorLayer.position = CGPointMake(150 - 64, 150);</div><div class="line">      doorLayer.anchorPoint = CGPointMake(0, 0.5);</div><div class="line">      doorLayer.contents = (__bridge id)[UIImage imageNamed: @&quot;Door.png&quot;].CGImage;</div><div class="line">      [self.containerView.layer addSublayer:doorLayer];</div><div class="line">      //apply perspective transform</div><div class="line">      CATransform3D perspective = CATransform3DIdentity;</div><div class="line">      perspective.m34 = -1.0 / 500.0;</div><div class="line">      self.containerView.layer.sublayerTransform = perspective;</div><div class="line">      //apply swinging animation</div><div class="line">      CABasicAnimation *animation = [CABasicAnimation animation];</div><div class="line">      animation.keyPath = @&quot;transform.rotation.y&quot;;</div><div class="line">      animation.toValue = @(-M_PI_2);</div><div class="line">      animation.duration = 2.0;</div><div class="line">      animation.repeatDuration = INFINITY;</div><div class="line">      animation.autoreverses = YES;</div><div class="line">      [doorLayer addAnimation:animation forKey:nil];</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  @end</div></pre></td></tr></table></figure></p>
+<p><strong>相对时间</strong></p>
+<p> 每次讨论到Core Animation，时间都是相对的，每个动画都有它自己描述的时间，可以独立地加速，延时或者偏移。</p>
+<p>beginTime指定了动画开始之前的的延迟时间。这里的延迟从动画添加到可见图层的那一刻开始测量，默认是0（就是说动画会立刻执行）。</p>
+<p>speed是一个时间的倍数，默认1.0，减少它会减慢图层/动画的时间，增加它会加快速度。如果2.0的速度，那么对于一个duration为1的动画，实际上在0.5秒的时候就已经完成了。</p>
+<p>timeOffset和beginTime类似，但是和增加beginTime导致的延迟动画不同，增加timeOffset只是让动画快进到某一点，例如，对于一个持续1秒的动画来说，设置timeOffset为0.5意味着动画将从一半的地方开始。</p>
+<p>和beginTime不同的是，timeOffset并不受speed的影响。所以如果你把speed设为2.0，把timeOffset设置为0.5，那么你的动画将从动画最后结束的地方开始，因为1秒的动画实际上被缩短到了0.5秒。然而即使使用了timeOffset让动画从结束的地方开始，它仍然播放了一个完整的时长，这个动画仅仅是循环了一圈，然后从头开始播放。</p>
+<p>可以用清单9.3的测试程序验证一下，设置speed和timeOffset滑块到随意的值，然后点击播放来观察效果（见图9.3）</p>
+<p>#####清单9.3 测试timeOffset和speed属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">@interface ViewController ()</div><div class="line">  </div><div class="line">  @property (nonatomic, weak) IBOutlet UIView *containerView;</div><div class="line">  @property (nonatomic, weak) IBOutlet UILabel *speedLabel;</div><div class="line">  @property (nonatomic, weak) IBOutlet UILabel *timeOffsetLabel;</div><div class="line">  @property (nonatomic, weak) IBOutlet UISlider *speedSlider;</div><div class="line">  @property (nonatomic, weak) IBOutlet UISlider *timeOffsetSlider;</div><div class="line">  @property (nonatomic, strong) UIBezierPath *bezierPath;</div><div class="line">  @property (nonatomic, strong) CALayer *shipLayer;</div><div class="line">  </div><div class="line">  @end</div><div class="line">  </div><div class="line">  @implementation ViewController</div><div class="line">  </div><div class="line">  - (void)viewDidLoad</div><div class="line">  &#123;</div><div class="line">      [super viewDidLoad];</div><div class="line">      //create a path</div><div class="line">      self.bezierPath = [[UIBezierPath alloc] init];</div><div class="line">      [self.bezierPath moveToPoint:CGPointMake(0, 150)];</div><div class="line">      [self.bezierPath addCurveToPoint:CGPointMake(300, 150) controlPoint1:CGPointMake(75, 0) controlPoint2:CGPointMake(225, 300)];</div><div class="line">      //draw the path using a CAShapeLayer</div><div class="line">      CAShapeLayer *pathLayer = [CAShapeLayer layer];</div><div class="line">      pathLayer.path = self.bezierPath.CGPath;</div><div class="line">      pathLayer.fillColor = [UIColor clearColor].CGColor;</div><div class="line">      pathLayer.strokeColor = [UIColor redColor].CGColor;</div><div class="line">      pathLayer.lineWidth = 3.0f;</div><div class="line">      [self.containerView.layer addSublayer:pathLayer];</div><div class="line">      //add the ship</div><div class="line">      self.shipLayer = [CALayer layer];</div><div class="line">      self.shipLayer.frame = CGRectMake(0, 0, 64, 64);</div><div class="line">      self.shipLayer.position = CGPointMake(0, 150);</div><div class="line">      self.shipLayer.contents = (__bridge id)[UIImage imageNamed: @&quot;Ship.png&quot;].CGImage;</div><div class="line">      [self.containerView.layer addSublayer:self.shipLayer];</div><div class="line">      //set initial values</div><div class="line">      [self updateSliders];</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  - (IBAction)updateSliders</div><div class="line">  &#123;</div><div class="line">      CFTimeInterval timeOffset = self.timeOffsetSlider.value;</div><div class="line">      self.timeOffsetLabel.text = [NSString stringWithFormat:@&quot;%0.2f&quot;, timeOffset];</div><div class="line">      float speed = self.speedSlider.value;</div><div class="line">      self.speedLabel.text = [NSString stringWithFormat:@&quot;%0.2f&quot;, speed];</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  - (IBAction)play</div><div class="line">  &#123;</div><div class="line">      //create the keyframe animation</div><div class="line">      CAKeyframeAnimation *animation = [CAKeyframeAnimation animation];</div><div class="line">      animation.keyPath = @&quot;position&quot;;</div><div class="line">      animation.timeOffset = self.timeOffsetSlider.value;</div><div class="line">      animation.speed = self.speedSlider.value;</div><div class="line">      animation.duration = 1.0;</div><div class="line">      animation.path = self.bezierPath.CGPath;</div><div class="line">      animation.rotationMode = kCAAnimationRotateAuto;</div><div class="line">      animation.removedOnCompletion = NO;</div><div class="line">      [self.shipLayer addAnimation:animation forKey:@&quot;slide&quot;];</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  @end</div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-4a83c5d46df16476.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="9.3.png"></p>
+<pre><code>**fillMode**
+</code></pre><p>对于beginTime非0的一段动画来说，会出现一个当动画添加到图层上但什么也没发生的状态。类似的，removeOnCompletion被设置为NO<br>的动画将会在动画结束的时候仍然保持之前的状态。这就产生了一个问题，当动画开始之前和动画结束之后，被设置动画的属性将会是什么值呢？</p>
+<p>一种可能是属性和动画没被添加之前保持一致，也就是在模型图层定义的值（见第七章“隐式动画”，模型图层和呈现图层的解释）。<br>另一种可能是保持动画开始之前那一帧，或者动画结束之后的那一帧。这就是所谓的填充，因为动画开始和结束的值用来填充开始之前和结束之后的时间。<br>这种行为就交给开发者了，它可以被CAMediaTiming的fillMode<br>来控制。fillMode是一个NSString类型，可以接受如下四种常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">kCAFillModeForwards </div><div class="line">kCAFillModeBackwards </div><div class="line">kCAFillModeBoth </div><div class="line">kCAFillModeRemoved</div></pre></td></tr></table></figure></p>
+<p> 默认是kCAFillModeRemoved，当动画不再播放的时候就显示图层模型指定的值剩下的三种类型向前，向后或者即向前又向后去填充动画状态，使得动画在开始前或者结束后仍然保持开始和结束那一刻的值。</p>
+<p>这就对避免在动画结束的时候急速返回提供另一种方案（见第八章）。但是记住了，当用它来解决这个问题的时候，需要把removeOnCompletion设置为NO，另外需要给动画添加一个非空的键，于是可以在不需要动画的时候把它从图层上移除。</p>
+<p><strong>层级关系时间</strong></p>
+<p> 在第三章“图层几何学”中，你已经了解到每个图层是如何相对在图层树中的父图层定义它的坐标系的。动画时间和它类似，每个动画和图层在时间上都有它自己的层级概念，相对于它的父亲来测量。对图层调整时间将会影响到它本身和子图层的动画，但不会影响到父图层。另一个相似点是所有的动画都被按照层级组合（使用CAAnimationGroup实例）。</p>
+<p>对CALayer或者CAGroupAnimation调整duration和repeatCount/repeatDuration属性并不会影响到子动画。但是beginTime，timeOffset和speed属性将会影响到子动画。然而在层级关系中，beginTime指定了父图层开始动画（或者组合关系中的父动画）和对象将要开始自己动画之间的偏移。类似的，调整CALayer和CAGroupAnimation的speed属性将会对动画以及子动画速度应用一个缩放的因子。</p>
+<p><strong>全局时间和本地时间</strong></p>
+<p>CoreAnimation有一个全局时间的概念，也就是所谓的马赫时间（“马赫”实际上是<a href="http://lib.csdn.net/base/1" target="_blank" rel="noopener">iOS</a>和Mac OS系统内核的命名）。马赫时间在设备上所有进程都是全局的–但是在不同设备上并不是全局的–不过这已经足够对动画的参考点提供便利了，你可以使用CACurrentMediaTime函数来访问马赫时间：<br><code>CFTimeInterval time = CACurrentMediaTime();</code><br>这个函数返回的值其实无关紧要（它返回了设备自从上次启动后的秒数，并不是你所关心的），它真实的作用在于对动画的时间测量提供了一个相对值。注意当设备休眠的时候马赫时间会暂停，也就是所有的CAAnimations（基于马赫时间）同样也会暂停。</p>
+<p>因此马赫时间对长时间测量并不有用。比如用CACurrentMediaTime<br>去更新一个实时闹钟并不明智。（可以用[NSDate date]代替，就像第三章例子所示）。</p>
+<p>每个CALayer和CAAnimation实例都有自己本地时间的概念，是根据父图层/动画层级关系中的beginTime，timeOffset和speed属性计算。就和转换不同图层之间坐标关系一样，CALayer同样也提供了方法来转换不同图层之间的本地时间。如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"> (CFTimeInterval)convertTime:(CFTimeInterval)t fromLayer:(CALayer *)l; </div><div class="line">- (CFTimeInterval)convertTime:(CFTimeInterval)t toLayer:(CALayer *)l;</div></pre></td></tr></table></figure></p>
+<p>当用来同步不同图层之间有不同的speed，timeOffset和beginTime的动画，这些方法会很有用。</p>
+<p><strong>暂停，倒回和快进</strong></p>
+<p>设置动画的speed属性为0可以暂停动画，但在动画被添加到图层之后不太可能再修改它了，所以不能对正在进行的动画使用这个属性。给图层添加一个CAAnimation实际上是给动画对象做了一个不可改变的拷贝，所以对原始动画对象属性的改变对真实的动画并没有作用。相反，直接用-animationForKey:来检索图层正在进行的动画可以返回正确的动画对象，但是修改它的属性将会抛出异常。</p>
+<p>如果移除图层正在进行的动画，图层将会急速返回动画之前的状态。但如果在动画移除之前拷贝呈现图层到模型图层，动画将会看起来暂停在那里。但是不好的地方在于之后就不能再恢复动画了。</p>
+<p>一个简单的方法是可以利用CAMediaTiming来暂停图层本身。如果把图层的speed设置成0，它会暂停任何添加到图层上的动画。类似的，设置speed大于1.0将会快进，设置成一个负值将会倒回动画。</p>
+<p>通过增加主窗口图层的speed，可以暂停整个应用程序的动画。这对UI自动化提供了好处，我们可以加速所有的视图动画来进行自动化测试（注意对于在主窗口之外的视图并不会被影响，比如UIAlertview<br>）。可以在app delegate设置如下进行验证：</p>
+<p><code>self.window.layer.speed = 100;</code></p>
+<p>你也可以通过这种方式来减速，但其实也可以在模拟器通过切换慢速动画来实现</p>
+<p><strong>手动动画</strong><br> timeOffset一个很有用的功能在于你可以它可以让你手动控制动画进程，通过设置speed为0，可以禁用动画的自动播放，然后来使用timeOffset来来回显示动画序列。这可以使得运用手势来手动控制动画变得很简单。</p>
+<p>举个简单的例子：还是之前关门的动画，修改代码来用手势控制动画。我们给视图添加一个UIPanGestureRecognizer，然后用timeOffset左右摇晃。</p>
+<p>因为在动画添加到图层之后不能再做修改了，我们来通过调整layer的timeOffset达到同样的效果（清单9.4）。</p>
+<p>#####清单9.4 通过触摸手势手动控制动画<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">@interface ViewController ()</div><div class="line">   </div><div class="line">   @property (nonatomic, weak) UIView *containerView;</div><div class="line">   @property (nonatomic, strong) CALayer *doorLayer;</div><div class="line">   </div><div class="line">   @end</div><div class="line">   </div><div class="line">   @implementation ViewController</div><div class="line">   </div><div class="line">   - (void)viewDidLoad</div><div class="line">   &#123;</div><div class="line">       [super viewDidLoad];</div><div class="line">       //add the door</div><div class="line">       self.doorLayer = [CALayer layer];</div><div class="line">       self.doorLayer.frame = CGRectMake(0, 0, 128, 256);</div><div class="line">       self.doorLayer.position = CGPointMake(150 - 64, 150);</div><div class="line">       self.doorLayer.anchorPoint = CGPointMake(0, 0.5);</div><div class="line">       self.doorLayer.contents = (__bridge id)[UIImage imageNamed:@&quot;Door.png&quot;].CGImage;</div><div class="line">       [self.containerView.layer addSublayer:self.doorLayer];</div><div class="line">       //apply perspective transform</div><div class="line">       CATransform3D perspective = CATransform3DIdentity;</div><div class="line">       perspective.m34 = -1.0 / 500.0;</div><div class="line">       self.containerView.layer.sublayerTransform = perspective;</div><div class="line">       //add pan gesture recognizer to handle swipes</div><div class="line">       UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] init];</div><div class="line">       [pan addTarget:self action:@selector(pan:)];</div><div class="line">       [self.view addGestureRecognizer:pan];</div><div class="line">       //pause all layer animations</div><div class="line">       self.doorLayer.speed = 0.0;</div><div class="line">       //apply swinging animation (which won&apos;t play because layer is paused)</div><div class="line">       CABasicAnimation *animation = [CABasicAnimation animation];</div><div class="line">       animation.keyPath = @&quot;transform.rotation.y&quot;;</div><div class="line">       animation.toValue = @(-M_PI_2);</div><div class="line">       animation.duration = 1.0;</div><div class="line">       [self.doorLayer addAnimation:animation forKey:nil];</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   - (void)pan:(UIPanGestureRecognizer *)pan</div><div class="line">   &#123;</div><div class="line">       //get horizontal component of pan gesture</div><div class="line">       CGFloat x = [pan translationInView:self.view].x;</div><div class="line">       //convert from points to animation duration //using a reasonable scale factor</div><div class="line">       x /= 200.0f;</div><div class="line">       //update timeOffset and clamp result</div><div class="line">       CFTimeInterval timeOffset = self.doorLayer.timeOffset;</div><div class="line">       timeOffset = MIN(0.999, MAX(0.0, timeOffset - x));</div><div class="line">       self.doorLayer.timeOffset = timeOffset;</div><div class="line">       //reset pan gesture</div><div class="line">       [pan setTranslation:CGPointZero inView:self.view];</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   @end</div></pre></td></tr></table></figure></p>
+<p> 这其实是个小诡计，也许相对于设置个动画然后每次显示一帧而言，用移动手势来直接设置门的transform会更简单。</p>
+<p>在这个例子中的确是这样，但是对于比如说关键这这样更加复杂的情况，或者有多个图层的动画组，相对于实时计算每个图层的属性而言，这就显得方便的多了。</p>
+<p>#####总结<br>在这一章，我们了解了CAMediaTiming协议，以及Core Animation用来操作时间控制动画的机制。在下一章，我们将要接触缓冲，另一个用来使动画更加真实的操作时间的技术。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/28/CoreAnimation之贝塞尔曲线（加入购物车动画）/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/28/CoreAnimation之动画继承/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
