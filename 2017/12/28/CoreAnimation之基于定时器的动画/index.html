@@ -69,18 +69,18 @@
 
 
 
-<meta name="description" content="我可以指导你，但是你必须按照我说的做。 – 骇客帝国  在第10章“缓冲”中，我们研究了CAMediaTimingFunction，它是一个通过控制动画缓冲来模拟物理效果例如加速或者减速来增强现实感的东西，那么如果想更加真实地模拟物理交互或者实时根据用户输入修改动画改怎么办呢？在这一章中，我们将继续探索一种能够允许我们精确地控制一帧一帧展示的基于定时器的动画。 #####定时帧动画看起来是用来显">
+<meta name="description" content="title: CoreAnimation之基于定时器的动画date: 2016-05-10 20:19:35tags:—&amp;gt;我可以指导你，但是你必须按照我说的做。 – 骇客帝国 在第10章“缓冲”中，我们研究了CAMediaTimingFunction，它是一个通过控制动画缓冲来模拟物理效果例如加速或者减速来增强现实感的东西，那么如果想更加真实地模拟物理交互或者实时根据用户输入修改动画改怎么">
 <meta property="og:type" content="article">
 <meta property="og:title" content="雪晟">
 <meta property="og:url" content="liuxinixn.github.io/2017/12/28/CoreAnimation之基于定时器的动画/index.html">
 <meta property="og:site_name" content="雪晟">
-<meta property="og:description" content="我可以指导你，但是你必须按照我说的做。 – 骇客帝国  在第10章“缓冲”中，我们研究了CAMediaTimingFunction，它是一个通过控制动画缓冲来模拟物理效果例如加速或者减速来增强现实感的东西，那么如果想更加真实地模拟物理交互或者实时根据用户输入修改动画改怎么办呢？在这一章中，我们将继续探索一种能够允许我们精确地控制一帧一帧展示的基于定时器的动画。 #####定时帧动画看起来是用来显">
+<meta property="og:description" content="title: CoreAnimation之基于定时器的动画date: 2016-05-10 20:19:35tags:—&amp;gt;我可以指导你，但是你必须按照我说的做。 – 骇客帝国 在第10章“缓冲”中，我们研究了CAMediaTimingFunction，它是一个通过控制动画缓冲来模拟物理效果例如加速或者减速来增强现实感的东西，那么如果想更加真实地模拟物理交互或者实时根据用户输入修改动画改怎么">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-d283e91c630081dc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-12-28T12:43:14.000Z">
+<meta property="og:updated_time" content="2017-12-28T13:19:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="雪晟">
-<meta name="twitter:description" content="我可以指导你，但是你必须按照我说的做。 – 骇客帝国  在第10章“缓冲”中，我们研究了CAMediaTimingFunction，它是一个通过控制动画缓冲来模拟物理效果例如加速或者减速来增强现实感的东西，那么如果想更加真实地模拟物理交互或者实时根据用户输入修改动画改怎么办呢？在这一章中，我们将继续探索一种能够允许我们精确地控制一帧一帧展示的基于定时器的动画。 #####定时帧动画看起来是用来显">
+<meta name="twitter:description" content="title: CoreAnimation之基于定时器的动画date: 2016-05-10 20:19:35tags:—&amp;gt;我可以指导你，但是你必须按照我说的做。 – 骇客帝国 在第10章“缓冲”中，我们研究了CAMediaTimingFunction，它是一个通过控制动画缓冲来模拟物理效果例如加速或者减速来增强现实感的东西，那么如果想更加真实地模拟物理交互或者实时根据用户输入修改动画改怎么">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1694376-d283e91c630081dc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -331,9 +331,8 @@
       
 
       
-        <blockquote>
-<p>我可以指导你，但是你必须按照我说的做。 – 骇客帝国</p>
-</blockquote>
+        <hr>
+<p>title: CoreAnimation之基于定时器的动画<br>date: 2016-05-10 20:19:35<br>tags:<br>—&gt;我可以指导你，但是你必须按照我说的做。 – 骇客帝国</p>
 <p>在第10章“缓冲”中，我们研究了CAMediaTimingFunction，它是一个通过控制动画缓冲来模拟物理效果例如加速或者减速来增强现实感的东西，那么如果想更加真实地模拟物理交互或者实时根据用户输入修改动画改怎么办呢？在这一章中，我们将继续探索一种能够允许我们精确地控制一帧一帧展示的基于定时器的动画。</p>
 <p>#####定时帧<br>动画看起来是用来显示一段连续的运动过程，但实际上当在固定位置上展示像素的时候并不能做到这一点。一般来说这种显示都无法做到连续的移动，能做的仅仅是足够快地展示一系列静态图片，只是看起来像是做了运动。</p>
 <p>我们之前提到过<a href="http://lib.csdn.net/base/1" target="_blank" rel="noopener">iOS</a>按照每秒60次刷新屏幕，然后CAAnimation计算出需要展示的新的帧，然后在每次屏幕更新的时候同步绘制上去，CAAnimation最机智的地方在于每次刷新需要展示的时候去计算插值和缓冲。</p>
@@ -436,7 +435,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/28/CoreAnimation之显示动画/" rel="next" title="">
+              <a href="/2017/12/28/CoreAnimation之贝塞尔曲线（加入购物车动画）/" rel="next" title="">
                 <i class="fa fa-chevron-left"></i> 
               </a>
             
@@ -446,7 +445,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/28/CoreAnimation之贝塞尔曲线（加入购物车动画）/" rel="prev" title="">
+              <a href="/2017/12/28/CoreAnimation之变换/" rel="prev" title="">
                  <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -519,7 +518,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-count">96</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

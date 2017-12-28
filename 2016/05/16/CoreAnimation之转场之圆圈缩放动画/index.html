@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="先看动画效果： 间客的APP上之前是有这个动画的，拜读了大神的文章：iOS自定义转场详解03——实现通过圆圈放大缩小的转场动画,博客里面很详细。  因为要自定义转场，所以我们需要一个新的对象集成NSObject，并且遵守转场动画的协议,UIViewControllerAnimatedTransitioning  介绍个知识点： 1、CGRectInsetCGRect    CGRectInset">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CoreAnimation转场之圆圈缩放动画">
+<meta property="og:url" content="liuxinixn.github.io/2016/05/16/CoreAnimation之转场之圆圈缩放动画/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="先看动画效果： 间客的APP上之前是有这个动画的，拜读了大神的文章：iOS自定义转场详解03——实现通过圆圈放大缩小的转场动画,博客里面很详细。  因为要自定义转场，所以我们需要一个新的对象集成NSObject，并且遵守转场动画的协议,UIViewControllerAnimatedTransitioning  介绍个知识点： 1、CGRectInsetCGRect    CGRectInset">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-c980b1f7307547e7.gif?imageMogr2/auto-orient/strip">
+<meta property="og:updated_time" content="2017-12-28T13:22:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CoreAnimation转场之圆圈缩放动画">
+<meta name="twitter:description" content="先看动画效果： 间客的APP上之前是有这个动画的，拜读了大神的文章：iOS自定义转场详解03——实现通过圆圈放大缩小的转场动画,博客里面很详细。  因为要自定义转场，所以我们需要一个新的对象集成NSObject，并且遵守转场动画的协议,UIViewControllerAnimatedTransitioning  介绍个知识点： 1、CGRectInsetCGRect    CGRectInset">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1694376-c980b1f7307547e7.gif?imageMogr2/auto-orient/strip">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2016/05/16/CoreAnimation之转场之圆圈缩放动画/"/>
+
+
+
+
+
+  <title>CoreAnimation转场之圆圈缩放动画 | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/16/CoreAnimation之转场之圆圈缩放动画/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CoreAnimation转场之圆圈缩放动画</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-16T20:19:35+08:00">
+                2016-05-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>先看动画效果：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-c980b1f7307547e7.gif?imageMogr2/auto-orient/strip" alt="圆圈转场动画.gif"></p>
+<p>间客的APP上之前是有这个动画的，拜读了大神的文章：<a href="http://www.kittenyang.com/pingtransition/" target="_blank" rel="noopener">iOS自定义转场详解03——实现通过圆圈放大缩小的转场动画</a>,博客里面很详细。</p>
+<blockquote>
+<p>因为要自定义转场，所以我们需要一个新的对象集成NSObject，并且遵守转场动画的协议,<code>UIViewControllerAnimatedTransitioning</code></p>
+</blockquote>
+<p>介绍个知识点：</p>
+<p>1、CGRectInsetCGRect<br>    CGRectInset (<br>        CGRect rect,<br>        CGFloat dx,<br>        CGFloat dy);<br>该结构体的应用是以原rect为中心，再参考dx，dy，进行缩放或者放大。
+　　</p>
+<p>2、CGRectOffsetCGRect<br>   CGRectOffset(<br>      CGRect rect,<br>      CGFloat dx,<br>      CGFloat dy);　<br>相对于源矩形原点rect（左上角的点）沿x轴和y轴偏移, 再rect基础上沿x轴和y轴偏移</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// This is used for percent driven interactive transitions, as well as for</div><div class="line">// container controllers that have companion animations that might need to</div><div class="line">// synchronize with the main animation.</div><div class="line">设置转场动画的时间。</div><div class="line">- (NSTimeInterval)transitionDuration:(nullable id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;</div><div class="line"></div><div class="line">// This method can only  be a nop if the transition is interactive and not a percentDriven interactive transition.</div><div class="line">转场的上下文</div><div class="line">- (void)animateTransition:(id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;</div></pre></td></tr></table></figure>
+<p>关于这个参数transitionContext， 该参数是一个实现了 UIViewControllerContextTransitioning可以让我们访问一些实现过渡所必须的对象。<br>    UIViewControllerContextTransitioning 协议中有一些方法：</p>
+<ul>
+<li>(UIView *)containerView;<br>  //转场动画发生的容器</li>
+<li>(UIViewController <em>)viewControllerForKey:(NSString </em>)key;<br>  // 我们可以通过它拿到过渡的两个 ViewController。</li>
+</ul>
+<p>大致思路是这样从，我们画两个内塞尔曲线的圆，第一个小圆的frame和右上角圆形按钮的大小一样，第二个大圆则是覆盖了整个屏幕。然后，去设置view.layer.mask属性，让这个mask从小圆动画到大圆。</p>
+<p>以push 动画为例：pop动画不过是起终点的mask路径相反罢了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">- (void)animateTransition:(id &lt;UIViewControllerContextTransitioning&gt;)transitionContext&#123;</div><div class="line"></div><div class="line">   </div><div class="line">    ViewController * fromVC = (ViewController *)[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];</div><div class="line">    DetailViewController *toVC = (DetailViewController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];</div><div class="line">    UIView *contView = [transitionContext containerView];</div><div class="line"></div><div class="line">    UIButton *button = fromVC.button;</div><div class="line">    </div><div class="line">    </div><div class="line">    UIBezierPath *maskStartBP =  [UIBezierPath bezierPathWithOvalInRect:button.frame];    </div><div class="line">    [contView addSubview:fromVC.view];</div><div class="line">    [contView addSubview:toVC.view];</div><div class="line"></div><div class="line">    </div><div class="line">    </div><div class="line">    //创建两个圆形的 UIBezierPath 实例；一个是 button 的 size ，另外一个则拥有足够覆盖屏幕的半径。最终的动画则是在这两个贝塞尔路径之间进行的</div><div class="line">    </div><div class="line">    CGPoint finalPoint;</div><div class="line">    //判断触发点在那个象限</div><div class="line">    if(button.frame.origin.x &gt; (toVC.view.bounds.size.width / 2))&#123;</div><div class="line">        if (button.frame.origin.y &lt; (toVC.view.bounds.size.height / 2)) &#123;</div><div class="line">            //第一象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - 0, button.center.y - CGRectGetMaxY(toVC.view.bounds)+30);</div><div class="line">        &#125;else&#123;</div><div class="line">            //第四象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - 0, button.center.y - 0);</div><div class="line">        &#125;</div><div class="line">    &#125;else&#123;</div><div class="line">        if (button.frame.origin.y &lt; (toVC.view.bounds.size.height / 2)) &#123;</div><div class="line">            //第二象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - CGRectGetMaxX(toVC.view.bounds), button.center.y - CGRectGetMaxY(toVC.view.bounds)+30);</div><div class="line">        &#125;else&#123;</div><div class="line">            //第三象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - CGRectGetMaxX(toVC.view.bounds), button.center.y - 0);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">    CGFloat radius = sqrt((finalPoint.x * finalPoint.x) + (finalPoint.y * finalPoint.y));</div><div class="line">    UIBezierPath *maskFinalBP = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(button.frame, -radius, -radius)];</div><div class="line">    </div><div class="line">    </div><div class="line">    //创建一个 CAShapeLayer 来负责展示圆形遮盖</div><div class="line">    CAShapeLayer *maskLayer = [CAShapeLayer layer];</div><div class="line">    maskLayer.path = maskFinalBP.CGPath; //将它的 path 指定为最终的 path 来避免在动画完成后会回弹</div><div class="line">    toVC.view.layer.mask = maskLayer;</div><div class="line">    maskLayer.backgroundColor =[UIColor redColor].CGColor;</div><div class="line">    </div><div class="line">    CABasicAnimation *maskLayerAnimation = [CABasicAnimation animationWithKeyPath:@&quot;path&quot;];</div><div class="line">    maskLayerAnimation.fromValue = (__bridge id)(maskStartBP.CGPath);</div><div class="line">    maskLayerAnimation.toValue = (__bridge id)((maskFinalBP.CGPath));</div><div class="line">    maskLayerAnimation.duration = [self transitionDuration:transitionContext];</div><div class="line">    maskLayerAnimation.timingFunction = [CAMediaTimingFunction  functionWithName:kCAMediaTimingFunctionEaseInEaseOut];</div><div class="line">    maskLayerAnimation.delegate = self;</div><div class="line">    </div><div class="line">    [maskLayer addAnimation:maskLayerAnimation forKey:@&quot;path&quot;];</div></pre></td></tr></table></figure></p>
+<p> 结束动画后设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#pragma mark - CABasicAnimation的Delegate</div><div class="line">- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag&#123;</div><div class="line"></div><div class="line">    //告诉 iOS 这个 transition 完成</div><div class="line">    [self.transitionContext completeTransition:![self. transitionContext transitionWasCancelled]];</div><div class="line">    //清除 fromVC 的 mask</div><div class="line">    [self.transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey].view.layer.mask = nil;</div><div class="line">    [self.transitionContext viewControllerForKey:UITransitionContextToViewControllerKey].view.layer.mask = nil;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>自定义完push 动画后我们需要进行设置，因为所有的子控制器由UINavgationController进行管理，所有我们需要在ViewCotroller中实现代理;</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@interface ViewController ()&lt;UINavigationControllerDelegate&gt;</div></pre></td></tr></table></figure>
+<p>最好在<code>viewWillAppear</code>中设置代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-(void)viewWillAppear:(BOOL)animated&#123;</div><div class="line">    self.navigationController.delegate = self;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>实现代理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#pragma mark - UINavigationControllerDelegate</div><div class="line">- (id &lt;UIViewControllerAnimatedTransitioning&gt;)navigationController:(UINavigationController *)navigationController</div><div class="line">                                   animationControllerForOperation:(UINavigationControllerOperation)operation</div><div class="line">                                                fromViewController:(UIViewController *)fromVC</div><div class="line">                                                  toViewController:(UIViewController *)toVC&#123;</div><div class="line">    if (operation == UINavigationControllerOperationPush) &#123;</div><div class="line">        </div><div class="line">        PingTransition *ping = [PingTransition new];</div><div class="line">        return ping;</div><div class="line">    &#125;else&#123;</div><div class="line">        return nil;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>本文demo地址：<a href="https://github.com/liuxinixn/CircleZoomView/tree/master" target="_blank" rel="noopener">圆圈转场动画</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/15/CoreAnimation之隐式动画/" rel="next" title="CoreAnimation之隐式动画">
+                <i class="fa fa-chevron-left"></i> CoreAnimation之隐式动画
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/17/CoreAnimation之CAEmitterLayer(粒子破碎动画)/" rel="prev" title="CoreAnimation之CAEmitterLayer(粒子破碎动画)">
+                CoreAnimation之CAEmitterLayer(粒子破碎动画) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="初步学习了CoreAnimation框架，总结了几个动画效果，主要是通过CAShapeLayer与贝塞尔曲线实现。推荐一个大神的博客：Kitten 的时间胶囊,爱好动画的可以看看。感觉数学好渣渣，是时候恶补一下了先看下效果   #####扇形下载进度  要实现扇形的下载进度，有两种方法， 这里先使用第一种：1.使用设置UIBezierPath的角度2.使用 CAShapeLayer的stokeEn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CAShapeLayer与UIBezierPath实现注水动画与正余弦水波纹动画，雷达扩散，添加购物车动画">
+<meta property="og:url" content="liuxinixn.github.io/2016/05/01/CAShapeLayer与UIBezierPath实现注水动画与正余弦水波纹动画,雷达扩散效果，添加购物车动画/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="初步学习了CoreAnimation框架，总结了几个动画效果，主要是通过CAShapeLayer与贝塞尔曲线实现。推荐一个大神的博客：Kitten 的时间胶囊,爱好动画的可以看看。感觉数学好渣渣，是时候恶补一下了先看下效果   #####扇形下载进度  要实现扇形的下载进度，有两种方法， 这里先使用第一种：1.使用设置UIBezierPath的角度2.使用 CAShapeLayer的stokeEn">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-729daa88f1ae1a23.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-4dfc88e76fa8a370.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-2394fa45a2af03ef.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-37a8d72c7ff0562c.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-12-28T13:13:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CAShapeLayer与UIBezierPath实现注水动画与正余弦水波纹动画，雷达扩散，添加购物车动画">
+<meta name="twitter:description" content="初步学习了CoreAnimation框架，总结了几个动画效果，主要是通过CAShapeLayer与贝塞尔曲线实现。推荐一个大神的博客：Kitten 的时间胶囊,爱好动画的可以看看。感觉数学好渣渣，是时候恶补一下了先看下效果   #####扇形下载进度  要实现扇形的下载进度，有两种方法， 这里先使用第一种：1.使用设置UIBezierPath的角度2.使用 CAShapeLayer的stokeEn">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1694376-729daa88f1ae1a23.gif?imageMogr2/auto-orient/strip">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2016/05/01/CAShapeLayer与UIBezierPath实现注水动画与正余弦水波纹动画,雷达扩散效果，添加购物车动画/"/>
+
+
+
+
+
+  <title>CAShapeLayer与UIBezierPath实现注水动画与正余弦水波纹动画，雷达扩散，添加购物车动画 | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/01/CAShapeLayer与UIBezierPath实现注水动画与正余弦水波纹动画,雷达扩散效果，添加购物车动画/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CAShapeLayer与UIBezierPath实现注水动画与正余弦水波纹动画，雷达扩散，添加购物车动画</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-01T20:19:35+08:00">
+                2016-05-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>初步学习了CoreAnimation框架，总结了几个动画效果，主要是通过CAShapeLayer与贝塞尔曲线实现。<br>推荐一个大神的博客：<a href="http://kittenyang.com/" target="_blank" rel="noopener">Kitten 的时间胶囊</a>,爱好动画的可以看看。感觉数学好渣渣，是时候恶补一下了<br>先看下效果</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-729daa88f1ae1a23.gif?imageMogr2/auto-orient/strip" alt="gif.gif"></p>
+<blockquote>
+<p>#####<strong>扇形下载进度</strong></p>
+</blockquote>
+<p>要实现扇形的下载进度，有两种方法， 这里先使用第一种：<br>1.使用设置UIBezierPath的角度<br>2.使用 CAShapeLayer的stokeEnd属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">//设置中心点</div><div class="line">  CGPoint point = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);</div><div class="line">  </div><div class="line">  //起点位置</div><div class="line">  CGFloat startAngle = - M_PI /2;</div><div class="line">  </div><div class="line">  //结束位置</div><div class="line">  CGFloat endAngle = self.progress *M_PI *2 + startAngle;</div><div class="line">  </div><div class="line">  </div><div class="line">  UIBezierPath *path =[UIBezierPath bezierPathWithArcCenter:point radius:self.bounds.size.width/2 startAngle:startAngle endAngle:endAngle clockwise:1];</div><div class="line">  </div><div class="line">   //画一根到 圆心的线</div><div class="line">  [path addLineToPoint:point];</div><div class="line">  </div><div class="line">  </div><div class="line">  //通过layer绘制</div><div class="line">  CAShapeLayer *layer =[CAShapeLayer layer];</div><div class="line">  </div><div class="line">  </div><div class="line">  layer.path = path.CGPath;</div><div class="line">  </div><div class="line">  layer.fillColor =[UIColor colorWithRed:0.47 green:0.83 blue:0.98 alpha:1].CGColor;</div><div class="line">  </div><div class="line">  [self.layer addSublayer:layer];</div></pre></td></tr></table></figure></p>
+<blockquote>
+<h5 id="圆形进度"><a href="#圆形进度" class="headerlink" title="圆形进度"></a><strong>圆形进度</strong></h5></blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">首先 我们需要一个背景层 一个前景层，一个路径供给两个layer使用。这里我们使用改变stokeEnd 来改变圆弧的进度，代码里增加了一点渐变</div><div class="line">   self.backLayer =[CAShapeLayer layer];</div><div class="line">    self.backLayer.fillColor  =[UIColor clearColor].CGColor;</div><div class="line">    self.backLayer.frame = self.bounds;</div><div class="line">    self.backLayer.lineWidth = 4;</div><div class="line">    self.backLayer.strokeColor =[UIColor lightGrayColor].CGColor;</div><div class="line">    [self.layer addSublayer:self.backLayer];</div><div class="line">    </div><div class="line">    self.foreLayer =[CAShapeLayer layer];</div><div class="line">    self.foreLayer.fillColor  =[UIColor clearColor].CGColor;</div><div class="line">    self.foreLayer.frame = self.bounds;</div><div class="line">    self.foreLayer.strokeColor =[UIColor redColor].CGColor;</div><div class="line">    self.foreLayer.lineWidth = 4;</div><div class="line">    [self.layer addSublayer:self.foreLayer];</div><div class="line">    </div><div class="line">    </div><div class="line">    UIBezierPath *path=  [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2) radius:self.bounds.size.width/2-2 startAngle:-M_PI_2 endAngle:M_PI *1.5 clockwise:YES];</div><div class="line">    self.backPath = path;</div><div class="line">    </div><div class="line">    self.backLayer.path = self.backPath.CGPath;</div><div class="line">    self.foreLayer.path = self.backPath.CGPath;</div><div class="line">    self.foreLayer.strokeEnd = 0;</div><div class="line">    </div><div class="line">    </div><div class="line">    self.gradientLayerLeft =[CAGradientLayer layer];</div><div class="line">    self.gradientLayerLeft.frame = self.bounds;</div><div class="line">    </div><div class="line">    self.gradientLayerLeft.colors =@[(__bridge id)[UIColor redColor].CGColor,(__bridge id)[UIColor yellowColor].CGColor,(__bridge id)[UIColor blueColor].CGColor];</div><div class="line">    self.gradientLayerLeft.locations = @[@0,@0.5,@1];</div><div class="line">    self.gradientLayerLeft.startPoint = CGPointMake(0, 0);</div><div class="line">    self.gradientLayerLeft.endPoint = CGPointMake(0, 1);</div><div class="line">    [self.layer addSublayer:self.gradientLayerLeft];</div><div class="line">  </div><div class="line">    </div><div class="line">    //设置mask</div><div class="line">    [self.gradientLayerLeft setMask:self.foreLayer];</div><div class="line">-(void)setProgressValue:(CGFloat)progressValue</div><div class="line">&#123;</div><div class="line">    _progressValue = progressValue;</div><div class="line">    self.foreLayer.strokeEnd = progressValue;</div><div class="line">    self.label.text = [NSString stringWithFormat:@&quot;%.f%%&quot;,progressValue *100];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p> #####<strong>一个加载动画</strong></p>
+</blockquote>
+<p>引自：<a href="http://www.jianshu.com/p/447b0de110a7" target="_blank" rel="noopener">旋转加载动画</a><br>可以重点学习下做动画的思路，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">//核心代码 在动画开始的时候做一些平移旋转</div><div class="line">- (void)animationDidStart:(CAAnimation *)anim&#123;</div><div class="line">    [UIView animateWithDuration:0.3 delay:0.1 options:UIViewAnimationOptionCurveEaseOut|UIViewAnimationOptionBeginFromCurrentState animations:^&#123;</div><div class="line">        </div><div class="line">        self.ball_1.transform = CGAffineTransformMakeTranslation(-BALL_RADIUS, 0);</div><div class="line">        self.ball_1.transform = CGAffineTransformScale(self.ball_1.transform, 0.7, 0.7);</div><div class="line">        </div><div class="line">        self.ball_3.transform = CGAffineTransformMakeTranslation(BALL_RADIUS, 0);</div><div class="line">        self.ball_3.transform = CGAffineTransformScale(self.ball_3.transform, 0.7, 0.7);</div><div class="line">        </div><div class="line">        </div><div class="line">        self.ball_2.transform = CGAffineTransformScale(self.ball_2.transform, 0.7, 0.7);</div><div class="line">    &#125; completion:^(BOOL finished) &#123;</div><div class="line">        [UIView animateWithDuration:0.3 delay:0.1 options:UIViewAnimationOptionCurveEaseIn  | UIViewAnimationOptionBeginFromCurrentState animations:^&#123;</div><div class="line">            self.ball_1.transform = CGAffineTransformIdentity;</div><div class="line">            self.ball_3.transform = CGAffineTransformIdentity;</div><div class="line">            self.ball_2.transform = CGAffineTransformIdentity;</div><div class="line">        &#125; completion:NULL];</div><div class="line">        </div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>#####<strong>使用正余弦做的注水动画</strong></p>
+</blockquote>
+<p>在使用正余弦做注水动画时，先了解下正余弦<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> 正弦曲线公式可表示为y=Asin(ωx+φ)+k：</div><div class="line"> A，振幅，最高和最低的距离</div><div class="line"> W，角速度，用于控制周期大小，单位x中的起伏个数</div><div class="line"> K，偏距，曲线整体上下偏移量</div><div class="line"> φ，初相，左右移动的值</div><div class="line"> </div><div class="line"> 这个效果主要的思路是添加两条曲线 一条正玄曲线、一条余弦曲线 然后在曲线下添加深浅不同的背景颜色，从而达到波浪显示的效果</div><div class="line"> */</div></pre></td></tr></table></figure></p>
+<p>我们要做的 就是使用两条正余弦，但是这两条正余弦， 波峰需要对应波谷，有两种方法：</p>
+<ol>
+<li>使用for循环分别拼接正余弦的路径</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">-(void)updateWave</div><div class="line">&#123;</div><div class="line">    //波浪宽度</div><div class="line">    CGFloat waterWaveWidth = self.bounds.size.width;</div><div class="line">    //初始化运动路径</div><div class="line">    CGMutablePathRef path = CGPathCreateMutable();</div><div class="line">    </div><div class="line">    CGMutablePathRef maskPath = CGPathCreateMutable();</div><div class="line">    //设置起始位置</div><div class="line">    CGPathMoveToPoint(path, nil, 0, _waveY);</div><div class="line">    </div><div class="line">    //设置起始位置</div><div class="line">    CGPathMoveToPoint(maskPath, nil, 0, _waveY);</div><div class="line">    //初始化波浪其实Y为偏距</div><div class="line">    CGFloat y = _waveY;</div><div class="line">  </div><div class="line">    //正弦曲线公式为： y=Asin(ωx+φ)+k;</div><div class="line">    for (float x = 0.0f; x &lt;= waterWaveWidth ; x++) &#123;</div><div class="line">        y = _waveAmplitude * sin(_wavePalstance * x + _waveX) + _waveY;</div><div class="line">       </div><div class="line">        CGPathAddLineToPoint(path, nil, x, y);</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    for (float x = 0.0f; x &lt;= waterWaveWidth ; x++) &#123;</div><div class="line">        y = _waveAmplitude * cos(_wavePalstance * x + _waveX) + _waveY;</div><div class="line">       </div><div class="line">        CGPathAddLineToPoint(maskPath, nil, x, y);</div><div class="line">    &#125;</div><div class="line">    [self updateLayer:_waveLayer1 path:path];</div><div class="line">    [self updateLayer:_waveLayer2 path:maskPath];</div><div class="line"></div><div class="line">&#125;</div><div class="line">-(void)updateLayer:(CAShapeLayer *)layer path:(CGMutablePathRef )path</div><div class="line">&#123;</div><div class="line">    //填充底部颜色</div><div class="line">    CGFloat waterWaveWidth = self.bounds.size.width;</div><div class="line">    CGPathAddLineToPoint(path, nil, waterWaveWidth, self.bounds.size.height);</div><div class="line">    CGPathAddLineToPoint(path, nil, 0, self.bounds.size.height);</div><div class="line">    CGPathCloseSubpath(path);</div><div class="line">    layer.path = path;</div><div class="line">     CGPathRelease(path);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2.使用单个for循环只是 设置 另一条曲线的y值相反即可实现两条正余弦的效果 ，最后一个动画中会有说明<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">for (int x = 0; x&lt;WIDTH; x++) &#123;</div><div class="line">       y = waveHeight*sinf(0.01*waveCurvature*x+offSetValue*0.045);</div><div class="line">       CGPathAddLineToPoint(path, nil, x, y);</div><div class="line">       //遮罩层的路径与之相反</div><div class="line">       masky = -y;</div><div class="line">       CGPathAddLineToPoint(maskPath, nil, x, masky);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p><strong>但是</strong>我们有个需求就是改变 波浪的高度， 实现注水的百分比，就需要设置波浪的偏距<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">-(void)updateWaveY</div><div class="line">&#123;</div><div class="line">    CGFloat targetY = self.bounds.size.height - _progress * self.bounds.size.height;</div><div class="line">    if (_waveY &lt; targetY) &#123;</div><div class="line">        _waveY += 2;</div><div class="line">    &#125;</div><div class="line">    if (_waveY &gt; targetY ) &#123;</div><div class="line">        _waveY -= 2;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>#####<strong>正余弦动画2</strong> </p>
+</blockquote>
+<p>如果有个需求 ，比如一个小船 随着波浪的波动而起伏<br>那我们就需要计算 波浪的位置，然后设置小船的frame<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">//这里使用创建正余弦的第二种方法</div><div class="line">    for (int x = 0; x&lt;WIDTH; x++) &#123;</div><div class="line">        y = waveHeight*sinf(0.01*waveCurvature*x+offSetValue*0.045);</div><div class="line">        CGPathAddLineToPoint(path, nil, x, y);</div><div class="line">        //遮罩层的路径与之相反</div><div class="line">        masky = -y;</div><div class="line">        CGPathAddLineToPoint(maskPath, nil, x, masky);</div><div class="line">    &#125;</div><div class="line">计算出实浪波动时，最中间的位置，设置小船的frame</div><div class="line">  CGFloat CentY = waveHeight*sinf(0.01*waveCurvature*WIDTH/2+offSetValue*0.045);</div><div class="line">    CGRect boardViewFrame = [boardView frame];</div><div class="line">    boardViewFrame.origin.y = 100-waveHeight+CentY;</div><div class="line">    boardView.frame = boardViewFrame;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>雷达动画</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-4dfc88e76fa8a370.gif?imageMogr2/auto-orient/strip" alt="gif.gif"></p>
+<p>给UIView添加一个分类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line"></div><div class="line">@interface UIView (RadarAnimation)</div><div class="line"></div><div class="line">@property(nonatomic,strong)UIColor *radarColor; //扩散颜色</div><div class="line">@property(nonatomic,assign)UIColor *radarBorderColor; //扩散边界颜色</div><div class="line">-(void)addRadarAnimation;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>调用方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">button.radarColor = LBColor(237, 174, 130, 1);</div><div class="line">button.radarBorderColor = LBColor(237, 174, 130, 0.5);</div><div class="line"> [button addRadarAnimation];</div></pre></td></tr></table></figure></p>
+<p>动画:添加动画的方法,创建三个layer，只不过，开始动画的时间要错开形成这个效果：：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">-(void)Animation&#123;</div><div class="line">    NSInteger pulsingCount = 3;</div><div class="line">    double animationDuration = 2;</div><div class="line"></div><div class="line">    CALayer * animationLayer = [[CALayer alloc]init];</div><div class="line"></div><div class="line">    for (int i = 0; i &lt; pulsingCount; i++) &#123;</div><div class="line">        CALayer * pulsingLayer = [[CALayer alloc]init];</div><div class="line">        pulsingLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);</div><div class="line">        pulsingLayer.backgroundColor = self.radarColor.CGColor;</div><div class="line">        pulsingLayer.borderColor = self.radarBorderColor.CGColor;</div><div class="line"></div><div class="line"></div><div class="line">        pulsingLayer.borderWidth = 1.0;</div><div class="line">        pulsingLayer.cornerRadius = self.frame.size.height/2;</div><div class="line"></div><div class="line">        CAMediaTimingFunction * defaultCurve = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];</div><div class="line"></div><div class="line">        CAAnimationGroup * animationGroup = [[CAAnimationGroup alloc]init];</div><div class="line">        animationGroup.fillMode = kCAFillModeBoth;</div><div class="line">        animationGroup.beginTime = CACurrentMediaTime() + (double)i * animationDuration/(double)pulsingCount;</div><div class="line">        animationGroup.duration = animationDuration;</div><div class="line">        animationGroup.repeatCount = HUGE_VAL;</div><div class="line">        animationGroup.timingFunction = defaultCurve;</div><div class="line"></div><div class="line">        CABasicAnimation * scaleAnimation = [CABasicAnimation animationWithKeyPath:@&quot;transform.scale&quot;];</div><div class="line">        scaleAnimation.autoreverses = NO;</div><div class="line">        scaleAnimation.fromValue = [NSNumber numberWithDouble:1];</div><div class="line">        scaleAnimation.toValue = [NSNumber numberWithDouble:1.5];</div><div class="line"></div><div class="line">        CAKeyframeAnimation * opacityAnimation = [CAKeyframeAnimation animationWithKeyPath:@&quot;opacity&quot;];</div><div class="line">        opacityAnimation.values = @[[NSNumber numberWithDouble:1.0],[NSNumber numberWithDouble:0.5],[NSNumber numberWithDouble:0.3],[NSNumber numberWithDouble:0.0]];</div><div class="line">        opacityAnimation.keyTimes = @[[NSNumber numberWithDouble:0.0],[NSNumber numberWithDouble:0.25],[NSNumber numberWithDouble:0.5],[NSNumber numberWithDouble:1.0]];</div><div class="line">        animationGroup.animations = @[scaleAnimation,opacityAnimation];</div><div class="line"></div><div class="line">        [pulsingLayer addAnimation:animationGroup forKey:@&quot;pulsing&quot;];</div><div class="line">        [animationLayer addSublayer:pulsingLayer];</div><div class="line">    &#125;</div><div class="line">        animationLayer.zPosition = -1;//重新加载时，使动画至底层</div><div class="line">    [self.layer addSublayer:animationLayer];</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>爱奇艺旋转动画，说白了还是监听stokeStart stokeEnd做动画效果。</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-2394fa45a2af03ef.gif?imageMogr2/auto-orient/strip" alt="  爱奇艺动画.gif"></p>
+<p>代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line">-(void)setUp&#123;</div><div class="line">    </div><div class="line">    CGPoint point =  CGPointMake(self.width/2, self.height/2);</div><div class="line">    UIBezierPath *path =[UIBezierPath bezierPathWithArcCenter:point radius:(self.width - 1)/2 startAngle:-0.5 *M_PI endAngle:1.5 *M_PI clockwise:YES];</div><div class="line"></div><div class="line">    self.shapeLayer =[[CAShapeLayer alloc]init];</div><div class="line">    self.shapeLayer.frame = self. bounds;</div><div class="line">    </div><div class="line">    self.shapeLayer.strokeColor = [UIColor hexStringToColor:@&quot;#94BF3F&quot;].CGColor;</div><div class="line">    self.shapeLayer.fillColor =[UIColor clearColor].CGColor;</div><div class="line">    self.shapeLayer.lineWidth = 1;</div><div class="line">    self.shapeLayer.lineCap = kCALineCapRound;</div><div class="line">    </div><div class="line"> </div><div class="line">    self.shapeLayer.path = path.CGPath;</div><div class="line">    </div><div class="line">    [self.layer addSublayer:self.shapeLayer];</div><div class="line">    </div><div class="line">    </div><div class="line">  </div><div class="line">    self.imageView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 9, 9)];</div><div class="line">    self.imageView.center = point;</div><div class="line">    self.imageView.image =[UIImage imageNamed:@&quot;三角形&quot;];</div><div class="line">    </div><div class="line">    [self addSubview:self.imageView];</div><div class="line">    [self animationOne];</div><div class="line"></div><div class="line">&#125;</div><div class="line">-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag&#123;</div><div class="line">    if ([[anim valueForKey:@&quot;animationName&quot;] isEqualToString:@&quot;AnimationEnd&quot;]) &#123;</div><div class="line">        </div><div class="line">        [self animationTwo];</div><div class="line">        [self rotationAnimation];</div><div class="line">    &#125;</div><div class="line">    if ([[anim valueForKey:@&quot;animationName&quot;] isEqualToString:@&quot;AnimationStart&quot;]) &#123;</div><div class="line">        </div><div class="line">   </div><div class="line">        [self.shapeLayer removeAllAnimations];</div><div class="line">        [self animationOne];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)animationOne&#123;</div><div class="line">    </div><div class="line">    self.shapeLayer.strokeStart=0;</div><div class="line">    //设置strokeEnd的最终值，动画的fromValue为0，strokeEnd的最终值为0.98</div><div class="line">    self.shapeLayer.strokeEnd=0.98;</div><div class="line">    CABasicAnimation *basicAnimationOne=[CABasicAnimation animationWithKeyPath:@&quot;strokeEnd&quot;];</div><div class="line">    basicAnimationOne.fromValue=@(0);</div><div class="line">    </div><div class="line">    basicAnimationOne.duration= KAnimationDuration;</div><div class="line">    </div><div class="line">    basicAnimationOne.delegate=self;</div><div class="line">    [basicAnimationOne setValue:@&quot;AnimationEnd&quot; forKey:@&quot;animationName&quot;];</div><div class="line">    </div><div class="line">    [self.shapeLayer addAnimation:basicAnimationOne forKey:@&quot;animationName&quot;];</div><div class="line">&#125;</div><div class="line">-(void)animationTwo&#123;</div><div class="line">    </div><div class="line">    self.shapeLayer.strokeStart = 0.98;</div><div class="line">    CABasicAnimation *basicAnimationTwo=[CABasicAnimation animationWithKeyPath:@&quot;strokeStart&quot;];</div><div class="line">    basicAnimationTwo.fromValue=@(0);</div><div class="line">    </div><div class="line">    basicAnimationTwo.duration= KAnimationDuration;</div><div class="line">    </div><div class="line">    basicAnimationTwo.delegate=self;</div><div class="line">    [basicAnimationTwo setValue:@&quot;AnimationStart&quot; forKey:@&quot;animationName&quot;];</div><div class="line">    </div><div class="line"></div><div class="line">    [self.shapeLayer addAnimation:basicAnimationTwo forKey:@&quot;animationName&quot;];</div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)rotationAnimation&#123;</div><div class="line">    CABasicAnimation *rotationAnimation=[CABasicAnimation animationWithKeyPath:@&quot;transform.rotation.z&quot;];</div><div class="line">    </div><div class="line">    rotationAnimation.toValue=@(M_PI*2);</div><div class="line">    rotationAnimation.duration= KAnimationDuration;</div><div class="line">    </div><div class="line">    rotationAnimation.delegate=self;</div><div class="line">    [rotationAnimation setValue:@&quot;AnimationRotation&quot; forKey:@&quot;animationName&quot;];</div><div class="line">    [self.imageView.layer addAnimation:rotationAnimation forKey:@&quot;AnimationRotation&quot;];</div><div class="line">    </div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>初学动画，参考很多文章，做个小小总结。<br>demo地址 <a href="https://github.com/liuxinixn/ProgressViewDemo" target="_blank" rel="noopener">demo集合</a></p>
+<p>另外一个加入购物车的小动画：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-37a8d72c7ff0562c.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="12.gif"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">-(void)startAnimation</div><div class="line">&#123;</div><div class="line">    //起点</div><div class="line">    </div><div class="line">    //控点</div><div class="line">    CGPoint controlPoint = CGPointMake(_endPoint.x, _startPoint.y);</div><div class="line">    </div><div class="line">    UIBezierPath *path = [UIBezierPath bezierPath];</div><div class="line">    [path moveToPoint:_startPoint];</div><div class="line">    [path addQuadCurveToPoint:_endPoint controlPoint:controlPoint];</div><div class="line">    </div><div class="line">    CAShapeLayer *layer =[CAShapeLayer layer];</div><div class="line">    layer.path = path.CGPath;</div><div class="line">    layer.fillColor = [UIColor clearColor].CGColor;</div><div class="line">    layer.strokeColor = [UIColor redColor].CGColor;</div><div class="line">    layer.lineWidth = 3.0f;</div><div class="line">    layer.shouldRasterize = YES;//抗锯齿</div><div class="line">    [_viewController.view.layer addSublayer:layer];</div><div class="line">    </div><div class="line">    //创建关键帧</div><div class="line">    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@&quot;position&quot;];</div><div class="line">    </div><div class="line">    //动画时间</div><div class="line">    animation.duration = 1;</div><div class="line">    animation.path = path.CGPath</div><div class="line">    ;</div><div class="line">    //当动画完成，停留到结束位置</div><div class="line">    animation.removedOnCompletion = YES;</div><div class="line">    animation.fillMode = kCAFillModeForwards;</div><div class="line">    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];</div><div class="line">    [_shopView.layer addAnimation:animation forKey:nil];</div><div class="line">    path = nil;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><a href="http://www.jianshu.com/p/a9a4c51aef13" target="_blank" rel="noopener">贝塞尔曲线（加入购物车动画）</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/02/CoreAnimation寄宿图/" rel="prev" title="CoreAnimation寄宿图">
+                CoreAnimation寄宿图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#圆形进度"><span class="nav-number">1.</span> <span class="nav-text">圆形进度</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
