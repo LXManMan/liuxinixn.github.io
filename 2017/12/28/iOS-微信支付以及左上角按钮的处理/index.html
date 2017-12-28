@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="大概说一下流程。1.去微信开放平台注册应用。https://open.weixin.qq.com/（大概需要5天左右才能通过。）2.应用审批后进一步去获得支付能力。（需要提供营业资格，法人或者负责人的身份证以及开户许可证，如果应用没有上线需要上传应用截图，具体的截图根据指示即可。）3.微信审核后会在第二步提供的银行卡账户扣除小额不等的money，然后会把商户号、密码等等一些重要的信息发到提供的邮箱">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 微信支付以及左上角按钮的处理">
+<meta property="og:url" content="liuxinixn.github.io/2017/12/28/iOS-微信支付以及左上角按钮的处理/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="大概说一下流程。1.去微信开放平台注册应用。https://open.weixin.qq.com/（大概需要5天左右才能通过。）2.应用审批后进一步去获得支付能力。（需要提供营业资格，法人或者负责人的身份证以及开户许可证，如果应用没有上线需要上传应用截图，具体的截图根据指示即可。）3.微信审核后会在第二步提供的银行卡账户扣除小额不等的money，然后会把商户号、密码等等一些重要的信息发到提供的邮箱">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-63736c50d5d6ab9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-12-28T12:34:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 微信支付以及左上角按钮的处理">
+<meta name="twitter:description" content="大概说一下流程。1.去微信开放平台注册应用。https://open.weixin.qq.com/（大概需要5天左右才能通过。）2.应用审批后进一步去获得支付能力。（需要提供营业资格，法人或者负责人的身份证以及开户许可证，如果应用没有上线需要上传应用截图，具体的截图根据指示即可。）3.微信审核后会在第二步提供的银行卡账户扣除小额不等的money，然后会把商户号、密码等等一些重要的信息发到提供的邮箱">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1694376-63736c50d5d6ab9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2017/12/28/iOS-微信支付以及左上角按钮的处理/"/>
+
+
+
+
+
+  <title>iOS 微信支付以及左上角按钮的处理 | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-微信支付以及左上角按钮的处理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS 微信支付以及左上角按钮的处理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:33:37+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>大概说一下流程。<br>1.去微信开放平台注册应用。<a href="https://open.weixin.qq.com/（大概需要5天左右才能通过。）" target="_blank" rel="noopener">https://open.weixin.qq.com/（大概需要5天左右才能通过。）</a><br>2.应用审批后进一步去获得支付能力。（需要提供营业资格，法人或者负责人的身份证以及开户许可证，如果应用没有上线需要上传应用截图，具体的截图根据指示即可。）<br>3.微信审核后会在第二步提供的银行卡账户扣除小额不等的money，然后会把商户号、密码等等一些重要的信息发到提供的邮箱里。<br>4.登录微信商户平台。<a href="https://pay.weixin.qq.com/" target="_blank" rel="noopener">https://pay.weixin.qq.com/</a>  在商户平台里安装证书，配置一个秘钥（<code>Key</code> 必须是<code>32</code>位的，服务器签名要用）。</p>
+<blockquote>
+<p>签名建议放在后端，前端不存放私钥。</p>
+</blockquote>
+<p>1.配置<code>QueriesSchemes</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;key&gt;LSApplicationQueriesSchemes&lt;/key&gt;</div><div class="line">&lt;array&gt;</div><div class="line">&lt;string&gt;weixin&lt;/string&gt;</div><div class="line">&lt;string&gt;wechat&lt;/string&gt;</div><div class="line">&lt;/array&gt;</div></pre></td></tr></table></figure>
+<p>2.配置URL Types.</p>
+<p>工程 — 》 <code>Targets</code> —-&gt;<code>info</code> —-&gt;<code>URL Types</code>,填写在微信中申请的应用id。(跳转需要)</p>
+<p>3.常用依赖库的添加。</p>
+<p>4.如果项目跑不起来，报错需要设置<code>bitcode</code>为<code>NO</code>，那么设置即可。</p>
+<p>前面的配置如果配置好，</p>
+<p>//注册微信支付信息</p>
+<p>第一步注册<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[WeiXinPayTool  RegistApp];</div></pre></td></tr></table></figure></p>
+<p>第二步设置好跳转<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">#pragma mark - IOS9.0以后废弃了这两个方法的调用</div><div class="line">- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url</div><div class="line">&#123;</div><div class="line">//微信处理</div><div class="line">if ([[WeiXinPayTool shareTool] handleOpenURL:url]) &#123;</div><div class="line">return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">// NOTE: 9.0以后使用新API接口</div><div class="line">- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary&lt;NSString*, id&gt; *)options</div><div class="line">&#123;</div><div class="line">//微信处理</div><div class="line">if ([[WeiXinPayTool shareTool] handleOpenURL:url]) &#123;</div><div class="line">return YES;</div><div class="line">&#125;</div><div class="line">return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接下来只需要调用拿到后台传的一些参数（比如<code>appid，partnerid，prepayid，package，noncestr</code> 等，微信支付需要的参数）调起微信支付即可。<br>如果<code>sendReq</code>为NO，可能是签名不对，或者是参数有误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">NSMutableString *stamp = [programs objectForKey:@&quot;timestamp&quot;];</div><div class="line">//调起微信支付</div><div class="line">PayReq* req            = [[PayReq alloc] init];</div><div class="line">req.partnerId          = [programs objectForKey:@&quot;partnerid&quot;];</div><div class="line">req.prepayId           = [programs objectForKey:@&quot;prepayid&quot;];</div><div class="line">req.nonceStr           = [programs objectForKey:@&quot;noncestr&quot;];</div><div class="line">req.timeStamp          = [stamp intValue];</div><div class="line">req.package            = [programs objectForKey:@&quot;package&quot;];</div><div class="line">req.sign               = [programs objectForKey:@&quot;sign&quot;];</div><div class="line"></div><div class="line">if (![WXApi isWXAppInstalled]) &#123;</div><div class="line">self.failed(ErrorCodeWXAppNotInstalled);</div><div class="line">&#125;</div><div class="line">BOOL isSuccess =  [WXApi sendReq:req];</div><div class="line">NSLog(@&quot;%d&quot;,isSuccess);</div><div class="line"></div><div class="line">`</div></pre></td></tr></table></figure></p>
+<p>正常支付和取消支付都会走下面的回调。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">- (void)onResp:(BaseResp *)resp&#123;</div><div class="line">if([resp isKindOfClass:[PayResp class]])&#123;</div><div class="line">//支付返回结果，实际支付结果需要去微信服务器端查询</div><div class="line"></div><div class="line">NSLog(@&quot;%@&quot;,resp);</div><div class="line">switch (resp.errCode) &#123;</div><div class="line">case WXSuccess:&#123;</div><div class="line">if (self.success) &#123;</div><div class="line">self.success();</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">break;</div><div class="line"></div><div class="line">case WXErrCodeCommon:&#123;</div><div class="line">self.failed(ErrorCodeWxPayError);</div><div class="line">&#125;</div><div class="line">break;</div><div class="line"></div><div class="line">case WXErrCodeUserCancel:&#123;</div><div class="line">self.failed(ErrorCodeWxPayCancle);</div><div class="line">&#125;</div><div class="line">break;</div><div class="line"></div><div class="line">default:</div><div class="line">break;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>关于iOS9 之后应用左上角的返回按钮对微信支付的影响</p>
+</blockquote>
+<p><code>iOS 9</code>之后为了方便应用之间跳转，系统增加了左上角的返回按钮。可是在微信支付时，中途点击了左上角的返回按钮，此时我们就拿不到微信的回调。</p>
+<p>我们需要的就是在下面两个方法里面其中一个方法里面发送通知，然后在通知页面调用微信的接口查询订单通知。如果生成的订单参数都是后台来负责签名的，查询订单也可以由后台来做，我们只需要传一个微信订单号（<code>transaction_id</code>）即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-63736c50d5d6ab9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20171206-145844.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void)applicationWillEnterForeground:(UIApplication *)application &#123;</div><div class="line">// Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.</div><div class="line">发送通知，在通知页面查询微信的支付订单</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)applicationDidBecomeActive:(UIApplication *)application &#123;</div><div class="line">// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/28/iOS-百度地图拖拽更新位置反编码/" rel="next" title="iOS 百度地图拖拽更新位置反编码">
+                <i class="fa fa-chevron-left"></i> iOS 百度地图拖拽更新位置反编码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/28/iOS-拆分一个爱奇艺动画/" rel="prev" title="iOS 拆分一个爱奇艺动画">
+                iOS 拆分一个爱奇艺动画 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
