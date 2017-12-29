@@ -262,820 +262,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/01/ios--版本比较/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/01/ios--版本比较/" itemprop="url">iOS  --版本比较</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T20:19:35+08:00">
-                2017-06-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">#define currentVersion  [[NSBundle mainBundle] objectForInfoDictionaryKey:@&quot;CFBundleShortVersionString&quot;]</div><div class="line"></div><div class="line">#pragma mark--判断版本号是不是大于本地版本</div><div class="line">-(BOOL)compareVesionWithServerVersion:(NSString *)version&#123;</div><div class="line">    NSArray *versionArray = [version componentsSeparatedByString:@&quot;.&quot;];//服务器返回版</div><div class="line">    NSArray *currentVesionArray = [currentVersion componentsSeparatedByString:@&quot;.&quot;];//当前版本</div><div class="line">    NSInteger a = (versionArray.count&gt; currentVesionArray.count)?currentVesionArray.count : versionArray.count;</div><div class="line">    </div><div class="line">    if ([version isEqualToString:currentVersion]) &#123;</div><div class="line">        return NO;</div><div class="line">    &#125;</div><div class="line">    for (int i = 0; i&lt; a; i++) &#123;</div><div class="line">        NSInteger a = [[versionArray objectAtIndex:i] integerValue];</div><div class="line">        NSInteger b = [[currentVesionArray objectAtIndex:i] integerValue];</div><div class="line">        if (a &gt; b) &#123;</div><div class="line">            //            NSLog(@&quot;有新版本&quot;);</div><div class="line">            return YES;</div><div class="line">        &#125;else if(a &lt; b)&#123;</div><div class="line">            return NO;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if (versionArray.count &gt; currentVesionArray.count) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    if (versionArray.count &lt; currentVesionArray.count ) &#123;</div><div class="line">        return NO;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    return NO;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/01/iOS-几种图片或Gif异步加载/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/01/iOS-几种图片或Gif异步加载/" itemprop="url">iOS -几种图片或Gif异步加载</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T20:19:35+08:00">
-                2017-06-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>iOS 加载加载图片的方式主流的有两种（本地图片略过）：<br>1、SDWebImage。<br>2、YYWebImage。</p>
-<p>######区别：主流框架主要使用SDWebImage进行处理图片，这点不用说明，但是SDWebImage在处理Gif的时候不是很友好，在github上SDWebImage 是这样说明的，需要额外pod ‘SDWebImage/Gif’.<br><img src="http://upload-images.jianshu.io/upload_images/1694376-7df605e3a582d996.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="提示.png"></p>
-<p>附上地址：<a href="https://github.com/Flipboard/FLAnimatedImage" target="_blank" rel="noopener">FLAnimatedImage</a></p>
-<p>FLAnimatedImage 加载网络GIF方法:</p>
-<p><code>cell.icon1.animatedImage =[[FLAnimatedImage alloc]initWithAnimatedGIFData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@&quot;http://images2015.cnblogs.com/blog/607542/201601/607542-20160123090832343-133952004.gif&quot;]]];</code><br>icon 的类型是<code>FLAnimatedImageView</code>；</p>
-<p>所以看得出来SDWebImage在支持Gif处理不是很好。</p>
-<p>接下来简单介绍一下YYWebImage：</p>
-<p>YYWebImage 是一个异步图片加载框架 (YYKit 组件之一).<br>其设计目的是试图替代 SDWebImage、PINRemoteImage、FLAnimatedImage 等开源框架，它支持这些开源框架的大部分功能，同时增加了大量新特性、并且有不小的性能提升。<br>它底层用 YYCache 实现了内存和磁盘缓存, 用 YYImage 实现了 WebP/APNG/GIF 动图的解码和播放。你可以查看这些项目以获得更多信息。</p>
-<p>异步的图片加载，支持 HTTP 和本地文件。<br>支持 GIF、APNG、WebP 动画（动态缓存，低内存占用）。<br>支持逐行扫描、隔行扫描、渐进式图像加载。<br>UIImageView、UIButton、MKAnnotationView、CALayer 的 Category 方法支持。<br>常见图片处理：模糊、圆角、大小调整、裁切、旋转、色调等。<br>高性能的内存和磁盘缓存。<br>高性能的图片设置方式，以避免主线程阻塞。<br>每个类和方法都有完善的文档注释。</p>
-<p>从 URL 加载图片：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 加载网络图片</div><div class="line">imageView.yy_imageURL = [NSURL URLWithString:@&quot;http://github.com/logo.png&quot;];</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 加载本地图片</div><div class="line">imageView.yy_imageURL = [NSURL fileURLWithPath:@&quot;/tmp/logo.png&quot;];</div></pre></td></tr></table></figure>
-<p>加载动图<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 只需要把 `UIImageView` 替换为 `YYAnimatedImageView` 即可。</div><div class="line">UIImageView *imageView = [YYAnimatedImageView new];</div><div class="line">imageView.yy_imageURL = [NSURL URLWithString:@&quot;http://github.com/ani.webp&quot;];</div></pre></td></tr></table></figure></p>
-<p>渐进式图片加载<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 渐进式：边下载边显示</div><div class="line">[imageView yy_setImageWithURL:url options:YYWebImageOptionProgressive];</div><div class="line">	</div><div class="line">// 渐进式加载，增加模糊效果和渐变动画 （见本页最上方的GIF演示）</div><div class="line"></div><div class="line">[imageView yy_setImageWithURL:url options:YYWebImageOptionProgressiveBlur ｜ YYWebImageOptionSetImageWithFadeAnimation];</div></pre></td></tr></table></figure></p>
-<p>加载、处理图片</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">// 1. 下载图片</div><div class="line">// 2. 获得图片下载进度</div><div class="line">// 3. 调整图片大小、加圆角</div><div class="line">// 4. 显示图片时增加一个淡入动画，以获得更好的用户体验</div><div class="line">	</div><div class="line">[imageView yy_setImageWithURL:url</div><div class="line">   placeholder:nil</div><div class="line">   options:YYWebImageOptionSetImageWithFadeAnimation</div><div class="line">   progress:^(NSInteger receivedSize, NSInteger expectedSize) &#123;</div><div class="line">       progress = (float)receivedSize / expectedSize;</div><div class="line">   &#125;</div><div class="line">   transform:^UIImage *(UIImage *image, NSURL *url) &#123;</div><div class="line">       image = [image yy_imageByResizeToSize:CGSizeMake(100, 100) contentMode:UIViewContentModeCenter];</div><div class="line">       return [image yy_imageByRoundCornerRadius:10];</div><div class="line">   &#125;</div><div class="line">   completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) &#123;</div><div class="line">       if (from == YYWebImageFromDiskCache) &#123;</div><div class="line">           NSLog(@&quot;load from disk cache&quot;);</div><div class="line">       &#125;</div><div class="line">   &#125;];</div></pre></td></tr></table></figure>
-<p>图片缓存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">YYImageCache *cache = [YYWebImageManager sharedManager].cache;</div><div class="line">    </div><div class="line">// 获取缓存大小</div><div class="line">cache.memoryCache.totalCost;</div><div class="line">cache.memoryCache.totalCount;</div><div class="line">cache.diskCache.totalCost;</div><div class="line">cache.diskCache.totalCount;</div><div class="line">    </div><div class="line">// 清空缓存</div><div class="line">[cache.memoryCache removeAllObjects];</div><div class="line">[cache.diskCache removeAllObjects];</div><div class="line">    </div><div class="line">// 清空磁盘缓存，带进度回调</div><div class="line">[cache.diskCache removeAllObjectsWithProgressBlock:^(int removedCount, int totalCount) &#123;</div><div class="line">   // progress</div><div class="line">&#125; endBlock:^(BOOL error) &#123;</div><div class="line">   // end</div><div class="line">&#125;];</div></pre></td></tr></table></figure></p>
-<p>关于YYWebImage 加载GIF补充一点，如果是加载本地Gif:<br><code>YYImage *image = [YYImage imageNamed:name];
-YYAnimatedImageView *imageView = [[YYAnimatedImageView alloc] initWithImage:image];</code></p>
-<p>加载网络Gif：<br>简单介绍两种：<br>1、同步方法，会卡顿（FLAnimatedImage在处理的时候卡顿会好很多，很流畅）。<br><code>imageView.yy_imageURL = [NSURL URLWithString:@&quot;http://upload-images.jianshu.io/upload_images/1694376-b9646eecf2139f87.gif&quot;];</code><br>2、异步方法：<br>```<br>imageView yy_setImageWithURL:[NSURL URLWithString:@”<a href="http://i.imgur.com/8KHKhxI.gif" target="_blank" rel="noopener">http://i.imgur.com/8KHKhxI.gif</a>“]<br>                          placeholder:nil<br>                              options:YYWebImageOptionProgressiveBlur | YYWebImageOptionShowNetworkActivity | YYWebImageOptionSetImageWithFadeAnimation<br>                             progress:^(NSInteger receivedSize, NSInteger expectedSize) {<br>                                 if (expectedSize &gt; 0 &amp;&amp; receivedSize &gt; 0) {</p>
-<pre><code>      }
-  }
- transform:nil
-completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) {
-
-    NSLog(@&quot;%ld&quot;,stage);
-}];
-</code></pre><p>`</p>
-<p>总结：<br>1、单独加载网络图片SDWebImage基本符合常用需求。<br>2、FLAnimatedImage在处理Gif的时候很流畅。至于SDWebImage配合FLAnimatedImage暂时没有发现，官网demo的事例可以参考一下。FLAnimatedImage到是可以单独加载Gif。<br>3、YYWebImage 可以加载网络图片以及良好的支持Gif，可以自定义多种过渡效果。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/01/如何建立自己的公有pod/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/01/如何建立自己的公有pod/" itemprop="url">如何建立自己的公有pod</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T20:19:35+08:00">
-                2017-06-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>如果在开发过程中，想把自己封装的一些控件、分类打包以pod的形式供自己或团队使用，我们可以建立公有pod或者私有pod。</p>
-<p>以下指示介绍如何打包公有pod供自己使用。</p>
-<blockquote>
-<p>步骤 1.<br>前往githup建立库。</p>
-</blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-d7e7f537ab28dbb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cocoapods.png"></p>
-<p>选择MIT 认证（得到cocopods的认证许可。）</p>
-<p>接下来把你需要的上传的工具类放到目录下：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-49d5f9fa7964dff8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="目录.png"></p>
-<blockquote>
-<p>步骤二：</p>
-</blockquote>
-<p>创建<code>.podspec</code>文件。<br>LXUtils 是你新建库的名字。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod spec create LXUtils</div></pre></td></tr></table></figure></p>
-<p>执行完上面的命令，会生成一个<code>.podspec</code>的文件。</p>
-<p>可以编辑打开，我是通过webStorm打开的（不知道为什么，通过默认的编辑器打开后面进行spec文件验证的时候经常提示语法错误，所以建议还是通过工具打开吧）：</p>
-<p>最好还是根据里面的修改。<strong>切记tag选项前面必须添加v</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">s.name         = &quot;LXUtils&quot;</div><div class="line"> s.version      = &quot;0.0.1&quot;</div><div class="line"> s.summary      = &quot;common tools on iOS.&quot;</div><div class="line">s.description  = &lt;&lt;-DESC</div><div class="line">                common tool and category on iOS</div><div class="line">                   DESC</div><div class="line">  s.homepage     = &quot;https://github.com/liuxinixn/LXUtils&quot;</div><div class="line">s.license      = &quot;MIT&quot;</div><div class="line"> s.author             = &#123; &quot;miss李&quot; =&gt; &quot;missli_211@163.com&quot; &#125;</div><div class="line">s.platform     = :ios, &quot;8.0&quot;</div><div class="line"></div><div class="line">s.source       = &#123; :git =&gt; &quot;https://github.com/liuxinixn/LXUtils.git&quot;, :tag =&gt; &quot;v#&#123;s.version&#125;&quot; &#125;</div><div class="line"></div><div class="line">s.source_files  = &quot;LXUtils&quot;, &quot;LXUtils/**/*.&#123;h,m&#125;&quot;</div><div class="line">s.framework  = &quot;UIKit&quot;</div><div class="line">  s.requires_arc = true</div></pre></td></tr></table></figure></p>
-<p>修改好对应的选项之后，验证spec文件的合法性。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod lib lint LXUtils.podspec</div></pre></td></tr></table></figure>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-2451430d50684d6f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="验证.png"></p>
-<blockquote>
-<p>步骤3.</p>
-</blockquote>
-<p>绑定tag，然后发布。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git tag &apos;0.0.1&apos;  </div><div class="line">git push --tags  </div><div class="line">git push origin master</div></pre></td></tr></table></figure>
-<p>下面的命令需要你去邮箱进行验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod trunk register jiushu0228@163.com &apos;LXUtils&apos;</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod trunk me</div></pre></td></tr></table></figure>
-<p>验证结果<br><img src="http://upload-images.jianshu.io/upload_images/1694376-ab447eea62a47b42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="邮箱验证.png"></p>
-<p>如果出现下面的问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[!] The spec did not pass validation, due to 1 error.</div><div class="line">[!] The validator for Swift projects uses Swift 3.0 by default, if you are using a different version of swift you can use a `.swift-version` file to set the version for your Pod. For example to use Swift 2.3, run: </div><div class="line">    `echo &quot;2.3&quot; &gt; .swift-version`.</div></pre></td></tr></table></figure></p>
-<p>执行<code>echo &quot;2.3&quot; &gt; .swift-version</code>即可。</p>
-<p>最后一步，发布spec到cocoapods</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod trunk push LXUtils.podspec</div></pre></td></tr></table></figure>
-<p>成功后如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">zhongzhideMini:LXUtils chenergou$ pod trunk push LXUtils.podspec</div><div class="line">Updating spec repo `master`</div><div class="line"></div><div class="line">CocoaPods 1.3.0.beta.3 is available.</div><div class="line">To update use: `sudo gem install cocoapods --pre`</div><div class="line">[!] This is a test version we&apos;d love you to try.</div><div class="line"></div><div class="line">For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3</div><div class="line"></div><div class="line">Validating podspec</div><div class="line"> -&gt; LXUtils (0.0.1)</div><div class="line"></div><div class="line">Updating spec repo `master`</div><div class="line"></div><div class="line">CocoaPods 1.3.0.beta.3 is available.</div><div class="line">To update use: `sudo gem install cocoapods --pre`</div><div class="line">[!] This is a test version we&apos;d love you to try.</div><div class="line"></div><div class="line">For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3</div><div class="line"></div><div class="line"></div><div class="line">--------------------------------------------------------------------------------</div><div class="line"> 🎉  Congrats</div><div class="line"></div><div class="line"> 🚀  LXUtils (0.0.1) successfully published</div><div class="line"> 📅  November 8th, 02:45</div><div class="line"> 🌎  https://cocoapods.org/pods/LXUtils</div><div class="line"> 👍  Tell your friends!</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>补充</p>
-</blockquote>
-<p>提交后需要等一段时间，如果搜不到试试下面的方法：<br>根据路径<code>~/Library/Caches/CocoaPods/search_index.json</code>找到这个json文件，然后删除即可。</p>
-<p>重新’pod search LXUtils’</p>
-<p><code>输出：Creating search index for spec repo &#39;master&#39;.. Done!，稍等片刻就会出现所有带RxSwift字段的类库出现。</code></p>
-<blockquote>
-<p>如何更新pod</p>
-</blockquote>
-<p>1.升级版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git tag &apos;v0.0.2&apos;  </div><div class="line">git push --tags  </div><div class="line">git push origin master</div></pre></td></tr></table></figure>
-<p>2.更新到cocoapods<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod trunk push LXUtils.podspec</div></pre></td></tr></table></figure></p>
-<p>成功之后，如果搜索不到执行<code>pod setup</code></p>
-<p>```</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/05/01/封装一个UINavgationBar的渐变效果/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/01/封装一个UINavgationBar的渐变效果/" itemprop="url">iOS 封装一个UINavgationBar的渐变效果</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-01T20:19:35+08:00">
-                2017-05-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>效果图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-576161be9612864e.gif?imageMogr2/auto-orient/strip" alt="滚动渐变NavBar.gif"></p>
-<p>在有UIScrollview的页面中，做一个NavBar 的渐变过渡，最好还是抽取出来。</p>
-<p>使用方法,需要注意的是，恢复navbar的颜色最好是放在viewDidDisappear中，否则侧滑返回的时候，Navbar的颜色会出现问题。渐变的处理，就是把UIScrollview传给工具类即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">-(void)viewDidDisappear:(BOOL)animated&#123;</div><div class="line">    [super viewDidDisappear:animated];</div><div class="line">    [LXGradientNavManager resStoreToDefaultNavigationBar];</div><div class="line"></div><div class="line">&#125;</div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view.</div><div class="line">    </div><div class="line">    </div><div class="line">    [self setUp];</div><div class="line">    </div><div class="line">    [LXGradientNavManager managerWithController:self];</div><div class="line">    </div><div class="line">    [LXGradientNavManager setOrignColor:[UIColor clearColor]];</div><div class="line">    </div><div class="line">    [LXGradientNavManager setZeroAlphaOffset:0];</div><div class="line">    [LXGradientNavManager setFullAlphaOffset:self.tableView.tableHeaderView.height];</div><div class="line">    [LXGradientNavManager setDefaultColor:[UIColor hexStringToColor:@&quot;F9F9F9&quot;]];</div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)scrollViewDidScroll:(UIScrollView *)scrollView&#123;</div><div class="line">    [LXGradientNavManager dealGradientWithScrollView:scrollView];</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>工具类如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">@interface LXGradientNavManager : NSObject</div><div class="line">@property(nonatomic,strong)UIColor *defaultColor; //默认的Nav的颜色</div><div class="line"></div><div class="line">@property(nonatomic,strong)UIColor *orignColor; //最开始的颜色</div><div class="line"></div><div class="line">@property(nonatomic,assign)float zeroAlphaOffset;</div><div class="line"></div><div class="line">@property (nonatomic, assign) float fullAlphaOffset;</div><div class="line"></div><div class="line">+(void)setOrignColor:(UIColor *)color;</div><div class="line"></div><div class="line">+ (void)setDefaultColor:(UIColor *)color;</div><div class="line"></div><div class="line">+ (void)setZeroAlphaOffset:(float)offset;</div><div class="line"></div><div class="line">+ (void)setFullAlphaOffset:(float)offset;</div><div class="line"></div><div class="line"></div><div class="line">+(void)managerWithController:(UIViewController *)viewController;</div><div class="line"></div><div class="line">+(void)dealGradientWithScrollView:(UIScrollView *)scrollView;</div><div class="line"></div><div class="line">+(void)reStoreToSystemNavigationBar; //change the navigationBar to system style</div><div class="line"></div><div class="line">+(void)resStoreToDefaultNavigationBar; //恢复到默认的navbar</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line">#import &quot;LXGradientNavManager.h&quot;</div><div class="line"></div><div class="line">@interface LXGradientNavManager()</div><div class="line">@property (nonatomic, strong) UINavigationBar *selfNavigationBar;</div><div class="line">@property (nonatomic, strong) UINavigationController *selfNavigationController;</div><div class="line">@end</div><div class="line">@implementation LXGradientNavManager</div><div class="line">+(LXGradientNavManager *)sharedManager&#123;</div><div class="line">    </div><div class="line">    static LXGradientNavManager *manager = nil;</div><div class="line">    static dispatch_once_t onceToken;</div><div class="line">    dispatch_once(&amp;onceToken, ^&#123;</div><div class="line">        manager = [[LXGradientNavManager alloc]init];</div><div class="line">    &#125;);</div><div class="line">    return manager;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+(void)managerWithController:(UIViewController *)viewController&#123;</div><div class="line">    </div><div class="line">    if (viewController.navigationController) &#123;</div><div class="line">        UINavigationBar *navigationBar = viewController.navigationController.navigationBar;</div><div class="line">        [self sharedManager].selfNavigationBar = navigationBar;</div><div class="line">        [self sharedManager].selfNavigationController = viewController.navigationController;</div><div class="line">        [navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];</div><div class="line">        [navigationBar setShadowImage:[UIImage new]];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+(void)dealGradientWithScrollView:(UIScrollView *)scrollView&#123;</div><div class="line">    CGFloat y = scrollView.contentOffset.y;</div><div class="line">    </div><div class="line">    UIColor *defaultColor = [self sharedManager].defaultColor;</div><div class="line"></div><div class="line">    if (y &gt; [self sharedManager].fullAlphaOffset) &#123;</div><div class="line">        UIImage *image =[self imageWithColor:defaultColor];</div><div class="line"></div><div class="line">        [[self sharedManager].selfNavigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];</div><div class="line">    &#125;else&#123;</div><div class="line">        CGFloat alpha = y /[self sharedManager].fullAlphaOffset;</div><div class="line">        UIImage *image =[self imageWithColor: [defaultColor colorWithAlphaComponent:alpha]];</div><div class="line">        [[self sharedManager].selfNavigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (void)reStoreToSystemNavigationBar &#123;</div><div class="line">    [[self sharedManager].selfNavigationController setValue:[UINavigationBar new] forKey:@&quot;navigationBar&quot;];</div><div class="line">&#125;</div><div class="line">+ (void)resStoreToDefaultNavigationBar&#123;</div><div class="line">    UIImage *image =[self imageWithColor:[self sharedManager].defaultColor];</div><div class="line"></div><div class="line">    [[self sharedManager].selfNavigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];</div><div class="line">&#125;</div><div class="line">+(void)setZeroAlphaOffset:(float)offset&#123;</div><div class="line">    [self sharedManager].zeroAlphaOffset = offset;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">+(void)setFullAlphaOffset:(float)offset&#123;</div><div class="line">    [self sharedManager].fullAlphaOffset = offset;</div><div class="line">&#125;</div><div class="line">+(void)setDefaultColor:(UIColor *)color&#123;</div><div class="line">    [self sharedManager].defaultColor = color;</div><div class="line">    </div><div class="line">   </div><div class="line">    </div><div class="line">&#125;</div><div class="line">+(void)setOrignColor:(UIColor *)color&#123;</div><div class="line">    [self sharedManager].orignColor = color;</div><div class="line">    </div><div class="line">    [[self sharedManager].selfNavigationBar setBackgroundImage:[self imageWithColor:color] forBarMetrics:UIBarMetricsDefault];</div><div class="line">    </div><div class="line"></div><div class="line">    </div><div class="line">&#125;</div><div class="line">+ (UIImage *)imageWithColor:(UIColor *)color &#123;</div><div class="line">    CGRect rect = CGRectMake(0, 0, 1, 1);</div><div class="line">    UIGraphicsBeginImageContext(rect.size);</div><div class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</div><div class="line">    [color setFill];</div><div class="line">    CGContextFillRect(context, rect);</div><div class="line">    UIImage *imgae = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    return imgae;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>关于 UIScrollview的起始偏移量，最好还是处理如下。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">self.view.backgroundColor =[UIColor whiteColor];</div><div class="line">   self.extendedLayoutIncludesOpaqueBars = YES;</div><div class="line">   self.automaticallyAdjustsScrollViewInsets = NO;</div></pre></td></tr></table></figure>
-<p>会保证起始点不会偏移。 </p>
-<p>demo地址：<a href="https://github.com/liuxinixn/LXGradientNavView" target="_blank" rel="noopener">滚动渐变NavBar</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/04/28/封装一个下拉一体效果/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/04/28/封装一个下拉一体效果/" itemprop="url">iOS封装一个下拉一体效果</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-28T20:19:35+08:00">
-                2017-04-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="http://upload-images.jianshu.io/upload_images/1694376-a410f3eb3482518a.gif?imageMogr2/auto-orient/strip" alt="下拉一体‘.gif"></p>
-<p>下拉一体效果，是利用tableview的contentInset。把view添加到tableview上，根据scrollview的滚动实现即可。<br>所以可以封装一个一劳永逸。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line"></div><div class="line">@interface PullDownZoom : NSObject</div><div class="line">-(instancetype)initWithTableview:(UIScrollView *)tableview headerH:(CGFloat)headerH header:(UIView *)header;</div><div class="line"></div><div class="line">-(void)scrollZoom;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p>传入tableview 与需要下拉的view，以及对应的高度,处理如下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">#import &quot;PullDownZoom.h&quot;</div><div class="line">#import &quot;UIView+Frame.h&quot;</div><div class="line">@interface PullDownZoom()&lt;UIScrollViewDelegate&gt;</div><div class="line">@property(nonatomic,strong)UIScrollView *tableview;</div><div class="line">@property(nonatomic,assign)CGFloat headerH;</div><div class="line">@property(nonatomic,strong)UIView *header;</div><div class="line">@end</div><div class="line">@implementation PullDownZoom</div><div class="line">-(instancetype)initWithTableview:(UIScrollView *)tableview headerH:(CGFloat)headerH header:(UIView *)header</div><div class="line">&#123;</div><div class="line">    </div><div class="line">    self = [super init];</div><div class="line">    if (self) &#123;</div><div class="line">        self.tableview = tableview;</div><div class="line">        </div><div class="line">      </div><div class="line">        self.tableview.delegate = self;</div><div class="line">        self.headerH = headerH;</div><div class="line">        self.header = header;</div><div class="line">        </div><div class="line">        self.tableview.contentInset = UIEdgeInsetsMake(self.headerH, 0, 0, 0);</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">-(void)scrollZoom&#123;</div><div class="line">    [self scrollViewDidScroll:self.tableview];</div><div class="line">&#125;</div><div class="line">-(void)scrollViewDidScroll:(UIScrollView *)scrollView&#123;</div><div class="line">    </div><div class="line">    CGFloat y = scrollView.contentOffset.y;</div><div class="line">    </div><div class="line">    if ( y  &lt; - self.headerH) &#123;</div><div class="line">        self.header.y  = y;</div><div class="line">        self.header.height = -y;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p>####所以只需要两步，即可。</p>
-<p>1、第一步：引入，初始化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">self.zoom =  [[PullDownZoom alloc]initWithTableview:self.tableview headerH:300 header:self.header];</div></pre></td></tr></table></figure></p>
-<p>2、第二步：在scrollview滚动的地方设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-(void)scrollViewDidScroll:(UIScrollView *)scrollView&#123;</div><div class="line"></div><div class="line">    [self.zoom scrollZoom];</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>demo地址：<a href="https://github.com/liuxinixn/pullDownStretch" target="_blank" rel="noopener">下拉一体</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/04/09/iOS-自定义弹框/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/04/09/iOS-自定义弹框/" itemprop="url">iOS -自定义弹框</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-09T20:19:35+08:00">
-                2017-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>项目中需要自定义弹框就撸一个弹框， 做个记录。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-90bfc2d9ab39af92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20170626-113554.png"></p>
-<p>xib 自定义一个View,添加在keyWindow上即可，block绑定点击按钮之后的回调。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line"></div><div class="line">@interface LXAlertView : UIView</div><div class="line">-(instancetype)initWithTitle:(NSString *)title</div><div class="line">                leftBtnTitle:(NSString *)leftBtnTitle</div><div class="line">                 rightBtnTitle:(NSString *)rightBtnTitle</div><div class="line">                 alertResult:(void (^)(NSInteger index)) alertResult;</div><div class="line"></div><div class="line"></div><div class="line">-(void)showLXAlertView;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line">//</div><div class="line">//  LXAlertView.m</div><div class="line">//  LXAlertview</div><div class="line">//</div><div class="line">//  Created by zhongzhi on 2017/6/22.</div><div class="line">//  Copyright © 2017年 zhongzhi. All rights reserved.</div><div class="line">//</div><div class="line"></div><div class="line">#import &quot;LXAlertView.h&quot;</div><div class="line">#import &quot;LXCustomAlert.h&quot;</div><div class="line">typedef void(^alertResult) (NSInteger index);</div><div class="line">@interface LXAlertView ()</div><div class="line">@property(nonatomic,strong)LXCustomAlert *customAlert;</div><div class="line">@property(nonatomic,copy)NSString *title;</div><div class="line">@property(nonatomic,copy)NSString *leftBtnTitle;</div><div class="line">@property(nonatomic,copy)NSString *rightBtnTitle;</div><div class="line">@property(nonatomic,copy)alertResult alertResult;</div><div class="line"></div><div class="line">@end</div><div class="line">@implementation LXAlertView</div><div class="line"></div><div class="line">-(instancetype)initWithTitle:(NSString *)title leftBtnTitle:(NSString *)leftBtnTitle rightBtnTitle:(NSString *)rightBtnTitle alertResult:(void (^)(NSInteger index)) alertResult;&#123;</div><div class="line">    </div><div class="line">    self = [super init];</div><div class="line">    if (self) &#123;</div><div class="line">        </div><div class="line">        self.frame = [UIScreen mainScreen].bounds;</div><div class="line">    </div><div class="line">        self.backgroundColor = [LBColor(98, 87, 56)colorWithAlphaComponent:0.9];</div><div class="line">        </div><div class="line">        </div><div class="line">        self.title = title;</div><div class="line">        </div><div class="line">        self.leftBtnTitle = leftBtnTitle;</div><div class="line">        </div><div class="line">        self.rightBtnTitle = rightBtnTitle;</div><div class="line">        </div><div class="line">        self.alertResult = alertResult;</div><div class="line">        </div><div class="line">        [self setup];</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)showLXAlertView&#123;</div><div class="line">    </div><div class="line">    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;</div><div class="line">    </div><div class="line">    [keyWindow addSubview:self];</div><div class="line">    </div><div class="line">    [self creatShowAnimation];</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void)setup&#123;</div><div class="line">    </div><div class="line">    [self addSubview:self.customAlert];</div><div class="line">    </div><div class="line">    self.customAlert.title = self.title;</div><div class="line">    </div><div class="line">    self.customAlert.leftBtnTitle = self.leftBtnTitle;</div><div class="line">    </div><div class="line">    self.customAlert.rightBtnTitle = self.rightBtnTitle;</div><div class="line">    </div><div class="line">    self.customAlert.leftBtn.tag = 1;</div><div class="line">    </div><div class="line">    self.customAlert.rightBtn.tag = 2;</div><div class="line">    </div><div class="line">    [self.customAlert.leftBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];</div><div class="line">    </div><div class="line">    [self.customAlert.rightBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">-(void)btnClick:(UIButton *)button</div><div class="line">&#123;</div><div class="line">    </div><div class="line">    </div><div class="line">        </div><div class="line">    if (self.alertResult) &#123;</div><div class="line">            </div><div class="line">        </div><div class="line">        [self dismiss];</div><div class="line">                </div><div class="line">        </div><div class="line">        self.alertResult(button.tag);</div><div class="line"></div><div class="line"> </div><div class="line">    &#125;</div><div class="line">    [self removeFromSuperview];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)creatShowAnimation</div><div class="line">&#123;</div><div class="line">    </div><div class="line">    self.customAlert.transform = CGAffineTransformMakeScale(0.90, 0.90);</div><div class="line">    </div><div class="line">    [UIView animateWithDuration:0.25 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:1 options:UIViewAnimationOptionCurveLinear animations:^&#123;</div><div class="line">        </div><div class="line">        self.customAlert.transform = CGAffineTransformMakeScale(1.0, 1.0);</div><div class="line">        </div><div class="line">    &#125; completion:^(BOOL finished) &#123;</div><div class="line">        </div><div class="line">    &#125;];</div><div class="line">&#125;</div><div class="line">-(void)dismiss&#123;</div><div class="line">    self.customAlert.transform = CGAffineTransformMakeScale(1.0, 1.0);</div><div class="line">    </div><div class="line">    [UIView animateWithDuration:0.20 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:1 options:UIViewAnimationOptionCurveLinear animations:^&#123;</div><div class="line">        </div><div class="line">        self.customAlert.transform = CGAffineTransformMakeScale(0.0, 0.0);</div><div class="line">    &#125; completion:^(BOOL finished) &#123;</div><div class="line">        </div><div class="line">        [self removeFromSuperview];</div><div class="line">        </div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line">-(LXCustomAlert *)customAlert&#123;</div><div class="line">    if (!_customAlert) &#123;</div><div class="line">        </div><div class="line">        _customAlert =[[NSBundle mainBundle]loadNibNamed:@&quot;LXCustomAlert&quot; owner:self options:nil].firstObject;</div><div class="line">        </div><div class="line">        _customAlert.frame = CGRectMake(Device_Width/2 -140, (Device_Height -64 - 145)/2, 280, 145);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    return _customAlert;</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p>demo地址：<a href="https://github.com/liuxinixn/LXAlertview" target="_blank" rel="noopener">LXAlertView</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/04/03/iOS-如何改变UITextFiled的清除按钮图片/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1575,6 +761,803 @@ UIButton *button =[textFild valueForKey:@&quot;_clearButton&quot;];
 <p>以上只是个人一点理解。</p>
 </blockquote>
 <p>demo 地址： <a href="https://github.com/liuxinixn/LXMVVMExample" target="_blank" rel="noopener">MVVMDemo</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/12/iOS-计算富文本，检索网址，号码，表情，并且计算高度，设置最大行数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/12/iOS-计算富文本，检索网址，号码，表情，并且计算高度，设置最大行数/" itemprop="url">iOS -计算富文本，检索网址，表情，计算高度，限制最大行数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-12T20:19:35+08:00">
+                2017-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://upload-images.jianshu.io/upload_images/1694376-55adea48bcb5ed75.gif?imageMogr2/auto-orient/strip" alt="fuwb.gif"></p>
+<blockquote>
+<p>前言：项目中用到检索表情，网址与号码，但是看了TTTAttributeLabel，emojyLabel，奈何都不太满意，plist格式不太符合，而且这两个第三方用到检索都是系统自带的检索，检测网址方面不准确， 所以就需要自己使用正则进行检索。</p>
+</blockquote>
+<p>关于以上两个三方检索不准确的可以参考：<a href="http://www.jianshu.com/p/72ab332f87e5" target="_blank" rel="noopener">检索网址</a></p>
+<blockquote>
+<p>接下来写一下实现的过程， 没有高度封装，仅供参考</p>
+</blockquote>
+<p>关于网址与号码的正则再说明下：<br><code>网址：KURlREGULAR @&quot;((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(((http[s]{0,1}|ftp)://|)((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)&quot;</code><br><code>号码： KPHONENUMBERREGLAR @&quot;\\d{3}-\\d{8}|\\d{4}-\\d{7}|\\d{11}&quot;</code><br>比如我要转的字符串为<br><code>@&quot;简书：http://jianshu.com哈哈哈[调皮][流汗][偷笑][再见][可爱][色][害羞][委屈][委屈][抓狂][酷][酷][嘘][嘘][龇牙][大哭][大哭][大哭][龇牙][嘘][嘘][调皮][调皮]哈哈哈哈[嘘][调皮][调皮]18637963241他大舅他二舅都是舅，高桌子地板头都是木头&quot;</code></p>
+<p>#####我需要做的是检索网址并且替换为和微博一样的链接，号码和链接有选中状态，因为UITextview有检测url 的方法可以添加点击事件，所以就采用UITextview进行封装。主要采取正则表达式与<code>RegexKitLite</code>配合做检索</p>
+<p>1 . 首先建立一个模型，把文字检索为富文本，检索出 表情，网址以及号码。中间需要使用一个模型存储检索出来的结果。对于特殊符号的表情建立一个模型。其实富文本的都是逐个检索，然后处理，最后拼接为一个NSMutableAttributedString。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">@interface ZLStatus : NSObject</div><div class="line">//源内容</div><div class="line">@property (nonatomic, copy) NSString *text;</div><div class="line"></div><div class="line">/**	string	信息内容 -- 带有属性的(特殊文字会高亮显示\显示表情)*/</div><div class="line">@property (nonatomic, copy) NSAttributedString *attributedText;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div></pre></td><td class="code"><pre><div class="line">#import &quot;ZLStatus.h&quot;</div><div class="line">#import &quot;ZLSpecial.h&quot;</div><div class="line">#import &quot;ZLTextPart.h&quot;</div><div class="line">#import &quot;RegexKitLite.h&quot;</div><div class="line">@implementation ZLStatus</div><div class="line">- (void)setText:(NSString *)text</div><div class="line">&#123;</div><div class="line">    _text = [text copy];</div><div class="line">    </div><div class="line">    // 利用text生成attributedText</div><div class="line">    self.attributedText = [self attributedTextWithText:text];</div><div class="line">&#125;</div><div class="line">/**</div><div class="line"> *  普通文字 --&gt; 属性文字</div><div class="line"> *</div><div class="line"> *  @param text 普通文字</div><div class="line"> *</div><div class="line"> *  @return 属性文字</div><div class="line"> */</div><div class="line">- (NSAttributedString *)attributedTextWithText:(NSString *)text</div><div class="line">&#123;</div><div class="line">    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] init];</div><div class="line">    </div><div class="line">    // 表情的规则</div><div class="line">    NSString *emotionPattern = @&quot;\\[[0-9a-zA-Z\\u4e00-\\u9fa5]+\\]&quot;;</div><div class="line">    // @的规则</div><div class="line">    NSString *atPattern = @&quot;@[0-9a-zA-Z\\u4e00-\\u9fa5-_]+&quot;;</div><div class="line">    // #话题#的规则</div><div class="line">    NSString *topicPattern = @&quot;#[0-9a-zA-Z\\u4e00-\\u9fa5]+#&quot;;</div><div class="line">    // url链接的规则</div><div class="line">    NSString *urlPattern = @&quot;((http[s]&#123;0,1&#125;|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]&#123;2,4&#125;)(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]&#123;2,4&#125;)(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(((http[s]&#123;0,1&#125;|ftp)://|)((?:(?:25[0-5]|2[0-4]\\d|((1\\d&#123;2&#125;)|([1-9]?\\d)))\\.)&#123;3&#125;(?:25[0-5]|2[0-4]\\d|((1\\d&#123;2&#125;)|([1-9]?\\d))))(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)&quot;;</div><div class="line">    NSString *phoneNumber =@&quot;\\d&#123;3&#125;-\\d&#123;8&#125;|\\d&#123;3&#125;-\\d&#123;7&#125;|\\d&#123;4&#125;-\\d&#123;8&#125;|\\d&#123;4&#125;-\\d&#123;7&#125;|1+[3578]+\\d&#123;9&#125;|\\d&#123;8&#125;|\\d&#123;7&#125;&quot;</div><div class="line">    ;</div><div class="line">    NSString *pattern = [NSString stringWithFormat:@&quot;%@|%@|%@|%@|%@&quot;, emotionPattern, atPattern, topicPattern, urlPattern,phoneNumber];</div><div class="line">    </div><div class="line">    // 遍历所有的特殊字符串</div><div class="line">    NSMutableArray *parts = [NSMutableArray array];</div><div class="line">    [text enumerateStringsMatchedByRegex:pattern usingBlock:^(NSInteger captureCount, NSString *const __unsafe_unretained *capturedStrings, const NSRange *capturedRanges, volatile BOOL *const stop) &#123;</div><div class="line">        if ((*capturedRanges).length == 0) return;</div><div class="line">        </div><div class="line">        ZLTextPart *part = [[ZLTextPart alloc] init];</div><div class="line">        part.special = YES;</div><div class="line">        part.text = *capturedStrings;</div><div class="line">        part.emotion = [part.text hasPrefix:@&quot;[&quot;] &amp;&amp; [part.text hasSuffix:@&quot;]&quot;];</div><div class="line">        part.range = *capturedRanges;</div><div class="line">        [parts addObject:part];</div><div class="line">    &#125;];</div><div class="line">    // 遍历所有的非特殊字符</div><div class="line">    [text enumerateStringsSeparatedByRegex:pattern usingBlock:^(NSInteger captureCount, NSString *const __unsafe_unretained *capturedStrings, const NSRange *capturedRanges, volatile BOOL *const stop) &#123;</div><div class="line">        if ((*capturedRanges).length == 0) return;</div><div class="line">        </div><div class="line">        ZLTextPart *part = [[ZLTextPart alloc] init];</div><div class="line">        part.text = *capturedStrings;</div><div class="line">        part.range = *capturedRanges;</div><div class="line">        [parts addObject:part];</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    // 排序</div><div class="line">    // 系统是按照从小 -&gt; 大的顺序排列对象</div><div class="line">    [parts sortUsingComparator:^NSComparisonResult(ZLTextPart *part1, ZLTextPart *part2) &#123;</div><div class="line">        // NSOrderedAscending = -1L, NSOrderedSame, NSOrderedDescending</div><div class="line">        // 返回NSOrderedSame:两个一样大</div><div class="line">        // NSOrderedAscending(升序):part2&gt;part1</div><div class="line">        // NSOrderedDescending(降序):part1&gt;part2</div><div class="line">        if (part1.range.location &gt; part2.range.location) &#123;</div><div class="line">            // part1&gt;part2</div><div class="line">            // part1放后面, part2放前面</div><div class="line">            return NSOrderedDescending;</div><div class="line">        &#125;</div><div class="line">        // part1&lt;part2</div><div class="line">        // part1放前面, part2放后面</div><div class="line">        return NSOrderedAscending;</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    UIFont *font = [UIFont systemFontOfSize:15];</div><div class="line">    NSMutableArray *specials = [NSMutableArray array];</div><div class="line">    NSString *filePath = [[NSBundle mainBundle] pathForResource:@&quot;face.plist&quot; ofType:nil];</div><div class="line">    NSArray  *face = [NSArray arrayWithContentsOfFile:filePath];</div><div class="line">    // 按顺序拼接每一段文字</div><div class="line">    for (ZLTextPart *part in parts) &#123;</div><div class="line">        // 等会需要拼接的子串</div><div class="line">        NSAttributedString *substr = nil;</div><div class="line">        if (part.isEmotion) &#123; // 表情  表情处理的时候，需要根据你自己的plist进行单独处理，像一些第三方里自定义的plist，格式要是也是很严格的</div><div class="line">            NSString *str = [text substringWithRange:part.range];</div><div class="line">            for (int i = 0; i &lt; face.count; i ++) &#123;</div><div class="line">                if ([face[i][@&quot;face_name&quot;] isEqualToString:str]) &#123;</div><div class="line">                    //face[i][@&quot;png&quot;]就是我们要加载的图片</div><div class="line">                    //新建文字附件来存放我们的图片,iOS7才新加的对象</div><div class="line">                    NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];</div><div class="line">                    //给附件添加图片</div><div class="line">                    textAttachment.image = [UIImage imageNamed:face[i][@&quot;face_image_name&quot;]];</div><div class="line">                    //调整一下图片的位置,如果你的图片偏上或者偏下，调整一下bounds的y值即可</div><div class="line">                    textAttachment.bounds = CGRectMake(0, -6, 25, 25);</div><div class="line">                    //把附件转换成可变字符串，用于替换掉源字符串中的表情文字</div><div class="line">                   substr = [NSAttributedString attributedStringWithAttachment:textAttachment];</div><div class="line"></div><div class="line">                    break;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125; else if (part.special) &#123; // 非表情的特殊文字</div><div class="line">            NSURL *url =[NSURL URLWithString:part.text];</div><div class="line">            if (url.scheme) &#123;</div><div class="line">                substr = [[NSAttributedString alloc] initWithString:part.text attributes:@&#123;</div><div class="line">                                                                                           NSForegroundColorAttributeName : [UIColor redColor]</div><div class="line">                                                                                           &#125;];</div><div class="line"></div><div class="line">               NSString *string =@&quot;网页链接&quot;;</div><div class="line">                            NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];</div><div class="line">                                //给附件添加图片</div><div class="line">                                textAttachment.image = [UIImage imageNamed:@&quot;链接&quot;];</div><div class="line">                                //调整一下图片的位置,如果你的图片偏上或者偏下，调整一下bounds的y值即可</div><div class="line">                                textAttachment.bounds = CGRectMake(0, -6, 25, 25);</div><div class="line">                NSMutableAttributedString *tempAttribute = [[NSMutableAttributedString alloc]initWithAttributedString:[NSAttributedString attributedStringWithAttachment:textAttachment]];</div><div class="line">                 NSMutableAttributedString *tempAttribute2 = [[NSMutableAttributedString alloc]initWithAttributedString:[NSAttributedString attributedStringWithAttachment:textAttachment]];</div><div class="line">                NSAttributedString *text =[[NSAttributedString alloc]initWithString:string attributes:@&#123;NSForegroundColorAttributeName:[UIColor blueColor]&#125;];</div><div class="line">                [tempAttribute appendAttributedString:text];</div><div class="line">                substr = [[NSAttributedString alloc]initWithAttributedString:tempAttribute];</div><div class="line">                // 创建特殊对象</div><div class="line">                </div><div class="line">                ZLSpecial *s = [[ZLSpecial alloc] init];</div><div class="line">                s.text = string;</div><div class="line">              //需要添加附属图片的长度，负责点击范围会变化</div><div class="line">                NSUInteger loc = attributedText.length+tempAttribute2.length;</div><div class="line">                NSUInteger len = string.length;</div><div class="line">                s.range = NSMakeRange(loc, len);</div><div class="line">                s.urlString = part.text;</div><div class="line">                [specials addObject:s];</div><div class="line">            &#125;else&#123;</div><div class="line">                </div><div class="line">                NSLog(@&quot;%@&quot;,part.text);</div><div class="line">                substr = [[NSAttributedString alloc] initWithString:part.text attributes:@&#123;</div><div class="line">                                                                                           NSForegroundColorAttributeName : [UIColor redColor]</div><div class="line">                                                                                           &#125;];</div><div class="line">                // 创建特殊对象</div><div class="line">                ZLSpecial *s = [[ZLSpecial alloc] init];</div><div class="line">                s.text = part.text;</div><div class="line">                NSUInteger loc = attributedText.length;</div><div class="line">                NSUInteger len = part.text.length;</div><div class="line">                s.range = NSMakeRange(loc, len);</div><div class="line">                s.urlString = part.text;</div><div class="line">                [specials addObject:s];</div><div class="line">            &#125;</div><div class="line">           </div><div class="line">            </div><div class="line">           </div><div class="line">        &#125; else &#123; // 非特殊文字</div><div class="line">            substr = [[NSAttributedString alloc] initWithString:part.text];</div><div class="line">        &#125;</div><div class="line">        [attributedText appendAttributedString:substr];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    // 一定要设置字体,保证计算出来的尺寸是正确的</div><div class="line">    [attributedText addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, attributedText.length)];</div><div class="line">    [attributedText addAttribute:@&quot;specials&quot; value:specials range:NSMakeRange(0, 1)];</div><div class="line">    </div><div class="line">    return attributedText;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>#####中间存储检索结果与特殊字符的model：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line"></div><div class="line">@interface ZLTextPart : NSObject</div><div class="line">/** 这段文字的内容 */</div><div class="line">@property (nonatomic, copy) NSString *text;</div><div class="line">/** 这段文字的范围 */</div><div class="line">@property (nonatomic, assign) NSRange range;</div><div class="line">/** 是否为特殊文字 */</div><div class="line">@property (nonatomic, assign, getter = isSpecical) BOOL special;</div><div class="line">/** 是否为表情 */</div><div class="line">@property (nonatomic, assign, getter = isEmotion) BOOL emotion;</div><div class="line"></div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line"></div><div class="line">@interface ZLSpecial : NSObject</div><div class="line">/** 这段特殊文字的内容 */</div><div class="line">@property (nonatomic, copy) NSString *text;</div><div class="line">/** 这段特殊文字的范围 */</div><div class="line">@property (nonatomic, assign) NSRange range;</div><div class="line">@property(nonatomic,copy)NSString *urlString;</div></pre></td></tr></table></figure>
+<p>######设置完内容后我们需要计算内容高度，然后复制给Textview,建立一个Frame模型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line">#import &quot;ZLStatus.h&quot;</div><div class="line">@interface ZLFrame : NSObject</div><div class="line"></div><div class="line">//设置</div><div class="line"></div><div class="line">/** 限制最大行数  这一步必须在设置完contentLabelF之后设置*/</div><div class="line">@property(nonatomic,assign)int  maxNumLine;</div><div class="line">@property(nonatomic,strong)ZLStatus *status;</div><div class="line">@property(nonatomic,assign)CGFloat frameX;</div><div class="line">@property(nonatomic,assign)CGFloat frameY;</div><div class="line">@property(nonatomic,assign)CGFloat maxWidth;</div><div class="line">//取值</div><div class="line">/**   */</div><div class="line">/** 正文 */</div><div class="line">@property (nonatomic, assign) CGRect contentLabelF;</div><div class="line">@property(nonatomic,assign)CGRect   maxNumLabelF;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">#import &quot;ZLFrame.h&quot;</div><div class="line">@interface ZLFrame()</div><div class="line">//检测高度的label;</div><div class="line">@property(nonatomic,strong)UILabel *templateLabel;</div><div class="line">@end</div><div class="line">@implementation ZLFrame</div><div class="line">-(void)setStatus:(ZLStatus *)status&#123;</div><div class="line">    _status = status;</div><div class="line">    CGSize contentSize = [status.attributedText boundingRectWithSize:CGSizeMake(self.maxWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;</div><div class="line">    self.contentLabelF = (CGRect)&#123;&#123;self.frameX , self.frameY&#125;, contentSize&#125;;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)setMaxNumLine:(int)maxNumLine&#123;</div><div class="line">    _maxNumLine = maxNumLine;</div><div class="line">    </div><div class="line">    self.templateLabel.frame =CGRectMake(self.frameX, self.frameY, self.maxWidth, 0);</div><div class="line">    self.templateLabel.attributedText = self.status.attributedText;</div><div class="line">    self.templateLabel.numberOfLines = maxNumLine;</div><div class="line">    [self.templateLabel sizeToFit];</div><div class="line">    self.maxNumLabelF = self.templateLabel.frame;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)setFrameX:(CGFloat)frameX&#123;</div><div class="line">    _frameX = frameX;</div><div class="line">&#125;</div><div class="line">-(void)setFrameY:(CGFloat)frameY&#123;</div><div class="line">    _frameY = frameY;</div><div class="line">&#125;</div><div class="line">-(void)setMaxWidth:(CGFloat)maxWidth&#123;</div><div class="line">    _maxWidth = maxWidth;</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(UILabel *)templateLabel&#123;</div><div class="line">    if (!_templateLabel) &#123;</div><div class="line">        _templateLabel =[[UILabel alloc]init];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    return _templateLabel;</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>####最后自定义Textview，引入Frame模型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">#import &quot;ZLFrame.h&quot;</div><div class="line">@interface ZLStatusTextView : UITextView</div><div class="line">/** 所有的特殊字符串(里面存放着HWSpecial) */</div><div class="line">@property (nonatomic, strong) NSArray *specials;</div><div class="line">@property(nonatomic,strong)ZLFrame *zlFrame;</div><div class="line">@property(nonatomic,assign)int maxLine;</div><div class="line">@property(nonatomic,assign)BOOL isShowAll;//是否全部显示</div><div class="line">@end</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div></pre></td><td class="code"><pre><div class="line">#import &quot;ZLStatusTextView.h&quot;</div><div class="line">#import &quot;ZLSpecial.h&quot;</div><div class="line">#define ZLStatusTextViewCoverTag 999</div><div class="line">@implementation ZLStatusTextView</div><div class="line">- (id)initWithFrame:(CGRect)frame</div><div class="line">&#123;</div><div class="line">    self = [super initWithFrame:frame];</div><div class="line">    if (self) &#123;</div><div class="line">        self.backgroundColor = [UIColor clearColor];</div><div class="line">        self.editable = NO;</div><div class="line">        self.textContainerInset = UIEdgeInsetsMake(0, -5, 0, -5);</div><div class="line">        // 禁止滚动, 让文字完全显示出来</div><div class="line">        self.scrollEnabled = NO;</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event</div><div class="line">&#123;</div><div class="line">    // 触摸对象</div><div class="line">    UITouch *touch = [touches anyObject];</div><div class="line">    </div><div class="line">    // 触摸点</div><div class="line">    CGPoint point = [touch locationInView:self];</div><div class="line">    </div><div class="line">    NSArray *specials = [self.attributedText attribute:@&quot;specials&quot; atIndex:0 effectiveRange:NULL];</div><div class="line">    BOOL contains = NO;</div><div class="line">    </div><div class="line">    for (ZLSpecial *special in specials) &#123;</div><div class="line">        self.selectedRange = special.range;</div><div class="line">        // self.selectedRange --影响--&gt; self.selectedTextRange</div><div class="line">        // 获得选中范围的矩形框</div><div class="line">        NSArray *rects = [self selectionRectsForRange:self.selectedTextRange];</div><div class="line">        // 清空选中范围</div><div class="line">        self.selectedRange = NSMakeRange(0, 0);</div><div class="line">        </div><div class="line">        for (UITextSelectionRect *selectionRect in rects) &#123;</div><div class="line">            CGRect rect = selectionRect.rect;</div><div class="line">            if (rect.size.width == 0 || rect.size.height == 0) continue;</div><div class="line">            </div><div class="line">            if (CGRectContainsPoint(rect, point)) &#123; // 点中了某个特殊字符串</div><div class="line">                contains = YES;</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        if (contains) &#123;</div><div class="line">            for (UITextSelectionRect *selectionRect in rects) &#123;</div><div class="line">                CGRect rect = selectionRect.rect;</div><div class="line">                if (rect.size.width == 0 || rect.size.height == 0) continue;</div><div class="line">                </div><div class="line">                UIView *cover = [[UIView alloc] init];</div><div class="line">                cover.backgroundColor = [UIColor greenColor];</div><div class="line">                cover.frame = rect;</div><div class="line">                cover.tag = ZLStatusTextViewCoverTag;</div><div class="line">                cover.layer.cornerRadius = 5;</div><div class="line">                [self insertSubview:cover atIndex:0];</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            break;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    // 在被触摸的特殊字符串后面显示一段高亮的背景</div><div class="line">&#125;</div><div class="line">- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event</div><div class="line">&#123;</div><div class="line">    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</div><div class="line">        // 触摸对象</div><div class="line">        UITouch *touch = [touches anyObject];</div><div class="line">        </div><div class="line">        // 触摸点</div><div class="line">        CGPoint point = [touch locationInView:self];</div><div class="line">        </div><div class="line">        NSArray *specials = [self.attributedText attribute:@&quot;specials&quot; atIndex:0 effectiveRange:NULL];</div><div class="line">        BOOL contains = NO;</div><div class="line">        </div><div class="line">        for (ZLSpecial *special in specials) &#123;</div><div class="line">            self.selectedRange = special.range;</div><div class="line">            // self.selectedRange --影响--&gt; self.selectedTextRange</div><div class="line">            // 获得选中范围的矩形框</div><div class="line">            NSArray *rects = [self selectionRectsForRange:self.selectedTextRange];</div><div class="line">            // 清空选中范围</div><div class="line">            self.selectedRange = NSMakeRange(0, 0);</div><div class="line">            </div><div class="line">            for (UITextSelectionRect *selectionRect in rects) &#123;</div><div class="line">                CGRect rect = selectionRect.rect;</div><div class="line">                if (rect.size.width == 0 || rect.size.height == 0) continue;</div><div class="line">                </div><div class="line">                if (CGRectContainsPoint(rect, point)) &#123; // 点中了某个特殊字符串</div><div class="line">                    contains = YES;</div><div class="line">                    break;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            if (contains) &#123;</div><div class="line">                for (UITextSelectionRect *selectionRect in rects) &#123;</div><div class="line">                    CGRect rect = selectionRect.rect;</div><div class="line">                    if (rect.size.width == 0 || rect.size.height == 0) continue;</div><div class="line">                    </div><div class="line">                    if (special.urlString) &#123;</div><div class="line">                        NSString *urlStr = special.urlString;</div><div class="line">                        NSURL *url =[NSURL URLWithString:urlStr];</div><div class="line">                        if (url.scheme) &#123;</div><div class="line">                            [[UIApplication sharedApplication]openURL:url];</div><div class="line">                        &#125;else&#123;</div><div class="line">                            NSMutableString *str=[[NSMutableString alloc] initWithFormat:@&quot;tel:%@&quot;,special.text];</div><div class="line">                            UIWebView *callWebview = [[UIWebView alloc] init];</div><div class="line">                            [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];</div><div class="line">                            [self addSubview:callWebview];</div><div class="line">                    &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                </div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        [self touchesCancelled:touches withEvent:event];</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event</div><div class="line">&#123;</div><div class="line">    // 去掉特殊字符串后面的高亮背景</div><div class="line">    for (UIView *child in self.subviews) &#123;</div><div class="line">        if (child.tag == ZLStatusTextViewCoverTag) [child removeFromSuperview];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(void)setZlFrame:(ZLFrame *)zlFrame&#123;</div><div class="line">    _zlFrame = zlFrame;</div><div class="line">    self.attributedText = zlFrame.status.attributedText;</div><div class="line">    self.frame = zlFrame.contentLabelF;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)setMaxLine:(int)maxLine&#123;</div><div class="line">    _maxLine = maxLine;</div><div class="line">    [self.zlFrame setMaxNumLine:maxLine];</div><div class="line">    self.frame = self.zlFrame.maxNumLabelF;</div><div class="line">&#125;</div><div class="line">-(void)setIsShowAll:(BOOL)isShowAll&#123;</div><div class="line">    _isShowAll = isShowAll;</div><div class="line">    if (isShowAll) &#123;</div><div class="line">        self.frame = self.zlFrame.contentLabelF;</div><div class="line"></div><div class="line">    &#125;else&#123;</div><div class="line">        [self setMaxLine:3];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<blockquote>
+<p>最后在ViewController里引入即可：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">#import &quot;ViewController.h&quot;</div><div class="line">#import &quot;ZLStatusTextView.h&quot;</div><div class="line">#define kTempText  @&quot;简书：http://jianshu.com哈哈哈[调皮][流汗][偷笑][再见][可爱][色][害羞][委屈][委屈][抓狂][酷][酷][嘘][嘘][龇牙][大哭][大哭][大哭][龇牙][嘘][嘘][调皮][调皮]哈哈哈哈[嘘][调皮][调皮]18637963241他大舅他二舅都是舅，高桌子地板头都是木头&quot;</div><div class="line">#define  KURlREGULAR @&quot;((http[s]&#123;0,1&#125;|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]&#123;2,4&#125;)(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]&#123;2,4&#125;)(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(((http[s]&#123;0,1&#125;|ftp)://|)((?:(?:25[0-5]|2[0-4]\\d|((1\\d&#123;2&#125;)|([1-9]?\\d)))\\.)&#123;3&#125;(?:25[0-5]|2[0-4]\\d|((1\\d&#123;2&#125;)|([1-9]?\\d))))(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)&quot;</div><div class="line">#define KPHONENUMBERREGLAR @&quot;\\d&#123;3&#125;-\\d&#123;8&#125;|\\d&#123;3&#125;-\\d&#123;7&#125;|\\d&#123;4&#125;-\\d&#123;8&#125;|\\d&#123;4&#125;-\\d&#123;7&#125;|1+[3578]+\\d&#123;9&#125;|\\d&#123;8&#125;|\\d&#123;7&#125;&quot;</div><div class="line">#import &quot;ZLStatus.h&quot;</div><div class="line">#import &quot;ZLFrame.h&quot;</div><div class="line">#import &quot;LxButton.h&quot;</div><div class="line">@interface ViewController ()&lt;UITextViewDelegate&gt;</div><div class="line">@property(nonatomic,strong)ZLStatusTextView *textview;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line">    </div><div class="line">    self.textview =[[ZLStatusTextView alloc]initWithFrame:CGRectMake(20, 100, 250, 200)];</div><div class="line">    ZLStatus *status = [[ZLStatus alloc]init];</div><div class="line">    status.text = kTempText;</div><div class="line">   </div><div class="line">   </div><div class="line">    ZLFrame *zlFrame =[[ZLFrame alloc]init];</div><div class="line">    zlFrame.frameX = self.textview.frame.origin.x;</div><div class="line">    zlFrame.frameY = self.textview.frame.origin.y;</div><div class="line">    zlFrame.maxWidth = self.textview.frame.size.width;</div><div class="line">    zlFrame.status = status;</div><div class="line">    </div><div class="line">    self.textview.zlFrame = zlFrame;</div><div class="line">    //设置最大行数用于展开</div><div class="line">    self.textview.maxLine = 3;</div><div class="line">    self.textview.isShowAll = YES;</div><div class="line">    [self.view addSubview:self.textview];</div><div class="line">    self.textview.backgroundColor =[UIColor lightGrayColor];</div><div class="line">   </div><div class="line">  </div><div class="line">    LxButton *button =[LxButton LXButtonWithTitle:@&quot;限制最大行数&quot; titleFont:[UIFont systemFontOfSize:15] Image:nil backgroundImage:nil backgroundColor:[UIColor brownColor] titleColor:[UIColor blueColor] frame:CGRectMake(20, 40, 150, 40)];</div><div class="line">    </div><div class="line">    [self.view addSubview:button];</div><div class="line">    __weak ViewController *weakSelf = self;</div><div class="line">    [button addClickBlock:^(UIButton *button) &#123;</div><div class="line">       </div><div class="line">        weakSelf.textview.isShowAll =!weakSelf.textview.isShowAll;</div><div class="line">    &#125;];</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>demo地址：<a href="https://github.com/liuxinixn/LXRegularTextview/tree/master" target="_blank" rel="noopener">富文本检索表情，网址，替换链接，限制最大输入行</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/07/appStore打包上线/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/07/appStore打包上线/" itemprop="url">appStore打包上线</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-07T20:19:35+08:00">
+                2017-03-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>想了想还是总结下：<br>xcode8 之后可以自动管理，当然也可以选择手动。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-cee6f2f5de417958.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-9106ab3a5557c514.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-de4e6316281890bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
+<p>Product里的app 变为黑色后，show in Finder。<br>新建个文件夹，命名为Payload。名字不能错，将app 复制到文件夹里，然后压缩，更改后缀名为ipa。<br><img src="http://upload-images.jianshu.io/upload_images/1694376-fa77095b7b1321d9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-dfbb2f6f713b0e4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5.png"></p>
+<p>如果登陆Application loader的时候 一直登陆不了，可以去appid设置的地方去管理密码的地方 ，设置一个app专用密码。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-106d8a23d2bd2d2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-44fd26f1f1be3367.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.jpeg"></p>
+<p>然后就按步骤上传即可。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/06/真机调试一些问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/06/真机调试一些问题/" itemprop="url">真机测试的一些问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-06T20:19:35+08:00">
+                2017-03-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>(1)Xcode 真机调试报错：<code>This application&#39;s application-identifier entitleme</code></p>
+<p><code>This application&#39;s application-identifier entitlement does not match that of the installed application. These values must match for an upgrade to be allowed</code></p>
+<p>解决方法：<br>1、Xcode－Window-&gt;Devices<br>2、选中你的设备，在右边的installed Apps中删除这个App<br>3、重新编绎即可</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/05/未越狱的手机安装ipa，制作iOS-Ad-Hoc测试线上应用-/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/05/未越狱的手机安装ipa，制作iOS-Ad-Hoc测试线上应用-/" itemprop="url">未越狱的手机安装ipa,制作iOS Ad-hoc测试应用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-05T20:19:35+08:00">
+                2017-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>######在上线前通常需要提交给测试，提供ipa，测试待上线的应用，针对未越狱的手机我们可以通过制作一个制作iOS Ad-Hoc测试线上应用 ，xcode 里进行简单配置，然后通过itunes，把描述文件拖进去，点击同步应用即可。 接下来详细说明:</p>
+<blockquote>
+<p>第一步 创建一个Ad-Hoc测试线上应用。</p>
+</blockquote>
+<p>上图： </p>
+<p>###选择环境<br><img src="http://upload-images.jianshu.io/upload_images/1694376-5e34af2404fe2bed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>###添加描述文件<br><img src="http://upload-images.jianshu.io/upload_images/1694376-cdb4697960c0f44d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p>###选择Ad Hoc<br><img src="http://upload-images.jianshu.io/upload_images/1694376-91ce51f74f29d359.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
+<p>###选择你的App ID 套装<br><img src="http://upload-images.jianshu.io/upload_images/1694376-e35bd95ac059be38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
+<p>###选择正确的证书<br><img src="http://upload-images.jianshu.io/upload_images/1694376-661e21dceaec1e8f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5.png"></p>
+<p>###然后选择done ，会生成一个iOS Distribution的Ad Hoc专用描述文件<br><img src="http://upload-images.jianshu.io/upload_images/1694376-443e7b133fe31a59.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.png"></p>
+<blockquote>
+<p>第二步  xcode 的配置：</p>
+</blockquote>
+<h3 id="project配置-，推荐使用Configurations名字：ad-hoc-distribution"><a href="#project配置-，推荐使用Configurations名字：ad-hoc-distribution" class="headerlink" title="project配置 ，推荐使用Configurations名字：ad hoc distribution"></a>project配置 ，推荐使用Configurations名字：ad hoc distribution</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-54a3820dc0c99315.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.png"></p>
+<p>###General 里配置：选择 配置好的描述文件 双击</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-917616d9e11a66d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.png"></p>
+<p>###最后 打包前需要设置 如果是上线 选择release， 上线前测试选择 ad hoc  distribution<br><img src="http://upload-images.jianshu.io/upload_images/1694376-8332d3e6ff3fe63a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="9.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-8f58eaac6e180acb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="10.png"></p>
+<h3 id="选择-device，command-b-编译"><a href="#选择-device，command-b-编译" class="headerlink" title="选择 device，command + b 编译"></a>选择 device，command + b 编译</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-b6aca55e7652f772.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="11.png"></p>
+<h3 id="编译通过后-Product里-app-颜色为黑色-，表示编译通过，然后show-in-finder-，复制到一个-Payload的文件夹里，选择压缩，把zip-后缀改为ipa。"><a href="#编译通过后-Product里-app-颜色为黑色-，表示编译通过，然后show-in-finder-，复制到一个-Payload的文件夹里，选择压缩，把zip-后缀改为ipa。" class="headerlink" title="编译通过后 Product里 app 颜色为黑色 ，表示编译通过，然后show in finder  ，复制到一个 Payload的文件夹里，选择压缩，把zip 后缀改为ipa。"></a>编译通过后 Product里 app 颜色为黑色 ，表示编译通过，然后show in finder  ，复制到一个 Payload的文件夹里，选择压缩，把zip 后缀改为ipa。</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-3f9ca96dc32cbedb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="12.png"></p>
+<h3 id="生成ipa"><a href="#生成ipa" class="headerlink" title="生成ipa"></a>生成ipa</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-20ac611478945833.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="13.png"></p>
+<blockquote>
+<p>最后 通过itunes 安装到手机上，准备好 Ad Hoc的描述文件与ipa 包 ，</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-f9e2c1da84b5d1ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="14.png"></p>
+<p>####最后选择手机 ，然后同步应用即可。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/04/设置Cell选中的颜色-/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/04/设置Cell选中的颜色-/" itemprop="url">设置Cell选中的颜色</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T20:19:35+08:00">
+                2017-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>需要同时设置高亮与选中状态，先高亮后选择<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (void)setSelected:(BOOL)selected animated:(BOOL)animated &#123;</div><div class="line">    [super setSelected:selected animated:animated];</div><div class="line">    // Configure the view for the selected state</div><div class="line">    </div><div class="line">    if (selected) &#123;</div><div class="line">        self.contentView.backgroundColor = QBBackColor;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated &#123;</div><div class="line">    </div><div class="line">    [super setHighlighted:highlighted animated:animated];</div><div class="line">    if (highlighted) &#123;</div><div class="line">        self.contentView.backgroundColor = QBBackColor;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/04/使用系统的或TTTAttributedLabel检索网址/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/04/使用系统的或TTTAttributedLabel检索网址/" itemprop="url">使用系统的或TTTAttributedLabel检索网址</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T20:19:35+08:00">
+                2017-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#####先立个flag，在检测网址链接的过程中，不管是使用 NSDataDetector还是TTTAttributedLabel 做检索网址，其实TTTAttributedLabel也是使用系统的检索网址，先记录一下发现的问题。</p>
+<ul>
+<li><p>如果网址是这样的<br><code>http://www.jianshu.com下雨天的</code><br>检索的结果是不准确的 ，结果检索到的网址是<code>http://www.jianshu.com下雨天的</code></p>
+</li>
+<li><p>如果网址是这样的<br><code>http://www.jianshu.com/下雨天的</code><br>检索结果是一样的，不准确</p>
+</li>
+<li><p>如果网址是这样的去掉了协议头，并且网址和文字中间没有空格，<br><code>www.jianshu.com下雨天的</code><br>#####结果检索到的网址是<code>www.jianshu.com</code> 正确</p>
+</li>
+<li><p>如果网址和文字中间#有#空格，有没有协议头都一样<br><code>http://www.jianshu.com 下雨天的</code><br>#####结果检索到的网址是<code>http://www.jianshu.com</code> 正确</p>
+</li>
+</ul>
+<blockquote>
+<p>发现好多第三方，都是采用系统自带的检测网址或者电话号码， 电话号码还好点但是网址总是检测不准。</p>
+</blockquote>
+<p>正确的姿势应该是这样的：<br>检测网址与电话：<br><code>// url链接的规则
+    NSString *urlPattern = @&quot;((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(((http[s]{0,1}|ftp)://|)((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)&quot;;
+    NSString *phoneNumber =@&quot;\\d{3}-\\d{8}|\\d{4}-\\d{7}|\\d{11}&quot;
+    ;</code><br>下一篇分析下如何利用正则检索网址与电话号码，表情，并且实现富文本的多行与完成显示的切换。</p>
 
           
         

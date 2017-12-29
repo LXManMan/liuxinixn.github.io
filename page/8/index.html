@@ -262,788 +262,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/07/iOS-环信3-2-3-离线推送，坑点/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/02/07/iOS-环信3-2-3-离线推送，坑点/" itemprop="url">iOS -环信3.2.3 离线推送，坑点</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-07T20:19:35+08:00">
-                2017-02-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在使用环信做离线推送时，环信文档后台的扩展消息的格式是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">    &quot;target_type&quot;:&quot;users&quot;,</div><div class="line">    &quot;target&quot;:[</div><div class="line">        &quot;6006&quot;</div><div class="line">    ],</div><div class="line">    &quot;msg&quot;:&#123;</div><div class="line">        &quot;type&quot;:&quot;txt&quot;,</div><div class="line">        &quot;msg&quot;:&quot;hello from rest&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;from&quot;:&quot;6001&quot;,</div><div class="line">    &quot;ext&quot;:&#123;</div><div class="line">        &quot;em_apns_ext&quot;:&quot;扩展内容&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>假如你们公司对ext 进行了扩展，类似下面的的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;em_apns_ext&quot; =     &#123;</div><div class="line">        &quot;em_push_title&quot; = &quot;\U5218\U65b0:testing&quot;;</div><div class="line">        &quot;model_type&quot; = 105002;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>######其中em_apns_ext,以及em_push_title 是必须的，字段名字不能变，后面可以扩展你需要的内容，作为跳转使用。</p>
-<p>然后 看一下 环信文档显示消息的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;aps&quot;:&#123;</div><div class="line">        &quot;alert&quot;:&quot;您有一条新消息&quot;,	 </div><div class="line">        &quot;badge&quot;:1,				 </div><div class="line">        &quot;sound&quot;:&quot;default&quot;		 </div><div class="line">    &#125;,</div><div class="line">    &quot;f&quot;:&quot;6001&quot;,					 </div><div class="line">    &quot;t&quot;:&quot;6006&quot;,					 </div><div class="line">    &quot;e&quot;:&quot;扩展内容&quot;,</div><div class="line">    &quot;m&quot;:&quot;14aec1e00ef&quot;			 </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>后台规定的字段em_push_title，是最终展示在消息通知中 的 alert，消息的具体内容。<br>那么扩展的字段在哪里展示呢？ 在上面的字段<code>e</code> 里，是一个字典，字典e 里的字段就是后台在ext 扩展的字段,意义对应。比如这里e里 只有：<br>{<br> “model_type” = 105002;<br>}</p>
-<p>在线消息的通知我们可以自己来实现，但是离线的字段是固定的。需要注意下。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/06/iOS-环信3-0-简单单聊集成/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/02/06/iOS-环信3-0-简单单聊集成/" itemprop="url">iOS -环信3.0简单单聊集成</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-06T20:19:35+08:00">
-                2017-02-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h5 id="1、准备工作，配置证书，绑定APPID，。注意开发证书和生产证书。创建应用，上传p12-文件（证书）到环信后台，环信会返回一个应用标识就是APPKEY，以及你的推送证书的名字。"><a href="#1、准备工作，配置证书，绑定APPID，。注意开发证书和生产证书。创建应用，上传p12-文件（证书）到环信后台，环信会返回一个应用标识就是APPKEY，以及你的推送证书的名字。" class="headerlink" title="1、准备工作，配置证书，绑定APPID，。注意开发证书和生产证书。创建应用，上传p12 文件（证书）到环信后台，环信会返回一个应用标识就是APPKEY，以及你的推送证书的名字。"></a>1、准备工作，配置证书，绑定APPID，。注意开发证书和生产证书。创建应用，上传p12 文件（证书）到环信后台，环信会返回一个应用标识就是APPKEY，以及你的推送证书的名字。</h5><p><img src="http://upload-images.jianshu.io/upload_images/1694376-6eae2c7076ffa2c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="应用标识.png"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-ce0584cdb16185f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="推送证书.png"></p>
-<p>#####2、下载官方SDK，<br><img src="http://upload-images.jianshu.io/upload_images/1694376-f9b7dbd09fb29f3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="sdk.png"></p>
-<p>#####3、新建个工程，把上面的 HyphenateFullSDK拖到工程里，开始配置。</p>
-<ul>
-<li>设置bitcode  为 No；</li>
-<li>创建pch ，</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#ifdef __OBJC__</div><div class="line"></div><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line">#import &lt;Hyphenate/Hyphenate.h&gt;</div><div class="line">#define HUANXINAPPKEY @&quot;1198170313178186#lxchatdemo&quot;  //应用标识</div><div class="line">#define APNSNAME @&quot;LXChatDemo&quot; //证明名字</div><div class="line">#endif</div></pre></td></tr></table></figure>
-<p>配置依赖的静态库：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">CoreMedia.framework</div><div class="line">AudioToolbox.framework</div><div class="line">AVFoundation.framework</div><div class="line">MobileCoreServices.framework</div><div class="line">ImageIO.framework</div><div class="line">libc++.dylib</div><div class="line">libz.dylib</div><div class="line">libstdc++.6.0.9.dylib</div><div class="line">libsqlite3.dylib</div><div class="line">libiconv.dylib</div></pre></td></tr></table></figure></p>
-<p>#####如果编译出现这样的问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dyld: Library not loaded: @rpath/Hyphenate.framework/Hyphenate</div><div class="line">  Referenced from: /Users/liangyi/Library/Developer/CoreSimulator/Devices/F3F0CB24-F891-489D-B71F-1AA6DA17832C/data/Containers/Bundle/Application/8D4D4F2E-A19F-4590-BE80-41403C735448/EMDemo.app/EMDemo</div><div class="line">  Reason: image not found</div></pre></td></tr></table></figure></p>
-<p>//字面意思是嵌入二进制文件<br><img src="http://upload-images.jianshu.io/upload_images/1694376-16bfa3fdd2ababe3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="shezhi.png"></p>
-<p>最后编译command + B  通过即可。</p>
-<p>######4、根据官方视频简单实现单聊：</p>
-<p><code>EMOptions</code> 是SDK的设置选项<br><code>EMClient</code> 是用户选项，大概看一下头文件，基本上包含了单聊，群聊，聊天室：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, strong, readonly) id&lt;IEMChatManager&gt; chatManager;</div><div class="line"></div><div class="line">/*!</div><div class="line"> *  \~chinese </div><div class="line"> *  好友模块</div><div class="line"> *</div><div class="line"> *  \~english </div><div class="line"> *  Contact Management</div><div class="line"> */</div><div class="line">@property (nonatomic, strong, readonly) id&lt;IEMContactManager&gt; contactManager;</div><div class="line"></div><div class="line">/*!</div><div class="line"> *  \~chinese </div><div class="line"> *  群组模块</div><div class="line"> *</div><div class="line"> *  \~english </div><div class="line"> *  Group Management</div><div class="line"> */</div><div class="line">@property (nonatomic, strong, readonly) id&lt;IEMGroupManager&gt; groupManager;</div><div class="line"></div><div class="line">/*!</div><div class="line"> *  \~chinese </div><div class="line"> *  聊天室模块</div><div class="line"> *</div><div class="line"> *  \~english </div><div class="line"> *  Chat room Management</div><div class="line"> */</div><div class="line">@property (nonatomic, strong, readonly) id&lt;IEMChatroomManager&gt; roomManager;</div></pre></td></tr></table></figure></p>
-<p>######直接按照视频实现下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">#import &quot;AppDelegate.h&quot;</div><div class="line">#import &quot;ChatViewController.h&quot;</div><div class="line">@interface AppDelegate ()</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation AppDelegate</div><div class="line"></div><div class="line"></div><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    // Override point for customization after application launch.</div><div class="line">    </div><div class="line">    EMOptions *option =[EMOptions optionsWithAppkey:HUANXINAPPKEY];</div><div class="line">    option.apnsCertName = APNSNAME;</div><div class="line">    </div><div class="line">    EMError *error =[[EMClient sharedClient]initializeSDKWithOptions:option];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;初始化成功&quot;);</div><div class="line">    &#125;</div><div class="line">    error = [[EMClient sharedClient] registerWithUsername:@&quot;111&quot; password:@&quot;111&quot;];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;注册成功&quot;);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">    &#125;</div><div class="line">    error = [[EMClient sharedClient] registerWithUsername:@&quot;222&quot; password:@&quot;222&quot;];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;注册成功&quot;);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    error =[[EMClient sharedClient]loginWithUsername:@&quot;111&quot; password:@&quot;111&quot;];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;登录成功&quot;);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">    &#125;</div><div class="line">//    error =[[EMClient sharedClient]loginWithUsername:@&quot;222&quot; password:@&quot;222&quot;];</div><div class="line">//    if (!error) &#123;</div><div class="line">//        NSLog(@&quot;登录成功&quot;);</div><div class="line">//    &#125;else&#123;</div><div class="line">//        NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">//    &#125;</div><div class="line">    </div><div class="line">    self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];</div><div class="line">    ChatViewController *vc =[[ChatViewController alloc]initWithConversationId:@&quot;222&quot; conversationType:EMConversationTypeChat];</div><div class="line">    UINavigationController *nav =[[UINavigationController alloc]initWithRootViewController:vc];</div><div class="line">    self.window.rootViewController = nav;</div><div class="line">    [self.window makeKeyAndVisible];</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">//接受消息 必须ChatManager 的代理</div><div class="line">@interface ChatViewController ()&lt;EMChatManagerDelegate&gt;</div><div class="line">@property (weak, nonatomic) IBOutlet UITextField *input;</div><div class="line">@property(nonatomic,strong)EMConversation *conversation;</div><div class="line">@property (weak, nonatomic) IBOutlet UILabel *receiveLabel;</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ChatViewController</div><div class="line">-(id)initWithConversationId:(NSString *)conversation conversationType:(EMConversationType)conversationType&#123;</div><div class="line">    self = [super initWithNibName:@&quot;ChatViewController&quot; bundle:nil];</div><div class="line">    if (self) &#123;</div><div class="line">        self.conversation = [[EMClient sharedClient].chatManager getConversation:conversation type:conversationType createIfNotExist:YES];</div><div class="line">        [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">-(void)dealloc&#123;</div><div class="line">    [[EMClient sharedClient] removeDelegate:self];</div><div class="line">&#125;</div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view from its nib.</div><div class="line">&#125;</div><div class="line">#pragma mark --接受消息---</div><div class="line">-(void)messagesDidReceive:(NSArray *)aMessages&#123;</div><div class="line">    EMMessage *message = aMessages[0];</div><div class="line">    EMTextMessageBody *body = (EMTextMessageBody *)message.body;</div><div class="line">    self.receiveLabel.text = body.text;</div><div class="line">&#125;</div><div class="line">#pragma mark ---发送消息---</div><div class="line">- (IBAction)sendAction:(id)sender &#123;</div><div class="line">    EMTextMessageBody *body =[[EMTextMessageBody alloc]initWithText:self.input.text];</div><div class="line">    EMMessage *message =[[EMMessage alloc]initWithConversationID:self.conversation.conversationId from:[EMClient sharedClient].currentUsername to:self.conversation.conversationId body:body ext:nil];</div><div class="line">    [[EMClient sharedClient].chatManager sendMessage:message progress:^(int progress) &#123;</div><div class="line">       </div><div class="line">    &#125; completion:^(EMMessage *message, EMError *error) &#123;</div><div class="line">        if (!error) &#123;</div><div class="line">            NSLog(@&quot;发送成功&quot;);</div><div class="line">        &#125;else&#123;</div><div class="line">            NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">        &#125;</div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-867d697f9d7b2457.gif?imageMogr2/auto-orient/strip" alt="效果图.gif"></p>
-<p> #####最后别忘了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;</div><div class="line">	&lt;dict&gt;</div><div class="line">		&lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;</div><div class="line">		&lt;true/&gt;</div><div class="line">	&lt;/dict&gt;</div></pre></td></tr></table></figure></p>
-<p>简单单聊集成就是这样了。至于消息的存储，排序，提示，还需要借助数据库，推送进行处理，当然也可以使用环信的数据库。<br>最简单的集成单聊页面，就是把EaseUI 拖到项目里，然后定义一个UIViewController继承与EaseMessageViewController即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    // Override point for customization after application launch.</div><div class="line">    </div><div class="line">    EMOptions *option =[EMOptions optionsWithAppkey:HUANXINAPPKEY];</div><div class="line">    option.apnsCertName = APNSNAME;</div><div class="line">    </div><div class="line">    EMError *error =[[EMClient sharedClient]initializeSDKWithOptions:option];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;初始化成功&quot;);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    error =[[EMClient sharedClient]loginWithUsername:@&quot;111&quot; password:@&quot;111&quot;];</div><div class="line">    if (!error) &#123;</div><div class="line">        NSLog(@&quot;登录成功&quot;);</div><div class="line">    &#125;else&#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error.errorDescription);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    </div><div class="line">    self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];</div><div class="line">    ChatViewController *vc =[[ChatViewController alloc]initWithConversationChatter:@&quot;222&quot; conversationType:EMConversationTypeChat];</div><div class="line">                             UINavigationController *nav =[[UINavigationController alloc]initWithRootViewController:vc];</div><div class="line">    self.window.rootViewController = nav;</div><div class="line">    [self.window makeKeyAndVisible];</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>然后就可以实现简单的单聊了，环信官方建议好友体系由自己管理，当然开发环境环信也提供了好友体系。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-7ca593f1ae1c4fa7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="欧了.png"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/05/iOS-关于懒加载的页面动画进入后台后暂停/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/02/05/iOS-关于懒加载的页面动画进入后台后暂停/" itemprop="url">iOS --关于懒加载的页面进入后台后暂停</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-05T20:19:35+08:00">
-                2017-02-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>对于 UITabarController管理的导航控制器的根界面，如果加入动画，你会发现，当应用退出到后台，然后进入到前台，你就会发现动画停止了。解决办法就是添加通知监听应用进入前台，进入活跃状态。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterPlayground) name:UIApplicationDidBecomeActiveNotification object:nil];</div><div class="line">&#125;</div><div class="line">-(void)appDidEnterPlayground&#123;</div><div class="line">    [self.heroBtn.layer removeAllAnimations];</div><div class="line">     [self.heroBtn.layer addAnimation:[self groupAnimation] forKey:nil];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/09/10/iOS-在使用全屏返回手势与UIScrollview的冲突问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/10/iOS-在使用全屏返回手势与UIScrollview的冲突问题/" itemprop="url">iOS -在使用全屏返回手势与UIScrollview的冲突问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-10T20:19:35+08:00">
-                2016-09-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在使用<code>UINavigationController+FDFullscreenPopGesture</code>全屏手势的时候与UIScrollview发生冲突。在官方的demo里 是这么写的:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer &#123;</div><div class="line">    if (self.contentOffset.x &lt;= 0) &#123;</div><div class="line">        if ([otherGestureRecognizer.delegate isKindOfClass:NSClassFromString(@&quot;_FDFullscreenPopGestureRecognizerDelegate&quot;)]) &#123;</div><div class="line">            return YES;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return NO;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>所以我们只需要新建一个UIScrollview分类，把这个方法放进去即可。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/07/09/iOS-内存检测Instruments之Leaks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/07/09/iOS-内存检测Instruments之Leaks/" itemprop="url">iOS -内存检测Instruments之Leaks</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-09T20:19:35+08:00">
-                2016-07-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>动态检测内存工具Leaks，可以和静态分析工具Analyze配合使用。<br><code>cmd + I</code>进入 Leaks 主界面，</p>
-<p>#######第一步：点击左上角的红色录制按钮，会重启模拟器或者手机，点击暂停可以进行测试。<br><img src="http://upload-images.jianshu.io/upload_images/1694376-92dcf784dd366981.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-6a8f6ff5ea01903d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
-<p>#######第二步：然后 点击应用，进入界面，测试，如果出现红X，点击暂停按钮暂停，开始查找内存泄漏的地方。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-9206d4d535f67f4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
-<p>#######第三步：点击Leak Checks按钮，选择要定位的区域，红色❌号标识前后。选择CallTree，会定位到具体的方法。右侧面板配置如图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-01354a2229ee2ec5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
-<p>#######第四步：最后双击需要检测的地方跳转到Xcode，定位代码。</p>
-<blockquote>
-<p>最后简单使用Time Profiler检测耗时的代码.面板配置同Leaks。</p>
-</blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-8f794c0c019ff50f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p>之前用Time Profiler 检测过UIImage 加载两种方式的区别。<a href="http://www.jianshu.com/p/a700dcf27b83" target="_blank" rel="noopener">UIImageview加载动画做内存与耗时</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/07/05/ios--UITableView三级展开/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/07/05/ios--UITableView三级展开/" itemprop="url">iOS --UITableView三级展开</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-05T20:19:35+08:00">
-                2016-07-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>有个多级展开的需求，但不是那种三层嵌套，是这个效果：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-75ffc45cfef9b56f.gif?imageMogr2/auto-orient/strip" alt="多级展开.gif"><br>这样 我们只需要给Tableview的总的header 以及分区header 增加一个展开即可：</p>
-<blockquote>
-<p>总的header 不会复用，所以给header 一个展开属性</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">typedef void (^LXExpandBlock)(BOOL isExpand);</div><div class="line">@interface LXTableviewHeader : UIView</div><div class="line">@property(nonatomic, assign)BOOL isExpand;</div><div class="line">@property(nonatomic,copy)LXExpandBlock expandBlock;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<blockquote>
-<p>分区header 的复用把展开属性设置在对应的model里</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">@class LXSectionModel;</div><div class="line">typedef void (^LXHeaderViewExpandBlock)(BOOL isExpand);</div><div class="line">@interface LXHeadView : UITableViewHeaderFooterView</div><div class="line">@property(nonatomic,strong)LXSectionModel *model;</div><div class="line">@property(nonatomic,copy)LXHeaderViewExpandBlock enpandBlock;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line"></div><div class="line">@interface LXSectionModel : NSObject</div><div class="line">@property (nonatomic, copy) NSString *sectionTitle;</div><div class="line">// 是否是展开的</div><div class="line">@property (nonatomic, assign) BOOL isExpanded;</div><div class="line"></div><div class="line">@property (nonatomic, strong) NSMutableArray *cellModels;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<blockquote>
-<p>整体头部展开是这样的 </p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">LXTableviewHeader *header =[[LXTableviewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];</div><div class="line">__weak ViewController *weakSelf = self;</div><div class="line">header.expandBlock = ^( BOOL isExpand)</div><div class="line">&#123;</div><div class="line">    [weakSelf.tableView reloadData];</div><div class="line">&#125;;</div><div class="line">self.tableView.tableHeaderView = header;</div><div class="line">self.headerView = header;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>分区头部展开处理过程</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section</div><div class="line">&#123;</div><div class="line">    LXHeadView *view =[tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderIdentifier];</div><div class="line">    LXSectionModel *sectionModel = self.sectionDataSources[section];</div><div class="line">    </div><div class="line">    view.model = sectionModel;</div><div class="line">    view.enpandBlock = ^(BOOL isExpanded)</div><div class="line">    &#123;</div><div class="line">        [tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:0];</div><div class="line">    &#125;;</div><div class="line">    return view;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>  返回分区与返回cell个数的处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView</div><div class="line">&#123;</div><div class="line">    return self.headerView.isExpand ?self.sectionDataSources.count:0;</div><div class="line">&#125;</div><div class="line">-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section</div><div class="line">&#123;</div><div class="line">      LXSectionModel *sectionModel = self.sectionDataSources[section];</div><div class="line">    return sectionModel.isExpanded ? sectionModel.cellModels.count:0;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p>#####所有的展开与收起  额外计算，只需要刷新整体或者刷新分区即可，改变分区个数与分区内对应cell 个数，不需要对cell 做insert 或者delete操作。</p>
-<p>demo 地址：<a href="https://github.com/liuxinixn/Tableview-/tree/master" target="_blank" rel="noopener">UITableview三级展开</a><br>参考文章：<a href="http://www.jianshu.com/p/fc45624603f6" target="_blank" rel="noopener">UITableView分区展开与收起</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/06/03/ios--二维码生成（带图标）以及相册识别二维码跳转/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1560,6 +778,1056 @@
 </blockquote>
 <p><img src="http://upload-images.jianshu.io/upload_images/1694376-6be7c39c780f2522.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="上下文状态.png"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">- (void)drawRect:(CGRect)rect &#123;</div><div class="line">    </div><div class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</div><div class="line"></div><div class="line">    </div><div class="line">    //只描边</div><div class="line">    [[UIColor blueColor]setStroke];</div><div class="line">    [[UIColor redColor]setFill];</div><div class="line"></div><div class="line">    </div><div class="line">    //渐变色 采用layer</div><div class="line">    CAGradientLayer *gradient1 = [CAGradientLayer layer];</div><div class="line">    gradient1.frame = CGRectMake(100, 200, 60, 30);</div><div class="line">    gradient1.colors = [NSArray arrayWithObjects:(id)[UIColor whiteColor].CGColor,</div><div class="line">                        (id)[UIColor grayColor].CGColor,</div><div class="line">                        (id)[UIColor blackColor].CGColor,</div><div class="line">                        (id)[UIColor yellowColor].CGColor,</div><div class="line">                        (id)[UIColor blueColor].CGColor,</div><div class="line">                        (id)[UIColor redColor].CGColor,</div><div class="line">                        (id)[UIColor greenColor].CGColor,</div><div class="line">                        (id)[UIColor orangeColor].CGColor,</div><div class="line">                        (id)[UIColor brownColor].CGColor,nil];</div><div class="line">    [self.layer insertSublayer:gradient1 atIndex:0];</div><div class="line">    </div><div class="line"></div><div class="line">    </div><div class="line">    //保存当前上下文状态，如果做了裁剪就会在裁剪范围内 进行绘制，只有恢复到之前的上下文状态，才可以在裁剪区域之外进行绘制</div><div class="line">    CGContextSaveGState(context);</div><div class="line">    </div><div class="line">    CGContextMoveToPoint(context, 250, 300);</div><div class="line">    CGContextAddLineToPoint(context,350, 300);</div><div class="line">    CGContextAddLineToPoint(context, 350, 400);</div><div class="line">    CGContextAddLineToPoint(context, 250, 400);</div><div class="line">    CGContextClip(context);//context裁剪路径,后续操作的路径</div><div class="line"></div><div class="line">    //CGContextDrawLinearGradient(CGContextRef context,CGGradientRef gradient, CGPoint startPoint, CGPoint endPoint,CGGradientDrawingOptions options)</div><div class="line">    //gradient渐变颜色,startPoint开始渐变的起始位置,endPoint结束坐标,options开始坐标之前or开始之后开始渐变</div><div class="line">    CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();</div><div class="line">    CGFloat colors[] =</div><div class="line">    &#123;</div><div class="line">        1,1,1, 1.00,</div><div class="line">        1,1,0, 1.00,</div><div class="line">        1,0,0, 1.00,</div><div class="line">        1,0,1, 1.00,</div><div class="line">        0,1,1, 1.00,</div><div class="line">        0,1,0, 1.00,</div><div class="line">        0,0,1, 1.00,</div><div class="line">        0,0,0, 1.00,</div><div class="line">    &#125;;</div><div class="line">    CGGradientRef gradient = CGGradientCreateWithColorComponents</div><div class="line">    (rgb, colors, NULL, sizeof(colors)/(sizeof(colors[0])*4));//形成梯形，渐变的效果</div><div class="line">    CGColorSpaceRelease(rgb);</div><div class="line">    </div><div class="line">    CGContextDrawLinearGradient(context, gradient, CGPointMake(250, 300), CGPointMake(350, 400), kCGGradientDrawsAfterEndLocation);</div><div class="line"></div><div class="line">    //恢复上下文状态</div><div class="line">    CGContextRestoreGState(context);</div><div class="line">    </div><div class="line">  //如果没有恢复上下文状态，下方的矩形是看不见的</div><div class="line">    CGContextFillRect(context, CGRectMake(100, 450, 100, 100));</div><div class="line">    CGContextDrawPath(context, kCGPathFill);</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/20/CoreGraphics-绘制聊天气泡（图片类型的cell）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/05/20/CoreGraphics-绘制聊天气泡（图片类型的cell）/" itemprop="url">CoreGraphics-绘制聊天气泡（图片类型的cell）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-20T20:19:35+08:00">
+                2016-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>先看下效果图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-a6a2e3e20aea4647.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="效果图.png"></p>
+<p>在聊天时，如果消息类型是纯图片类型，对于加载图片的bubble 气泡，就不太好处理了，需要将图片充满整个气泡。所以我们需要对图片做一下处理。</p>
+<blockquote>
+<p>首先我们自定义view里实现类似的效果： 就是裁剪好这么一个带凸起的区域，然后把图片绘制在限定区域内；</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">- (void)drawRect:(CGRect)rect &#123;</div><div class="line">    // Drawing code</div><div class="line">    </div><div class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</div><div class="line"></div><div class="line">    CGContextSetLineWidth(context, 5);</div><div class="line">    CGContextSaveGState(context);</div><div class="line">    //先剪裁区域</div><div class="line">    UIBezierPath *path =[UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 200 -10, 301) cornerRadius:6];</div><div class="line">    path.lineWidth = 5;</div><div class="line">    [path moveToPoint:CGPointMake(200-10, 0)];</div><div class="line">    [path addLineToPoint:CGPointMake(200-10, 13)];</div><div class="line">    [path addLineToPoint:CGPointMake(200-10+5, 16)];</div><div class="line">    [path addLineToPoint:CGPointMake(200-10, 19)];</div><div class="line">    [path closePath];</div><div class="line">    </div><div class="line"></div><div class="line">    [path fill];</div><div class="line">    [path addClip];</div><div class="line">    </div><div class="line">    //裁剪好区域后 然后把图片绘制上去</div><div class="line">    UIImage *iamge =[UIImage imageNamed:@&quot;cutSome&quot;];</div><div class="line">    [iamge drawInRect:path.bounds];</div><div class="line"></div><div class="line">        context = UIGraphicsGetCurrentContext();</div><div class="line">    CGContextStrokePath(context);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>####可以实现类似效果</p>
+<blockquote>
+<p>上面的处理明显是不对的，我们可以对图片进行直接处理，然后用imageview 加载即可 </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line">#import &quot;ViewController.h&quot;</div><div class="line">#import &quot;LXView.h&quot;</div><div class="line">#define APP_WIDTH ([UIScreen mainScreen].bounds.size.width)</div><div class="line">#define APP_HEIGHT ([UIScreen mainScreen].bounds.size.height)</div><div class="line">@interface ViewController ()</div><div class="line">@property(nonatomic,strong)UIImageView *imageview;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line">    UIImage *imagecon=[UIImage imageNamed:@&quot;1&quot;];</div><div class="line">    </div><div class="line">   imagecon =  [self imageWithImage:imagecon scaledToSize:CGSizeMake(200, 200 *775.0/515)];</div><div class="line">    </div><div class="line">    self.imageview =[[UIImageView alloc]initWithFrame:CGRectMake(50, 100, imagecon.size.width, imagecon.size.height)];</div><div class="line">//    self.imageview.image = imagecon;</div><div class="line">    self.imageview.image =[self makeArrow:imagecon imageSize:imagecon.size];</div><div class="line">    [self.view addSubview:self.imageview];</div><div class="line">    </div><div class="line">    self.imageview.backgroundColor =[UIColor redColor];</div><div class="line">//    LXView *view =[[LXView alloc]initWithFrame:CGRectMake(20, 100, 210,400)];</div><div class="line">//    view.backgroundColor =[UIColor redColor];</div><div class="line">//    [self.view addSubview:view];</div><div class="line">&#125;</div><div class="line"></div><div class="line">//对图片进行压缩 </div><div class="line">- (UIImage *)imageWithImage:(UIImage*)image</div><div class="line">               scaledToSize:(CGSize)newSize;</div><div class="line">&#123;</div><div class="line">    UIGraphicsBeginImageContext(newSize);</div><div class="line">    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];</div><div class="line">    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    </div><div class="line">//    NSString * path = [NSString stringWithFormat:@&quot;%@/Documents/cutSome.jpg&quot;,NSHomeDirectory()];</div><div class="line">//    NSData * imagedata = UIImageJPEGRepresentation(newImage, 1);</div><div class="line">//</div><div class="line">//    if( [imagedata writeToFile:path atomically:YES])&#123;</div><div class="line">//        NSLog(@&quot;保存成功%@&quot;,path);</div><div class="line">//    &#125;</div><div class="line"></div><div class="line">    return newImage;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div><div class="line">//添加箭头，其实和第一种道理一样，也是绘制一个凸起的区域，然后把图片绘制上去达到效果，不过处理的是图形上下文；</div><div class="line">-(UIImage *)makeArrow:(UIImage *)image  imageSize:(CGSize )imageSize</div><div class="line"></div><div class="line">&#123;</div><div class="line">    </div><div class="line">    CGFloat arrowWidth = 6;</div><div class="line">    CGFloat marginTop = 13;</div><div class="line">    CGFloat arrowHeight = 10;</div><div class="line">    CGFloat imageW = imageSize.width;</div><div class="line"></div><div class="line">    </div><div class="line">    //开始上下文</div><div class="line">    UIGraphicsBeginImageContext(imageSize);</div><div class="line">    //获得上下文</div><div class="line">    CGContextRef context =UIGraphicsGetCurrentContext();</div><div class="line">        UIBezierPath *path =[UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, imageSize.width- arrowWidth, imageSize.height) cornerRadius:6];</div><div class="line">    [path moveToPoint:CGPointMake(imageW - arrowWidth, 0)];</div><div class="line">    [path addLineToPoint:CGPointMake(imageW - arrowWidth, marginTop)];</div><div class="line">    [path addLineToPoint:CGPointMake(imageW, marginTop + 0.5 * arrowHeight)];</div><div class="line">    [path addLineToPoint:CGPointMake(imageW - arrowWidth, marginTop + arrowHeight)];</div><div class="line">    [path closePath];</div><div class="line">    path.lineWidth = 3;</div><div class="line">    CGContextAddPath(context, path.CGPath);</div><div class="line">//    CGContextEOClip(context);</div><div class="line">    [path addClip];</div><div class="line">    [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];</div><div class="line">    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    return newImage;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/19/CoreAnimation之maskLayer使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/05/19/CoreAnimation之maskLayer使用/" itemprop="url">CoreAnimation之maskLayer使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-19T20:19:35+08:00">
+                2016-05-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>demo 地址：<a href="https://github.com/liuxinixn/MaskLayer" target="_blank" rel="noopener">MaskLayer使用</a><br><img src="http://upload-images.jianshu.io/upload_images/1694376-979ecf2a4a198745.gif?imageMogr2/auto-orient/strip" alt="1.gif"><br>因为初学动画的缘故，对mask 蒙版理解不是很到位。</p>
+<p> demo中的三个例子效果其实都是有<strong>前景和背景图视图，mask只是加在前景视图上</strong>，在使用mask的时候，会直接覆盖掉被遮盖图层（如果frame 与被覆盖层相同的话），然后我们可以通过改变mask layer 的一些属性做一些动画。</p>
+<blockquote>
+<p>首先看下 ❤️ 形的注水效果 </p>
+</blockquote>
+<p><strong>1</strong>. 要实现这样的效果，我们需要准备两张图片，比如<br>背景：<img src="http://upload-images.jianshu.io/upload_images/1694376-283a683670025357.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="心2.png"><br>前景：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-c104e6bad2904e45.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="心.png"><br>我们需要做的就是设置一个mask 蒙版加载前景视图上，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">  </div><div class="line"> self.maskLayer =[CAShapeLayer layer];</div><div class="line">//大小一样</div><div class="line"> self.maskLayer.frame = self.imageView.bounds;</div><div class="line"> CGPoint center  =  CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);</div><div class="line"> UIBezierPath *path =[UIBezierPath bezierPathWithArcCenter:center radius:100 startAngle:0 endAngle:2 *M_PI clockwise:YES];</div><div class="line"> self.maskLayer.path = path.CGPath;</div><div class="line"> self.imageView.layer.mask =  self.maskLayer;</div></pre></td></tr></table></figure></p>
+<p><strong>2</strong>. 实现注水效果的第二步，我们要实现那样的动态效果，视图中能看到的是蒙版与前景共同作用的效果。当我们把蒙版从 下方移动到上方，就可以可以实现。<br> 首先在初始化maskLayer时需要设置maskLayer的位置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">self.maskLayer.position =CGPointMake(self.bounds.size.width/2, self.bounds.size.height * 1.5);</div></pre></td></tr></table></figure></p>
+<p>然后做一个基础动画即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">CABasicAnimation *animation =[CABasicAnimation animation];</div><div class="line">    animation.keyPath = @&quot;position&quot;;</div><div class="line">    animation.duration = 2;</div><div class="line">    animation.repeatCount = HUGE;</div><div class="line">    animation.fromValue = [NSValue valueWithCGPoint:CGPointMake(self.bounds.size.width/2, self.bounds.size.height * 1.5)]; //因为蒙版大小和前景图大小一样，我们需要把中心点向下移动一倍的高度</div><div class="line">    animation.toValue = [NSValue valueWithCGPoint:CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2)];</div><div class="line">    [self.maskLayer addAnimation:animation forKey:nil];</div><div class="line">    self.maskLayer.position = CGPointMake(self.bounds.size.width/2, self.bounds.size.height * 1.5);</div></pre></td></tr></table></figure></p>
+<p>这样基本上 一个简单的动画就实现了，如果想实现两个方向的 注水，可以添加两个subLayer作为蒙版</p>
+<blockquote>
+<p>文字渐变</p>
+</blockquote>
+<p><a href="http://www.jianshu.com/p/6c8f645cb604" target="_blank" rel="noopener">参考文章</a><br>也是使用了两个视图 加一个蒙版<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@property(nonatomic,strong)UILabel *forelLabel;</div><div class="line">@property(nonatomic,strong)UILabel *backLabel;</div><div class="line">@property(nonatomic,strong)CAGradientLayer *maskLayer;</div></pre></td></tr></table></figure></p>
+<p>动画代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">-(void)setType:(GradientType)type</div><div class="line">&#123;</div><div class="line">    _type = type;</div><div class="line">    switch (type) &#123;</div><div class="line">        case fadeOne:</div><div class="line">            self.maskLayer.colors = @[(id)[UIColor clearColor],(id)[UIColor redColor].CGColor,(id)[UIColor blackColor].CGColor,(id)[UIColor clearColor].CGColor];</div><div class="line">            self.maskLayer.locations = @[@(0.01),@(0.1),@(0.9),@(0.99)];</div><div class="line">            [self fadeString:(self.bounds.size.width)];</div><div class="line">            break;</div><div class="line">        case fadeTwo:</div><div class="line">             self.maskLayer.colors = @[(id)[UIColor clearColor].CGColor,(id)[UIColor redColor].CGColor,(id)[UIColor clearColor].CGColor];</div><div class="line">             self.maskLayer.locations = @[@(0.25),@(0.5),@(0.75)];</div><div class="line">             self.maskLayer.startPoint = CGPointMake(0, 0);</div><div class="line">             self.maskLayer.endPoint = CGPointMake(1, 0);</div><div class="line">           </div><div class="line">             self.maskLayer.position = CGPointMake(-self.bounds.size.width/2.0, self.bounds.size.height/2.0);</div><div class="line">           //默认中心点修改为左侧一半处。</div><div class="line">            [self iphoneFade: (self.bounds.size.width+self.bounds.size.width/2.0)];</div><div class="line">            break;</div><div class="line">        default:</div><div class="line">            break;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void)fadeString:(CGFloat) toValue</div><div class="line">&#123;</div><div class="line">    CABasicAnimation *basicAnimation = [CABasicAnimation animation];</div><div class="line">    basicAnimation.keyPath = @&quot;transform.translation.x&quot;;</div><div class="line">    basicAnimation.fromValue = @(0);</div><div class="line">    basicAnimation.toValue = @(toValue);</div><div class="line">    basicAnimation.duration = 2;</div><div class="line">    basicAnimation.repeatCount = HUGE;</div><div class="line">    basicAnimation.removedOnCompletion = NO;</div><div class="line">    basicAnimation.fillMode = kCAFillModeForwards;</div><div class="line">    [self.maskLayer addAnimation:basicAnimation forKey:nil];</div><div class="line"></div><div class="line">&#125;</div><div class="line">-(void)iphoneFade:(CGFloat) toValue</div><div class="line">&#123;</div><div class="line">    CABasicAnimation *basicAnimation = [CABasicAnimation animation];</div><div class="line">    basicAnimation.keyPath = @&quot;transform.translation.x&quot;;</div><div class="line">    basicAnimation.fromValue = @(0);</div><div class="line">    basicAnimation.toValue = @(toValue);</div><div class="line">    basicAnimation.duration = 2;</div><div class="line">    basicAnimation.repeatCount = HUGE;</div><div class="line">    basicAnimation.removedOnCompletion = NO;</div><div class="line">    basicAnimation.fillMode = kCAFillModeForwards;</div><div class="line">    [self.maskLayer addAnimation:basicAnimation forKey:nil];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/18/CoreAnimation之CAReplicatorLayer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/05/18/CoreAnimation之CAReplicatorLayer/" itemprop="url">CoreAnimation之CAReplicatorLayer</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-18T20:19:35+08:00">
+                2016-05-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>CAReplicatorLayer 一般用来复制层或者反射。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-e6fd9c0497884002.gif?imageMogr2/auto-orient/strip" alt="3.gif"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line">#import &quot;ViewController.h&quot;</div><div class="line"></div><div class="line">@interface ViewController ()</div><div class="line">@property(nonatomic,strong)UIView *containView;</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line">    </div><div class="line"></div><div class="line">    self.containView =[[UIView alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 -100, self.view.frame.size.height/2 - 100, 200, 200)];</div><div class="line">    self.containView.backgroundColor =[UIColor redColor];</div><div class="line">    [self.view addSubview:self.containView];</div><div class="line">    </div><div class="line"></div><div class="line">    CAReplicatorLayer *replayer =[CAReplicatorLayer layer];</div><div class="line">    replayer.frame = self.containView.bounds;</div><div class="line">    [self.containView.layer addSublayer:replayer];</div><div class="line">    CALayer *layer = [CALayer layer];</div><div class="line">    </div><div class="line"></div><div class="line">    layer.frame = CGRectMake(0, replayer.bounds.size.height -150, 10, 150);</div><div class="line"></div><div class="line">    layer.backgroundColor = [UIColor whiteColor].CGColor;</div><div class="line">    </div><div class="line"></div><div class="line">    </div><div class="line">    [replayer addSublayer:layer];</div><div class="line">    </div><div class="line">    CABasicAnimation *anim = [CABasicAnimation animation];</div><div class="line">    </div><div class="line">    anim.keyPath = @&quot;transform.scale.y&quot;;</div><div class="line">    </div><div class="line">    anim.toValue = @0.1;</div><div class="line">    </div><div class="line">    anim.duration = 0.5;</div><div class="line">    </div><div class="line">    anim.repeatCount = MAXFLOAT;</div><div class="line">    </div><div class="line">    // 设置动画反转</div><div class="line">    anim.autoreverses = YES;</div><div class="line">    </div><div class="line">    </div><div class="line">    [layer addAnimation:anim forKey:nil];</div><div class="line">    </div><div class="line">    </div><div class="line">//     复制层中子层总数</div><div class="line">//     instanceCount：表示复制层里面有多少个子层，包括原始层</div><div class="line">    replayer.instanceCount = 5;</div><div class="line">    </div><div class="line">    // 设置复制子层偏移量，不包括原始层,相对于原始层x偏移</div><div class="line">//    replayer.instanceTransform = CATransform3DIdentity;</div><div class="line"></div><div class="line">   </div><div class="line">    CATransform3D tranform = CATransform3DIdentity;</div><div class="line">    tranform = CATransform3DMakeTranslation(45, 0, 0);</div><div class="line"></div><div class="line">    </div><div class="line"></div><div class="line">    replayer.instanceTransform =tranform;</div><div class="line">    </div><div class="line">    // 设置复制层动画延迟时间</div><div class="line">    replayer.instanceDelay = 0.1;</div><div class="line">    </div><div class="line">    // 如果设置了原始层背景色，就不需要设置这个属性</div><div class="line">    replayer.instanceColor = [UIColor greenColor].CGColor;</div><div class="line">    </div><div class="line">    replayer.instanceGreenOffset = -0.3;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/17/CoreAnimation之CAEmitterLayer(粒子破碎动画)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/05/17/CoreAnimation之CAEmitterLayer(粒子破碎动画)/" itemprop="url">CoreAnimation之CAEmitterLayer(粒子破碎动画)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-17T20:19:35+08:00">
+                2016-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在iOS 5中，苹果引入了一个新的CALayer子类叫做CAEmitterLayer。CAEmitterLayer是一个高性能的粒子引擎，被用来创建实时例子动画如：烟雾，火，雨等等这些效果。<br>CAEmitterLayer看上去像是许多CAEmitterCell的容器，这些CAEmitierCell定义了一个例子效果。你将会为不同的例子效果定义一个或多个CAEmitterCell作为模版，同时CAEmitterLayer负责基于这些模版实例化一个粒子流。一个CAEmitterCell类似于一个CALayer：它有一个contents属性可以定义为一个CGImage，另外还有一些可设置属性控制着表现和行为。我们不会对这些属性逐一进行详细的描述，你们可以在CAEmitterCell类的头文件中找到。</p>
+<blockquote>
+<p><strong> CAEmitterLayer类提供了一个粒子发射器系统为核心的动画。这些粒子是由CAEmitterCell组成的实例，它相当于一个管理者，来管理 CAEmitterCell的发射的一些细节，比如发射的位置，发射形状等等</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">emitterPosition</td>
+<td style="text-align:center">发射位置</td>
+</tr>
+<tr>
+<td style="text-align:center">emitterSize</td>
+<td style="text-align:center">发射源的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">emitterMode</td>
+<td style="text-align:center">发射模式</td>
+</tr>
+<tr>
+<td style="text-align:center">emitterShape</td>
+<td style="text-align:center">发射源的形状</td>
+</tr>
+<tr>
+<td style="text-align:center">renderMode</td>
+<td style="text-align:center">渲染模式</td>
+</tr>
+<tr>
+<td style="text-align:center">birthRate</td>
+<td style="text-align:center">粒子产生系数，默认1.0</td>
+</tr>
+<tr>
+<td style="text-align:center">emitterCells</td>
+<td style="text-align:center">装着CAEmitterCell对象的数组，被用于把粒子投放到layer上</td>
+</tr>
+<tr>
+<td style="text-align:center">emitterDepth</td>
+<td style="text-align:center">决定粒子形状的深度联系</td>
+</tr>
+<tr>
+<td style="text-align:center">emitterZposition</td>
+<td style="text-align:center">发射源的z坐标位置</td>
+</tr>
+<tr>
+<td style="text-align:center">lifetime</td>
+<td style="text-align:center">粒子生命周期</td>
+</tr>
+<tr>
+<td style="text-align:center">scale</td>
+<td style="text-align:center">粒子的缩放比例</td>
+</tr>
+<tr>
+<td style="text-align:center">seed</td>
+<td style="text-align:center">用于初始化随机数产生的种子</td>
+</tr>
+<tr>
+<td style="text-align:center">spin</td>
+<td style="text-align:center">自旋转速度</td>
+</tr>
+<tr>
+<td style="text-align:center">velocity</td>
+<td style="text-align:center">粒子速度</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>CAEmitterCell属性 </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">alphaRange</td>
+<td style="text-align:center">一个粒子的颜色alpha能改变的范围</td>
+</tr>
+<tr>
+<td style="text-align:center">alphaSpeed</td>
+<td style="text-align:center">粒子透明度在生命周期内的改变速度</td>
+</tr>
+<tr>
+<td style="text-align:center">birthrate</td>
+<td style="text-align:center">每秒发射的粒子数量</td>
+</tr>
+<tr>
+<td style="text-align:center">blueRange     一个粒子的颜色blue 能改变的范围</td>
+</tr>
+<tr>
+<td style="text-align:center">blueSpeed</td>
+<td style="text-align:center">粒子blue在生命周期内的改变速度</td>
+</tr>
+<tr>
+<td style="text-align:center">color</td>
+<td style="text-align:center">粒子的颜色</td>
+</tr>
+<tr>
+<td style="text-align:center">contents</td>
+<td style="text-align:center">是个CGImageRef的对象,既粒子要展现的图片</td>
+</tr>
+<tr>
+<td style="text-align:center">contentsRect</td>
+<td style="text-align:center">应该画在contents里的子rectangle</td>
+</tr>
+<tr>
+<td style="text-align:center">emissionLatitude</td>
+<td style="text-align:center">发射的z轴方向的角度</td>
+</tr>
+<tr>
+<td style="text-align:center">emissionLongitude</td>
+<td style="text-align:center">x-y平面的发射方向</td>
+</tr>
+<tr>
+<td style="text-align:center">emissionRange</td>
+<td style="text-align:center">周围发射角度</td>
+</tr>
+<tr>
+<td style="text-align:center">emitterCells</td>
+<td style="text-align:center">粒子发射的粒子的数组</td>
+</tr>
+<tr>
+<td style="text-align:center">enabled</td>
+<td style="text-align:center">粒子是否被渲染</td>
+</tr>
+<tr>
+<td style="text-align:center">greenrange</td>
+<td style="text-align:center">一个粒子的颜色green 能改变的范围</td>
+</tr>
+<tr>
+<td style="text-align:center">greenSpeed</td>
+<td style="text-align:center">粒子green在生命周期内的改变速度</td>
+</tr>
+<tr>
+<td style="text-align:center">lifetime</td>
+<td style="text-align:center">生命周期</td>
+</tr>
+<tr>
+<td style="text-align:center">lifetimeRange</td>
+<td style="text-align:center">生命周期范围 lifetime= lifetime(+/-) lifetimeRange</td>
+</tr>
+<tr>
+<td style="text-align:center">magnificationFilter</td>
+<td style="text-align:center">增加自己的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">minificatonFilter</td>
+<td style="text-align:center">减小自己的大小</td>
+</tr>
+<tr>
+<td style="text-align:center">minificationFilterBias</td>
+<td style="text-align:center">减小大小的因子</td>
+</tr>
+<tr>
+<td style="text-align:center">name</td>
+<td style="text-align:center">粒子的名字</td>
+</tr>
+<tr>
+<td style="text-align:center">redRange</td>
+<td style="text-align:center">一个粒子的颜色red 能改变的范围</td>
+</tr>
+<tr>
+<td style="text-align:center">redSpeed</td>
+<td style="text-align:center">粒子red在生命周期内的改变速度</td>
+</tr>
+<tr>
+<td style="text-align:center">scale</td>
+<td style="text-align:center">缩放比例</td>
+</tr>
+<tr>
+<td style="text-align:center">scaleRange</td>
+<td style="text-align:center">缩放比例范围</td>
+</tr>
+<tr>
+<td style="text-align:center">scaleSpeed</td>
+<td style="text-align:center">缩放比例速度</td>
+</tr>
+<tr>
+<td style="text-align:center">spin</td>
+<td style="text-align:center">子旋转角度</td>
+</tr>
+<tr>
+<td style="text-align:center">spinrange</td>
+<td style="text-align:center">子旋转角度范围</td>
+</tr>
+<tr>
+<td style="text-align:center">velocity</td>
+<td style="text-align:center">速度</td>
+</tr>
+<tr>
+<td style="text-align:center">velocityRange</td>
+<td style="text-align:center">速度范围</td>
+</tr>
+<tr>
+<td style="text-align:center">xAcceleration</td>
+<td style="text-align:center">粒子x方向的加速度分量</td>
+</tr>
+<tr>
+<td style="text-align:center">yAcceleration</td>
+<td style="text-align:center">粒子y方向的加速度分量</td>
+</tr>
+<tr>
+<td style="text-align:center">zAcceleration</td>
+<td style="text-align:center">粒子z方向的加速度分量</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@interface ViewController () </div><div class="line">@property (nonatomic, weak) IBOutlet UIView *containerView; </div><div class="line">@end </div><div class="line">@implementation ViewController </div><div class="line"></div><div class="line">- (void)viewDidLoad &#123;</div><div class="line"> [super viewDidLoad]; </div><div class="line">//create particle emitter layer </div><div class="line">CAEmitterLayer *emitter = [CAEmitterLayer layer];</div><div class="line"> emitter.frame = self.containerView.bounds; [self.containerView.layer addSublayer:emitter]; </div><div class="line">//configure emitter emitter.renderMode = kCAEmitterLayerAdditive; </div><div class="line">emitter.emitterPosition = CGPointMake(emitter.frame.size.width / 2.0, emitter.frame.size.height / 2.0); </div><div class="line">//create a particle template </div><div class="line">CAEmitterCell *cell = [[CAEmitterCell alloc] init]; </div><div class="line">cell.contents = (__bridge id)[UIImage imageNamed:@&quot;Spark.png&quot;].CGImage; cell.birthRate = 150; </div><div class="line">cell.lifetime = 5.0;</div><div class="line"> cell.color = [UIColor colorWithRed:1 green:0.5 blue:0.1 alpha:1.0].CGColor; </div><div class="line">cell.alphaSpeed = -0.4; </div><div class="line">cell.velocity = 50;</div><div class="line"> cell.velocityRange = 50; </div><div class="line">cell.emissionRange = M_PI * 2.0; //add particle template to emitter emitter.emitterCells = @[cell]; </div><div class="line">&#125; </div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>#####点赞的破碎动画<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">self.view.backgroundColor =[UIColor whiteColor];</div><div class="line"></div><div class="line">self.container =[[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];</div><div class="line">self.container.layer.contents = (__bridge id)[UIImage imageNamed:@&quot;点赞2&quot;].CGImage;</div><div class="line">self.container.center = self.view.center;</div><div class="line">[self.view addSubview:self.container];</div><div class="line">CAEmitterCell *emitterCell = [CAEmitterCell emitterCell];</div><div class="line">emitterCell.name           = @&quot;emitter&quot;;</div><div class="line">emitterCell.alphaRange     = 0.10;</div><div class="line">emitterCell.alphaSpeed     = -1.0;</div><div class="line">emitterCell.lifetime       = 0.6;</div><div class="line">emitterCell.lifetimeRange  = 0.3;</div><div class="line">emitterCell.birthRate      = 0;</div><div class="line">emitterCell.velocity       = 40.00;</div><div class="line">emitterCell.velocityRange  = 10.00;</div><div class="line">emitterCell.scale          = 0.03;</div><div class="line">emitterCell.scaleRange     = 0.02;</div><div class="line">emitterCell.contents       = (id)[UIImage imageNamed:@&quot;Emitter&quot;].CGImage;</div><div class="line"></div><div class="line"> self.emitterLayer               = [CAEmitterLayer layer];</div><div class="line"> self.emitterLayer.name          = @&quot;emitterLayer&quot;;</div><div class="line"> self.emitterLayer.emitterShape  = kCAEmitterLayerCircle;</div><div class="line"> self.emitterLayer.emitterMode   = kCAEmitterLayerOutline;</div><div class="line"> self.emitterLayer.emitterSize   = CGSizeMake(20, 20);</div><div class="line"> self.emitterLayer.emitterCells  = @[emitterCell];</div><div class="line"> self.emitterLayer.renderMode    = kCAEmitterLayerAdditive;</div><div class="line"> self.emitterLayer.masksToBounds = NO;</div><div class="line"> self.emitterLayer.position      = CGPointMake(self.container.frame.size.width/2.0,self.container.frame.size.height/2.0);</div><div class="line"></div><div class="line">[self.container.layer addSublayer:self.emitterLayer];</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/16/CoreAnimation之转场之圆圈缩放动画/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/05/16/CoreAnimation之转场之圆圈缩放动画/" itemprop="url">CoreAnimation转场之圆圈缩放动画</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-16T20:19:35+08:00">
+                2016-05-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>先看动画效果：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-c980b1f7307547e7.gif?imageMogr2/auto-orient/strip" alt="圆圈转场动画.gif"></p>
+<p>间客的APP上之前是有这个动画的，拜读了大神的文章：<a href="http://www.kittenyang.com/pingtransition/" target="_blank" rel="noopener">iOS自定义转场详解03——实现通过圆圈放大缩小的转场动画</a>,博客里面很详细。</p>
+<blockquote>
+<p>因为要自定义转场，所以我们需要一个新的对象集成NSObject，并且遵守转场动画的协议,<code>UIViewControllerAnimatedTransitioning</code></p>
+</blockquote>
+<p>介绍个知识点：</p>
+<p>1、CGRectInsetCGRect<br>    CGRectInset (<br>        CGRect rect,<br>        CGFloat dx,<br>        CGFloat dy);<br>该结构体的应用是以原rect为中心，再参考dx，dy，进行缩放或者放大。
+　　</p>
+<p>2、CGRectOffsetCGRect<br>   CGRectOffset(<br>      CGRect rect,<br>      CGFloat dx,<br>      CGFloat dy);　<br>相对于源矩形原点rect（左上角的点）沿x轴和y轴偏移, 再rect基础上沿x轴和y轴偏移</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// This is used for percent driven interactive transitions, as well as for</div><div class="line">// container controllers that have companion animations that might need to</div><div class="line">// synchronize with the main animation.</div><div class="line">设置转场动画的时间。</div><div class="line">- (NSTimeInterval)transitionDuration:(nullable id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;</div><div class="line"></div><div class="line">// This method can only  be a nop if the transition is interactive and not a percentDriven interactive transition.</div><div class="line">转场的上下文</div><div class="line">- (void)animateTransition:(id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;</div></pre></td></tr></table></figure>
+<p>关于这个参数transitionContext， 该参数是一个实现了 UIViewControllerContextTransitioning可以让我们访问一些实现过渡所必须的对象。<br>    UIViewControllerContextTransitioning 协议中有一些方法：</p>
+<ul>
+<li>(UIView *)containerView;<br>  //转场动画发生的容器</li>
+<li>(UIViewController <em>)viewControllerForKey:(NSString </em>)key;<br>  // 我们可以通过它拿到过渡的两个 ViewController。</li>
+</ul>
+<p>大致思路是这样从，我们画两个内塞尔曲线的圆，第一个小圆的frame和右上角圆形按钮的大小一样，第二个大圆则是覆盖了整个屏幕。然后，去设置view.layer.mask属性，让这个mask从小圆动画到大圆。</p>
+<p>以push 动画为例：pop动画不过是起终点的mask路径相反罢了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">- (void)animateTransition:(id &lt;UIViewControllerContextTransitioning&gt;)transitionContext&#123;</div><div class="line"></div><div class="line">   </div><div class="line">    ViewController * fromVC = (ViewController *)[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];</div><div class="line">    DetailViewController *toVC = (DetailViewController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];</div><div class="line">    UIView *contView = [transitionContext containerView];</div><div class="line"></div><div class="line">    UIButton *button = fromVC.button;</div><div class="line">    </div><div class="line">    </div><div class="line">    UIBezierPath *maskStartBP =  [UIBezierPath bezierPathWithOvalInRect:button.frame];    </div><div class="line">    [contView addSubview:fromVC.view];</div><div class="line">    [contView addSubview:toVC.view];</div><div class="line"></div><div class="line">    </div><div class="line">    </div><div class="line">    //创建两个圆形的 UIBezierPath 实例；一个是 button 的 size ，另外一个则拥有足够覆盖屏幕的半径。最终的动画则是在这两个贝塞尔路径之间进行的</div><div class="line">    </div><div class="line">    CGPoint finalPoint;</div><div class="line">    //判断触发点在那个象限</div><div class="line">    if(button.frame.origin.x &gt; (toVC.view.bounds.size.width / 2))&#123;</div><div class="line">        if (button.frame.origin.y &lt; (toVC.view.bounds.size.height / 2)) &#123;</div><div class="line">            //第一象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - 0, button.center.y - CGRectGetMaxY(toVC.view.bounds)+30);</div><div class="line">        &#125;else&#123;</div><div class="line">            //第四象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - 0, button.center.y - 0);</div><div class="line">        &#125;</div><div class="line">    &#125;else&#123;</div><div class="line">        if (button.frame.origin.y &lt; (toVC.view.bounds.size.height / 2)) &#123;</div><div class="line">            //第二象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - CGRectGetMaxX(toVC.view.bounds), button.center.y - CGRectGetMaxY(toVC.view.bounds)+30);</div><div class="line">        &#125;else&#123;</div><div class="line">            //第三象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - CGRectGetMaxX(toVC.view.bounds), button.center.y - 0);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">    CGFloat radius = sqrt((finalPoint.x * finalPoint.x) + (finalPoint.y * finalPoint.y));</div><div class="line">    UIBezierPath *maskFinalBP = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(button.frame, -radius, -radius)];</div><div class="line">    </div><div class="line">    </div><div class="line">    //创建一个 CAShapeLayer 来负责展示圆形遮盖</div><div class="line">    CAShapeLayer *maskLayer = [CAShapeLayer layer];</div><div class="line">    maskLayer.path = maskFinalBP.CGPath; //将它的 path 指定为最终的 path 来避免在动画完成后会回弹</div><div class="line">    toVC.view.layer.mask = maskLayer;</div><div class="line">    maskLayer.backgroundColor =[UIColor redColor].CGColor;</div><div class="line">    </div><div class="line">    CABasicAnimation *maskLayerAnimation = [CABasicAnimation animationWithKeyPath:@&quot;path&quot;];</div><div class="line">    maskLayerAnimation.fromValue = (__bridge id)(maskStartBP.CGPath);</div><div class="line">    maskLayerAnimation.toValue = (__bridge id)((maskFinalBP.CGPath));</div><div class="line">    maskLayerAnimation.duration = [self transitionDuration:transitionContext];</div><div class="line">    maskLayerAnimation.timingFunction = [CAMediaTimingFunction  functionWithName:kCAMediaTimingFunctionEaseInEaseOut];</div><div class="line">    maskLayerAnimation.delegate = self;</div><div class="line">    </div><div class="line">    [maskLayer addAnimation:maskLayerAnimation forKey:@&quot;path&quot;];</div></pre></td></tr></table></figure></p>
+<p> 结束动画后设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#pragma mark - CABasicAnimation的Delegate</div><div class="line">- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag&#123;</div><div class="line"></div><div class="line">    //告诉 iOS 这个 transition 完成</div><div class="line">    [self.transitionContext completeTransition:![self. transitionContext transitionWasCancelled]];</div><div class="line">    //清除 fromVC 的 mask</div><div class="line">    [self.transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey].view.layer.mask = nil;</div><div class="line">    [self.transitionContext viewControllerForKey:UITransitionContextToViewControllerKey].view.layer.mask = nil;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>自定义完push 动画后我们需要进行设置，因为所有的子控制器由UINavgationController进行管理，所有我们需要在ViewCotroller中实现代理;</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@interface ViewController ()&lt;UINavigationControllerDelegate&gt;</div></pre></td></tr></table></figure>
+<p>最好在<code>viewWillAppear</code>中设置代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-(void)viewWillAppear:(BOOL)animated&#123;</div><div class="line">    self.navigationController.delegate = self;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>实现代理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#pragma mark - UINavigationControllerDelegate</div><div class="line">- (id &lt;UIViewControllerAnimatedTransitioning&gt;)navigationController:(UINavigationController *)navigationController</div><div class="line">                                   animationControllerForOperation:(UINavigationControllerOperation)operation</div><div class="line">                                                fromViewController:(UIViewController *)fromVC</div><div class="line">                                                  toViewController:(UIViewController *)toVC&#123;</div><div class="line">    if (operation == UINavigationControllerOperationPush) &#123;</div><div class="line">        </div><div class="line">        PingTransition *ping = [PingTransition new];</div><div class="line">        return ping;</div><div class="line">    &#125;else&#123;</div><div class="line">        return nil;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>本文demo地址：<a href="https://github.com/liuxinixn/CircleZoomView/tree/master" target="_blank" rel="noopener">圆圈转场动画</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/15/CoreAnimation之隐式动画/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/05/15/CoreAnimation之隐式动画/" itemprop="url">CoreAnimation之隐式动画</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-15T20:19:35+08:00">
+                2016-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>按照我的意思去做，而不是我说的。 – 埃德娜，辛普森</p>
+</blockquote>
+<p>我们在第一部分讨论了Core Animation除了动画之外可以做到的任何事情。但是动画师Core Animation库一个非常显著的特性。这一章我们来看看它是怎么做到的。具体来说，我们先来讨论框架自动完成的隐式动画（除非你明确禁用了这个功能）。</p>
+<p>####事务<br> Core Animation基于一个假设，说屏幕上的任何东西都可以（或者可能）做动画。动画并不需要你在Core Animation中手动打开，相反需要明确地关闭，否则他会一直存在。</p>
+<p>当你改变CALayer的一个可做动画的属性，它并不能立刻在屏幕上体现出来。相反，它是从先前的值平滑过渡到新的值。这一切都是默认的行为，你不需要做额外的操作。</p>
+<p>这看起来这太棒了，似乎不太真实，我们来用一个demo解释一下：首先和第一章“图层树”一样创建一个蓝色的方块，然后添加一个按钮，随机改变它的颜色。代码见清单7.1。点击按钮，你会发现图层的颜色平滑过渡到一个新值，而不是跳变（图7.1）。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-20bb31a74640830f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.1.png"></p>
+<p>#####清单7.1 随机改变图层颜色<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">@interface ViewController ()</div><div class="line">    </div><div class="line">    @property (nonatomic, weak) IBOutlet UIView *layerView;</div><div class="line">    @property (nonatomic, weak) IBOutlet CALayer *colorLayer;</div><div class="line">    </div><div class="line">    @end</div><div class="line">    </div><div class="line">    @implementation ViewController</div><div class="line">    </div><div class="line">    - (void)viewDidLoad</div><div class="line">    &#123;</div><div class="line">        [super viewDidLoad];</div><div class="line">        //create sublayer</div><div class="line">        self.colorLayer = [CALayer layer];</div><div class="line">        self.colorLayer.frame = CGRectMake(50.0f, 50.0f, 100.0f, 100.0f);</div><div class="line">        self.colorLayer.backgroundColor = [UIColor blueColor].CGColor;</div><div class="line">        //add it to our view</div><div class="line">        [self.layerView.layer addSublayer:self.colorLayer];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    - (IBAction)changeColor</div><div class="line">    &#123;</div><div class="line">        //randomize the layer background color</div><div class="line">        CGFloat red = arc4random() / (CGFloat)INT_MAX;</div><div class="line">        CGFloat green = arc4random() / (CGFloat)INT_MAX;</div><div class="line">        CGFloat blue = arc4random() / (CGFloat)INT_MAX;</div><div class="line">        self.colorLayer.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0].CGColor;                                                                                       </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @end</div></pre></td></tr></table></figure></p>
+<p>这其实就是所谓的隐式动画。之所以叫隐式是因为我们并没有指定任何动画的类型。我们仅仅改变了一个属性，然后Core Animation来决定如何并且何时去做动画。CoreAnimaiton同样支持显式动画，下章详细说明。</p>
+<p>但当你改变一个属性，Core Animation是如何判断动画类型和持续时间的呢？实际上动画执行的时间取决于当前事务的设置，动画类型取决于图层行为。</p>
+<p>事务实际上是Core Animation用来包含一系列属性动画集合的机制，任何用指定事务去改变可以做动画的图层属性都不会立刻发生变化，而是当事务一旦提交的时候开始用一个动画过渡到新值。</p>
+<p>事务是通过CATransaction类来做管理，这个类的设计有些奇怪，不像你从它的命名预期的那样去管理一个简单的事务，而是管理了一叠你不能访问的事务。CATransaction<br>没有属性或者实例方法，并且也不能用+alloc和-init方法创建它。但是可以用+begin和+commit分别来入栈或者出栈。</p>
+<p>任何可以做动画的图层属性都会被添加到栈顶的事务，你可以通过+setAnimationDuration:方法设置当前事务的动画时间，或者通过+animationDuration方法来获取值（默认0.25秒）。</p>
+<p>Core Animation在每个run loop周期中自动开始一次新的事务（run loop是<a href="http://lib.csdn.net/base/1" target="_blank" rel="noopener">iOS</a>负责收集用户输入，处理定时器或者网络事件并且重新绘制屏幕的东西），即使你不显式的用[CATransaction begin]开始一次事务，任何在一次run loop循环中属性的改变都会被集中起来，然后做一次0.25秒的动画。</p>
+<p>明白这些之后，我们就可以轻松修改变色动画的时间了。我们当然可以用当前事务的+setAnimationDuration:方法来修改动画时间，但在这里我们首先起一个新的事务，于是修改时间就不会有别的副作用。因为修改当前事务的时间可能会导致同一时刻别的动画（如屏幕旋转），所以最好还是在调整动画之前压入一个新的事务。</p>
+<p>修改后的代码见清单7.2。运行程序，你会发现色块颜色比之前变得更慢了。</p>
+<p>#####清单7.2 使用CATransaction控制动画时间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">- (IBAction)changeColor</div><div class="line">&#123;</div><div class="line">    //begin a new transaction</div><div class="line">    [CATransaction begin];</div><div class="line">    //set the animation duration to 1 second</div><div class="line">    [CATransaction setAnimationDuration:1.0];</div><div class="line">    //randomize the layer background color</div><div class="line">    CGFloat red = arc4random() / (CGFloat)INT_MAX;</div><div class="line">    CGFloat green = arc4random() / (CGFloat)INT_MAX;</div><div class="line">    CGFloat blue = arc4random() / (CGFloat)INT_MAX;</div><div class="line">    self.colorLayer.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0].CGColor;</div><div class="line">    //commit the transaction</div><div class="line">    [CATransaction commit];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p> 如果你用过UIView的动画方法做过一些动画效果，那么应该对这个模式不陌生。UIView有两个方法，+beginAnimations:context:和+commitAnimations，和CATransaction的+begin和+commit方法类似。实际上在+beginAnimations:context:和+commitAnimations之间所有视图或者图层属性的改变而做的动画都是由于设置了CATransaction的原因。</p>
+<p>在iOS4中，苹果对UIView添加了一种基于block的动画方法：+animateWithDuration:animations:。这样写对做一堆的属性动画在语法上会更加简单，但实质上它们都是在做同样的事情。</p>
+<p>CATransaction的+begin和+commit方法在+animateWithDuration:animations:内部自动调用，这样block中所有属性的改变都会被事务所包含。这样也可以避免开发者由于对+begin和+commit匹配的失误造成的风险。</p>
+<p>#####完成块<br>基于UIView的block的动画允许你在动画结束的时候提供一个完成的动作。CATranscation接口提供的+setCompletionBlock:方法也有同样的功能。我们来调整上个例子，在颜色变化结束之后执行一些操作。我们来添加一个完成之后的block，用来在每次颜色变化结束之后切换到另一个旋转90的动画。代码见清单7.3，运行结果见图7.2。</p>
+<p>#####清单7.3 在颜色动画完成之后添加一个回调<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">- (IBAction)changeColor</div><div class="line">   &#123;</div><div class="line">       //begin a new transaction</div><div class="line">       [CATransaction begin];</div><div class="line">       //set the animation duration to 1 second</div><div class="line">       [CATransaction setAnimationDuration:1.0];</div><div class="line">       //add the spin animation on completion</div><div class="line">       [CATransaction setCompletionBlock:^&#123;</div><div class="line">           //rotate the layer 90 degrees</div><div class="line">           CGAffineTransform transform = self.colorLayer.affineTransform;</div><div class="line">           transform = CGAffineTransformRotate(transform, M_PI_2);</div><div class="line">           self.colorLayer.affineTransform = transform;</div><div class="line">       &#125;];</div><div class="line">       //randomize the layer background color</div><div class="line">       CGFloat red = arc4random() / (CGFloat)INT_MAX;</div><div class="line">       CGFloat green = arc4random() / (CGFloat)INT_MAX;</div><div class="line">       CGFloat blue = arc4random() / (CGFloat)INT_MAX;</div><div class="line">       self.colorLayer.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0].CGColor;</div><div class="line">       //commit the transaction</div><div class="line">       [CATransaction commit];</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-0b504d64ca403949.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.2.png"><br>注意旋转动画要比颜色渐变快得多，这是因为完成块是在颜色渐变的事务提交并出栈之后才被执行，于是，用默认的事务做变换，默认的时间也就变成了0.25秒。</p>
+<p>#####图层行为<br> 现在来做个实验，试着直接对UIView关联的图层做动画而不是一个单独的图层。清单7.4是对清单7.2代码的一点修改，移除了colorLayer，并且直接设置layerView关联图层的背景色。</p>
+<p>#####清单7.4 直接设置图层的属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">@interface ViewController ()</div><div class="line">   </div><div class="line">   @property (nonatomic, weak) IBOutlet UIView *layerView;</div><div class="line">   </div><div class="line">   @end</div><div class="line">   </div><div class="line">   @implementation ViewController</div><div class="line">   </div><div class="line">   - (void)viewDidLoad</div><div class="line">   &#123;</div><div class="line">       [super viewDidLoad];</div><div class="line">       //set the color of our layerView backing layer directly</div><div class="line">       self.layerView.layer.backgroundColor = [UIColor blueColor].CGColor;</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   - (IBAction)changeColor</div><div class="line">   &#123;</div><div class="line">       //begin a new transaction</div><div class="line">       [CATransaction begin];</div><div class="line">       //set the animation duration to 1 second</div><div class="line">       [CATransaction setAnimationDuration:1.0];</div><div class="line">       //randomize the layer background color</div><div class="line">       CGFloat red = arc4random() / (CGFloat)INT_MAX;</div><div class="line">       CGFloat green = arc4random() / (CGFloat)INT_MAX;</div><div class="line">       CGFloat blue = arc4random() / (CGFloat)INT_MAX;</div><div class="line">       self.layerView.layer.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0].CGColor;</div><div class="line">       //commit the transaction</div><div class="line">       [CATransaction commit];</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>运行程序，你会发现当按下按钮，图层颜色瞬间切换到新的值，而不是之前平滑过渡的动画。发生了什么呢？隐式动画好像被UIView关联图层给禁用了。</p>
+<p>试想一下，如果UIView的属性都有动画特性的话，那么无论在什么时候修改它，我们都应该能注意到的。所以，如果说UIKit建立在Core Animation（默认对所有东西都做动画）之上，那么隐式动画是如何被UIKit禁用掉呢？</p>
+<p>我们知道Core Animation通常对CALayer的所有属性（可动画的属性）做动画，但是UIView把它关联的图层的这个特性关闭了。为了更好说明这一点，我们需要知道隐式动画是如何实现的。</p>
+<p>我们把改变属性时CALayer自动应用的动画称作行为，当CALayer的属性被修改时候，它会调用-actionForKey:方法，传递属性的名称。剩下的操作都在CALayer的头文件中有详细的说明，实质上是如下几步：</p>
+<ul>
+<li>图层首先检测它是否有委托，并且是否实现CALayerDelegate协议指定的-actionForLayer:forKey方法。如果有，直接调用并返回结果。</li>
+<li>如果没有委托，或者委托没有实现-actionForLayer:forKey方法，图层接着检查包含属性名称对应行为映射的actions字典。</li>
+<li>如果actions字典没有包含对应的属性，那么图层接着在它的style字典接着搜索属性名。</li>
+<li>最后，如果在style里面也找不到对应的行为，那么图层将会直接调用定义了每个属性的标准行为的-defaultActionForKey:方法。<br>所以一轮完整的搜索结束之后，-actionForKey:要么返回空（这种情况下将不会有动画发生），要么是CAAction协议对应的对象，最后CALayer拿这个结果去对先前和当前的值做动画。</li>
+</ul>
+<p>于是这就解释了UIKit是如何禁用隐式动画的：每个UIView对它关联的图层都扮演了一个委托，并且提供了-actionForLayer:forKey的实现方法。当不在一个动画块的实现中，UIView对所有图层行为返回nil，但是在动画block范围之内，它就返回了一个非空值。我们可以用一个demo做个简单的实验（清单7.5）</p>
+<p>#####清单7.5 测试UIView的actionForLayer:forKey:实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">@interface ViewController ()</div><div class="line">    </div><div class="line">    @property (nonatomic, weak) IBOutlet UIView *layerView;</div><div class="line">    </div><div class="line">    @end</div><div class="line">    </div><div class="line">    @implementation ViewController</div><div class="line">    </div><div class="line">    - (void)viewDidLoad</div><div class="line">    &#123;</div><div class="line">        [super viewDidLoad];</div><div class="line">        //test layer action when outside of animation block</div><div class="line">        NSLog(@&quot;Outside: %@&quot;, [self.layerView actionForLayer:self.layerView.layer forKey:@&quot;backgroundColor&quot;]);</div><div class="line">        //begin animation block</div><div class="line">        [UIView beginAnimations:nil context:nil];</div><div class="line">        //test layer action when inside of animation block</div><div class="line">        NSLog(@&quot;Inside: %@&quot;, [self.layerView actionForLayer:self.layerView.layer forKey:@&quot;backgroundColor&quot;]);</div><div class="line">        //end animation block</div><div class="line">        [UIView commitAnimations];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @end</div></pre></td></tr></table></figure></p>
+<p>运行程序，控制台显示结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ LayerTest[21215:c07] Outside: &lt;null&gt;</div><div class="line">$ LayerTest[21215:c07] Inside: &lt;CABasicAnimation: 0x757f090&gt;</div></pre></td></tr></table></figure></p>
+<p> 于是我们可以预言，当属性在动画块之外发生改变，UIView直接通过返回nil来禁用隐式动画。但如果在动画块范围之内，根据动画具体类型返回相应的属性，在这个例子就是CABasicAnimation（第八章“显式动画”将会提到）。</p>
+<p>当然返回nil并不是禁用隐式动画唯一的办法，CATransacition有个方法叫做+setDisableActions:，可以用来对所有属性打开或者关闭隐式动画。如果在清单7.2的[CATransaction begin]之后添加下面的代码，同样也会阻止动画的发生：<br><code>[CATransaction setDisableActions:YES];</code><br>总结一下，我们知道了如下几点:</p>
+<ul>
+<li>UIView关联的图层禁用了隐式动画，对这种图层做动画的唯一办法就是使用UIView的动画函数（而不是依赖CATransaction），或者继承UIView，并覆盖-actionForLayer:forKey:方法，或者直接创建一个显式动画（具体细节见第八章）。</li>
+<li>对于单独存在的图层，我们可以通过实现图层的-actionForLayer:forKey:委托方法，或者提供一个actions字典来控制隐式动画。</li>
+</ul>
+<p>我们来对颜色渐变的例子使用一个不同的行为，通过给colorLayer设置一个自定义的actions字典。我们也可以使用委托来实现，但是actions字典可以写更少的代码。那么到底改如何创建一个合适的行为对象呢？</p>
+<p>行为通常是一个被Core Animation隐式调用的显式动画对象。这里我们使用的是一个实现了CATransaction的实例，叫做推进过渡。</p>
+<p>第八章中将会详细解释过渡，不过对于现在，知道CATransition响应CAAction协议，并且可以当做一个图层行为就足够了。结果很赞，不论在什么时候改变背景颜色，新的色块都是从左侧滑入，而不是默认的渐变效果。</p>
+<p>#####清单7.6 实现自定义行为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@interface ViewController ()</div><div class="line"></div><div class="line">@property (nonatomic, weak) IBOutlet UIView *layerView;</div><div class="line">@property (nonatomic, weak) IBOutlet CALayer *colorLayer;</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (void)viewDidLoad</div><div class="line">&#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    </div><div class="line">    //create sublayer</div><div class="line">    self.colorLayer = [CALayer layer];</div><div class="line">    self.colorLayer.frame = CGRectMake(50.0f, 50.0f, 100.0f, 100.0f);</div><div class="line">    self.colorLayer.backgroundColor = [UIColor blueColor].CGColor;</div><div class="line">    //add a custom action</div><div class="line">    CATransition *transition = [CATransition animation];</div><div class="line">    transition.type = kCATransitionPush;</div><div class="line">    transition.subtype = kCATransitionFromLeft;</div><div class="line">    self.colorLayer.actions = @&#123;@&quot;backgroundColor&quot;: transition&#125;;</div><div class="line">    //add it to our view</div><div class="line">    [self.layerView.layer addSublayer:self.colorLayer];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (IBAction)changeColor</div><div class="line">&#123;</div><div class="line">    //randomize the layer background color</div><div class="line">    CGFloat red = arc4random() / (CGFloat)INT_MAX;</div><div class="line">    CGFloat green = arc4random() / (CGFloat)INT_MAX;</div><div class="line">    CGFloat blue = arc4random() / (CGFloat)INT_MAX;</div><div class="line">    self.colorLayer.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0].CGColor;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-e5f1538ed0a19aec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.3.png"></p>
+<p>#####呈现与模型<br>CALayer<br>的属性行为其实很不正常，因为改变一个图层的属性并没有立刻生效，而是通过一段时间渐变更新。这是怎么做到的呢？<br>当你改变一个图层的属性，属性值的确是立刻更新的（如果你读取它的数据，你会发现它的值在你设置它的那一刻就已经生效了），但是屏幕上并没有马上发生改变。这是因为你设置的属性并没有直接调整图层的外观，相反，他只是定义了图层动画结束之后将要变化的外观。<br>当设置CALayer的属性，实际上是在定义当前事务结束之后图层如何显示的模型。Core Animation扮演了一个控制器的角色，并且负责根据图层行为和事务设置去不断更新视图的这些属性在屏幕上的状态。</p>
+<p>我们讨论的就是一个典型的微型MVC模式。CALayer<br>是一个连接用户界面（就是MVC中的view）虚构的类，但是在界面本身这个场景下，CALayer的行为更像是存储了视图如何显示和动画的数据模型。实际上，在苹果自己的文档中，图层树通常都是值的图层树模型。</p>
+<p>在iOS中，屏幕每秒钟重绘60次。如果动画时长比60分之一秒要长，Core Animation就需要在设置一次新值和新值生效之间，对屏幕上的图层进行重新组织。这意味着CALayer<br>除了“真实”值（就是你设置的值）之外，必须要知道当前显示在屏幕上的属性值的记录。</p>
+<p>每个图层属性的显示值都被存储在一个叫做呈现图层的独立图层当中，他可以通过-presentationLayer方法来访问。这个呈现图层实际上是模型图层的复制，但是它的属性值代表了在任何指定时刻当前外观效果。换句话说，你可以通过呈现图层的值来获取当前屏幕上真正显示出来的值（图7.4）。</p>
+<p>我们在第一章中提到除了图层树，另外还有呈现树。呈现树通过图层树中所有图层的呈现图层所形成。注意呈现图层仅仅当图层首次被提交（就是首次第一次在屏幕上显示）的时候创建，所以在那之前调用-presentationLayer<br>将会返回nil。</p>
+<p>你可能注意到有一个叫做–modelLayer的方法。在呈现图层上调用–modelLayer将会返回它正在呈现所依赖的CALayer<br>。通常在一个图层上调用-modelLayer会返回–self(实际上我们已经创建的原始图层就是一种数据模型）</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-842f562b2414851f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.4.png"></p>
+<p>大多数情况下，你不需要直接访问呈现图层，你可以通过和模型图层的交互，来让Core Animation更新显示。两种情况下呈现图层会变得很有用，一个是同步动画，一个是处理用户交互。</p>
+<ul>
+<li>如果你在实现一个基于定时器的动画（见第11章“基于定时器的动画”），而不仅仅是基于事务的动画，这个时候准确地知道在某一时刻图层显示在什么位置就会对正确摆放图层很有用了。</li>
+<li>如果你想让你做动画的图层响应用户输入，你可以使用-hitTest:<br>方法（见第三章“图层几何学”）来判断指定图层是否被触摸，这时候对呈现图层而不是模型图层调用-hitTest:<br>会显得更有意义，因为呈现图层代表了用户当前看到的图层位置，而不是当前动画结束之后的位置。</li>
+</ul>
+<p>我们可以用一个简单的案例来证明后者（见清单7.7）。在这个例子中，点击屏幕上的任意位置将会让图层平移到那里。点击图层本身可以随机改变它的颜色。我们通过对呈现图层调用-hitTest:来判断是否被点击。</p>
+<p>如果修改代码让-hitTest:直接作用于colorLayer而不是呈现图层，你会发现当图层移动的时候它并不能正确显示。这时候你就需要点击图层将要移动到的位置而不是图层本身来响应点击（这就是为什么用呈现图层来响应交互的原因）</p>
+<p>#####清单7.7 使用presentationLayer图层来判断当前图层位置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">@interface ViewController ()</div><div class="line">  </div><div class="line">  @property (nonatomic, strong) CALayer *colorLayer;</div><div class="line">  </div><div class="line">  @end</div><div class="line">  </div><div class="line">  @implementation ViewController</div><div class="line">  </div><div class="line">  - (void)viewDidLoad</div><div class="line">  &#123;</div><div class="line">      [super viewDidLoad];</div><div class="line">      //create a red layer</div><div class="line">      self.colorLayer = [CALayer layer];</div><div class="line">      self.colorLayer.frame = CGRectMake(0, 0, 100, 100);</div><div class="line">      self.colorLayer.position = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 2);</div><div class="line">      self.colorLayer.backgroundColor = [UIColor redColor].CGColor;</div><div class="line">      [self.view.layer addSublayer:self.colorLayer];</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event</div><div class="line">  &#123;</div><div class="line">      //get the touch point</div><div class="line">      CGPoint point = [[touches anyObject] locationInView:self.view];</div><div class="line">      //check if we&apos;ve tapped the moving layer</div><div class="line">      if ([self.colorLayer.presentationLayer hitTest:point]) &#123;</div><div class="line">          //randomize the layer background color</div><div class="line">          CGFloat red = arc4random() / (CGFloat)INT_MAX;</div><div class="line">          CGFloat green = arc4random() / (CGFloat)INT_MAX;</div><div class="line">          CGFloat blue = arc4random() / (CGFloat)INT_MAX;</div><div class="line">          self.colorLayer.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0].CGColor;</div><div class="line">      &#125; else &#123;</div><div class="line">          //otherwise (slowly) move the layer to new position</div><div class="line">          [CATransaction begin];</div><div class="line">          [CATransaction setAnimationDuration:4.0];</div><div class="line">          self.colorLayer.position = point;</div><div class="line">          [CATransaction commit];</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  @end</div></pre></td></tr></table></figure></p>
+<p>#####总结<br>这一章讨论了隐式动画，还有Core Animation对指定属性选择合适的动画行为的机制。同时你知道了UIKit是如何充分利用Core Animation的隐式动画机制来强化它的显式系统，以及动画是如何被默认禁用并且当需要的时候启用的。最后，你了解了呈现和模型图层，以及Core Animation是如何通过它们来判断出图层当前位置以及将要到达的位置。<br>在下一章中，我们将研究Core Animation提供的显式动画类型，既可以直接对图层属性做动画，也可以覆盖默认的图层行为。</p>
 
           
         

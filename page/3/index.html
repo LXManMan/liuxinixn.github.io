@@ -262,1152 +262,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/10/Swift之集合类型-(Collection-Types)（字典篇）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/10/Swift之集合类型-(Collection-Types)（字典篇）/" itemprop="url">iOS -Swift之集合类型-(Colletion -Types)(字典篇)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-10T20:19:35+08:00">
-                2017-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>字典</p>
-</blockquote>
-<p>字典是一种存储多个相同类型的值的容器。每个值(<code>value</code>)都关联唯一的键(<code>key</code>)，键作为字典中的这个值数 据的标识符。和数组中的数据项不同，字典中的数据项并没有具体顺序。我们在需要通过标识符(键)访问数据 的时候使用字典，这种方法很大程度上和我们在现实世界中使用字典查字义的方法一样。</p>
-<p><code>注意:</code>Swift<code>的</code>Dictionary<code>类型被桥接到</code>Foundation <code>的 NSDictionary 类。</code></p>
-<p><strong>字典类型简化语法</strong></p>
-<p><code>Swift</code> 的字典使用<code>Dictionary&lt;Key, Value&gt;</code> 定义，其中 <code>Key</code> 是字典中键的数据类型， <code>Value</code>是字典中对应于这些 键所存储值的数据类型。<br>我们也可以用 <code>[Key: Value]</code>这样简化的形式去创建一个字典类型。虽然这两种形式功能上相同，但是后者是首 选，并且这本指导书涉及到字典类型时通篇采用后者。</p>
-<p><strong>创建一个空字典</strong></p>
-<p>我们可以像数组一样使用构造语法创建一个拥有确定类型的空字典:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var namesOfIntegers = Int: String</div><div class="line"></div><div class="line">// namesOfIntegers 是一个空的 [Int: String] 字典</div></pre></td></tr></table></figure>
-<p>这个例子创建了一个<code>[Int: String]</code>类型的空字典来储存整数的英语命名。它的键是<code>Int</code>型，值是 <code>String</code> 型。<br>如果上下文已经提供了类型信息，我们可以使用空字典字面量来创建一个空字典，记作<code>[:]</code>(中括号中放一个冒 号):</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">namesOfIntegers[16] = &quot;sixteen&quot;</div><div class="line">// namesOfIntegers 现在包含一个键值对</div><div class="line">namesOfIntegers = [:]</div><div class="line">// namesOfIntegers 又成为了一个 [Int: String] 类型的空字典</div></pre></td></tr></table></figure>
-<blockquote>
-<p>用字典字面量创建字典</p>
-</blockquote>
-<p>我们可以使用字典字面量来构造字典，这和我们刚才介绍过的数组字面量拥有相似语法。字典字面量是一种将一<br>个或多个键值对写作 <code>Dictionary</code> 集 合的快捷途径。<br>一个键值对是一个<code>key</code> 和一个 <code>value</code> 的结合体。在字典字面量中，每一个键值对的键和值都由冒号分割。这些键 值对构成一个列表，其中这些键值对由方括号包含、由逗号分割:</p>
-<p><code>[key 1: value 1, key 2: value 2, key 3: value 3]</code></p>
-<p>下面的例子创建了一个存储国际机场名称的字典。在这个字典中键是三个字母的国际航空运输相关代码，值是机场名称:</p>
-<p><code>var airports: [String: String] = [&quot;YYZ&quot;: &quot;Toronto Pearson&quot;, &quot;DUB&quot;: &quot;Dublin&quot;]</code></p>
-<p><code>airports</code> 字典被声明为一种 <code>[String: String]</code>类型，这意味着这个字典的键和值都是 <code>String</code>类型。</p>
-<p><code>注意: airports 字典被声明为变量(用 var 关键字)而不是常量( let 关键字)因为后来更多的机场信息会被添加到
-这个示例字典中。</code></p>
-<p><code>airports</code>字典使用字典字面量初始化，包含两个键值对。第一对的键是 <code>YYZ</code>，值是 <code>Toronto Pearson</code> 。第二对的 键是 <code>DUB</code> ，值是 <code>Dublin</code> 。<br>这个字典语句包含了两个<code>String: String</code> 类型的键值对。它们对应 <code>airports</code> 变量声明的类型(一个只有 键和 String 值的字典)所以这个字典字面量的任务是构造拥有两个初始数据项的 <code>airport</code> 字典。<br>和数组一样，我们在用字典字面量构造字典时，如果它的键和值都有各自一致的类型，那么就不必写出字典的类 型。 <code>airports</code> 字典也可以用这种简短方式定义:</p>
-<p><code>var airports = [&quot;YYZ&quot;: &quot;Toronto Pearson&quot;, &quot;DUB&quot;: &quot;Dublin&quot;]</code></p>
-<p>因为这个语句中所有的键和值都各自拥有相同的数据类型，<code>Swift</code>可以推断出<code>Dictionary&lt;String, String&gt;</code> 是<code>airports</code>字典的正确类型。</p>
-<p><strong>访问和修改字典</strong></p>
-<p>我们可以通过字典的方法和属性来访问和修改字典，或者通过使用下标语法。 和数组一样，我们可以通过字典的只读属性<code>count</code>来获取某个字典的数据项数量:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(&quot;The dictionary of airports contains (airports.count) items.&quot;)</div><div class="line">// 打印 &quot;The dictionary of airports contains 2 items.&quot;(这个字典有两个数据项)</div></pre></td></tr></table></figure>
-<p>使用布尔属性 <code>isEmpty</code> 作为一个缩写形式去检查 <code>count</code>属性是否为 0 :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> if airports.isEmpty &#123;</div><div class="line">     print(&quot;The airports dictionary is empty.&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;The airports dictionary is not empty.&quot;)</div><div class="line">&#125;</div><div class="line">// 打印 &quot;The airports dictionary is not empty.&quot;</div></pre></td></tr></table></figure></p>
-<p>我们也可以在字典中使用下标语法来添加新的数据项。可以使用一个恰当类型的键作为下标索引，并且分配恰当<br>类型的新值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">airports[&quot;LHR&quot;] = &quot;London&quot;</div><div class="line">// airports 字典现在有三个数据项</div></pre></td></tr></table></figure></p>
-<p>我们也可以使用下标语法来改变特定键对应的值:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">airports[&quot;LHR&quot;] = &quot;London Heathrow&quot;</div><div class="line">// &quot;LHR&quot;对应的值 被改为 &quot;London Heathrow</div></pre></td></tr></table></figure>
-<p>作为另一种下标方法，字典的<code>updateValue(_:forKey:)</code>方法可以设置或者更新特定键对应的值。就像上面所示的 下标示例， <code>updateValue(_:forKey:)</code> 方法在这个键不存在对应值的时候会设置新值或者在存在时更新已存在的 值。和上面的下标方法不同的， <code>updateValue(_:forKey:)</code> 这个方法返回更新值之前的原值。这样使得我们可以检 查更新是否成功。</p>
-<p><code>updateValue(_:forKey:)</code>方法会返回对应值的类型的可选值。举例来说:对于存储<code>String</code> 值的字典，这个函数会 返回一个 <code>String</code>? 或者“可选 <code>String</code>”类型的值。</p>
-<p>如果有值存在于更新前，则这个可选值包含了旧值，否则它将会是<code>nil</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> if let oldValue = airports.updateValue(&quot;Dublin Airport&quot;, forKey: &quot;DUB&quot;) &#123;</div><div class="line">     print(&quot;The old value for DUB was (oldValue).&quot;)</div><div class="line">&#125;</div><div class="line">// 输出 &quot;The old value for DUB was Dublin.&quot;</div></pre></td></tr></table></figure>
-<p>我们也可以使用下标语法来在字典中检索特定键对应的值。因为有可能请求的键没有对应的值存在，字典的下标 访问会返回对应值的类型的可选值。如果这个字典包含请求键所对应的值，下标会返回一个包含这个存在值的可 选值，否则将返回 <code>nil</code> :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> if let airportName = airports[&quot;DUB&quot;] &#123;</div><div class="line">     print(&quot;The name of the airport is (airportName).&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;That airport is not in the airports dictionary.&quot;)</div><div class="line">&#125;</div><div class="line">// 打印 &quot;The name of the airport is Dublin Airport.&quot;</div></pre></td></tr></table></figure>
-<p>我们还可以使用下标语法来通过给某个键的对应值赋值为 nil 来从字典里移除一个键值对:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">airports[&quot;APL&quot;] = &quot;Apple Internation&quot;</div><div class="line">// &quot;Apple Internation&quot; 不是真的 APL 机场, 删除它 airports[&quot;APL&quot;] = nil</div><div class="line">// APL 现在被移除了</div></pre></td></tr></table></figure></p>
-<p>此外，<code>removeValue(forKey:)</code>方法也可以用来在字典中移除键值对。这个方法在键值对存在的情况下会移除该键 值对并且返回被移除的值或者在没有值的情况下返回 <code>nil</code> :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if let removedValue = airports. removeValue(forKey: &quot;DUB&quot;) &#123;</div><div class="line">    print(&quot;The removed airport&apos;s name is (removedValue).&quot;)</div><div class="line">&#125; else &#123;</div><div class="line">    print(&quot;The airports dictionary does not contain a value for DUB.&quot;)</div><div class="line">&#125;</div><div class="line">// prints &quot;The removed airport&apos;s name is Dublin Airport.&quot;</div></pre></td></tr></table></figure>
-<p><strong>字典遍历</strong></p>
-<p>我们可以使用 <code>for-in</code> 循环来遍历某个字典中的键值对。每一个字典中的数据项都以 (<code>key, value</code>) 元组形式返 回，并且我们可以使用临时常量或者变量来分解这些元组:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">for (airportCode, airportName) in airports &#123;</div><div class="line">    print(&quot;(airportCode): (airportName)&quot;)</div><div class="line">&#125;</div><div class="line">// YYZ: Toronto Pearson</div><div class="line">// LHR: London Heathrow</div></pre></td></tr></table></figure>
-<p>通过访问<code>keys</code>   或者   <code>values</code>属性，我们也可以遍历字典的键或者值:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">for airportCode in airports.keys &#123;</div><div class="line">    print(&quot;Airport code: (airportCode)&quot;)</div><div class="line">&#125;</div><div class="line">// Airport code: YYZ</div><div class="line">// Airport code: LHR</div><div class="line">for airportName in airports.values &#123;</div><div class="line">    print(&quot;Airport name: (airportName)&quot;)</div><div class="line">&#125;</div><div class="line">// Airport name: Toronto Pearson</div><div class="line">// Airport name: London Heathrow</div></pre></td></tr></table></figure>
-<p>如果我们只是需要使用某个字典的键 集合或者值 集合来作为某个接受   <code>Array</code>实例的 <code>API</code> 的参数，可以直接使用 <code>keys</code>或者<code>values</code> 属性构造一个新数组:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let airportCodes = String</div><div class="line">// airportCodes 是 [&quot;YYZ&quot;, &quot;LHR&quot;]</div><div class="line">let airportNames = String</div><div class="line">// airportNames 是 [&quot;Toronto Pearson&quot;, &quot;London Heathrow&quot;]</div></pre></td></tr></table></figure>
-<p><code>Swift</code> 的字典类型是无序集 合类型。为了以特定的顺序遍历字典的键或值，可以对字典的<code>keys</code>  或 <code>values</code>  属性使 用  <code>sorted ()</code>方法。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/09/Swift之基本运算符/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/09/Swift之基本运算符/" itemprop="url">iOS -Swift基本运算符</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-09T20:19:35+08:00">
-                2017-11-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Swift 的运算符和C以及OC的运算符相比并没有太大的变化，但是有很好的补充。</p>
-<blockquote>
-<p>赋值运算符(因为元组的使用更加丰富),注意区别</p>
-</blockquote>
-<p>赋值运算符( <code>a = b</code>)，表示用<code>b</code> 的值来初始化或更新<code>a</code> 的值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let b = 10</div><div class="line">var a = 5</div><div class="line">a= b</div><div class="line">// a 现在等于 10</div></pre></td></tr></table></figure></p>
-<p>如果赋值的右边是一个多元组，它的元素可以马上被分解成多个常量或变量:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let (x, y) = (1, 2)</div><div class="line">// 现在 x 等于 1，y 等于 2</div></pre></td></tr></table></figure></p>
-<p>与 <code>C</code>语言和 <code>Objective-C</code> 不同，<code>Swift</code>的赋值操作并不返回任何值。所以以下代码是错误的:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if x = y &#123;</div><div class="line">// 此句错误, 因为 x = y 并不返回任何值</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><code>这个特性使你无法把(</code> == <code>)错写成(</code> =<code>)，由于</code>if x = y<code>是错误代码，</code>Swift<code>能帮你避免此类错误发生。</code></p>
-<blockquote>
-<p>算术运算符 求余运算符  组合赋值运算符 三目运算符(没有太多变化)</p>
-</blockquote>
-<p>• 加法(+)<br>• 减法(-)<br>• 乘法(*)<br>• 除法(/)<br> 求余运算符( <code>a</code>% <code>b</code> )是计算 <code>b</code>的多少倍刚刚好可以容入<code>a</code>，返回多出来的那部分(余数)。</p>
-<p>组合赋值运算符<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = 1</div><div class="line">a += 2</div><div class="line">// a 现在是 3</div></pre></td></tr></table></figure></p>
-<p>三目运算符<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let contentHeight = 40</div><div class="line">let hasHeader = true</div><div class="line">let rowHeight = contentHeight + (hasHeader ? 50 : 20) // rowHeight 现在是 90</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>一元负号运算符  一元正号运算符</p>
-</blockquote>
-<p>数值的正负号可以使用前缀 - (即一元负号符)来切换<br>一元负号符( <code>-</code> )写在操作数之前，中间没有空格。<br>一元正号符( + )不做任何改变地返回操作数的值</p>
-<blockquote>
-<p>比较运算符(Comparison Operators)</p>
-</blockquote>
-<p>• 等于( a == b )<br>• 不等于( a != b )<br>• 大于( a &gt; b )<br>• 小于( a &lt; b )<br>• 大于等于( a &gt;= b )<br>• 小于等于( a &lt;= b )</p>
-<p><code>每个比较运算都返回了一个标识表达式是否成立的布尔值</code></p>
-<p>当元组中的值可以比较时，你也可以使用这些运算符来比较它们的大小。例如，因为 <code>Int</code>和<code>String</code> 类型的值 可以比较，所以类型为 (<code>Int, String</code>) 的元组也可以被比较。相反，<code>Bool</code>不能被比较，也意味着存有布尔类 型的元组不能被比较。<br>比较元组大小会按照从左到右、逐值比较的方式，直到发现有两个值不等时停止。如果所有的值都相等，那么这一对元组我们就称它们是相等的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">注意:</div><div class="line">Swift 标准库只能比较七个以内元素的元组比较函数。</div><div class="line">如果你的元组元素超过七个时，你需要自己实现比较运算 符</div></pre></td></tr></table></figure>
-<blockquote>
-<p>空合运算符 (Nil Coalescing Operator) 是Swift对运算符的一个很好的扩展</p>
-</blockquote>
-<p>合运算符( <code>a ?? b</code> )将对可选类型 a 进行空判断，如果 <code>a</code> 包含一个值就进行解封，否则就返回一个默认<br>值<code>b</code> 。表达式 <code>a</code>必须是 <code>Optional</code>类型。默认值 <code>b</code> 的类型必须要和<code>a</code> 存储值的类型保持一致。<br>空合运算符是对以下代码的简短表达方法:</p>
-<p><code>a != nil ? a! : b</code><br>上述代码使用了三目运算符。当可选类型 <code>a</code> 的值不为空时，进行强制解封(<code>a!</code>)，访问 a 中的值;反之返 回默认值 <code>b</code>。无疑空合运算符( <code>??</code> )提供了一种更为优 的方式去封装条件判断和解封两种行为，显得简洁以 及更具可读性。<br><code>注意: 如果</code>a <code>为非空值(</code> non-nil<code>)，那么值</code>b <code>将不会被计算。这也就是所谓的短路求值。</code></p>
-<p>使用方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let defaultColorName = &quot;red&quot;</div><div class="line">var userDefinedColorName: String? //默认值为 nil</div><div class="line">var colorNameToUse = userDefinedColorName ?? defaultColorName</div><div class="line">// userDefinedColorName 的值为空，所以 colorNameToUse 的值为 &quot;red&quot;</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>区间运算符(Range Operators)</p>
-</blockquote>
-<p>Swift 提供了两个方便表达一个区间的值的区间运算符。</p>
-<p><strong>闭区间运算符</strong><br>闭区间运算符(<code>a...b</code>)定义一个包含从 到 (a包括 和b )的所有值的区间。a 的值不能超过 b。 ? 闭区间运算符在迭代一个区间的所有值时是非常有用的，如在 for-in   循环中:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">for index in 1...5 &#123;</div><div class="line">    print(&quot;\(index) * 5 = \(index * 5)&quot;)</div><div class="line">&#125;</div><div class="line">// 1 * 5 = 5</div><div class="line">// 2 * 5 = 10</div><div class="line">// 3 * 5 = 15</div><div class="line">// 4 * 5 = 20</div><div class="line">// 5 * 5 = 25</div></pre></td></tr></table></figure>
-<p><strong>半开区间运算符(多用于数组遍历)</strong></p>
-<p>半开区间运算符(  <code>a..&lt;b</code> )定义一个从<code>a到b</code>但不包括b的区间。之所以称为半开区间，是应为改区间 包含第一个值而不包括最后的值。<br>半开区间的实用性在于当你使用一个从 <code>0</code> 开始的列表(如数组)时，非常方便地从<code>0</code>数到列表的长度。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> let names = [&quot;Anna&quot;, &quot;Alex&quot;, &quot;Brian&quot;, &quot;Jack&quot;]</div><div class="line"> let count = names.count</div><div class="line"> for i in 0..&lt;count &#123;</div><div class="line">print(&quot;第 \(i + 1) 个人叫 \(names[i])&quot;) &#125;</div><div class="line">// 第 1 个人叫 Anna </div><div class="line">// 第 2 个人叫 Alex </div><div class="line">// 第 3 个人叫 Brian </div><div class="line">// 第 4 个人叫 Jack</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>逻辑运算符(Logical Operators)</p>
-</blockquote>
-<p><code>逻辑运算符的操作对象是逻辑布尔值。Swift 支持基于 C 语言的三个标准逻辑运算。</code><br>•逻辑非( )<br>• 逻辑与( )<br>• 逻辑或( )</p>
-<p>逻辑运算符组合计算</p>
-<p>我们可以组合多个逻辑运算符来表达一个复合逻辑:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> if enteredDoorCode &amp;&amp; passedRetinaScan || hasDoorKey || knowsOverridePassword &#123;</div><div class="line">     print(&quot;Welcome!&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;ACCESS DENIED&quot;)</div><div class="line">&#125;</div><div class="line">// 输出 &quot;Welcome!&quot;</div></pre></td></tr></table></figure></p>
-<p>这个例子使用了含多个 <code>&amp;&amp;</code>和<code>||</code>的复合逻辑。但无论怎样， <code>&amp;&amp;</code> 和<code>||</code> 始终只能操作两个值。</p>
-<p><code>注意: Swift 逻辑操作符 &amp;&amp; 和 || 是左结合的，这意味着拥有多元逻辑操作符的复合表达式优先计算最左 边的子表达式。</code><br><code>使用括号来明确优先级</code></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/08/Swift之基本数据结构、控制语句/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/08/Swift之基本数据结构、控制语句/" itemprop="url">iOS -Swift之基本数据结构，控制语句</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-08T20:19:35+08:00">
-                2017-11-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>简介：<br>Swift 是一门进行 iOS 和 OS X 应用开发的新语言。然而，如果你有 C 或者 Objective-C 开发经验的话，你会发现 Swift 的很多内容都是你熟悉的。<br>Swift 包含了 C 和 Objective-C 上所有基础数据类型，Int表示整型值；Double和Float表示浮点型值；Bool是布尔型值；String是文本型数据。Swift 还提供了三个基本的集合类型，Array，Set和Dictionary，详见集合类型。<br>就像 C 语言一样，Swift 使用变量来进行存储并通过变量名来关联值。在 Swift 中，广泛的使用着值不可变的变量，它们就是常量，而且比 C 语言的常量更强大。在 Swift 中，如果你要处理的值不需要改变，那使用常量可以让你的代码更加安全并且更清晰地表达你的意图。<br>除了我们熟悉的类型，Swift 还增加了 Objective-C 中没有的高阶数据类型比如元组（Tuple）。元组可以让你创建或者传递一组数据，比如作为函数的返回值时，你可以用一个元组可以返回多个值。<br>Swift 还增加了可选（Optional）类型，用于处理值缺失的情况。可选表示“那儿有一个值，并且它等于 x ”或者“那儿没有值”。可选有点像在 Objective-C 中使用nil<br>，但是它可以用在任何类型上，不仅仅是类。可选类型比 Objective-C 中的nil<br>指针更加安全也更具表现力，它是 Swift 许多强大特性的重要组成部分。<br>Swift 是一门类型安全的语言，可选类型就是一个很好的例子。Swift 可以让你清楚地知道值的类型。如果你的代码期望得到一个String<br>，类型安全会阻止你不小心传入一个Int<br>。你可以在开发阶段尽早发现并修正错误。</p>
-<p>参考文章：<a href="https://www.gitbook.com/book/numbbbbb/-the-swift-programming-language-/details" target="_blank" rel="noopener">《The Swift Programming Language》中文版</a> </p>
-<p>#####跟着溜一遍</p>
-<p>######数据类型：常亮与 变量 let 用来生命常量，var 用来声明变量 一个常量的值，在编译的时候，并不需要有明确的值，但是你只能为它赋值一次。也就是说你可以用常量来表示这样一个值：你只需要决定一次，但是需要使用很多次。常量或者变量的类型必须和你赋给它们的值一样。然而，声明时类型是可选的，声明的同时赋值的话，编译器会自动推断类型。在上面的例子中，编译器推断出myVariable是一个整数（integer）因为它的初始值是整数。</p>
-<blockquote>
-<p>常量与变量</p>
-</blockquote>
-<p>最基础的数据类型 就是 <code>常量与变量</code><br>如果初始值没有提供足够的信息（或者没有初始值），那你需要在变量后面声明类型，用冒号分割。术语叫做 <code>类型标注</code><br>常量与变量名不能包含数学符号，箭头，保留的（或者非法的）Unicode 码位，连线与制表符。也不能以数字开头，但是可以在常量与变量名的其他地方包含数字。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var welcomeMessage: String</div><div class="line"></div><div class="line">yVariable = 50</div><div class="line">let myConstant = 42</div><div class="line">let implicitInteger = 70</div><div class="line">let implicitDouble = 70.0</div><div class="line">let explicitDouble:Double = 70   //声明中的冒号代表着“是...类型”，</div></pre></td></tr></table></figure></p>
-<p>值永远不会被隐式转换为其他类型。如果你需要把一个值转换成其他类型，请显式转换。 <code>转换的时候➕号与 转换类型之间需要有空格</code><br>注意：一般来说你很少需要写类型标注。如果你在声明常量或者变量的时候赋了一个初始值，Swift可以推断出这个常量或者变量的类型，请参考类型安全和类型推断。在上面的例子中，没有给welcomeMessage<br>赋初始值，所以变量welcomeMessage<br>的类型是通过一个类型标注指定的，而不是通过初始值推断的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let label = &quot;The width is&quot;</div><div class="line">let width = 94</div><div class="line">let witdthLabel = label + String(width)</div></pre></td></tr></table></figure></p>
-<p>如果去掉String，会提示：<code>MyPlayground.playground:25:25: error: binary operator &#39;+&#39; cannot be applied to operands of type &#39;String&#39; and &#39;Int&#39;</code></p>
-<p>######有一种更简单的把值转换成字符串的方法：把值写到括号中，并且在括号之前写一个反斜杠。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let apples = 3</div><div class="line">let oranges = 5</div><div class="line">let appleSummaryt = &quot;I have \(apples) apples.&quot;</div><div class="line"></div><div class="line">let fruitSummary = &quot;I have \(apples + oranges) pieces of fruits&quot;</div><div class="line"></div><div class="line">//练习： 使用\()来把一个浮点计算转换成字符串，并加上某人的名字，和他打个招呼。</div><div class="line"></div><div class="line">let age = 3</div><div class="line">let chiledName = &quot;archy&quot;</div><div class="line">let seeWhat = chiledName + &quot; &quot; + String(age) + &quot; 岁了&quot;</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>数组与字典</p>
-</blockquote>
-<p>######使用方括号[]来创建数组和字典，并使用下标或者键（key）来访问元素。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var shoppingList = [&quot;catfish&quot;,&quot;water&quot;,&quot;tulips&quot;,&quot;blue paint&quot;]</div><div class="line">shoppingList[1] = &quot;bottle of water&quot;</div><div class="line"></div><div class="line">print(shoppingList)</div><div class="line"></div><div class="line">var occupations = [</div><div class="line">    &quot;Malcolm&quot;:&quot;Captain&quot;,</div><div class="line">    &quot;Kaylee&quot;:&quot;Mecahnic&quot;,</div><div class="line"></div><div class="line">]</div><div class="line"></div><div class="line">occupations[&quot;Jayne&quot;] = &quot;Public Realtions&quot;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//初始化一个数组或者字典 使用初始化语法</div><div class="line">let emptyArray = [String]()</div><div class="line">//emptyArray = [&quot;catfish&quot;,&quot;water&quot;,&quot;tulips&quot;,&quot;blue paint&quot;]</div><div class="line"></div><div class="line">let emptyDictionary = [String:Float]()</div><div class="line"></div><div class="line"></div><div class="line">//如果类型信息可以被推断出来，你可以用[]和[:]来创建空数组和空字典——就像你声明变量或者给函数传参数的时候一样。</div><div class="line">//shoppingList = []</div><div class="line">//occupations = [:]</div></pre></td></tr></table></figure>
-<blockquote>
-<p>控制语句：使用if和switch来进行条件操作，使用for-in、for、while和do-while来进行循环。包裹条件和循环变量括号可以省略，但是语句体的大括号是必须的。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var optionalString:String? = &quot;Hello&quot;</div><div class="line">print(optionalString == nil)</div><div class="line"></div><div class="line">var optionalName:String? = &quot;Jobn&quot;</div><div class="line">var greeting = &quot;hello&quot;</div><div class="line">if optionalName == nil &#123;</div><div class="line">    greeting = &quot;Hello, archy&quot;</div><div class="line">&#125;else&#123;</div><div class="line">    if let name = optionalName &#123;</div><div class="line">        greeting = &quot;Hello ,\(name)&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>######switch支持任意类型的数据以及各种比较操作——不仅仅是整数以及测试相等。声明’let’可用于匹配某部分固定值的模式,运行switch中匹配到的子句之后，程序会退出switch语句，并不会继续向下运行，所以不需要在每个子句结尾写break。</p>
-<p><code>不加 default 报错：error: switch must be exhaustive, consider adding a default clause</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let vegetable = &quot;red pepper,blue pepper&quot;</div><div class="line">switch vegetable &#123;</div><div class="line">case &quot;celery&quot;:</div><div class="line">    let vegetableComment = &quot;Add some raisins and make ants on a log.&quot;</div><div class="line">case &quot;cucumber&quot;, &quot;watercress&quot;:</div><div class="line">    let vegetableComment = &quot;That would make a good tea sandwich.&quot;</div><div class="line">case let x where x.hasSuffix(&quot;pepper&quot;):</div><div class="line">    let vegetableComment = &quot;Is it a spicy \(x)?&quot;</div><div class="line">default:</div><div class="line">    let vegetableComment = &quot;Everything tastes good in soup.&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>######你可以使用for-in来遍历字典，需要两个变量来表示每个键值对。字典是一个无序的集合，所以他们的键和值以任意顺序迭代结束。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">let intetestingNumbers = [</div><div class="line">    &quot;Prime&quot;: [2,3,5,7,11,13],</div><div class="line">    &quot;Fibonacci&quot;: [1,1,2,3,5,8],</div><div class="line">    &quot;Square&quot;: [1,4,9,16,25],</div><div class="line">]</div><div class="line">// kind  numbers 对应键值对</div><div class="line">var largest = 0</div><div class="line">var largestName = String()</div><div class="line"></div><div class="line">for (kind, numbers) in intetestingNumbers&#123;</div><div class="line">    for number in numbers&#123;</div><div class="line">        if number &gt; largest &#123;</div><div class="line">             largest = number</div><div class="line">            largestName = kind;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">print(&quot;largestName + \(largest) &quot;)</div></pre></td></tr></table></figure>
-<h5 id="do-while-由repeat-while-来代替"><a href="#do-while-由repeat-while-来代替" class="headerlink" title="do while  由repeat  while 来代替"></a>do while  由repeat  while 来代替</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var n = 2</div><div class="line">while n &lt; 100 &#123;</div><div class="line">    n =  n * 2</div><div class="line">&#125;</div><div class="line">print(n)</div><div class="line"></div><div class="line">var m  = 2;</div><div class="line">// do while  由repeat  while 来代替</div><div class="line">repeat &#123;</div><div class="line">    m = m * 2</div><div class="line">&#125;while m &lt; 100</div><div class="line">    print(m)</div></pre></td></tr></table></figure>
-<p>######for  循环你可以在循环中使用..&lt;来表示范围，也可以使用传统的写法，两者是等价的,比如下面 0 与4 中间是不可以由空格的，否则会报语法错误<br>使用..&lt;创建的范围不包含上界，如果想包含的话需要使用…。0…2 表示的是 1 和 2 ，0..<2 1="" 表示的是="" <figure="" class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var  firstForLoop = 0</div><div class="line">for i in 0..&lt;2 &#123;</div><div class="line">    firstForLoop += i</div><div class="line">&#125;</div><div class="line">print(firstForLoop)</div></pre></td></tr></table></2></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/06/iOS-UIView设置局部阴影/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/06/iOS-UIView设置局部阴影/" itemprop="url">iOS -UIView设置局部阴影</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-06T20:19:35+08:00">
-                2017-11-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>有时候，UI并不会给我们切带有阴影的图片，阴影就需要我们自己来做。（当然了，有图片是最好的）</p>
-<p>举个栗子如图：<img src="http://upload-images.jianshu.io/upload_images/1694376-54216e2678786831.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="阴影.png"><br>我们要给上图设置一个左侧的阴影，系统的方法<code>shadowOffset</code>可以满足，但是系统的方法只能设置单侧的阴影，我们需要多个方向变不可用。仔细观察，系统的阴影有个过渡的效果。所以我大胆猜测，如果自己实现左侧阴影的效果，实际上和上图阴影的区域是类似的。（这些在下面处理阴影的宽度有很大的关系）</p>
-<blockquote>
-<p>通过shadowPath 实现局部阴影  ，因为系统的过渡效果，所以这个偏移为shadowPathWidth/2</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"> self.layer.masksToBounds = NO;</div><div class="line"> </div><div class="line"> self.layer.shadowColor = shadowColor.CGColor;</div><div class="line"> </div><div class="line"> self.layer.shadowOpacity = shadowOpacity;</div><div class="line"> </div><div class="line"> self.layer.shadowRadius =  shadowRadius;</div><div class="line"> </div><div class="line"> self.layer.shadowOffset = CGSizeZero;</div><div class="line"></div><div class="line">因为系统的过渡效果，所以这个偏移为shadowPathWidth/2</div><div class="line">CGRect shadowRect    = CGRectMake(originX, originY - shadowPathWidth/2, originW,  shadowPathWidth);</div><div class="line"></div><div class="line">UIBezierPath *path =[UIBezierPath bezierPathWithRect:shadowRect];</div><div class="line"> </div><div class="line"> self.layer.shadowPath = path.CGPath;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>将常用的局部阴影效果封装为分类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">typedef enum :NSInteger&#123;</div><div class="line">    </div><div class="line">    LXShadowPathLeft,</div><div class="line">    </div><div class="line">    LXShadowPathRight,</div><div class="line">    </div><div class="line">    LXShadowPathTop,</div><div class="line"></div><div class="line">    LXShadowPathBottom,</div><div class="line"></div><div class="line">    LXShadowPathNoTop,</div><div class="line">    </div><div class="line">    LXShadowPathAllSide</div><div class="line"></div><div class="line">&#125; LXShadowPathSide;</div><div class="line">@interface UIView (LXShadowPath)</div><div class="line"></div><div class="line">/*</div><div class="line"> * shadowColor 阴影颜色</div><div class="line"> *</div><div class="line"> * shadowOpacity 阴影透明度，默认0</div><div class="line"> *</div><div class="line"> * shadowRadius  阴影半径，默认3</div><div class="line"> *</div><div class="line"> * shadowPathSide 设置哪一侧的阴影，</div><div class="line"> </div><div class="line"> * shadowPathWidth 阴影的宽度，</div><div class="line"></div><div class="line"> */</div><div class="line"></div><div class="line">-(void)LX_SetShadowPathWith:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowRadius:(CGFloat)shadowRadius shadowSide:(LXShadowPathSide)shadowPathSide shadowPathWidth:(CGFloat)shadowPathWidth;</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p>效果图：<img src="http://upload-images.jianshu.io/upload_images/1694376-c812c44087f2f147.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="局部阴影.gif"></p>
-<p>demo地址：<a href="https://github.com/liuxinixn/LXViewShadowPath" target="_blank" rel="noopener">UIView局部阴影</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/05/iOS-封装一个简单的日历控件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/05/iOS-封装一个简单的日历控件/" itemprop="url">iOS --封装一个简单的日历控件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-05T20:19:35+08:00">
-                2017-11-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>先看下效果图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-63468571744c0e0d.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="日历.gif"></p>
-<p>看了一些第三方，改动起来不容易，找了一个demo，跟着思路走了一遍，所以还是动手自己封装一遍。封装尽量保持代码简洁。</p>
-<blockquote>
-<p>首先是布局。</p>
-</blockquote>
-<p>分为三个模块：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-91ac1a252adc54bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="布局.png"></p>
-<p>分为<code>LXCalendarHearder</code>,<code>LXCalendarWeekView</code>以及<code>collectionView</code>封装的日历控件。</p>
-<p><code>header</code>和<code>weekView</code>就不用多说了，最重要的是<code>collectionView</code>的模型建立。有的是把一个月的数据放在一个模型里，想了想还是把每一天的数据单独建立一个模型。</p>
-<blockquote>
-<p>模型的建立</p>
-</blockquote>
-<p>首先是根据当前的日期拿到当月的数据模型，以及上个月下个月的数据模型，因为可能有需要设置上个月和下个月的显示以及灰度处理。</p>
-<p><code>month</code>模型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, strong) NSDate *monthDate; //!&lt; 传入的 NSDate 对象，该 NSDate 对象代表当前月的某一日，根据它来获得其他数据</div><div class="line">@property (nonatomic, assign) NSInteger totalDays; //!&lt; 当前月的天数</div><div class="line">@property (nonatomic, assign) NSInteger firstWeekday; //!&lt; 标示第一天是星期几（0代表周日，1代表周一，以此类推）</div><div class="line">@property (nonatomic, assign) NSInteger year; //!&lt; 所属年份</div><div class="line">@property (nonatomic, assign) NSInteger month; //!&lt; 当前月份</div><div class="line"></div><div class="line">- (instancetype)initWithDate:(NSDate *)date;</div></pre></td></tr></table></figure></p>
-<p>关于获取上个月下个月的日期，<code>demo</code>里有。</p>
-<p><code>DayModel</code>模型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">@interface LXCalendarDayModel : NSObject</div><div class="line">@property (nonatomic, assign) NSInteger totalDays; //!&lt; 当前月的天数</div><div class="line">@property (nonatomic, assign) NSInteger firstWeekday; //!&lt; 标示第一天是星期几（0代表周日，1代表周一，以此类推）</div><div class="line">@property (nonatomic, assign) NSInteger year; //!&lt; 所属年份</div><div class="line">@property (nonatomic, assign) NSInteger month; //!&lt; 当前月份</div><div class="line">@property (nonatomic, assign) NSInteger day;   //每天所在的位置</div><div class="line"></div><div class="line">@property(nonatomic,assign)BOOL isLastMonth;//属于上个月的</div><div class="line">@property(nonatomic,assign)BOOL isNextMonth;//属于下个月的</div><div class="line">@property(nonatomic,assign)BOOL isCurrentMonth;//属于当月</div><div class="line"></div><div class="line">@property(nonatomic,assign)BOOL isToday;//今天</div><div class="line"></div><div class="line">@property(nonatomic,assign)BOOL isSelected;//是否被选中</div></pre></td></tr></table></figure></p>
-<p>根据month模型建立DayModel模型：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">LXCalendarDayModel *model =[[LXCalendarDayModel alloc]init];</div><div class="line">       </div><div class="line">       //配置外面属性</div><div class="line">       [self configDayModel:model];</div><div class="line">       </div><div class="line">       model.firstWeekday = firstWeekday;</div><div class="line">       model.totalDays = totalDays;</div><div class="line">       </div><div class="line">       model.month = monthModel.month;</div><div class="line">       </div><div class="line">       model.year = monthModel.year;</div><div class="line">       </div><div class="line">       </div><div class="line">       //上个月的日期</div><div class="line">       if (i &lt; firstWeekday) &#123;</div><div class="line">           model.day = lastMonthModel.totalDays - (firstWeekday - i) + 1;</div><div class="line">           model.isLastMonth = YES;</div><div class="line">       &#125;</div><div class="line">       </div><div class="line">       //当月的日期</div><div class="line">       if (i &gt;= firstWeekday &amp;&amp; i &lt; (firstWeekday + totalDays)) &#123;</div><div class="line">           </div><div class="line">           model.day = i -firstWeekday +1;</div><div class="line">           model.isCurrentMonth = YES;</div><div class="line">           </div><div class="line">           //标识是今天</div><div class="line">           if ((monthModel.month == [[NSDate date] dateMonth]) &amp;&amp; (monthModel.year == [[NSDate date] dateYear])) &#123;</div><div class="line">               if (i == [[NSDate date] dateDay] + firstWeekday - 1) &#123;</div><div class="line">                   </div><div class="line">                   model.isToday = YES;</div><div class="line">                   </div><div class="line">               &#125;                 </div><div class="line">           &#125;</div><div class="line">           </div><div class="line">       &#125;</div><div class="line">        //下月的日期</div><div class="line">       if (i &gt;= (firstWeekday + monthModel.totalDays)) &#123;</div><div class="line">           </div><div class="line">           model.day = i -firstWeekday - nextMonthModel.totalDays +1;</div><div class="line">           model.isNextMonth = YES;</div><div class="line">           </div><div class="line">       &#125;</div></pre></td></tr></table></figure></p>
-<p>上面的处理主要是把上个月和下个月需要显示的日期和当月的日期全部塞进<code>DayModel</code>模型里。这样我们对<code>cell</code>的处理只需要根据<code>DayModel</code>即可。</p>
-<blockquote>
-<p>细节说明</p>
-</blockquote>
-<p><code>demo</code> 中只是使用了一个<code>collectionView</code>然后添加左右清扫手势，给<code>collectionView</code>的<code>layer</code>做一个假假的动画实现翻页效果。</p>
-<p>关于日历demo中设置了6 行，具体为什么参考日历的12月份。</p>
-<blockquote>
-<p>最后</p>
-</blockquote>
-<p>demo中设置了一些常见的属性，可以自行配置，需要注意的是在属性设置之后才可以处理数据。</p>
-<p>使用方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">self.calenderView =[[LXCalendarView alloc]initWithFrame:CGRectMake(20, 80, Device_Width - 40, 0)];</div><div class="line">    </div><div class="line">    self.calenderView.currentMonthTitleColor =[UIColor hexStringToColor:@&quot;2c2c2c&quot;];</div><div class="line">    self.calenderView.lastMonthTitleColor =[UIColor hexStringToColor:@&quot;8a8a8a&quot;];</div><div class="line">    self.calenderView.nextMonthTitleColor =[UIColor hexStringToColor:@&quot;8a8a8a&quot;];</div><div class="line">    </div><div class="line">    self.calenderView.isHaveAnimation = NO;</div><div class="line">    </div><div class="line">    self.calenderView.isCanScroll = YES;</div><div class="line">    self.calenderView.isShowLastAndNextBtn = NO;</div><div class="line">    </div><div class="line">    self.calenderView.isShowLastAndNextDate = YES;</div><div class="line"></div><div class="line">    self.calenderView.todayTitleColor =[UIColor redColor];</div><div class="line">    </div><div class="line">    self.calenderView.selectBackColor =[UIColor greenColor];</div><div class="line">    </div><div class="line">    [self.calenderView dealData];</div><div class="line">    </div><div class="line">    self.calenderView.backgroundColor =[UIColor whiteColor];</div><div class="line">    [self.view addSubview:self.calenderView];</div><div class="line">    </div><div class="line">    self.calenderView.selectBlock = ^(NSInteger year, NSInteger month, NSInteger day) &#123;</div><div class="line">        NSLog(@&quot;%ld年 - %ld月 - %ld日&quot;,year,month,day);</div><div class="line">    &#125;;</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>补充</p>
-</blockquote>
-<p>代码中选中的日期在滑动会清除选中日期，修复代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[self.monthdataA enumerateObjectsUsingBlock:^(LXCalendarDayModel * obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</div><div class="line">       </div><div class="line">       if ((obj.year == self.selectModel.year) &amp;&amp; (obj.month == self.selectModel.month) &amp;&amp; (obj.day == self.selectModel.day)) &#123;</div><div class="line">           obj.isSelected = YES;</div><div class="line">       &#125;</div><div class="line">   &#125;];</div></pre></td></tr></table></figure></p>
-<p>如果是自定义日历，动画效果会超出显示区域，此时设置<br><code>self.calenderView.layer.masksToBounds = YES;</code>裁剪动画区域即可。</p>
-<p>最新代码请移步demo 地址。<br>demo地址：<a href="https://github.com/liuxinixn/LXCalendar/tree/master" target="_blank" rel="noopener">LXCalendar</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/02/iOS应用跳转到appstore评分，首页/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/02/iOS应用跳转到appstore评分，首页/" itemprop="url">iOS -应用跳转到appStore评分，首页</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-02T20:19:35+08:00">
-                2017-11-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#####传入第一次在itunesconnect创建应用时创建的appID</p>
-<p>评分<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">NSString *urlStr = [NSString stringWithFormat:@&quot;itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&amp;id=%@&amp;pageNumber=0&amp;sortOrdering=2&amp;mt=8&quot;, @&quot;&quot;]; </div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">[[UIApplication sharedApplication] openURL:[NSURL URLWithString:str2]];</div></pre></td></tr></table></figure></p>
-<p>跳转到首页<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NSString *str2 = [NSString stringWithFormat: @&quot;itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=%@&quot;,  @&quot;&quot;];</div><div class="line"></div><div class="line">  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str2]];</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/01/iOS接入百度地图SDK-v3-4-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/01/iOS接入百度地图SDK-v3-4-2/" itemprop="url">iOS -接入百度地图SDK3.4.2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-01T20:19:35+08:00">
-                2017-11-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>效果图:<br><img src="http://upload-images.jianshu.io/upload_images/1694376-00c98c804c033846.gif?imageMogr2/auto-orient/strip" alt="地图.gif"></p>
-<p>在使用cocoapod接入百度地图时候，遇到的一些问题，总结如下。</p>
-<blockquote>
-<p>######首先是网络配置以及环境配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">网络配置</div><div class="line">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;</div><div class="line">	&lt;dict&gt;</div><div class="line">		&lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;</div><div class="line">		&lt;true/&gt;</div><div class="line">	&lt;/dict&gt;</div><div class="line">定位允许</div><div class="line">&lt;key&gt;NSLocationWhenInUseUsageDescription&lt;/key&gt;</div></pre></td></tr></table></figure></p>
-<p>接入流程 配置appkey,需要注意的是，百度地图添加了安全码，bundle ID 以及 appkey ，项目名字是一一对应的，否则地图是加载不出来的:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    </div><div class="line">    _mapManager = [[BMKMapManager alloc]init];</div><div class="line">    // 如果要关注网络及授权验证事件，请设定     generalDelegate参数</div><div class="line">    BOOL ret = [_mapManager start:KBaiduMapKey  generalDelegate:nil];</div><div class="line">    if (!ret) &#123;</div><div class="line">        NSLog(@&quot;manager start failed!&quot;);</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>几个技术点</p>
-</blockquote>
-<p>1.地图的精度圈的处理<br>2.是否隐藏我的位置的气泡以及其他气泡。<br>3.计算离我最近点的距离以及显示。<br>4.计算离我最近点的距离，然后添加折线（覆盖物）<br>5.点击其他位置时更新连线（我的位置到点击的大头针的连线， 以及计算距离）</p>
-<p>1地图的精度圈的处理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">-(BMKMapView *)mapView&#123;</div><div class="line">    if (!_mapView) &#123;</div><div class="line">        _mapView =[[BMKMapView alloc]initWithFrame:CGRectMake(0, 104 , Device_Width , Device_Height - 104)];</div><div class="line">        _mapView.zoomLevel = 15;</div><div class="line">        _mapView.minZoomLevel = 5;</div><div class="line">        _mapView.maxZoomLevel = 17;</div><div class="line">        </div><div class="line">        BMKLocationViewDisplayParam *displayParam = [[BMKLocationViewDisplayParam alloc]init];</div><div class="line">        displayParam.isRotateAngleValid = true;//跟随态旋转角度是否生效</div><div class="line">        displayParam.isAccuracyCircleShow = false;//精度圈是否显示</div><div class="line">        displayParam.locationViewOffsetX = 0;//定位偏移量(经度)</div><div class="line">        displayParam.locationViewOffsetY = 0;//定位偏移量（纬度）</div><div class="line">        [_mapView updateLocationViewWithParam:displayParam];</div><div class="line">    &#125;</div><div class="line">    return _mapView;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>2大头针的初始化，<code>annotationView.canShowCallout = NO;//是否显示起泡泡</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">#pragma mark---大头针---</div><div class="line">- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id &lt;BMKAnnotation&gt;)annotation</div><div class="line">&#123;</div><div class="line">    if ([annotation isKindOfClass:[BMKPointAnnotation class]]) &#123;</div><div class="line">        </div><div class="line">        NSString *AnnotationViewID = @&quot;renameMark&quot;;</div><div class="line">        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];</div><div class="line">        if (annotationView == nil) &#123;</div><div class="line">            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];</div><div class="line">             //设置颜色</div><div class="line">                annotationView.pinColor = BMKPinAnnotationColorPurple;</div><div class="line">                // 从天上掉下效果</div><div class="line">                annotationView.animatesDrop = YES;</div><div class="line">                // 设置可拖拽</div><div class="line">                annotationView.draggable = YES;</div><div class="line">//            annotationView.canShowCallout = NO;//是否显示起泡泡</div><div class="line">            annotationView.image =[UIImage imageNamed:@&quot;icon_green&quot;];</div><div class="line">        &#125;</div><div class="line">        return annotationView;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    return nil;</div><div class="line">    </div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>上面的方法可以隐藏其他的气泡。但是我的位置的气泡是没办法隐藏的，查看百度的API，在点击大头针的时候首先会调用下面的方法，所以我们需要在下面处理。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> *当选中一个annotation views时，调用此接口</div><div class="line"> *@param mapView 地图View</div><div class="line"> *@param views 选中的annotation views</div><div class="line"> */</div><div class="line">- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view;</div></pre></td></tr></table></figure>
-<p>处理如下，在点击我的位置的时候可以发现和其他的大头针不一样，是<code>LocationView</code>类型，所以做个判断即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">#pragma mark---点击位置的方法 可屏蔽掉我的位置的气泡--</div><div class="line">- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view&#123;</div><div class="line">//    NSLog(@&quot;%@&quot;,view);</div><div class="line">    </div><div class="line">    if (![view isKindOfClass:NSClassFromString(@&quot;LocationView&quot;)]) &#123;</div><div class="line">        </div><div class="line">        view.canShowCallout = YES;</div><div class="line">        [mapView bringSubviewToFront:view];</div><div class="line">      </div><div class="line">        </div><div class="line">    &#125;else&#123;</div><div class="line">        view.canShowCallout = NO;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>3,4.计算离我最近点的距离、显示，以及初始化，最近点的连线。</p>
-<p>在计算离我最近点距离时候，我们需要在每次更新用户位置的时候进行处理。最新的地图API中下面的方法会不停调用，所以判断是否更新了位置，避免计算距离。计算距离用到百度地图的反编码。<code>BMKReverseGeoCodeOption</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">#pragma mark 用户位置更新后，会调用此函数 新的用户位置---</div><div class="line">- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation</div><div class="line">&#123;</div><div class="line">        NSLog(@&quot;didUpdateUserLocation lat %f,long %f&quot;,userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);</div><div class="line">    [_mapView updateLocationData:userLocation];</div><div class="line">    </div><div class="line">    if (self.userLocation != userLocation) &#123;</div><div class="line">        self.userLocation = userLocation;</div><div class="line">        [self.mapView setCenterCoordinate:userLocation.location.coordinate ];</div><div class="line">        </div><div class="line">        </div><div class="line">        double minDistance = MAXFLOAT;</div><div class="line">        CLLocationCoordinate2D mincoordinate;</div><div class="line">        //获取最近点的距离，然后显示</div><div class="line">        for (BMKPointAnnotation *animation in self.mapView.annotations) &#123;</div><div class="line">            </div><div class="line">            BMKMapPoint point1 =  BMKMapPointForCoordinate(userLocation.location.coordinate);</div><div class="line">            </div><div class="line">              BMKMapPoint point2 = BMKMapPointForCoordinate(animation.coordinate);</div><div class="line">             CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);</div><div class="line">            </div><div class="line">            if (distance &lt;= minDistance) &#123;</div><div class="line">                minDistance= distance;</div><div class="line">                mincoordinate = animation.coordinate; //获得距离最小的经纬度。</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">       </div><div class="line">        //距离</div><div class="line">        self.ditanceLabel.text = [NSString stringWithFormat:@&quot;离我最近%.f 米&quot;,minDistance];</div><div class="line">        </div><div class="line">     //计算最短的距离的时候连线</div><div class="line">        CLLocationCoordinate2D coors[2] = &#123;0&#125;;</div><div class="line">        </div><div class="line">        coors[0].latitude = userLocation.location.coordinate.latitude;</div><div class="line">        coors[0].longitude = userLocation.location.coordinate.longitude;</div><div class="line">        coors[1].latitude = mincoordinate.latitude;</div><div class="line">        coors[1].longitude = mincoordinate.longitude;</div><div class="line">        </div><div class="line">        BMKPolyline* polyline = [BMKPolyline polylineWithCoordinates:coors count:2];</div><div class="line">        [_mapView addOverlay:polyline];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">   </div><div class="line">    //反地理编码</div><div class="line">    BMKReverseGeoCodeOption *reverseOption=[[BMKReverseGeoCodeOption alloc]init];</div><div class="line">    //2.给反向地理编码选项对象的坐标点赋值</div><div class="line">    reverseOption.reverseGeoPoint=userLocation.location.coordinate;</div><div class="line">    //3.执行反地理编码</div><div class="line">    </div><div class="line">  </div><div class="line">    BOOL flag = [self.geocodesearch reverseGeoCode:reverseOption];</div><div class="line">    if(flag)</div><div class="line">    &#123;</div><div class="line">        NSLog(@&quot;反geo检索发送成功&quot;);</div><div class="line">    &#125;</div><div class="line">    else</div><div class="line">    &#123;</div><div class="line">        NSLog(@&quot;反geo检索发送失败&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>计算距离，更新显示–<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#pragma mark---获取反编码的数据---</div><div class="line">-(void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error</div><div class="line">&#123;</div><div class="line">//    BMKAddressComponent *component=[[BMKAddressComponent alloc]init];</div><div class="line">//    component=result.addressDetail;</div><div class="line"> </div><div class="line">    self.geoLabel.text= result.address;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>5.点击其他位置时更新连线（我的位置到点击的大头针的连线， 以及计算距离）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">#pragma mark---点击位置的方法 可屏蔽掉我的位置的气泡--</div><div class="line">- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view&#123;</div><div class="line">//    NSLog(@&quot;%@&quot;,view);</div><div class="line">    </div><div class="line">    if (![view isKindOfClass:NSClassFromString(@&quot;LocationView&quot;)]) &#123;</div><div class="line">        </div><div class="line">        view.canShowCallout = YES;</div><div class="line">        [mapView bringSubviewToFront:view];</div><div class="line">        </div><div class="line">        </div><div class="line">        //下面的是添加折线，（覆盖物）</div><div class="line">        NSArray * array = [NSArray arrayWithArray:_mapView.overlays];</div><div class="line">        [mapView removeOverlays:array];</div><div class="line">        </div><div class="line">        BMKPointAnnotation *animation = view.annotation;</div><div class="line">        //计算最短的距离的时候连线</div><div class="line">        CLLocationCoordinate2D coors[2] = &#123;0&#125;;</div><div class="line">        </div><div class="line">        coors[0].latitude = self.userLocation.location.coordinate.latitude;</div><div class="line">        coors[0].longitude = self.userLocation.location.coordinate.longitude;</div><div class="line">        coors[1].latitude = animation.coordinate.latitude;</div><div class="line">        coors[1].longitude = animation.coordinate.longitude;</div><div class="line">        </div><div class="line">        BMKPolyline* polyline = [BMKPolyline polylineWithCoordinates:coors count:2];</div><div class="line">        [_mapView addOverlay:polyline];</div><div class="line"></div><div class="line">        </div><div class="line">        </div><div class="line">        BMKMapPoint point1 =  BMKMapPointForCoordinate(self.userLocation.location.coordinate);</div><div class="line">        </div><div class="line">        BMKMapPoint point2 = BMKMapPointForCoordinate(animation.coordinate);</div><div class="line">        CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);</div><div class="line">        //距离</div><div class="line">        self.ditanceLabel.text = [NSString stringWithFormat:@&quot;离我距离%.f 米&quot;,distance];</div><div class="line">        [mapView setNeedsDisplay];</div><div class="line">        </div><div class="line">        </div><div class="line">    &#125;else&#123;</div><div class="line">        view.canShowCallout = NO;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>代码需要在真机下运行。<br>demo 地址：<a href="https://github.com/liuxinixn/BaiduTestDemo/tree/master" target="_blank" rel="noopener">百度地图testDemo</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/10/09/iOS-通联支付/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/09/iOS-通联支付/" itemprop="url">iOS -通联支付</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-09T20:19:35+08:00">
-                2017-10-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本版本是基于V4.5 版的。<br>目前的 SDK 版的所有版本必须以会员模式对接。</p>
-<p>一共两个步骤，把下面的依赖库直接拖进去即可，至于一些Build Settings选项的修改，你只需要对照文档看一下xcode的配置一致不。（xcode8.3.2的配置不需要做任何改变，只需要把下面的库拖进去即可）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">a)</div><div class="line">iOS 平台开发步骤</div><div class="line">APay.h</div><div class="line">APayRes.bundle</div><div class="line">libAPayLib.a</div><div class="line">APMPPassGuardCtrlBundle.bundle TrustDefenderMobile.framework</div><div class="line">文件拷贝到需要引用通联支付插件的工程目录下;`</div><div class="line">f) 工程中添加以下依赖库:</div><div class="line">CoreTelephony.framework CoreLocation.framework Security.framework SystemConfiguration.framework</div><div class="line">QuarzCore.framework</div><div class="line"> CoreText.framework AudioToolbox.framework CoreGraphics.framework libstdc++.6.0.9.dylib</div></pre></td></tr></table></figure></p>
-<p>通联支付id 由后台注册。前段对应的通联id的字段为 ext1</p>
-<p>只说明针对md5验签。<br>MD5加密的key 给后台要即可。<br>商户需通过 mode 字段切换测试环境和生产环境<br>当前连接的通联支付环境。<br> mode=”01” 测试环境<br>mode=”00” 生产环境</p>
-<p>需要注意的是所有的参数必须按照文档的顺序填写，00环境才可以支付。（通联支付的支付插件真的很垃圾）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div></pre></td><td class="code"><pre><div class="line">-(void)rechargeCard&#123;</div><div class="line">    </div><div class="line">    NSInteger amount =  1; //以分为计算单位</div><div class="line">    </div><div class="line">    //商户订单生成日期</div><div class="line">    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];</div><div class="line">    [dateFormatter setDateFormat:@&quot;yyyyMMddHHmmss&quot;];</div><div class="line">    NSDate *workDate = [NSDate dateWithTimeIntervalSinceReferenceDate:[NSDate timeIntervalSinceReferenceDate]];</div><div class="line">    NSString *timeStr = [dateFormatter stringFromDate:workDate];</div><div class="line">    </div><div class="line">    //商户订单号</div><div class="line">    NSString *orderStr = [NSString stringWithFormat:@&quot;%ld&quot;,[NSString getNowInterVal]];</div><div class="line">    </div><div class="line">    //####################################  计算外卡扩展信息字段签名  ######################################//</div><div class="line">    NCUserInfoModel *infoModel = [NCUserInfoManager getUserInfo];</div><div class="line">    NSString *ext1 = [NSString stringWithFormat:@&quot;&lt;USER&gt;%@&lt;/USER&gt;&quot;,infoModel.tonglianUserId];</div><div class="line">    </div><div class="line">    //##################################################################################################//</div><div class="line">    </div><div class="line">    NSArray *paaDic = @[</div><div class="line">                        </div><div class="line">                        ////协议字符集 1-UTF-8  2-GBK; 3-GB2312</div><div class="line">                        @&quot;1&quot;, @&quot;inputCharset&quot;,</div><div class="line">                        </div><div class="line">                        //支付通知结果以此为准,后台通知商户网站支付结 果的 url 地址</div><div class="line">                        //                         @&quot;http://www&quot;, @&quot;receiveUrl&quot;,</div><div class="line">                        @&quot;http://119.28.62.27:8080/ytr/appcard/orderPayment&quot;, @&quot;receiveUrl&quot;,</div><div class="line">                        </div><div class="line">                        ////协议版本,固定填 v1.0</div><div class="line">                        @&quot;v1.0&quot;, @&quot;version&quot;,</div><div class="line">                        </div><div class="line">                        //指定当前语言</div><div class="line">                        //固定选择值:1-简体中文 2-繁体中文 3-英文</div><div class="line">                        //可不填</div><div class="line">                        //非外卡支付只支持简体中文</div><div class="line">                        //外卡支付若未指定语言则默认为系统语言，若系统语言不被支持则默认为英文</div><div class="line">                        @&quot;1&quot;, @&quot;language&quot;,</div><div class="line">                        </div><div class="line">                        //订单信息签名方式</div><div class="line">                        @&quot;0&quot;, @&quot;signType&quot;,</div><div class="line">                        </div><div class="line">                        //通联分配给商户的ID</div><div class="line">                        @&quot;xxxxx&quot;, @&quot;merchantId&quot;,                                    //商户当前支付订单号</div><div class="line">                        orderStr, @&quot;orderNo&quot;,</div><div class="line">                        </div><div class="line">                        //订单支付金额</div><div class="line">                        //分做单位</div><div class="line">                        //最小0.01元</div><div class="line">                        @&quot;1&quot;, @&quot;orderAmount&quot;,</div><div class="line">                        </div><div class="line">                        //针对非跨境和非外卡支付</div><div class="line">                        //payType=27</div><div class="line">                        //支持以下币种: 默认[人民币]-0 人民币-156</div><div class="line">                        @&quot;0&quot;, @&quot;orderCurrency&quot;,</div><div class="line">                        </div><div class="line">                        //商户生成订单时间戳</div><div class="line">                        //必须允许的订单时间范围内</div><div class="line">                        timeStr, @&quot;orderDatetime&quot;,</div><div class="line">                        </div><div class="line">                        //商品名称</div><div class="line">                        @&quot;会员卡&quot;, @&quot;productName&quot;,</div><div class="line">                        </div><div class="line">                        //对于非外卡支付</div><div class="line">                        //商户用户号在通联会员系统对应的会员号</div><div class="line">                        ext1, @&quot;ext1&quot;,//若商户用户未注册通联会员号,该行不需要,可以注释掉</div><div class="line">                        self.cardIdModel.ID ,@&quot;ext2&quot;,</div><div class="line">                        @&quot;33&quot;, @&quot;payType&quot;,</div><div class="line">                        @&quot;1234567890&quot;, @&quot;key&quot;,</div><div class="line">                        ];</div><div class="line">    NSString *paaStr = [self formatPaa:paaDic];</div><div class="line">    </div><div class="line">    //        paaStr = [NSString stringWithFormat:@&quot;&amp;%@&amp;&quot;,paaStr];</div><div class="line">    [APay startPay:paaStr viewController:self delegate:self mode:@&quot;00&quot;];</div><div class="line"></div><div class="line">    </div><div class="line">&#125;</div><div class="line">- (void)APayResult:(NSString *)result &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;%@&quot;, result);</div><div class="line">    NSArray *parts = [result componentsSeparatedByString:@&quot;=&quot;];</div><div class="line">    NSError *error;</div><div class="line">    NSData *data = [[parts lastObject] dataUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&amp;error];</div><div class="line">    NSInteger payResult = [dic[@&quot;payResult&quot;] integerValue];</div><div class="line">    //    NSString *format_string = @&quot;支付结果::支付%@&quot;;</div><div class="line">    if (payResult == APayResultSuccess) &#123;</div><div class="line">        </div><div class="line">        [LXNotificationCenter postNotificationName:UPDATEORDERSTATUE object:nil];</div><div class="line">        [self.view makeToast:@&quot;支付成功&quot;];</div><div class="line">        [self delayAction];</div><div class="line">    &#125; else if (payResult == APayResultFail) &#123;</div><div class="line">        </div><div class="line">        [self.view makeToast:@&quot;支付失败&quot;];</div><div class="line">    &#125; else if (payResult == APayResultCancel) &#123;</div><div class="line">        </div><div class="line">        [self.view makeToast:@&quot;支付被取消&quot;];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (NSString *)formatPaa:(NSArray *)array &#123;</div><div class="line">    </div><div class="line">    NSMutableDictionary *mdic = [NSMutableDictionary dictionary];</div><div class="line">    </div><div class="line">    NSMutableString *paaStr = [[NSMutableString alloc] init];</div><div class="line">    for (int i = 0; i &lt; array.count; i++) &#123;</div><div class="line">        [paaStr appendFormat:@&quot;%@=%@&amp;&quot;, array[i+1], array[i]];</div><div class="line">        mdic[array[i+1]] = array[i];</div><div class="line">        i++;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    NSString *signMsg = [self md5:[paaStr substringToIndex:paaStr.length - 1]];</div><div class="line">    mdic[@&quot;signMsg&quot;] = signMsg.uppercaseString;</div><div class="line">    </div><div class="line">    //############################  卡号回显请参考以下部分  ##############################################//</div><div class="line">    </div><div class="line">    //卡号回显需要在订单信息中传入该字段</div><div class="line">    //该字段不参与订单信息的签名计算</div><div class="line">    //若不需要卡号回显的功能该字段可不传入</div><div class="line">    //    NSString *cardNo = @&quot;4391880000000004&quot;;//测试用信用卡</div><div class="line">    //                       @&quot;6225882120759623&quot;;//测试用借记卡</div><div class="line">    //    mdic[@&quot;cardNo&quot;] = cardNo;</div><div class="line">    </div><div class="line">    //##################################################################################################//</div><div class="line">    </div><div class="line">    //############################  外卡支付订单添加扩展信息字段  ###########################################//</div><div class="line">    </div><div class="line">    //    [mdic addEntriesFromDictionary:[self extPart]];</div><div class="line">    </div><div class="line">    //##################################################################################################//</div><div class="line">    </div><div class="line">    if (mdic[@&quot;key&quot;]) &#123;//商户私有签名密钥 通联后台持有不传入插件</div><div class="line">        [mdic removeObjectForKey:@&quot;key&quot;];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    NSError *error;</div><div class="line">    NSData *data = [NSJSONSerialization dataWithJSONObject:mdic options:NSJSONWritingPrettyPrinted error:&amp;error];</div><div class="line">    NSString *jsonStr = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];</div><div class="line">    </div><div class="line">    [paaStr setString:jsonStr];</div><div class="line">    </div><div class="line">    return paaStr;</div><div class="line">&#125;</div><div class="line">- (NSString *)md5:(NSString *)string &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;%@&quot;, string);</div><div class="line">    </div><div class="line">    if (string == nil) &#123; return nil; &#125;</div><div class="line">    </div><div class="line">    const char *str = [string cStringUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    CC_LONG strLen = (CC_LONG)[string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    unsigned char *result = calloc(CC_MD5_DIGEST_LENGTH, sizeof(unsigned char));</div><div class="line">    CC_MD5(str, strLen, result);</div><div class="line">    </div><div class="line">    NSMutableString *hash = [NSMutableString string];</div><div class="line">    for (int i = 0; i &lt; CC_MD5_DIGEST_LENGTH; ++i) &#123;</div><div class="line">        [hash appendFormat:@&quot;%02x&quot;, result[i]];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    free(result);</div><div class="line">    </div><div class="line">    return hash;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/10/01/iOS-利用runtime修改UILabel的默认显示文本方式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1621,6 +475,1038 @@
 <p>添加动画的方法,创建三个layer，只不过，开始动画的时间要错开形成这个效果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">-(void)Animation&#123;</div><div class="line">    NSInteger pulsingCount = 3;</div><div class="line">    double animationDuration = 2;</div><div class="line">    </div><div class="line">    CALayer * animationLayer = [[CALayer alloc]init];</div><div class="line">    </div><div class="line">    for (int i = 0; i &lt; pulsingCount; i++) &#123;</div><div class="line">        CALayer * pulsingLayer = [[CALayer alloc]init];</div><div class="line">        pulsingLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);</div><div class="line">        pulsingLayer.backgroundColor = self.radarColor.CGColor;</div><div class="line">        pulsingLayer.borderColor = self.radarBorderColor.CGColor;</div><div class="line"></div><div class="line"></div><div class="line">        pulsingLayer.borderWidth = 1.0;</div><div class="line">        pulsingLayer.cornerRadius = self.frame.size.height/2;</div><div class="line">        </div><div class="line">        CAMediaTimingFunction * defaultCurve = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];</div><div class="line">        </div><div class="line">        CAAnimationGroup * animationGroup = [[CAAnimationGroup alloc]init];</div><div class="line">        animationGroup.fillMode = kCAFillModeBoth;</div><div class="line">        animationGroup.beginTime = CACurrentMediaTime() + (double)i * animationDuration/(double)pulsingCount;</div><div class="line">        animationGroup.duration = animationDuration;</div><div class="line">        animationGroup.repeatCount = HUGE_VAL;</div><div class="line">        animationGroup.timingFunction = defaultCurve;</div><div class="line">        </div><div class="line">        CABasicAnimation * scaleAnimation = [CABasicAnimation animationWithKeyPath:@&quot;transform.scale&quot;];</div><div class="line">        scaleAnimation.autoreverses = NO;</div><div class="line">        scaleAnimation.fromValue = [NSNumber numberWithDouble:1];</div><div class="line">        scaleAnimation.toValue = [NSNumber numberWithDouble:1.5];</div><div class="line">        </div><div class="line">        CAKeyframeAnimation * opacityAnimation = [CAKeyframeAnimation animationWithKeyPath:@&quot;opacity&quot;];</div><div class="line">        opacityAnimation.values = @[[NSNumber numberWithDouble:1.0],[NSNumber numberWithDouble:0.5],[NSNumber numberWithDouble:0.3],[NSNumber numberWithDouble:0.0]];</div><div class="line">        opacityAnimation.keyTimes = @[[NSNumber numberWithDouble:0.0],[NSNumber numberWithDouble:0.25],[NSNumber numberWithDouble:0.5],[NSNumber numberWithDouble:1.0]];</div><div class="line">        animationGroup.animations = @[scaleAnimation,opacityAnimation];</div><div class="line">        </div><div class="line">        [pulsingLayer addAnimation:animationGroup forKey:@&quot;pulsing&quot;];</div><div class="line">        [animationLayer addSublayer:pulsingLayer];</div><div class="line">    &#125;</div><div class="line">        animationLayer.zPosition = -1;//重新加载时，使动画至底层</div><div class="line">    [self.layer addSublayer:animationLayer];</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>为了防止动画进入后台假死，需要监听通知：<br><code>[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterPlayground) name:UIApplicationDidBecomeActiveNotification object:nil];</code></p>
 <p>demo 地址：<a href="https://github.com/liuxinixn/LXRadarAnimationDemo" target="_blank" rel="noopener">漫漫的demo</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/09/05/iOS-关乎使用AFNetworking请求，三种占位图。/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/05/iOS-关乎使用AFNetworking请求，三种占位图。/" itemprop="url">iOS --关于使用AFNetworking请求，三种占位图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-05T20:19:35+08:00">
+                2017-09-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>1、等待网络请求的占位图。</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-e89790e3062ad6f9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>借助MBProgressHUD自定义view实现。</p>
+<p><code>[MBProgressHUD show:@&quot;&quot; icon:@&quot;矢量智能对象&quot; view:self.view];</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">+ (void)show:(NSString *)text icon:(NSString *)icon view:(UIView *)view</div><div class="line">&#123;</div><div class="line">    if (view == nil) view = [UIApplication sharedApplication].keyWindow;</div><div class="line">    // 快速显示一个提示信息</div><div class="line">    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];</div><div class="line">//    hud.label.text = text;</div><div class="line">      hud.mode = MBProgressHUDModeCustomView;</div><div class="line">    // 设置图片</div><div class="line">    UIImage *image =[UIImage imageNamed:icon];</div><div class="line">    hud.customView = [[UIImageView alloc] initWithImage:image];    // 再设置模式</div><div class="line">  </div><div class="line">    hud.bezelView.backgroundColor =[UIColor whiteColor];</div><div class="line">    hud.backgroundView.backgroundColor =[UIColor whiteColor];</div><div class="line">    // 隐藏时候从父控件中移除</div><div class="line">    hud.removeFromSuperViewOnHide = YES;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>网络异常重新加载的占位图,以及无数据的占位图。</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-c769ccb3fb04aeba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-82f6673e6ba7a2e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
+<p>对比了一下<code>Reachability</code>以及<code>AFNetWorking</code>中 <code>AFNetworkReachabilityManager</code>两种检测网路的方法，感觉都不是很准。<br>只能借助网络请求之后的错误码<code>code</code>，当<code>code</code> 为<code>-1099</code>时，<code>AFNetWorking</code>提示网络断开连接。可以根据 返回code码做文章。</p>
+<p>使用分类来给view扩展占位图。关于扩展属性,可以了解运行时。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">typedef void (^ReGetNetwork)(void);</div><div class="line">@interface UIView (NCPlaceholder)</div><div class="line">@property(nonatomic,copy)ReGetNetwork reGetwork; //重新刷新网络的回调</div><div class="line">-(void)showNoNetworkViewWithBlock:(ReGetNetwork)reGetwork;//无网络时点击重新刷新网络</div><div class="line">-(void)showNoDataView;//无数据view</div><div class="line"></div><div class="line">-(void)hideNoNetworkView;</div><div class="line">-(void)hideNoDataView;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">#import &quot;UIView+NCPlaceholder.h&quot;</div><div class="line">#import &lt;objc/runtime.h&gt;</div><div class="line">#import &quot;NCNoNetWorkView.h&quot;</div><div class="line">#define Device_Width  [[UIScreen mainScreen] bounds].size.width//获取屏幕宽高</div><div class="line">#define Device_Height [[UIScreen mainScreen] bounds].size.height</div><div class="line">@implementation UIView (NCPlaceholder)</div><div class="line">-(void)showNoNetworkViewWithBlock:(ReGetNetwork)reGetwork&#123;</div><div class="line">    </div><div class="line">    </div><div class="line">    NCNoNetWorkView *noView =[[NSBundle mainBundle]loadNibNamed:@&quot;NCNoNetWorkView&quot; owner:self options:nil].firstObject;</div><div class="line">    noView.tag = 2593;</div><div class="line">    noView.frame = CGRectMake(0, 64, Device_Width, Device_Height - 64);</div><div class="line">    </div><div class="line">    noView.imageView.image =[UIImage imageNamed:@&quot;nothing&quot;];</div><div class="line">    noView.noticeTitle.text = @&quot;当前网络无连接&quot;;</div><div class="line">    noView.reLoadBtn.hidden = NO;</div><div class="line">    [noView.reLoadBtn addTarget:self action:@selector(reLoadBtnAction) forControlEvents:UIControlEventTouchUpInside];</div><div class="line">    [self addSubview:noView];</div><div class="line">    </div><div class="line">    self.reGetwork = reGetwork;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)reLoadBtnAction&#123;</div><div class="line">    </div><div class="line">    if (self.reGetwork) &#123;</div><div class="line">        self.reGetwork();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(void)showNoDataView&#123;</div><div class="line">    </div><div class="line">    NCNoNetWorkView *noView =[[NSBundle mainBundle]loadNibNamed:@&quot;NCNoNetWorkView&quot; owner:self options:nil].firstObject;</div><div class="line">    </div><div class="line">    noView.frame = CGRectMake(0, 64, Device_Width, Device_Height - 64);</div><div class="line">    noView.tag = 2592;</div><div class="line">    noView.imageView.image =[UIImage imageNamed:@&quot;nothing&quot;];</div><div class="line">    noView.noticeTitle.text = @&quot;无数据&quot;;</div><div class="line">    noView.reLoadBtn.hidden = YES;</div><div class="line">    [self addSubview:noView];</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)hideNoNetworkView&#123;</div><div class="line">     NCNoNetWorkView *noView = (NCNoNetWorkView *)[self viewWithTag:2593];</div><div class="line">    if (noView) &#123;</div><div class="line">        [noView removeFromSuperview];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(void)hideNoDataView&#123;</div><div class="line">    NCNoNetWorkView *noDataView = (NCNoNetWorkView *)[self viewWithTag:2592];</div><div class="line">    if (noDataView) &#123;</div><div class="line">        [noDataView removeFromSuperview];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(ReGetNetwork)reGetwork&#123;</div><div class="line">    </div><div class="line">    return objc_getAssociatedObject(self, @selector(reGetwork));</div><div class="line">&#125;</div><div class="line">-(void)setReGetwork:(ReGetNetwork)reGetwork&#123;</div><div class="line">    objc_setAssociatedObject(self, @selector(reGetwork), reGetwork, OBJC_ASSOCIATION_COPY_NONATOMIC);</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>使用方法：</p>
+<p>#####1、网络异常重新加载的占位图：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[self.view showNoNetworkViewWithBlock:^&#123;</div><div class="line">       </div><div class="line">       NSLog(@&quot;%@&quot;,[weakSelf class]); //可重新请求网络</div><div class="line">       </div><div class="line">       [weakSelf.view hideNoNetworkView];</div><div class="line">       </div><div class="line">     </div><div class="line">   &#125;];</div></pre></td></tr></table></figure></p>
+<p>#####2、网络无数据的占位图：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[self.view showNoDataView];</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/21/xib-与代码设置颜色-色差的那些事/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/21/xib-与代码设置颜色-色差的那些事/" itemprop="url">xib 与代码设置颜色 色差的那些事</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-21T20:19:35+08:00">
+                2017-08-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://upload-images.jianshu.io/upload_images/1694376-76425a0c1701e79e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>上图 第一个是 代码实现的色值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">UIView *view =[[UIView alloc]initWithFrame:CGRectMake(0, 64, Device_Width, 64)];</div><div class="line">view.backgroundColor = [UIColor hexStringToColor:@&quot;#ff8833&quot;];//</div><div class="line">[self.view addSubview:view];</div></pre></td></tr></table></figure></p>
+<p>第二个是xib 或者SB 设置的色值。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-2d505ace825ecf3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p>可以看出来，虽然设置的十六进制都一样，可是效果不同，原因是，代码xib 设置的 默认是sRGB显示的 ，要比代码设置的要浅很多，网上昭和很多也没找到。</p>
+<p>所以只能利用 系统自带的取色计拾色，选择是sRGB 拾取 xib 设置的颜色即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-415434d4085f7fb3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
+<p>比如 我xib 设置的颜色为ff8833 ，那么拾设计以 sRGB 显示就是255 ，155， 65， 转换为十六进制就是 #FF9B41。</p>
+<p>结果是这样的，色值一致：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-30f334a34a4d0f15.gif?imageMogr2/auto-orient/strip" alt="gif.gif"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/19/Strong-与weak的区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/19/Strong-与weak的区别/" itemprop="url">iOS -Strong与weak的区别</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-19T20:19:35+08:00">
+                2017-08-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>关于属性，我们声明的时候会使用Strong与Weak。但是二者在使用的时候有什么区别呢。</p>
+<p>1、在使用xib 或者SB 拖控件的时候我们都会看到系统帮我们声明的是：<code>@property (weak, nonatomic) IBOutlet UILabel *lalbel;</code>,首先这个控件是用weak来声明的。所以一旦执行了<code>[self.lalbel removeFromSuperview];</code>lalbel的地址为nil,只要在使用该控件过程中，没有执行<code>removeFromSuperview</code>，该控件会一直存在在内存里，不会被释放。</p>
+<p>当我们用使用代码来声明一个weak属性时，<br><img src="http://upload-images.jianshu.io/upload_images/1694376-050c5be64787f979.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"><br>系统会自动识别，在分配好内存好因为没有强引用，只有weak引用，会直接释放掉，所以此刻打印self.label 是nil。<br>我们需要这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">UILabel *lable =[[UILabel alloc]init];</div><div class="line">    self.label = lable;</div></pre></td></tr></table></figure></p>
+<p>此刻 打印self.label 是有地址的。</p>
+<p>但是 如果该控件没有被加到父视图中，出了该作用域，依然是没有地址的。</p>
+<p>2、 使用strong 来修饰，不管有没有加到父视图里，该控件的地址会一直存在。因为它一直被 该ViewController强引用。只有ViewController 执行了delloc 之后，才会释放。</p>
+<p>3、weak 与assign 的区别：</p>
+<ul>
+<li>assign 可以修饰基本数据类型和对象，但是修饰对象后，对象被释放，指针不会被释放。对象释放后访问该指针会显示<code>[UILabel retain]: message sent to deallocated instance 0x7fc0eec0c1d0
+(lldb)</code> 对已经dealloc 的对象进行了访问</li>
+<li>weak   只能修饰对象 ，对象释放后，指针为nil，对nil 访问不会造成崩溃。代理声明使用weak。</li>
+</ul>
+<p>总结：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">如果要严格控制内存管理，对于不常用或者中间可能不需要被释放内存的属性，我们使用weak来修饰，但是要严格注意是不是被父视图所引用。</div><div class="line"></div><div class="line">如果不是那么严格，所有的控件属性通过strong来修饰，地址就会永远存在，不用担心突然被释放的问题。</div><div class="line"></div><div class="line">如果控件在使用过程中一直存在，那么使用strong即可。如果控件在使用过程中会被移除，那么使用weak，可以节省内存。</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/18/Strong-与Copy的区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/18/Strong-与Copy的区别/" itemprop="url">iOS -Strong 与 Copy的区别</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-18T20:19:35+08:00">
+                2017-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>什么时候使用Strong与copy一直分不清，其实这个和浅拷贝和深拷贝有关系。参考：<a href="http://www.cocoachina.com/ios/20150512/11805.html" target="_blank" rel="noopener">参考</a>，文章中有一点不足，稍后会做补充。</p>
+<blockquote>
+<p>当对NSString进行strong 与copy 时，会有什么不同呢：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">#import &quot;ViewController.h&quot;</div><div class="line"></div><div class="line">@interface ViewController ()</div><div class="line">@property(nonatomic,strong)NSString *strongString;</div><div class="line">@property(nonatomic,copy)NSString *copyedString;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line">    [self test];</div><div class="line">&#125;</div><div class="line">-(void)test&#123;</div><div class="line">    NSString *string =[NSString stringWithFormat:@&quot;abcshshsrhjrshsrjhsrhjs&quot;];</div><div class="line"></div><div class="line">    self.strongString = string;</div><div class="line">    self.copyedString = string;</div><div class="line"></div><div class="line">    NSLog(@&quot;%lu&quot;,[string retainCount]);</div><div class="line">    NSLog(@&quot;orign string:%p,%p&quot;,string,&amp;string);</div><div class="line">    NSLog(@&quot;strong string:%p,%p&quot;,_strongString,&amp;_strongString);</div><div class="line">    NSLog(@&quot;copy string:%p,%p&quot;,_copyedString,&amp;_copyedString);</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>打印截图如下：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-ac1e01ce60b34c10.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Nsstring.png"></p>
+<p><strong>可以很直观的看到，引用计数为3 ，strong和copy后指针指向的地址是相同的，所以说对NSString进行操作时，strong与copy都是对字符串进行了浅拷贝，只是拷贝了指针指向。（补充下参考文章中没有指明的一点，亲测, 当format后面的字符串长度大于等于12时, 引用计数为1. 这个现象存在于initWithFormat:和stringWithFormat:方法, 至于有没有其他方法也会有这种情况不敢确定，当只有很少的字符时，引用计数为-1，有兴趣的可以测试下，只是对文章中进行补充）</strong></p>
+<blockquote>
+<p>对不可变字符串进行strong与copy时会有什么不同呢</p>
+</blockquote>
+<p>修改一行代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">NSMutableString *string =[NSMutableString stringWithFormat:@&quot;agagagagagagaegagaga&quot;];</div><div class="line"></div><div class="line">    self.strongString = string;</div><div class="line">    self.copyedString = string;</div><div class="line"></div><div class="line">    NSLog(@&quot;%lu&quot;,[string retainCount]);</div><div class="line">    NSLog(@&quot;%lu&quot;,[_strongString retainCount]);</div><div class="line">    NSLog(@&quot;%lu&quot;,[_copyedString retainCount]);</div><div class="line"></div><div class="line">    NSLog(@&quot;orign string:%p,%p&quot;,string,&amp;string);</div><div class="line">    NSLog(@&quot;strong string:%p,%p&quot;,_strongString,&amp;_strongString);</div><div class="line">    NSLog(@&quot;copy string:%p,%p&quot;,_copyedString,&amp;_copyedString);</div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-14c6e3c0d50fd789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="MustableStiring2.png"></p>
+<p><strong>可以很明显的看到string 与_strongString的引用计数为2，_copyString的引用计数为1，string 与_strongString的地址是相同的，而_copyString指向的新的地址，所以对于可变字符串，strong使用了浅拷贝，copy使用了深拷贝</strong></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/10/ios-关于启动图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/10/ios-关于启动图/" itemprop="url">iOS --关于启动图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-10T20:19:35+08:00">
+                2017-08-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>关于设置APP启动图有两种方式<br>1.旧方式：</p>
+<p>Launch Images Source 添加启动图，Launch Screen File 中删掉“LaunchScreen”,置为空；</p>
+<p>在Assets文件夹里新建一个iOS Launch Image。然后设置好对应的尺寸。<br>LaunchScreen.storyboard取消勾选LaunchScreen。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-6b32738a85ed58f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"><br><img src="http://upload-images.jianshu.io/upload_images/1694376-63d978758808e783.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-b761e165b46d4036.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
+<p>2.新方式：<br>Launch Images Source 中不需要添加启动图，Launch Screen File 为“ LaunchScreen”（默认）<br>，LaunchScreen.storyboard添加imageView,imageView上放图片，工程中要有对应的 750<em>1334 的@2x图，1242 </em> 2208的@3x图 ，LaunchScreen.storyboard勾选LaunchScreen。</p>
+<p>如果你的模拟器可以加载启动图个，真机启动图加载不来，那么把 750<em>1334 的@2x图，1242 </em> 2208的@3x图 命名为Defult即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-9fb53080b4090fed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="default.png"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/07/ios-UIImageView不变形/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/07/ios-UIImageView不变形/" itemprop="url">iOS -UIImageView不变形</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-07T20:19:35+08:00">
+                2017-08-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>就两行代码：<br><code>self.icon.contentMode = UIViewContentModeScaleAspectFill;
+ self.icon.clipsToBounds = YES;</code><br>设置前效果：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-852d2af3c78bccbd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>设置后：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-be15728eaf3146c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p>不会变形，唯一美中不足的就是不能完全显示了，被切掉了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/05/iOS-关乎绘制圆弧的一个细节/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/05/iOS-关乎绘制圆弧的一个细节/" itemprop="url">iOS --关于绘制圆弧的一个细节</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-05T20:19:35+08:00">
+                2017-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://upload-images.jianshu.io/upload_images/1694376-09b88e5516654b64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">#import &quot;LXBezierPathView.h&quot;</div><div class="line">@interface LXBezierPathView()</div><div class="line">@property(nonatomic,strong)UILabel *lable;</div><div class="line">@end</div><div class="line">@implementation LXBezierPathView</div><div class="line"></div><div class="line">-(instancetype)initWithFrame:(CGRect)frame</div><div class="line">&#123;</div><div class="line">    self = [super initWithFrame:frame];</div><div class="line">    if (self) &#123;</div><div class="line">        </div><div class="line">        </div><div class="line">        self.lable =[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];</div><div class="line">        self.lable.text = @&quot;哈哈哈&quot;;</div><div class="line">        self.lable.textAlignment = NSTextAlignmentCenter;</div><div class="line">        self.lable.center = CGPointMake((frame.size.width )/2, (frame.size.width)/2);</div><div class="line">        </div><div class="line">        [self addSubview:self.lable];</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">-(void)drawRect:(CGRect)rect&#123;</div><div class="line">    CAShapeLayer *shapeLayer =[[CAShapeLayer alloc]init];</div><div class="line">    </div><div class="line">    shapeLayer.frame = CGRectMake(0, 0, rect.size.width, rect.size.width);</div><div class="line">    shapeLayer.lineWidth = 10;</div><div class="line">    </div><div class="line">    shapeLayer.fillColor =[UIColor clearColor].CGColor;</div><div class="line">    shapeLayer.strokeColor =[UIColor redColor].CGColor;</div><div class="line">    </div><div class="line">    </div><div class="line">    CGPoint center =  CGPointMake((rect.size.width )/2, (rect.size.width)/2);</div><div class="line">   </div><div class="line">    UIBezierPath *bezierPath =[UIBezierPath bezierPathWithArcCenter:center radius:(rect.size.width )/2 startAngle:-0.5 *M_PI endAngle:0.5 *M_PI clockwise:YES];</div><div class="line">    shapeLayer.path = bezierPath.CGPath;</div><div class="line">    </div><div class="line">    [self.layer insertSublayer:shapeLayer above:shapeLayer];</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们绘制圆弧的时候，会设置贝塞尔曲线的半径为view的一半， 可是真正显示出来，会发现多了一点。这一点的长度刚好是线宽的一般。</p>
+<p>所以需要处理的是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UIBezierPath *bezierPath =[UIBezierPath bezierPathWithArcCenter:center radius:(rect.size.width  - 线宽)/2 startAngle:-0.5 *M_PI endAngle:0.5 *M_PI clockwise:YES];</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/05/iOS--友盟最新分享/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/05/iOS--友盟最新分享/" itemprop="url">iOS --友盟最新分享</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-05T20:19:35+08:00">
+                2017-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>步骤：<br>1、HTTPS key 的添加。<br>2、必要白名单的配置。<br>3、URL  Schemes的配置。QQ要添加两个一个是tencent+appID,一个是QQ+（appid 转16进制）</p>
+<p><code>echo &#39;ibase=10;obase=16;1106301422&#39;|bc</code> <strong>替换掉需要转换的appID</strong><br>cocoapods配置（精简版的，QQ ，微信为例）：<br>  pod ‘UMengUShare/Social/ReducedWeChat’<br>  pod ‘UMengUShare/Social/ReducedQQ’</p>
+<p>执行命令：<code>pod update</code></p>
+<p>跳转的配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">// iOS 8 及以下请用这个</div><div class="line">- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation &#123;</div><div class="line">    if ([Pingpp handleOpenURL:url withCompletion:nil]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //6.3的新的API调用，是为了兼容国外平台(例如:新版facebookSDK,VK等)的调用[如果用6.2的api调用会没有回调],对国内平台没有影响</div><div class="line">    </div><div class="line">    if ([[UMSocialManager defaultManager] handleOpenURL:url sourceApplication:sourceApplication annotation:annotation]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">       return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// iOS 9 以上请用这个</div><div class="line">- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options &#123;</div><div class="line">    if ([Pingpp handleOpenURL:url withCompletion:nil]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if ([[UMSocialManager defaultManager]  handleOpenURL:url options:options]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url</div><div class="line">&#123;</div><div class="line">//    BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url];</div><div class="line">//    if (!result) &#123;</div><div class="line">//        // 其他如支付等SDK的回调</div><div class="line">//    &#125;</div><div class="line">//    return result;</div><div class="line">    </div><div class="line">    if ([[UMSocialManager defaultManager] handleOpenURL:url]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>集成步骤：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">/* 设置友盟appkey */</div><div class="line">     [[UMSocialManager defaultManager] setUmSocialAppkey:YOUMENGKEY];</div><div class="line">    </div><div class="line"></div><div class="line">    //设置微信的appKey和appSecret</div><div class="line">//    https://itunes.apple.com/cn/app/id1092469431</div><div class="line">    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@&quot;&quot; appSecret:@&quot;&quot; redirectURL:@&quot;&quot;];</div><div class="line">    //设置分享到QQ互联的appKey和appSecret</div><div class="line">    // U-Share SDK为了兼容大部分平台命名，统一用appKey和appSecret进行参数设置，而QQ平台仅需将appID作为U-Share的appKey参数传进即可。</div><div class="line">    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@&quot;&quot;  appSecret:nil redirectURL:@&quot;&quot;];</div></pre></td></tr></table></figure>
+<p>调用方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">-(void)shareWithType:(UMSocialPlatformType)type&#123;</div><div class="line">    </div><div class="line">    //创建分享消息对象</div><div class="line">    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];</div><div class="line">    </div><div class="line">    //创建网页内容对象</div><div class="line">    NSString* thumbURL =  @&quot;https://mobile.umeng.com/images/pic/home/social/img-1.png&quot;;</div><div class="line">    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:@&quot;欢迎使用【友盟+】社会化组件U-Share&quot; descr:@&quot;欢迎使用【友盟+】社会化组件U-Share，SDK包最小，集成成本最低，助力您的产品开发、运营与推广！&quot; thumImage:thumbURL];</div><div class="line">    //设置网页地址</div><div class="line">    shareObject.webpageUrl = @&quot;http://mobile.umeng.com/social&quot;;</div><div class="line">    </div><div class="line">    //分享消息对象设置分享内容对象</div><div class="line">    messageObject.shareObject = shareObject;</div><div class="line">    </div><div class="line">    //调用分享接口</div><div class="line">    [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) &#123;</div><div class="line"></div><div class="line">        if (error) &#123;</div><div class="line">            [self.view makeToast:@&quot;分享失败&quot; duration:2 position:nil];</div><div class="line">        &#125;else&#123;</div><div class="line">            [self.view makeToast:@&quot;分享成功&quot; duration:2 position:nil];</div><div class="line">            </div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
           
         
