@@ -262,6 +262,150 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2018/01/10/iOS-关于类似于淘宝的广告上下滚动/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/10/iOS-关于类似于淘宝的广告上下滚动/" itemprop="url">iOS 关于类似于淘宝的广告上下滚动</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-10T19:53:12+08:00">
+                2018-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>前言</p>
+</blockquote>
+<p>如若项目中有类似于淘宝的广告上下滚动的需求，有可能是文字轮播，有可能是多行轮播，因为需求的变化太多，所以上下滚动的原理理解了就自己简单封装就好了。（ ps:封装的结果如果是框架，那么很多人将受益无穷，如果不是框架，只是罗列了那么几种可能，改动起来也是有些繁琐。）</p>
+<blockquote>
+<p>言归正传</p>
+</blockquote>
+<p>分析两个库：一个是<a href="https://github.com/gsdios/SDCycleScrollView" target="_blank" rel="noopener">SDCycleScrollView</a>,一个是<a href="https://github.com/kingsic/SGAdvertScrollView" target="_blank" rel="noopener">SGAdvertScrollView</a></p>
+<p>第一个库是常用的轮播。里面有有文字轮播，<code>demo</code>里有说明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 网络加载 --- 创建只上下滚动展示文字的轮播器</div><div class="line">// 由于模拟器的渲染问题，如果发现轮播时有一条线不必处理，模拟器放大到100%或者真机调试是不会出现那条线的</div><div class="line">SDCycleScrollView *cycleScrollView4 = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 750, w, 40) delegate:self placeholderImage:nil];</div><div class="line">cycleScrollView4.scrollDirection = UICollectionViewScrollDirectionVertical;</div><div class="line">cycleScrollView4.onlyDisplayText = YES;</div><div class="line"></div><div class="line">NSMutableArray *titlesArray = [NSMutableArray new];</div><div class="line">[titlesArray addObject:@&quot;纯文字上下滚动轮播&quot;];</div><div class="line">[titlesArray addObject:@&quot;纯文字上下滚动轮播 -- demo轮播图4&quot;];</div><div class="line">[titlesArray addObjectsFromArray:titles];</div><div class="line">cycleScrollView4.titlesGroup = [titlesArray copy];</div><div class="line"></div><div class="line">[demoContainerView addSubview:cycleScrollView4];</div></pre></td></tr></table></figure></p>
+<p>允许我中间插一句话，一致以来轮播图，不管是面试还是项目中，我们用的都是<code>Scrollview</code>封装的三张图轮播，两张图轮播，等等。但是在了解广告轮播的过程中我才到这个库里仔细看了一下原理。</p>
+<p><code>SDCycleScrollView</code>是基于<code>UICollectionView</code>封装的，在初始的时候他一次性创建了100份的图片数组，基于<code>UICollectionView</code>复用的特性，所以性能方面也是不错的。在定时器轮播的时候，当轮播到最后一张图的时候，会自动回滚到50倍的地方。然后就形成了自动轮播的假象。</p>
+<p>源码片段如下：</p>
+<p>100份的图片数组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">_totalItemsCount = self.infiniteLoop ? self.imagePathsGroup.count * 100 : self.imagePathsGroup.count;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section</div><div class="line">&#123;</div><div class="line">return _totalItemsCount;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>轮播的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- (void)scrollToIndex:(int)targetIndex</div><div class="line">&#123;</div><div class="line">if (targetIndex &gt;= _totalItemsCount) &#123;</div><div class="line">if (self.infiniteLoop) &#123;</div><div class="line">targetIndex = _totalItemsCount * 0.5;</div><div class="line">[_mainView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:targetIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];</div><div class="line">&#125;</div><div class="line">return;</div><div class="line">&#125;</div><div class="line">[_mainView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:targetIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以很清楚的看到超过图片数组时会回滚到50倍的地方。</p>
+<p>接下来说一下<a href="https://github.com/kingsic/SGAdvertScrollView" target="_blank" rel="noopener">SGAdvertScrollView</a></p>
+<p>在做广告上下滚动时，有多行的轮播，作者很巧妙的使用了100倍的数组（外面传入的模型数组），作为100个分区，回滚的思路和<a href="https://github.com/gsdios/SDCycleScrollView" target="_blank" rel="noopener">SDCycleScrollView</a>一模一样。也就不再说明了。</p>
+<p>源码片段：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">static NSInteger const advertScrollViewMaxSections = 100;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">- (void)beginUpdateUI &#123;</div><div class="line">if (self.titleArr.count == 0) return;</div><div class="line"></div><div class="line">// 1、当前正在展示的位置</div><div class="line">NSIndexPath *currentIndexPath = [[self.collectionView indexPathsForVisibleItems] lastObject];</div><div class="line"></div><div class="line">// 马上显示回最中间那组的数据</div><div class="line">NSIndexPath *resetCurrentIndexPath = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:0.5 * advertScrollViewMaxSections];</div><div class="line">[self.collectionView scrollToItemAtIndexPath:resetCurrentIndexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];</div><div class="line"></div><div class="line">// 2、计算出下一个需要展示的位置</div><div class="line">NSInteger nextItem = resetCurrentIndexPath.item + 1;</div><div class="line">NSInteger nextSection = resetCurrentIndexPath.section;</div><div class="line">if (nextItem == self.titleArr.count) &#123;</div><div class="line">nextItem = 0;</div><div class="line">nextSection++;</div><div class="line">&#125;</div><div class="line"></div><div class="line">NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];</div><div class="line"></div><div class="line">// 3、通过动画滚动到下一个位置</div><div class="line">[self.collectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>最后</p>
+</blockquote>
+<p>理解了原理，我们就真的可以为所欲为了，定制自己的广告上下轮播。</p>
+<p>这里是我写的一个小demo：<a href="https://github.com/liuxinixn/LXAdvertScrollview" target="_blank" rel="noopener">LXAdvertScrollview</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/ios-支付宝支付老版本与新版本的比较/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -990,6 +1134,149 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/仿朋友圈下拉刷新动画（基础动画）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/28/仿朋友圈下拉刷新动画（基础动画）/" itemprop="url">仿朋友圈下拉刷新动画</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:19:35+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>示意图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-db5166069f123884.gif?imageMogr2/auto-orient/strip" alt="2.0.gif"><br>demo地址：<a href="https://github.com/liuxinixn/LX_WXChatCirleRresh" target="_blank" rel="noopener">仿朋友圈下拉刷新动画</a></p>
+<blockquote>
+<p> <strong>动画的起源源于好奇</strong></p>
+</blockquote>
+<p>因为刚开是学动画，恨不得把所有的都实现一遍，试了一下微信朋友圈的下拉刷新动画。<br>如果ViewController的第一个子视图为UIScrollview的子类，系统会默认有个偏移量 ，如果不想这样可以设置<br><code>self.automaticallyAdjustsScrollViewInsets = NO;</code><br>下面所有的Navbar 都是默认透明的，设置为不透明就需要处理下。</p>
+<ul>
+<li>首先我们需要自定义一个headerView，但是不要设置<strong>self.layer.masksToBounds = Yes</strong> ,这样超出的部分都会被剪掉。<br>header 的组成部分：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    UIImageView *_backgroundImageView; </div><div class="line">    UIImageView *_iconView;</div><div class="line">    UILabel *_nameLabel;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>因为要做成微信朋友圈的效果我们需要这样处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//背景图 y 设置为 负的。</div><div class="line">_backgroundImageView.frame = CGRectMake(0, -60, KWidth, CGRectGetHeight(self.frame)+60);</div><div class="line">  </div><div class="line">    _iconView.frame = CGRectMake(KWidth - 70 -15, CGRectGetHeight(self.frame)-40, 70, 70);</div><div class="line">   </div><div class="line">    _nameLabel.frame = CGRectMake(KWidth - 70 -15 -20-200, CGRectGetHeight(self.frame)-20-10, 200, 20);</div></pre></td></tr></table></figure></p>
+<ul>
+<li>接下来处理下拉刷新的部分<br>tableview是Viewcontroller的第一个子视图，所以默认的Contentoffset.y为-64，我们需要的就是在下拉刷新的时候给headerview添加动画。<br>可以将监听contentoffset抽取出来，减少Viewcontroller的冗杂。</li>
+</ul>
+<ol>
+<li><strong>自定义一个view，给其一些属性：</strong></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">typedef enum &#123;</div><div class="line">    LXWXRefreshViewStateNormal,</div><div class="line">    LXWXRefreshViewStateWillRefresh,</div><div class="line">    LXWXRefreshViewStateRefreshing,</div><div class="line">&#125; LXWXRefreshViewState;</div><div class="line"></div><div class="line">@interface LX_RefreshView : UIView &lt;CAAnimationDelegate&gt;</div><div class="line"></div><div class="line"></div><div class="line">+ (instancetype)refreshHeaderWithCenter:(CGPoint)center;</div><div class="line"></div><div class="line">//传入我们需要的处理下拉刷新的UIscrollview的子类</div><div class="line">@property(nonatomic,strong)UIScrollView *scrollView;</div><div class="line">//刷新ing的回调，用来处理数据</div><div class="line">@property (nonatomic, copy) void(^refreshingBlock)();</div><div class="line"></div><div class="line">@property (nonatomic, assign) LXWXRefreshViewState refreshState;</div><div class="line">//结束刷新，回到主线程刷新tableview</div><div class="line">- (void)endRefreshing;</div></pre></td></tr></table></figure>
+<p>2  <strong>.m文件中的处理</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (void)setupView</div><div class="line">&#123;</div><div class="line">    self.backgroundColor = [UIColor clearColor];</div><div class="line">    //动态添加到 headerview上，做动画处理</div><div class="line">    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@&quot;AlbumReflashIcon&quot;]];</div><div class="line">    self.bounds = imageView.bounds;</div><div class="line">    [self addSubview:imageView];</div><div class="line">    </div><div class="line"> //刷新时请求数据等待动画</div><div class="line">    _rotateAnimation = [[CABasicAnimation alloc] init];</div><div class="line">    _rotateAnimation.keyPath = @&quot;transform.rotation.z&quot;;</div><div class="line">    _rotateAnimation.fromValue = @0;</div><div class="line">    _rotateAnimation.toValue = @(M_PI * 2);</div><div class="line">    _rotateAnimation.duration = 1.0;</div><div class="line">    _rotateAnimation.repeatCount = MAXFLOAT;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p> 将viewcontroller中监听contentoffset属性迁移到这里，在设置属性的时候开始监听<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">- (void)setScrollView:(UIScrollView *)scrollView</div><div class="line">&#123;</div><div class="line">    _scrollView = scrollView;</div><div class="line">    </div><div class="line"></div><div class="line">    [scrollView addObserver:self forKeyPath:ObserveKeyPath options:NSKeyValueObservingOptionNew context:nil];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSString *,id&gt; *)change context:(void *)context</div><div class="line">&#123;</div><div class="line">   </div><div class="line">    if (keyPath != ObserveKeyPath) return;</div><div class="line">    </div><div class="line">    [self updateRefreshHeaderWithOffsetY:self.scrollView.contentOffset.y];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在更新contentoffset.y 的时候做一些判断，处理旋转角度，可以自己调整。在拖拽以及停止拖拽的时候判断刷新状态，进而进行不同的动画处理。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">- (void)updateRefreshHeaderWithOffsetY:(CGFloat)y</div><div class="line">&#123;</div><div class="line">   </div><div class="line">    CGFloat rotateValue = y / 47.0 * M_PI;</div><div class="line">   </div><div class="line">    if (y &lt; contentOffetY) &#123;</div><div class="line">        y = contentOffetY;</div><div class="line">               if (self.scrollView.isDragging &amp;&amp; self.refreshState != LXWXRefreshViewStateWillRefresh) &#123;</div><div class="line">            self.refreshState = LXWXRefreshViewStateWillRefresh;</div><div class="line">            </div><div class="line">        &#125; else if (!self.scrollView.isDragging &amp;&amp; self.refreshState == LXWXRefreshViewStateWillRefresh) &#123;</div><div class="line">            </div><div class="line">            self.refreshState = LXWXRefreshViewStateRefreshing;</div><div class="line">        &#125;    &#125;</div><div class="line">    </div><div class="line">    if (self.refreshState == LXWXRefreshViewStateRefreshing) return;</div><div class="line">    </div><div class="line">    CGAffineTransform transform = CGAffineTransformIdentity;</div><div class="line">//这里处理纵向偏移是因为 tableview为第一个子视图，我们需要设向下偏移，所以取负值。否则是看不到这个视图的。</div><div class="line">    transform = CGAffineTransformTranslate(transform, 0, -y);</div><div class="line">    transform = CGAffineTransformRotate(transform, rotateValue);</div><div class="line">    </div><div class="line">    self.transform = transform;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对不同刷新状态的处理 在刷新完成时我们需要再做一个动画，使其纵向消失，然后在动画完成后移除。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">- (void)setRefreshState:(LXWXRefreshViewState)refreshState</div><div class="line">&#123;</div><div class="line">    _refreshState =  refreshState;</div><div class="line"></div><div class="line">    if (refreshState  == LXWXRefreshViewStateWillRefresh) &#123;</div><div class="line">        </div><div class="line">        self.hidden = NO;</div><div class="line">    &#125;</div><div class="line">    if (refreshState == LXWXRefreshViewStateRefreshing) &#123;</div><div class="line">        if (self.refreshingBlock) &#123;</div><div class="line">            self.refreshingBlock();</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        [self.layer addAnimation:_rotateAnimation forKey:AnimationKey];</div><div class="line">    &#125; else if (refreshState == LXWXRefreshViewStateNormal) &#123;</div><div class="line">        </div><div class="line">        [self.layer removeAnimationForKey:AnimationKey];</div><div class="line">        self.transform = CGAffineTransformIdentity;</div><div class="line">        CABasicAnimation *basic =[CABasicAnimation animation];</div><div class="line">        basic.keyPath = @&quot;position&quot;;</div><div class="line">        basic.fromValue =[NSValue valueWithCGPoint:self.center];</div><div class="line">        basic.toValue = [NSValue valueWithCGPoint:CGPointMake(self.center.x, -self.center.y)];</div><div class="line">        basic.duration = 0.5;</div><div class="line">        basic.delegate = self;</div><div class="line">        [self.layer addAnimation:basic forKey:PositionKey];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(void)animationDidStop:(CABasicAnimation *)anim finished:(BOOL)flag</div><div class="line">&#123;</div><div class="line">    if ([anim.keyPath isEqualToString:PositionKey]) &#123;</div><div class="line">        [self.layer removeAnimationForKey:PositionKey];</div><div class="line">        self.hidden = YES;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>刷新view 封装完成，接下来 我们在Viewcontroller中引用下即可</strong></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS仿微信输入框，限制最大行数，一体键盘/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1307,149 +1594,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/仿朋友圈下拉刷新动画（基础动画）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/28/仿朋友圈下拉刷新动画（基础动画）/" itemprop="url">仿朋友圈下拉刷新动画</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T20:19:35+08:00">
-                2017-12-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>示意图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-db5166069f123884.gif?imageMogr2/auto-orient/strip" alt="2.0.gif"><br>demo地址：<a href="https://github.com/liuxinixn/LX_WXChatCirleRresh" target="_blank" rel="noopener">仿朋友圈下拉刷新动画</a></p>
-<blockquote>
-<p> <strong>动画的起源源于好奇</strong></p>
-</blockquote>
-<p>因为刚开是学动画，恨不得把所有的都实现一遍，试了一下微信朋友圈的下拉刷新动画。<br>如果ViewController的第一个子视图为UIScrollview的子类，系统会默认有个偏移量 ，如果不想这样可以设置<br><code>self.automaticallyAdjustsScrollViewInsets = NO;</code><br>下面所有的Navbar 都是默认透明的，设置为不透明就需要处理下。</p>
-<ul>
-<li>首先我们需要自定义一个headerView，但是不要设置<strong>self.layer.masksToBounds = Yes</strong> ,这样超出的部分都会被剪掉。<br>header 的组成部分：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    UIImageView *_backgroundImageView; </div><div class="line">    UIImageView *_iconView;</div><div class="line">    UILabel *_nameLabel;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>因为要做成微信朋友圈的效果我们需要这样处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//背景图 y 设置为 负的。</div><div class="line">_backgroundImageView.frame = CGRectMake(0, -60, KWidth, CGRectGetHeight(self.frame)+60);</div><div class="line">  </div><div class="line">    _iconView.frame = CGRectMake(KWidth - 70 -15, CGRectGetHeight(self.frame)-40, 70, 70);</div><div class="line">   </div><div class="line">    _nameLabel.frame = CGRectMake(KWidth - 70 -15 -20-200, CGRectGetHeight(self.frame)-20-10, 200, 20);</div></pre></td></tr></table></figure></p>
-<ul>
-<li>接下来处理下拉刷新的部分<br>tableview是Viewcontroller的第一个子视图，所以默认的Contentoffset.y为-64，我们需要的就是在下拉刷新的时候给headerview添加动画。<br>可以将监听contentoffset抽取出来，减少Viewcontroller的冗杂。</li>
-</ul>
-<ol>
-<li><strong>自定义一个view，给其一些属性：</strong></li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">typedef enum &#123;</div><div class="line">    LXWXRefreshViewStateNormal,</div><div class="line">    LXWXRefreshViewStateWillRefresh,</div><div class="line">    LXWXRefreshViewStateRefreshing,</div><div class="line">&#125; LXWXRefreshViewState;</div><div class="line"></div><div class="line">@interface LX_RefreshView : UIView &lt;CAAnimationDelegate&gt;</div><div class="line"></div><div class="line"></div><div class="line">+ (instancetype)refreshHeaderWithCenter:(CGPoint)center;</div><div class="line"></div><div class="line">//传入我们需要的处理下拉刷新的UIscrollview的子类</div><div class="line">@property(nonatomic,strong)UIScrollView *scrollView;</div><div class="line">//刷新ing的回调，用来处理数据</div><div class="line">@property (nonatomic, copy) void(^refreshingBlock)();</div><div class="line"></div><div class="line">@property (nonatomic, assign) LXWXRefreshViewState refreshState;</div><div class="line">//结束刷新，回到主线程刷新tableview</div><div class="line">- (void)endRefreshing;</div></pre></td></tr></table></figure>
-<p>2  <strong>.m文件中的处理</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (void)setupView</div><div class="line">&#123;</div><div class="line">    self.backgroundColor = [UIColor clearColor];</div><div class="line">    //动态添加到 headerview上，做动画处理</div><div class="line">    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@&quot;AlbumReflashIcon&quot;]];</div><div class="line">    self.bounds = imageView.bounds;</div><div class="line">    [self addSubview:imageView];</div><div class="line">    </div><div class="line"> //刷新时请求数据等待动画</div><div class="line">    _rotateAnimation = [[CABasicAnimation alloc] init];</div><div class="line">    _rotateAnimation.keyPath = @&quot;transform.rotation.z&quot;;</div><div class="line">    _rotateAnimation.fromValue = @0;</div><div class="line">    _rotateAnimation.toValue = @(M_PI * 2);</div><div class="line">    _rotateAnimation.duration = 1.0;</div><div class="line">    _rotateAnimation.repeatCount = MAXFLOAT;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p> 将viewcontroller中监听contentoffset属性迁移到这里，在设置属性的时候开始监听<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">- (void)setScrollView:(UIScrollView *)scrollView</div><div class="line">&#123;</div><div class="line">    _scrollView = scrollView;</div><div class="line">    </div><div class="line"></div><div class="line">    [scrollView addObserver:self forKeyPath:ObserveKeyPath options:NSKeyValueObservingOptionNew context:nil];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSString *,id&gt; *)change context:(void *)context</div><div class="line">&#123;</div><div class="line">   </div><div class="line">    if (keyPath != ObserveKeyPath) return;</div><div class="line">    </div><div class="line">    [self updateRefreshHeaderWithOffsetY:self.scrollView.contentOffset.y];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>在更新contentoffset.y 的时候做一些判断，处理旋转角度，可以自己调整。在拖拽以及停止拖拽的时候判断刷新状态，进而进行不同的动画处理。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">- (void)updateRefreshHeaderWithOffsetY:(CGFloat)y</div><div class="line">&#123;</div><div class="line">   </div><div class="line">    CGFloat rotateValue = y / 47.0 * M_PI;</div><div class="line">   </div><div class="line">    if (y &lt; contentOffetY) &#123;</div><div class="line">        y = contentOffetY;</div><div class="line">               if (self.scrollView.isDragging &amp;&amp; self.refreshState != LXWXRefreshViewStateWillRefresh) &#123;</div><div class="line">            self.refreshState = LXWXRefreshViewStateWillRefresh;</div><div class="line">            </div><div class="line">        &#125; else if (!self.scrollView.isDragging &amp;&amp; self.refreshState == LXWXRefreshViewStateWillRefresh) &#123;</div><div class="line">            </div><div class="line">            self.refreshState = LXWXRefreshViewStateRefreshing;</div><div class="line">        &#125;    &#125;</div><div class="line">    </div><div class="line">    if (self.refreshState == LXWXRefreshViewStateRefreshing) return;</div><div class="line">    </div><div class="line">    CGAffineTransform transform = CGAffineTransformIdentity;</div><div class="line">//这里处理纵向偏移是因为 tableview为第一个子视图，我们需要设向下偏移，所以取负值。否则是看不到这个视图的。</div><div class="line">    transform = CGAffineTransformTranslate(transform, 0, -y);</div><div class="line">    transform = CGAffineTransformRotate(transform, rotateValue);</div><div class="line">    </div><div class="line">    self.transform = transform;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>对不同刷新状态的处理 在刷新完成时我们需要再做一个动画，使其纵向消失，然后在动画完成后移除。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">- (void)setRefreshState:(LXWXRefreshViewState)refreshState</div><div class="line">&#123;</div><div class="line">    _refreshState =  refreshState;</div><div class="line"></div><div class="line">    if (refreshState  == LXWXRefreshViewStateWillRefresh) &#123;</div><div class="line">        </div><div class="line">        self.hidden = NO;</div><div class="line">    &#125;</div><div class="line">    if (refreshState == LXWXRefreshViewStateRefreshing) &#123;</div><div class="line">        if (self.refreshingBlock) &#123;</div><div class="line">            self.refreshingBlock();</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        [self.layer addAnimation:_rotateAnimation forKey:AnimationKey];</div><div class="line">    &#125; else if (refreshState == LXWXRefreshViewStateNormal) &#123;</div><div class="line">        </div><div class="line">        [self.layer removeAnimationForKey:AnimationKey];</div><div class="line">        self.transform = CGAffineTransformIdentity;</div><div class="line">        CABasicAnimation *basic =[CABasicAnimation animation];</div><div class="line">        basic.keyPath = @&quot;position&quot;;</div><div class="line">        basic.fromValue =[NSValue valueWithCGPoint:self.center];</div><div class="line">        basic.toValue = [NSValue valueWithCGPoint:CGPointMake(self.center.x, -self.center.y)];</div><div class="line">        basic.duration = 0.5;</div><div class="line">        basic.delegate = self;</div><div class="line">        [self.layer addAnimation:basic forKey:PositionKey];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(void)animationDidStop:(CABasicAnimation *)anim finished:(BOOL)flag</div><div class="line">&#123;</div><div class="line">    if ([anim.keyPath isEqualToString:PositionKey]) &#123;</div><div class="line">        [self.layer removeAnimationForKey:PositionKey];</div><div class="line">        self.hidden = YES;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p><strong>刷新view 封装完成，接下来 我们在Viewcontroller中引用下即可</strong></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-仿侧边栏/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1582,130 +1726,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/12/UIView动画之阻尼动画/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/12/UIView动画之阻尼动画/" itemprop="url">iOS -UIView动画之阻尼动画</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-12T20:19:35+08:00">
-                2017-11-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>iOS 7  之后新出来一个阻尼动画，类似于弹簧效果的API:<br><code>+ (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay usingSpringWithDamping:(CGFloat)dampingRatio initialSpringVelocity:(CGFloat)velocity options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^ __nullable)(BOOL finished))completion NS_AVAILABLE_IOS(7_0);</code></p>
-<p>dampingRatio（阻尼系数）<br>范围 0~1 当它设置为1时，动画是平滑的没有振动的达到静止状态，越接近0 振动越大</p>
-<p>velocity （弹性速率）<br>就是形变的速度，从视觉上看可以理解弹簧的形变速度，到动画结束，该速度减为0，所以，velocity速度越大，那么形变会越快，当然在同等时间内，速度的变化（就是速率）也会越快，因为速度最后都要到0。</p>
-<p>效果：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-1a1ecfeaa5f3fc05.gif?imageMogr2/auto-orient/strip" alt="动画.gif"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">   </div><div class="line">    </div><div class="line">    </div><div class="line">    UIButton *button =[UIButton buttonWithType:UIButtonTypeCustom];</div><div class="line">    button.backgroundColor =[UIColor greenColor];</div><div class="line">    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];</div><div class="line">    [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];</div><div class="line"></div><div class="line">    [button setTitle:@&quot;展开&quot; forState:UIControlStateNormal];</div><div class="line">    [button setTitle:@&quot;收起&quot; forState:UIControlStateSelected];</div><div class="line">    button.frame = CGRectMake(Device_Width - 100, 200, 80, 40);</div><div class="line">    </div><div class="line">    [button addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];</div><div class="line">    [self.view addSubview:button];</div><div class="line">    </div><div class="line">    _label =[[UILabel alloc]initWithFrame:CGRectMake(Device_Width - 100, 200, 0, 40)];</div><div class="line">    _label.backgroundColor =[UIColor cyanColor];</div><div class="line">    _label.text =  @&quot;哈哈哈&quot;;</div><div class="line">    [self.view addSubview:_label];</div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)btnClick:(UIButton *)button</div><div class="line">&#123;</div><div class="line">    button.selected = !button.selected;</div><div class="line">    </div><div class="line">    if (button.selected) &#123;</div><div class="line"></div><div class="line">        [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.6 options:UIViewAnimationOptionCurveLinear animations:^&#123;</div><div class="line">            _label.frame = CGRectMake(Device_Width - 300, 200, 100, 40 );</div><div class="line"></div><div class="line">        &#125; completion:^(BOOL finished) &#123;</div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">    if (!button.selected) &#123;</div><div class="line">        </div><div class="line">        [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.6 options:UIViewAnimationOptionCurveLinear animations:^&#123;</div><div class="line">            _label.frame = CGRectMake(Device_Width - 100, 200, 0, 40 );</div><div class="line">        &#125; completion:^(BOOL finished) &#123;</div><div class="line">            </div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1759,7 +1779,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">97</span>
+                <span class="site-state-item-count">98</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1829,7 +1849,7 @@
 <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

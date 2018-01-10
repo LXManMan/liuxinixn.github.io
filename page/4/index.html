@@ -262,6 +262,134 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/05/iOS--友盟最新分享/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/05/iOS--友盟最新分享/" itemprop="url">iOS --友盟最新分享</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-05T20:19:35+08:00">
+                2017-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>步骤：<br>1、HTTPS key 的添加。<br>2、必要白名单的配置。<br>3、URL  Schemes的配置。QQ要添加两个一个是tencent+appID,一个是QQ+（appid 转16进制）</p>
+<p><code>echo &#39;ibase=10;obase=16;1106301422&#39;|bc</code> <strong>替换掉需要转换的appID</strong><br>cocoapods配置（精简版的，QQ ，微信为例）：<br>  pod ‘UMengUShare/Social/ReducedWeChat’<br>  pod ‘UMengUShare/Social/ReducedQQ’</p>
+<p>执行命令：<code>pod update</code></p>
+<p>跳转的配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">// iOS 8 及以下请用这个</div><div class="line">- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation &#123;</div><div class="line">    if ([Pingpp handleOpenURL:url withCompletion:nil]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //6.3的新的API调用，是为了兼容国外平台(例如:新版facebookSDK,VK等)的调用[如果用6.2的api调用会没有回调],对国内平台没有影响</div><div class="line">    </div><div class="line">    if ([[UMSocialManager defaultManager] handleOpenURL:url sourceApplication:sourceApplication annotation:annotation]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">       return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// iOS 9 以上请用这个</div><div class="line">- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options &#123;</div><div class="line">    if ([Pingpp handleOpenURL:url withCompletion:nil]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if ([[UMSocialManager defaultManager]  handleOpenURL:url options:options]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url</div><div class="line">&#123;</div><div class="line">//    BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url];</div><div class="line">//    if (!result) &#123;</div><div class="line">//        // 其他如支付等SDK的回调</div><div class="line">//    &#125;</div><div class="line">//    return result;</div><div class="line">    </div><div class="line">    if ([[UMSocialManager defaultManager] handleOpenURL:url]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>集成步骤：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">/* 设置友盟appkey */</div><div class="line">     [[UMSocialManager defaultManager] setUmSocialAppkey:YOUMENGKEY];</div><div class="line">    </div><div class="line"></div><div class="line">    //设置微信的appKey和appSecret</div><div class="line">//    https://itunes.apple.com/cn/app/id1092469431</div><div class="line">    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@&quot;&quot; appSecret:@&quot;&quot; redirectURL:@&quot;&quot;];</div><div class="line">    //设置分享到QQ互联的appKey和appSecret</div><div class="line">    // U-Share SDK为了兼容大部分平台命名，统一用appKey和appSecret进行参数设置，而QQ平台仅需将appID作为U-Share的appKey参数传进即可。</div><div class="line">    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@&quot;&quot;  appSecret:nil redirectURL:@&quot;&quot;];</div></pre></td></tr></table></figure>
+<p>调用方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">-(void)shareWithType:(UMSocialPlatformType)type&#123;</div><div class="line">    </div><div class="line">    //创建分享消息对象</div><div class="line">    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];</div><div class="line">    </div><div class="line">    //创建网页内容对象</div><div class="line">    NSString* thumbURL =  @&quot;https://mobile.umeng.com/images/pic/home/social/img-1.png&quot;;</div><div class="line">    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:@&quot;欢迎使用【友盟+】社会化组件U-Share&quot; descr:@&quot;欢迎使用【友盟+】社会化组件U-Share，SDK包最小，集成成本最低，助力您的产品开发、运营与推广！&quot; thumImage:thumbURL];</div><div class="line">    //设置网页地址</div><div class="line">    shareObject.webpageUrl = @&quot;http://mobile.umeng.com/social&quot;;</div><div class="line">    </div><div class="line">    //分享消息对象设置分享内容对象</div><div class="line">    messageObject.shareObject = shareObject;</div><div class="line">    </div><div class="line">    //调用分享接口</div><div class="line">    [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) &#123;</div><div class="line"></div><div class="line">        if (error) &#123;</div><div class="line">            [self.view makeToast:@&quot;分享失败&quot; duration:2 position:nil];</div><div class="line">        &#125;else&#123;</div><div class="line">            [self.view makeToast:@&quot;分享成功&quot; duration:2 position:nil];</div><div class="line">            </div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/01/iOS-ping++支付/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1519,139 +1647,6 @@ ZZ –&gt; 保存并退出
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/12/ios-利用runtime添加属性改变UITextField的光标起始位置/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/12/ios-利用runtime添加属性改变UITextField的光标起始位置/" itemprop="url">iOS -利用runtime添加属性改变UITextField的光标的起始位置</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-12T20:19:35+08:00">
-                2017-06-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>下图是<code>UITextField</code>光标的起始位置。如果要改变<code>UITextfield</code>的光标的起始位置，我们只有重写它的方法<code>- (CGRect)editingRectForBounds:(CGRect)bounds;</code>可是，对于继承很不方便，扩展一个分类，可以修改UITextfield的光标位置是最方便不过。</p>
-</blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-7c8196950d923fa9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<blockquote>
-<p>利用runtime 为UITextfield添加一个属性，<code>tintAjust</code>,通过修改<code>tintAjust</code>可以修改编辑区域起始位置。不能重写上面的方法，可以利用UITextfield的leftview做文章，左边主要是一个透明的视图即可。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@interface UITextField (TintAjust)</div><div class="line">@property(nonatomic,assign)CGFloat tintAjust; //扩展属性</div><div class="line">@end</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#import &quot;UITextField+TintAjust.h&quot;</div><div class="line">#import &lt;objc/runtime.h&gt;</div><div class="line"></div><div class="line">static NSString *adjust = @&quot;adjust&quot;;</div><div class="line">@implementation UITextField (TintAjust)</div><div class="line"></div><div class="line">-(void)setTintAjust:(CGFloat )tintAjust&#123;</div><div class="line">    objc_setAssociatedObject(self, &amp;adjust, @(tintAjust), OBJC_ASSOCIATION_ASSIGN);</div><div class="line">    UILabel * leftView = [[UILabel alloc] initWithFrame:CGRectMake(tintAjust,0,tintAjust,self.frame.size.height)];</div><div class="line">    leftView.backgroundColor = [UIColor clearColor];</div><div class="line">    self.leftView = leftView;</div><div class="line">    self.leftViewMode = UITextFieldViewModeAlways;</div><div class="line">&#125;</div><div class="line">-(CGFloat)tintAjust&#123;</div><div class="line">    id  value = objc_getAssociatedObject(self, &amp;adjust);</div><div class="line">    return  [value floatValue ];</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<blockquote>
-<p>使用方法：<code>textField.tintAjust = 30;</code></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">UITextField *textField =[[UITextField alloc]initWithFrame:CGRectMake(20, 100, 200, 40)];</div><div class="line">   textField.backgroundColor =[UIColor redColor];</div><div class="line">   textField.borderStyle  = UITextBorderStyleNone;</div><div class="line">   textField.placeholder = @&quot;请选择&quot;;</div><div class="line">   [self.view addSubview:textField];</div><div class="line">   </div><div class="line">   textField.tintAjust = 30;</div><div class="line">   NSLog(@&quot;%f&quot;,textField.tintAjust);</div></pre></td></tr></table></figure>
-<p>效果图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-7af4a8a0836ea899.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1705,7 +1700,7 @@ ZZ –&gt; 保存并退出
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">97</span>
+                <span class="site-state-item-count">98</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1775,7 +1770,7 @@ ZZ –&gt; 保存并退出
 <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

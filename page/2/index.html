@@ -262,6 +262,130 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/12/UIView动画之阻尼动画/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/12/UIView动画之阻尼动画/" itemprop="url">iOS -UIView动画之阻尼动画</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-12T20:19:35+08:00">
+                2017-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>iOS 7  之后新出来一个阻尼动画，类似于弹簧效果的API:<br><code>+ (void)animateWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay usingSpringWithDamping:(CGFloat)dampingRatio initialSpringVelocity:(CGFloat)velocity options:(UIViewAnimationOptions)options animations:(void (^)(void))animations completion:(void (^ __nullable)(BOOL finished))completion NS_AVAILABLE_IOS(7_0);</code></p>
+<p>dampingRatio（阻尼系数）<br>范围 0~1 当它设置为1时，动画是平滑的没有振动的达到静止状态，越接近0 振动越大</p>
+<p>velocity （弹性速率）<br>就是形变的速度，从视觉上看可以理解弹簧的形变速度，到动画结束，该速度减为0，所以，velocity速度越大，那么形变会越快，当然在同等时间内，速度的变化（就是速率）也会越快，因为速度最后都要到0。</p>
+<p>效果：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-1a1ecfeaa5f3fc05.gif?imageMogr2/auto-orient/strip" alt="动画.gif"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">   </div><div class="line">    </div><div class="line">    </div><div class="line">    UIButton *button =[UIButton buttonWithType:UIButtonTypeCustom];</div><div class="line">    button.backgroundColor =[UIColor greenColor];</div><div class="line">    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];</div><div class="line">    [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];</div><div class="line"></div><div class="line">    [button setTitle:@&quot;展开&quot; forState:UIControlStateNormal];</div><div class="line">    [button setTitle:@&quot;收起&quot; forState:UIControlStateSelected];</div><div class="line">    button.frame = CGRectMake(Device_Width - 100, 200, 80, 40);</div><div class="line">    </div><div class="line">    [button addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];</div><div class="line">    [self.view addSubview:button];</div><div class="line">    </div><div class="line">    _label =[[UILabel alloc]initWithFrame:CGRectMake(Device_Width - 100, 200, 0, 40)];</div><div class="line">    _label.backgroundColor =[UIColor cyanColor];</div><div class="line">    _label.text =  @&quot;哈哈哈&quot;;</div><div class="line">    [self.view addSubview:_label];</div><div class="line">    </div><div class="line">&#125;</div><div class="line">-(void)btnClick:(UIButton *)button</div><div class="line">&#123;</div><div class="line">    button.selected = !button.selected;</div><div class="line">    </div><div class="line">    if (button.selected) &#123;</div><div class="line"></div><div class="line">        [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.6 options:UIViewAnimationOptionCurveLinear animations:^&#123;</div><div class="line">            _label.frame = CGRectMake(Device_Width - 300, 200, 100, 40 );</div><div class="line"></div><div class="line">        &#125; completion:^(BOOL finished) &#123;</div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">    if (!button.selected) &#123;</div><div class="line">        </div><div class="line">        [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.6 options:UIViewAnimationOptionCurveLinear animations:^&#123;</div><div class="line">            _label.frame = CGRectMake(Device_Width - 100, 200, 0, 40 );</div><div class="line">        &#125; completion:^(BOOL finished) &#123;</div><div class="line">            </div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/11/Swift之字符串和字符/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1628,130 +1752,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/10/09/iOS-通联支付/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/09/iOS-通联支付/" itemprop="url">iOS -通联支付</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-09T20:19:35+08:00">
-                2017-10-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本版本是基于V4.5 版的。<br>目前的 SDK 版的所有版本必须以会员模式对接。</p>
-<p>一共两个步骤，把下面的依赖库直接拖进去即可，至于一些Build Settings选项的修改，你只需要对照文档看一下xcode的配置一致不。（xcode8.3.2的配置不需要做任何改变，只需要把下面的库拖进去即可）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">a)</div><div class="line">iOS 平台开发步骤</div><div class="line">APay.h</div><div class="line">APayRes.bundle</div><div class="line">libAPayLib.a</div><div class="line">APMPPassGuardCtrlBundle.bundle TrustDefenderMobile.framework</div><div class="line">文件拷贝到需要引用通联支付插件的工程目录下;`</div><div class="line">f) 工程中添加以下依赖库:</div><div class="line">CoreTelephony.framework CoreLocation.framework Security.framework SystemConfiguration.framework</div><div class="line">QuarzCore.framework</div><div class="line"> CoreText.framework AudioToolbox.framework CoreGraphics.framework libstdc++.6.0.9.dylib</div></pre></td></tr></table></figure></p>
-<p>通联支付id 由后台注册。前段对应的通联id的字段为 ext1</p>
-<p>只说明针对md5验签。<br>MD5加密的key 给后台要即可。<br>商户需通过 mode 字段切换测试环境和生产环境<br>当前连接的通联支付环境。<br> mode=”01” 测试环境<br>mode=”00” 生产环境</p>
-<p>需要注意的是所有的参数必须按照文档的顺序填写，00环境才可以支付。（通联支付的支付插件真的很垃圾）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div></pre></td><td class="code"><pre><div class="line">-(void)rechargeCard&#123;</div><div class="line">    </div><div class="line">    NSInteger amount =  1; //以分为计算单位</div><div class="line">    </div><div class="line">    //商户订单生成日期</div><div class="line">    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];</div><div class="line">    [dateFormatter setDateFormat:@&quot;yyyyMMddHHmmss&quot;];</div><div class="line">    NSDate *workDate = [NSDate dateWithTimeIntervalSinceReferenceDate:[NSDate timeIntervalSinceReferenceDate]];</div><div class="line">    NSString *timeStr = [dateFormatter stringFromDate:workDate];</div><div class="line">    </div><div class="line">    //商户订单号</div><div class="line">    NSString *orderStr = [NSString stringWithFormat:@&quot;%ld&quot;,[NSString getNowInterVal]];</div><div class="line">    </div><div class="line">    //####################################  计算外卡扩展信息字段签名  ######################################//</div><div class="line">    NCUserInfoModel *infoModel = [NCUserInfoManager getUserInfo];</div><div class="line">    NSString *ext1 = [NSString stringWithFormat:@&quot;&lt;USER&gt;%@&lt;/USER&gt;&quot;,infoModel.tonglianUserId];</div><div class="line">    </div><div class="line">    //##################################################################################################//</div><div class="line">    </div><div class="line">    NSArray *paaDic = @[</div><div class="line">                        </div><div class="line">                        ////协议字符集 1-UTF-8  2-GBK; 3-GB2312</div><div class="line">                        @&quot;1&quot;, @&quot;inputCharset&quot;,</div><div class="line">                        </div><div class="line">                        //支付通知结果以此为准,后台通知商户网站支付结 果的 url 地址</div><div class="line">                        //                         @&quot;http://www&quot;, @&quot;receiveUrl&quot;,</div><div class="line">                        @&quot;http://119.28.62.27:8080/ytr/appcard/orderPayment&quot;, @&quot;receiveUrl&quot;,</div><div class="line">                        </div><div class="line">                        ////协议版本,固定填 v1.0</div><div class="line">                        @&quot;v1.0&quot;, @&quot;version&quot;,</div><div class="line">                        </div><div class="line">                        //指定当前语言</div><div class="line">                        //固定选择值:1-简体中文 2-繁体中文 3-英文</div><div class="line">                        //可不填</div><div class="line">                        //非外卡支付只支持简体中文</div><div class="line">                        //外卡支付若未指定语言则默认为系统语言，若系统语言不被支持则默认为英文</div><div class="line">                        @&quot;1&quot;, @&quot;language&quot;,</div><div class="line">                        </div><div class="line">                        //订单信息签名方式</div><div class="line">                        @&quot;0&quot;, @&quot;signType&quot;,</div><div class="line">                        </div><div class="line">                        //通联分配给商户的ID</div><div class="line">                        @&quot;xxxxx&quot;, @&quot;merchantId&quot;,                                    //商户当前支付订单号</div><div class="line">                        orderStr, @&quot;orderNo&quot;,</div><div class="line">                        </div><div class="line">                        //订单支付金额</div><div class="line">                        //分做单位</div><div class="line">                        //最小0.01元</div><div class="line">                        @&quot;1&quot;, @&quot;orderAmount&quot;,</div><div class="line">                        </div><div class="line">                        //针对非跨境和非外卡支付</div><div class="line">                        //payType=27</div><div class="line">                        //支持以下币种: 默认[人民币]-0 人民币-156</div><div class="line">                        @&quot;0&quot;, @&quot;orderCurrency&quot;,</div><div class="line">                        </div><div class="line">                        //商户生成订单时间戳</div><div class="line">                        //必须允许的订单时间范围内</div><div class="line">                        timeStr, @&quot;orderDatetime&quot;,</div><div class="line">                        </div><div class="line">                        //商品名称</div><div class="line">                        @&quot;会员卡&quot;, @&quot;productName&quot;,</div><div class="line">                        </div><div class="line">                        //对于非外卡支付</div><div class="line">                        //商户用户号在通联会员系统对应的会员号</div><div class="line">                        ext1, @&quot;ext1&quot;,//若商户用户未注册通联会员号,该行不需要,可以注释掉</div><div class="line">                        self.cardIdModel.ID ,@&quot;ext2&quot;,</div><div class="line">                        @&quot;33&quot;, @&quot;payType&quot;,</div><div class="line">                        @&quot;1234567890&quot;, @&quot;key&quot;,</div><div class="line">                        ];</div><div class="line">    NSString *paaStr = [self formatPaa:paaDic];</div><div class="line">    </div><div class="line">    //        paaStr = [NSString stringWithFormat:@&quot;&amp;%@&amp;&quot;,paaStr];</div><div class="line">    [APay startPay:paaStr viewController:self delegate:self mode:@&quot;00&quot;];</div><div class="line"></div><div class="line">    </div><div class="line">&#125;</div><div class="line">- (void)APayResult:(NSString *)result &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;%@&quot;, result);</div><div class="line">    NSArray *parts = [result componentsSeparatedByString:@&quot;=&quot;];</div><div class="line">    NSError *error;</div><div class="line">    NSData *data = [[parts lastObject] dataUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&amp;error];</div><div class="line">    NSInteger payResult = [dic[@&quot;payResult&quot;] integerValue];</div><div class="line">    //    NSString *format_string = @&quot;支付结果::支付%@&quot;;</div><div class="line">    if (payResult == APayResultSuccess) &#123;</div><div class="line">        </div><div class="line">        [LXNotificationCenter postNotificationName:UPDATEORDERSTATUE object:nil];</div><div class="line">        [self.view makeToast:@&quot;支付成功&quot;];</div><div class="line">        [self delayAction];</div><div class="line">    &#125; else if (payResult == APayResultFail) &#123;</div><div class="line">        </div><div class="line">        [self.view makeToast:@&quot;支付失败&quot;];</div><div class="line">    &#125; else if (payResult == APayResultCancel) &#123;</div><div class="line">        </div><div class="line">        [self.view makeToast:@&quot;支付被取消&quot;];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (NSString *)formatPaa:(NSArray *)array &#123;</div><div class="line">    </div><div class="line">    NSMutableDictionary *mdic = [NSMutableDictionary dictionary];</div><div class="line">    </div><div class="line">    NSMutableString *paaStr = [[NSMutableString alloc] init];</div><div class="line">    for (int i = 0; i &lt; array.count; i++) &#123;</div><div class="line">        [paaStr appendFormat:@&quot;%@=%@&amp;&quot;, array[i+1], array[i]];</div><div class="line">        mdic[array[i+1]] = array[i];</div><div class="line">        i++;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    NSString *signMsg = [self md5:[paaStr substringToIndex:paaStr.length - 1]];</div><div class="line">    mdic[@&quot;signMsg&quot;] = signMsg.uppercaseString;</div><div class="line">    </div><div class="line">    //############################  卡号回显请参考以下部分  ##############################################//</div><div class="line">    </div><div class="line">    //卡号回显需要在订单信息中传入该字段</div><div class="line">    //该字段不参与订单信息的签名计算</div><div class="line">    //若不需要卡号回显的功能该字段可不传入</div><div class="line">    //    NSString *cardNo = @&quot;4391880000000004&quot;;//测试用信用卡</div><div class="line">    //                       @&quot;6225882120759623&quot;;//测试用借记卡</div><div class="line">    //    mdic[@&quot;cardNo&quot;] = cardNo;</div><div class="line">    </div><div class="line">    //##################################################################################################//</div><div class="line">    </div><div class="line">    //############################  外卡支付订单添加扩展信息字段  ###########################################//</div><div class="line">    </div><div class="line">    //    [mdic addEntriesFromDictionary:[self extPart]];</div><div class="line">    </div><div class="line">    //##################################################################################################//</div><div class="line">    </div><div class="line">    if (mdic[@&quot;key&quot;]) &#123;//商户私有签名密钥 通联后台持有不传入插件</div><div class="line">        [mdic removeObjectForKey:@&quot;key&quot;];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    NSError *error;</div><div class="line">    NSData *data = [NSJSONSerialization dataWithJSONObject:mdic options:NSJSONWritingPrettyPrinted error:&amp;error];</div><div class="line">    NSString *jsonStr = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];</div><div class="line">    </div><div class="line">    [paaStr setString:jsonStr];</div><div class="line">    </div><div class="line">    return paaStr;</div><div class="line">&#125;</div><div class="line">- (NSString *)md5:(NSString *)string &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;%@&quot;, string);</div><div class="line">    </div><div class="line">    if (string == nil) &#123; return nil; &#125;</div><div class="line">    </div><div class="line">    const char *str = [string cStringUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    CC_LONG strLen = (CC_LONG)[string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];</div><div class="line">    unsigned char *result = calloc(CC_MD5_DIGEST_LENGTH, sizeof(unsigned char));</div><div class="line">    CC_MD5(str, strLen, result);</div><div class="line">    </div><div class="line">    NSMutableString *hash = [NSMutableString string];</div><div class="line">    for (int i = 0; i &lt; CC_MD5_DIGEST_LENGTH; ++i) &#123;</div><div class="line">        [hash appendFormat:@&quot;%02x&quot;, result[i]];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    free(result);</div><div class="line">    </div><div class="line">    return hash;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1805,7 +1805,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">97</span>
+                <span class="site-state-item-count">98</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1875,7 +1875,7 @@
 <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
