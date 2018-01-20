@@ -262,6 +262,151 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/12/28/iOS-仿侧边栏/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/28/iOS-仿侧边栏/" itemprop="url">iOS 仿侧边栏</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T00:13:14+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>粗仿QQ侧边栏</p>
+</blockquote>
+<p>分析：<code>QQ</code>侧边栏都用了哪些手势，有哪些效果？</p>
+<ol>
+<li><code>QQ</code>的主页是个<code>UITabbarController</code>，暂且称为<code>MainVc</code>左侧边缘添加的手势为边缘手势<code>UIScreenEdgePanGestureRecognizer</code></li>
+<li>当边缘手势滑动到屏幕中间时判断<code>MainVc</code>移动的距离超过屏幕中间，超过就显示侧边栏，没超过会自动归位。</li>
+<li><code>MainVc</code>移动的时候会有一层黑色的遮罩，遮罩的透明度和<code>MainVc</code>移动的距离有关。</li>
+<li>当侧边栏出现的时候，此时<code>MainVc</code>添加的手势更换为平移手势<code>UIPanGestureRecognizer</code>。判断<code>MainVc</code>移动的距离和第二步一样。</li>
+<li>添加的手势和系统的边缘手势冲突如何处理。</li>
+<li>当侧边栏隐藏的时候，给<code>MainVc</code>一个很大的速度，会立即显示侧边栏。当侧边栏出现的时候，给侧边栏一个很大的速度，会立即显示<code>MainVc</code>。</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-4d3ef4fdf977eb6d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="E016F97C-320C-4F2F-A66F-D0832750A893.png"></p>
+<p>层级关系如上图：MainVc 在侧边栏 上面，只需要添加手势来控制侧边栏的显示与隐藏即可。</p>
+<blockquote>
+<p>代码</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[self addChildViewController:self.leftVc];</div><div class="line">[self addChildViewController:self.mainVc];</div><div class="line"></div><div class="line">[self.mainVc didMoveToParentViewController:self];</div><div class="line"></div><div class="line">[self.leftVc didMoveToParentViewController:self];</div><div class="line"></div><div class="line">//添加屏幕边缘平移手势</div><div class="line">[self.mainVc.view addGestureRecognizer:self.pan1];</div><div class="line"></div><div class="line">//添加平移手势</div><div class="line">[self.mainVc.view addGestureRecognizer:self.pan2];</div><div class="line"></div><div class="line">//添加点击手势</div><div class="line">[self.mainVc.view addGestureRecognizer:self.tap];</div></pre></td></tr></table></figure>
+<p>关于手势的处理，模拟一个侧滑的临界速度，姑且定位1000.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">#pragma mark---手势处理</div><div class="line">-(void)screenGesture:(UIPanGestureRecognizer *)pan&#123;</div><div class="line">    </div><div class="line">    //移动的距离</div><div class="line">    CGPoint point = [pan translationInView:pan.view];</div><div class="line">    //移动的速度</div><div class="line">    CGPoint verPoint =  [pan velocityInView:pan.view];</div><div class="line">    </div><div class="line">   </div><div class="line">    </div><div class="line">    self.mainVc.view.lx_x += point.x;</div><div class="line">    </div><div class="line">    //边界限定</div><div class="line">    if (self.mainVc.view.lx_x &gt;= MAXLEFTSLIDEWIDTH) &#123;</div><div class="line">        self.mainVc.view.lx_x = MAXLEFTSLIDEWIDTH;</div><div class="line">    &#125;</div><div class="line">    if (self.mainVc.view.lx_x &lt;= 0) &#123;</div><div class="line">        self.mainVc.view.lx_x = 0;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //蒙版的阴影限定</div><div class="line">    self.maskView.alpha = self.mainVc.view.lx_x /MAXLEFTSLIDEWIDTH;</div><div class="line">   </div><div class="line">    </div><div class="line">    if (pan.state == UIGestureRecognizerStateEnded) &#123;</div><div class="line">        </div><div class="line">        //判断手势</div><div class="line">        if (pan == self.pan1) &#123;</div><div class="line">            </div><div class="line">            </div><div class="line">            if (verPoint.x &gt; MAXSPEED) &#123;</div><div class="line">                </div><div class="line">                 [self showLeftVc];</div><div class="line">                </div><div class="line">            &#125;else&#123;</div><div class="line">                </div><div class="line">                if (self.mainVc.view.lx_x &gt;= Device_Width/2) &#123;</div><div class="line">                    </div><div class="line">                    [self showLeftVc];</div><div class="line">                    </div><div class="line">                &#125;else&#123;</div><div class="line">                    </div><div class="line">                    [self hideLeftVc];</div><div class="line">                    </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;else&#123;</div><div class="line">            </div><div class="line">            if (verPoint.x &lt; - MAXSPEED) &#123;</div><div class="line">                </div><div class="line">                [self hideLeftVc];</div><div class="line">            &#125;else&#123;</div><div class="line">                </div><div class="line">                if (self.mainVc.view.lx_x &gt;= Device_Width/2) &#123;</div><div class="line">                    </div><div class="line">                    </div><div class="line">                    [self showLeftVc];</div><div class="line">                    </div><div class="line">                &#125;else&#123;</div><div class="line">                    </div><div class="line">                    [self hideLeftVc];</div><div class="line">                    </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    [pan setTranslation:CGPointZero inView:pan.view];</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>关于添加的手势和系统的边缘手势冲突的问题，解决如下:在子类化<code>UINavigationController</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">-(void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view.</div><div class="line">    self.navigationBar.translucent = YES;</div><div class="line"></div><div class="line">    self.navigationBar.barTintColor = LXMainColor;</div><div class="line">    </div><div class="line">    self.interactivePopGestureRecognizer.delegate = self;</div><div class="line">&#125;</div><div class="line">#pragma mark--防止与添加到tabbar的手势冲突--</div><div class="line">-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer&#123;</div><div class="line">    if (self.childViewControllers.count &lt;= 1) &#123;</div><div class="line">        return NO;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>发现<code>QQ</code>的二级页面添加了全屏手势,所以也把<code>UINavigationController+FDFullscreenPopGesture.h</code>添加了进去，发现原来冲突的手势也不冲突了。</p>
+</blockquote>
+<p>效果图：<img src="http://upload-images.jianshu.io/upload_images/1694376-b0fae02e3a47c794.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="仿QQ侧滑.gif"></p>
+<p>demo地址：<a href="https://github.com/liuxinixn/LXQQSlide" target="_blank" rel="noopener">仿QQ侧边栏</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/12/UIView动画之阻尼动画/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -578,6 +723,171 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/10/Swift之数据类型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/10/Swift之数据类型/" itemprop="url">iOS -Swift之数据类型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-10T20:19:35+08:00">
+                2017-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>数据类型</p>
+</blockquote>
+<p>有常量<code>let</code>，变量<code>var</code>，可以声明类型标注（需要在常量或者变量名后面加上一个冒号和空格，然后加上类型名称）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var welcomeMessage: String</div><div class="line">let maximumNumberOfLoginAttempts = 10</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>输出</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">你可以用 print(_:separator:terminator:) 函数来输出当前常量或变量的值: print(friendlyWelcome)</div><div class="line">// 输出 &quot;Bonjour!&quot;</div><div class="line">print(_:separator:terminator:) 是一个用来输出一个或多个值到适当输出区的全局函数。</div><div class="line">如果你用 Xcode， int(_:separator:terminator:) 将会输出内容到“console”面板上。</div><div class="line">separator 和 terminator 参数具有默认 值，因此你调用这个函数的时候可以忽略它们。</div><div class="line">默认情况下，该函数通过添加换行符来结束当前行。</div><div class="line">如果不想换 行，可以传递一个空字符串给 terminator 参数--例如， print(someValue, terminator:&quot;&quot;) 。</div><div class="line"></div><div class="line">Swift 用字符串插值(string interpolation)的方式把常量名或者变量名当做占位符加入到长字符串中，Swift 会用当前常量或变量的值替换这些占位符。</div><div class="line">将常量或变量名放入圆括号中，并在开括号前使用反斜杠将其转义:</div><div class="line"></div><div class="line">print(&quot;The current value of friendlyWelcome is \(friendlyWelcome)&quot;) // 输出 &quot;The current value of friendlyWelcome is Bonjour!</div></pre></td></tr></table></figure>
+<blockquote>
+<p>整数,浮点数以及转换(同OC)。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">整数就是没有小数部分的数字，比如 42 和 -23 。整数可以是 有符号 (正、负、零)或者 无符号 (正、零)。</div><div class="line">Swift 提供了8，16，32和64位的有符号和无符号整数类型。</div><div class="line">这些整数类型和 C 语言的命名方式很像，比如8位无 符号整数类型是 UInt8 ，32位有符号整数类型是 Int32 。</div><div class="line">就像 Swift 的其他类型一样，整数类型采用大写命名 法。</div><div class="line">除非你需要特定长度的整数，一般来说使用 Int 就够了。</div><div class="line">这可以提高代码一致性和可复用性。</div><div class="line">即使是在32位平 台上，Int 可以存储的整数范围也可以达到 -2,147,483,648 ~ 2,147,483,647 ，大多数时候这已经足够大 了。</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>注释<br>整数，浮点数 </p>
+<blockquote>
+<p>类型安全和类型推断</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Swift 是一个类型安全(type safe)的语言。类型安全的语言可以让你清楚地知道代码要处理的值的类型。如果</div><div class="line">你的代码需要一个 String ，你绝对不可能不小心传进去一个 Int 。</div><div class="line"></div><div class="line">由于 Swift 是类型安全的，所以它会在编译你的代码时进行类型检查(type checks)，并把不匹配的类型标记 为错误。</div><div class="line">这可以让你在开发的时候尽早发现并修复错误。</div></pre></td></tr></table></figure>
+<p>######布尔值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Swift 有一个基本的布尔(Boolean)类型，叫做 Bool 。</div><div class="line">布尔值指逻辑上的值，因为它们只能是真或者假。</div><div class="line">Swift 有两个布尔常量，true 和 false.</div><div class="line"></div><div class="line">当你编写条件语句比如   语句的时候，布尔值非常有用:</div><div class="line">if turnipsAreDelicious &#123;</div><div class="line">     print(&quot;Mmm, tasty turnips!&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;Eww, turnips are horrible.&quot;)</div><div class="line">&#125;</div><div class="line">// 输出 &quot;Eww, turnips are horrible.&quot;</div><div class="line"></div><div class="line">但是在配合if语句的时候，判断结果必须为bool值，否则会报错，这点比oc的语法严谨了很多。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>元组</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">元组(tuples)把多个值组合成一个复合值。</div><div class="line">元组内的值可以是任意类型，并不要求是相同类型。</div><div class="line">你可以把任意顺序的类型组合成一个元组，这个元组可以包含所有类型。只要你想，你可以创建一个类型为或者其他任何你想要的组合的元组。</div><div class="line">（常用于异常处理，组合显示，可自定义参数名）</div><div class="line">元祖的使用在临时组织值时是比oc便利的。</div><div class="line"></div><div class="line">let http200Status = (statusCode: 200, description: &quot;OK&quot;)</div><div class="line">print(&quot;The status code is \(http200Status.statusCode)&quot;)</div><div class="line">// 输出 &quot;The status code is 200&quot;</div><div class="line">print(&quot;The status message is \(http200Status.description)&quot;) // 输出 &quot;The status message is OK&quot;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>可选类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">使用可选类型(optionals)来处理值可能缺失的情况.</div><div class="line">可选类型表示:有值，等于 x或者没有值</div><div class="line">类似于Objective-C 中的nil，但是有很大不同，Objective-C 中的nil只针对于对象，Swift 的可选类型可以让 你暗示任意类型的值缺失，并不需要一个特殊值。</div><div class="line">在 Swift 中， nil 不是指针——它是一个确定的值，用来表示值缺失。任何类型的可选状态都可以被设 置为 nil ，不只是对象类型</div><div class="line">使用方法：在类型标注后面添加一个&apos;?&apos;号</div><div class="line">如果你声明一个可选常量或者变量但是没有赋值，它们会自动被设置为 nil :</div></pre></td></tr></table></figure></p>
+<p>可选绑定(if let使用)</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">使用可选绑定(optional binding)来判断可选类型是否包含值，如果包含就把值赋给一个临时常量或者变 量。</div><div class="line">可选绑定可以用在 if 和 while 语句中，这条语句不仅可以用来判断可选类型中是否有值，同时可以将 可选类型中的值赋给一个常量或者变量。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"> if let actualNumber = Int(possibleNumber) &#123;</div><div class="line">     print(&quot;\&apos;\(possibleNumber)\&apos; has an integer value of \(actualNumber)&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;\&apos;\(possibleNumber)\&apos; could not be converted to an integer&quot;)</div><div class="line">&#125;</div><div class="line">// 输出 &quot;&apos;123&apos; has an integer value of 123&quot;</div><div class="line">这段代码可以被理解为:</div><div class="line">“如果 Int(possibleNumber) 返回的可选 Int 包含一个值，创建一个叫做 actualNumber 的新常量并将可选 包含的值赋给它。”</div><div class="line">如果转换成功， actualNumber 常量可以在 if 语句的第一个分支中使用。</div><div class="line">它已经被可选类型 包含的 值初始化 过，所以不需要再使用 ! 后缀来获取它的值。在这个例子中，actualNumber 只被用来输出转换结果。</div><div class="line">你可以在可选绑定中使用常量和变量。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">如果你想在if语句的第一个分支中操作 actualNumber 的值，你可以改 成 if var actualNumber ，这样可选类型包含的值就会被赋给一个变量而非常量。</div><div class="line">你可以包含多个可选绑定或多个布尔条件在一个 if 语句中，只要使用逗号分开就行。</div><div class="line">只要有任意一个可选绑定 的值为nil，或者任意一个布尔条件为false，则整个if条件判断为false，这时你就需要使用嵌套 if 条 件语句来处理</div></pre></td></tr></table></figure>
+<blockquote>
+<p>隐式解析可选类型</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">可选类型暗示了常量或者变量可以“没有值”。</div><div class="line">可选可以通过 if 语句来判断是否有值，如果有值的 话可以通过可选绑定来解析值。</div><div class="line">有时候在程序架构中，第一次被赋值之后，可以确定一个可选类型总会有值。在这种情况下，每次都要判断和解</div><div class="line">析可选值是非常低效的，因为可以确定它总会有值。</div><div class="line">这种类型的可选状态被定义为隐式解析可选类型(implicitly unwrapped optionals)。</div><div class="line">把想要用作可选的类型 的后面的问号( String? )改成感叹号( String! )来声明一个隐式解析可选类型。</div><div class="line">当可选类型被第一次赋值之后就可以确定之后一直有值的时候，隐式解析可选类型非常有用。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">一个隐式解析可选类型其实就是一个普通的可选类型，但是可以被当做非可选类型来使用，并不需要每次都使用 解析来获取可选值。</div><div class="line">下面的例子展示了可选类型 String 和隐式解析可选类型 String 之间的区别:</div><div class="line">let possibleString: String? = &quot;An optional string.&quot;</div><div class="line">let forcedString: String = possibleString! // 需要感叹号来获取值</div><div class="line">let assumedString: String! = &quot;An implicitly unwrapped optional string.&quot; let implicitString: String = assumedString // 不需要感叹号</div><div class="line">你可以把隐式解析可选类型当做一个可以自动解析的可选类型。</div><div class="line">你要做的只是声明的时候把感叹号放到类型的结</div><div class="line">尾，而不是每次取值的可选名字的结尾。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>错误处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">你可以使用 错误处理(error handling) 来应对程序执行中可能会遇到的错误条件。</div><div class="line">相对于可选中运用值的存在与缺失来表达函数的成功与失败，错误处理可以推断失败的原因，并传播至程序的其</div><div class="line">他部分。</div><div class="line">当一个函数遇到错误条件，它能报错。</div><div class="line">调用函数的地方能抛出错误消息并合理处理。</div></pre></td></tr></table></figure></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func canThrowAnError() throws &#123; // 这个函数有可能抛出错误</div><div class="line">&#125;</div><div class="line">一个函数可以通过在声明中添加   关键词来抛出错误消息。当你的函数能抛出错误消息时, 你应该在表达式 中前置 关键词。</div><div class="line">do &#123;</div><div class="line">try canThrowAnError() // 没有错误消息抛出</div><div class="line">&#125; catch &#123;</div><div class="line">// 有一个错误消息抛出</div><div class="line">&#125;</div><div class="line">一个 语句创建了一个新的包含作用域,使得错误能被传播到一个或多个从句。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>断言</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">可选类型可以让你判断值是否存在，你可以在代码中优 地处理值缺失的情况。</div><div class="line">然而，在某些情况下，如果值缺 失或者值并不满足特定的条件，你的代码可能没办法继续执行。</div><div class="line">这时，你可以在你的代码中触发一个 断言(asse rtion) 来结束代码运行并通过调试来找到值缺失的原因</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">使用断言进行调试</div><div class="line">断言会在运行时判断一个逻辑条件是否为 true 。</div><div class="line">从字面意思来说，断言“断言”一个条件是否为真。你可以使 用断言来保证在运行其他代码之前，某些重要的条件已经被满足。</div><div class="line">如果条件判断为 true ，代码运行会继续进 行;如果条件判断为 false ，代码执行结束，你的应用被终止。</div><div class="line">如果你的代码在调试环境下触发了一个断言，比如你在 Xcode 中构建并运行一个应用，你可以清楚地看到不合法 的状态发生在哪里并检查断言被触发时你的应用的状态。</div><div class="line">此外，断言允许你附加一条调试信息。</div><div class="line">你可以使用全局 assert(_:_:file:line:) 函数来写一个断言。向这个函数传入一个结果为 true 或者 false 的表达式以及一条信息，当表达式的结果为 false 的时候这条信息会被显示:</div><div class="line"></div><div class="line">let age = -3</div><div class="line">assert(age &gt;= 0, &quot;A person&apos;s age cannot be less than zero&quot;) // 因为 age &lt; 0，所以断言会触发</div><div class="line">在这个例子中，只有 age &gt;= 0 为 true 的时候，即 age 的值非负的时候，代码才会继续执行。</div><div class="line">如果 age 的值是负数，就像代码中那样， age &gt;= 0 为 false ，断言被触发，终止应用。</div><div class="line">如果不需要断言信息，可以省略，就像这样: assert(age &gt;= 0)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">注意:</div><div class="line">当代码使用优化编译的时候，断言将会被禁用，例如在 Xcode 中，使用默认的 target Release 配置选项来 bu ild 时，断言会被禁用</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">何时使用断言</div><div class="line"></div><div class="line">当条件可能为假时使用断言，但是最终一定要保证条件为真，这样你的代码才能继续运行。断言的适用情景:</div><div class="line">• 整数类型的下标索引被传入一个自定义下标实现，但是下标索引值可能太小或者太大。</div><div class="line">• 需要给函数传入一个值，但是非法的值可能导致函数不能正常执行。</div><div class="line">• 一个可选值现在是 nil ，但是后面的代码运行需要一个非 nil 值。</div></pre></td></tr></table></figure>
+<p>参考文章：<a href="https://github.com/numbbbbb/the-swift-programming-language-in-chinese" target="_blank" rel="noopener">中文版 Apple 官方 Swift 教程《The Swift Programming Language》</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/10/Swift之集合类型-(Collection-Types)（字典篇）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -698,171 +1008,6 @@
 <p>如果我们只是需要使用某个字典的键 集合或者值 集合来作为某个接受   <code>Array</code>实例的 <code>API</code> 的参数，可以直接使用 <code>keys</code>或者<code>values</code> 属性构造一个新数组:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let airportCodes = String</div><div class="line">// airportCodes 是 [&quot;YYZ&quot;, &quot;LHR&quot;]</div><div class="line">let airportNames = String</div><div class="line">// airportNames 是 [&quot;Toronto Pearson&quot;, &quot;London Heathrow&quot;]</div></pre></td></tr></table></figure>
 <p><code>Swift</code> 的字典类型是无序集 合类型。为了以特定的顺序遍历字典的键或值，可以对字典的<code>keys</code>  或 <code>values</code>  属性使 用  <code>sorted ()</code>方法。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/10/Swift之数据类型/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/10/Swift之数据类型/" itemprop="url">iOS -Swift之数据类型</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-10T20:19:35+08:00">
-                2017-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>数据类型</p>
-</blockquote>
-<p>有常量<code>let</code>，变量<code>var</code>，可以声明类型标注（需要在常量或者变量名后面加上一个冒号和空格，然后加上类型名称）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var welcomeMessage: String</div><div class="line">let maximumNumberOfLoginAttempts = 10</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>输出</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">你可以用 print(_:separator:terminator:) 函数来输出当前常量或变量的值: print(friendlyWelcome)</div><div class="line">// 输出 &quot;Bonjour!&quot;</div><div class="line">print(_:separator:terminator:) 是一个用来输出一个或多个值到适当输出区的全局函数。</div><div class="line">如果你用 Xcode， int(_:separator:terminator:) 将会输出内容到“console”面板上。</div><div class="line">separator 和 terminator 参数具有默认 值，因此你调用这个函数的时候可以忽略它们。</div><div class="line">默认情况下，该函数通过添加换行符来结束当前行。</div><div class="line">如果不想换 行，可以传递一个空字符串给 terminator 参数--例如， print(someValue, terminator:&quot;&quot;) 。</div><div class="line"></div><div class="line">Swift 用字符串插值(string interpolation)的方式把常量名或者变量名当做占位符加入到长字符串中，Swift 会用当前常量或变量的值替换这些占位符。</div><div class="line">将常量或变量名放入圆括号中，并在开括号前使用反斜杠将其转义:</div><div class="line"></div><div class="line">print(&quot;The current value of friendlyWelcome is \(friendlyWelcome)&quot;) // 输出 &quot;The current value of friendlyWelcome is Bonjour!</div></pre></td></tr></table></figure>
-<blockquote>
-<p>整数,浮点数以及转换(同OC)。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">整数就是没有小数部分的数字，比如 42 和 -23 。整数可以是 有符号 (正、负、零)或者 无符号 (正、零)。</div><div class="line">Swift 提供了8，16，32和64位的有符号和无符号整数类型。</div><div class="line">这些整数类型和 C 语言的命名方式很像，比如8位无 符号整数类型是 UInt8 ，32位有符号整数类型是 Int32 。</div><div class="line">就像 Swift 的其他类型一样，整数类型采用大写命名 法。</div><div class="line">除非你需要特定长度的整数，一般来说使用 Int 就够了。</div><div class="line">这可以提高代码一致性和可复用性。</div><div class="line">即使是在32位平 台上，Int 可以存储的整数范围也可以达到 -2,147,483,648 ~ 2,147,483,647 ，大多数时候这已经足够大 了。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<p>注释<br>整数，浮点数 </p>
-<blockquote>
-<p>类型安全和类型推断</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Swift 是一个类型安全(type safe)的语言。类型安全的语言可以让你清楚地知道代码要处理的值的类型。如果</div><div class="line">你的代码需要一个 String ，你绝对不可能不小心传进去一个 Int 。</div><div class="line"></div><div class="line">由于 Swift 是类型安全的，所以它会在编译你的代码时进行类型检查(type checks)，并把不匹配的类型标记 为错误。</div><div class="line">这可以让你在开发的时候尽早发现并修复错误。</div></pre></td></tr></table></figure>
-<p>######布尔值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Swift 有一个基本的布尔(Boolean)类型，叫做 Bool 。</div><div class="line">布尔值指逻辑上的值，因为它们只能是真或者假。</div><div class="line">Swift 有两个布尔常量，true 和 false.</div><div class="line"></div><div class="line">当你编写条件语句比如   语句的时候，布尔值非常有用:</div><div class="line">if turnipsAreDelicious &#123;</div><div class="line">     print(&quot;Mmm, tasty turnips!&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;Eww, turnips are horrible.&quot;)</div><div class="line">&#125;</div><div class="line">// 输出 &quot;Eww, turnips are horrible.&quot;</div><div class="line"></div><div class="line">但是在配合if语句的时候，判断结果必须为bool值，否则会报错，这点比oc的语法严谨了很多。</div></pre></td></tr></table></figure>
-<blockquote>
-<p>元组</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">元组(tuples)把多个值组合成一个复合值。</div><div class="line">元组内的值可以是任意类型，并不要求是相同类型。</div><div class="line">你可以把任意顺序的类型组合成一个元组，这个元组可以包含所有类型。只要你想，你可以创建一个类型为或者其他任何你想要的组合的元组。</div><div class="line">（常用于异常处理，组合显示，可自定义参数名）</div><div class="line">元祖的使用在临时组织值时是比oc便利的。</div><div class="line"></div><div class="line">let http200Status = (statusCode: 200, description: &quot;OK&quot;)</div><div class="line">print(&quot;The status code is \(http200Status.statusCode)&quot;)</div><div class="line">// 输出 &quot;The status code is 200&quot;</div><div class="line">print(&quot;The status message is \(http200Status.description)&quot;) // 输出 &quot;The status message is OK&quot;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>可选类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">使用可选类型(optionals)来处理值可能缺失的情况.</div><div class="line">可选类型表示:有值，等于 x或者没有值</div><div class="line">类似于Objective-C 中的nil，但是有很大不同，Objective-C 中的nil只针对于对象，Swift 的可选类型可以让 你暗示任意类型的值缺失，并不需要一个特殊值。</div><div class="line">在 Swift 中， nil 不是指针——它是一个确定的值，用来表示值缺失。任何类型的可选状态都可以被设 置为 nil ，不只是对象类型</div><div class="line">使用方法：在类型标注后面添加一个&apos;?&apos;号</div><div class="line">如果你声明一个可选常量或者变量但是没有赋值，它们会自动被设置为 nil :</div></pre></td></tr></table></figure></p>
-<p>可选绑定(if let使用)</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">使用可选绑定(optional binding)来判断可选类型是否包含值，如果包含就把值赋给一个临时常量或者变 量。</div><div class="line">可选绑定可以用在 if 和 while 语句中，这条语句不仅可以用来判断可选类型中是否有值，同时可以将 可选类型中的值赋给一个常量或者变量。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"> if let actualNumber = Int(possibleNumber) &#123;</div><div class="line">     print(&quot;\&apos;\(possibleNumber)\&apos; has an integer value of \(actualNumber)&quot;)</div><div class="line"> &#125; else &#123;</div><div class="line">     print(&quot;\&apos;\(possibleNumber)\&apos; could not be converted to an integer&quot;)</div><div class="line">&#125;</div><div class="line">// 输出 &quot;&apos;123&apos; has an integer value of 123&quot;</div><div class="line">这段代码可以被理解为:</div><div class="line">“如果 Int(possibleNumber) 返回的可选 Int 包含一个值，创建一个叫做 actualNumber 的新常量并将可选 包含的值赋给它。”</div><div class="line">如果转换成功， actualNumber 常量可以在 if 语句的第一个分支中使用。</div><div class="line">它已经被可选类型 包含的 值初始化 过，所以不需要再使用 ! 后缀来获取它的值。在这个例子中，actualNumber 只被用来输出转换结果。</div><div class="line">你可以在可选绑定中使用常量和变量。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">如果你想在if语句的第一个分支中操作 actualNumber 的值，你可以改 成 if var actualNumber ，这样可选类型包含的值就会被赋给一个变量而非常量。</div><div class="line">你可以包含多个可选绑定或多个布尔条件在一个 if 语句中，只要使用逗号分开就行。</div><div class="line">只要有任意一个可选绑定 的值为nil，或者任意一个布尔条件为false，则整个if条件判断为false，这时你就需要使用嵌套 if 条 件语句来处理</div></pre></td></tr></table></figure>
-<blockquote>
-<p>隐式解析可选类型</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">可选类型暗示了常量或者变量可以“没有值”。</div><div class="line">可选可以通过 if 语句来判断是否有值，如果有值的 话可以通过可选绑定来解析值。</div><div class="line">有时候在程序架构中，第一次被赋值之后，可以确定一个可选类型总会有值。在这种情况下，每次都要判断和解</div><div class="line">析可选值是非常低效的，因为可以确定它总会有值。</div><div class="line">这种类型的可选状态被定义为隐式解析可选类型(implicitly unwrapped optionals)。</div><div class="line">把想要用作可选的类型 的后面的问号( String? )改成感叹号( String! )来声明一个隐式解析可选类型。</div><div class="line">当可选类型被第一次赋值之后就可以确定之后一直有值的时候，隐式解析可选类型非常有用。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">一个隐式解析可选类型其实就是一个普通的可选类型，但是可以被当做非可选类型来使用，并不需要每次都使用 解析来获取可选值。</div><div class="line">下面的例子展示了可选类型 String 和隐式解析可选类型 String 之间的区别:</div><div class="line">let possibleString: String? = &quot;An optional string.&quot;</div><div class="line">let forcedString: String = possibleString! // 需要感叹号来获取值</div><div class="line">let assumedString: String! = &quot;An implicitly unwrapped optional string.&quot; let implicitString: String = assumedString // 不需要感叹号</div><div class="line">你可以把隐式解析可选类型当做一个可以自动解析的可选类型。</div><div class="line">你要做的只是声明的时候把感叹号放到类型的结</div><div class="line">尾，而不是每次取值的可选名字的结尾。</div></pre></td></tr></table></figure>
-<blockquote>
-<p>错误处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">你可以使用 错误处理(error handling) 来应对程序执行中可能会遇到的错误条件。</div><div class="line">相对于可选中运用值的存在与缺失来表达函数的成功与失败，错误处理可以推断失败的原因，并传播至程序的其</div><div class="line">他部分。</div><div class="line">当一个函数遇到错误条件，它能报错。</div><div class="line">调用函数的地方能抛出错误消息并合理处理。</div></pre></td></tr></table></figure></p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func canThrowAnError() throws &#123; // 这个函数有可能抛出错误</div><div class="line">&#125;</div><div class="line">一个函数可以通过在声明中添加   关键词来抛出错误消息。当你的函数能抛出错误消息时, 你应该在表达式 中前置 关键词。</div><div class="line">do &#123;</div><div class="line">try canThrowAnError() // 没有错误消息抛出</div><div class="line">&#125; catch &#123;</div><div class="line">// 有一个错误消息抛出</div><div class="line">&#125;</div><div class="line">一个 语句创建了一个新的包含作用域,使得错误能被传播到一个或多个从句。</div></pre></td></tr></table></figure>
-<blockquote>
-<p>断言</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">可选类型可以让你判断值是否存在，你可以在代码中优 地处理值缺失的情况。</div><div class="line">然而，在某些情况下，如果值缺 失或者值并不满足特定的条件，你的代码可能没办法继续执行。</div><div class="line">这时，你可以在你的代码中触发一个 断言(asse rtion) 来结束代码运行并通过调试来找到值缺失的原因</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">使用断言进行调试</div><div class="line">断言会在运行时判断一个逻辑条件是否为 true 。</div><div class="line">从字面意思来说，断言“断言”一个条件是否为真。你可以使 用断言来保证在运行其他代码之前，某些重要的条件已经被满足。</div><div class="line">如果条件判断为 true ，代码运行会继续进 行;如果条件判断为 false ，代码执行结束，你的应用被终止。</div><div class="line">如果你的代码在调试环境下触发了一个断言，比如你在 Xcode 中构建并运行一个应用，你可以清楚地看到不合法 的状态发生在哪里并检查断言被触发时你的应用的状态。</div><div class="line">此外，断言允许你附加一条调试信息。</div><div class="line">你可以使用全局 assert(_:_:file:line:) 函数来写一个断言。向这个函数传入一个结果为 true 或者 false 的表达式以及一条信息，当表达式的结果为 false 的时候这条信息会被显示:</div><div class="line"></div><div class="line">let age = -3</div><div class="line">assert(age &gt;= 0, &quot;A person&apos;s age cannot be less than zero&quot;) // 因为 age &lt; 0，所以断言会触发</div><div class="line">在这个例子中，只有 age &gt;= 0 为 true 的时候，即 age 的值非负的时候，代码才会继续执行。</div><div class="line">如果 age 的值是负数，就像代码中那样， age &gt;= 0 为 false ，断言被触发，终止应用。</div><div class="line">如果不需要断言信息，可以省略，就像这样: assert(age &gt;= 0)</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">注意:</div><div class="line">当代码使用优化编译的时候，断言将会被禁用，例如在 Xcode 中，使用默认的 target Release 配置选项来 bu ild 时，断言会被禁用</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">何时使用断言</div><div class="line"></div><div class="line">当条件可能为假时使用断言，但是最终一定要保证条件为真，这样你的代码才能继续运行。断言的适用情景:</div><div class="line">• 整数类型的下标索引被传入一个自定义下标实现，但是下标索引值可能太小或者太大。</div><div class="line">• 需要给函数传入一个值，但是非法的值可能导致函数不能正常执行。</div><div class="line">• 一个可选值现在是 nil ，但是后面的代码运行需要一个非 nil 值。</div></pre></td></tr></table></figure>
-<p>参考文章：<a href="https://github.com/numbbbbb/the-swift-programming-language-in-chinese" target="_blank" rel="noopener">中文版 Apple 官方 Swift 教程《The Swift Programming Language》</a></p>
 
           
         
@@ -1614,144 +1759,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/01/iOS接入百度地图SDK-v3-4-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/01/iOS接入百度地图SDK-v3-4-2/" itemprop="url">iOS -接入百度地图SDK3.4.2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-01T20:19:35+08:00">
-                2017-11-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>效果图:<br><img src="http://upload-images.jianshu.io/upload_images/1694376-00c98c804c033846.gif?imageMogr2/auto-orient/strip" alt="地图.gif"></p>
-<p>在使用cocoapod接入百度地图时候，遇到的一些问题，总结如下。</p>
-<blockquote>
-<p>######首先是网络配置以及环境配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">网络配置</div><div class="line">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;</div><div class="line">	&lt;dict&gt;</div><div class="line">		&lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;</div><div class="line">		&lt;true/&gt;</div><div class="line">	&lt;/dict&gt;</div><div class="line">定位允许</div><div class="line">&lt;key&gt;NSLocationWhenInUseUsageDescription&lt;/key&gt;</div></pre></td></tr></table></figure></p>
-<p>接入流程 配置appkey,需要注意的是，百度地图添加了安全码，bundle ID 以及 appkey ，项目名字是一一对应的，否则地图是加载不出来的:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    </div><div class="line">    _mapManager = [[BMKMapManager alloc]init];</div><div class="line">    // 如果要关注网络及授权验证事件，请设定     generalDelegate参数</div><div class="line">    BOOL ret = [_mapManager start:KBaiduMapKey  generalDelegate:nil];</div><div class="line">    if (!ret) &#123;</div><div class="line">        NSLog(@&quot;manager start failed!&quot;);</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>几个技术点</p>
-</blockquote>
-<p>1.地图的精度圈的处理<br>2.是否隐藏我的位置的气泡以及其他气泡。<br>3.计算离我最近点的距离以及显示。<br>4.计算离我最近点的距离，然后添加折线（覆盖物）<br>5.点击其他位置时更新连线（我的位置到点击的大头针的连线， 以及计算距离）</p>
-<p>1地图的精度圈的处理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">-(BMKMapView *)mapView&#123;</div><div class="line">    if (!_mapView) &#123;</div><div class="line">        _mapView =[[BMKMapView alloc]initWithFrame:CGRectMake(0, 104 , Device_Width , Device_Height - 104)];</div><div class="line">        _mapView.zoomLevel = 15;</div><div class="line">        _mapView.minZoomLevel = 5;</div><div class="line">        _mapView.maxZoomLevel = 17;</div><div class="line">        </div><div class="line">        BMKLocationViewDisplayParam *displayParam = [[BMKLocationViewDisplayParam alloc]init];</div><div class="line">        displayParam.isRotateAngleValid = true;//跟随态旋转角度是否生效</div><div class="line">        displayParam.isAccuracyCircleShow = false;//精度圈是否显示</div><div class="line">        displayParam.locationViewOffsetX = 0;//定位偏移量(经度)</div><div class="line">        displayParam.locationViewOffsetY = 0;//定位偏移量（纬度）</div><div class="line">        [_mapView updateLocationViewWithParam:displayParam];</div><div class="line">    &#125;</div><div class="line">    return _mapView;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>2大头针的初始化，<code>annotationView.canShowCallout = NO;//是否显示起泡泡</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">#pragma mark---大头针---</div><div class="line">- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id &lt;BMKAnnotation&gt;)annotation</div><div class="line">&#123;</div><div class="line">    if ([annotation isKindOfClass:[BMKPointAnnotation class]]) &#123;</div><div class="line">        </div><div class="line">        NSString *AnnotationViewID = @&quot;renameMark&quot;;</div><div class="line">        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];</div><div class="line">        if (annotationView == nil) &#123;</div><div class="line">            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];</div><div class="line">             //设置颜色</div><div class="line">                annotationView.pinColor = BMKPinAnnotationColorPurple;</div><div class="line">                // 从天上掉下效果</div><div class="line">                annotationView.animatesDrop = YES;</div><div class="line">                // 设置可拖拽</div><div class="line">                annotationView.draggable = YES;</div><div class="line">//            annotationView.canShowCallout = NO;//是否显示起泡泡</div><div class="line">            annotationView.image =[UIImage imageNamed:@&quot;icon_green&quot;];</div><div class="line">        &#125;</div><div class="line">        return annotationView;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    return nil;</div><div class="line">    </div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>上面的方法可以隐藏其他的气泡。但是我的位置的气泡是没办法隐藏的，查看百度的API，在点击大头针的时候首先会调用下面的方法，所以我们需要在下面处理。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> *当选中一个annotation views时，调用此接口</div><div class="line"> *@param mapView 地图View</div><div class="line"> *@param views 选中的annotation views</div><div class="line"> */</div><div class="line">- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view;</div></pre></td></tr></table></figure>
-<p>处理如下，在点击我的位置的时候可以发现和其他的大头针不一样，是<code>LocationView</code>类型，所以做个判断即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">#pragma mark---点击位置的方法 可屏蔽掉我的位置的气泡--</div><div class="line">- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view&#123;</div><div class="line">//    NSLog(@&quot;%@&quot;,view);</div><div class="line">    </div><div class="line">    if (![view isKindOfClass:NSClassFromString(@&quot;LocationView&quot;)]) &#123;</div><div class="line">        </div><div class="line">        view.canShowCallout = YES;</div><div class="line">        [mapView bringSubviewToFront:view];</div><div class="line">      </div><div class="line">        </div><div class="line">    &#125;else&#123;</div><div class="line">        view.canShowCallout = NO;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>3,4.计算离我最近点的距离、显示，以及初始化，最近点的连线。</p>
-<p>在计算离我最近点距离时候，我们需要在每次更新用户位置的时候进行处理。最新的地图API中下面的方法会不停调用，所以判断是否更新了位置，避免计算距离。计算距离用到百度地图的反编码。<code>BMKReverseGeoCodeOption</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">#pragma mark 用户位置更新后，会调用此函数 新的用户位置---</div><div class="line">- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation</div><div class="line">&#123;</div><div class="line">        NSLog(@&quot;didUpdateUserLocation lat %f,long %f&quot;,userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);</div><div class="line">    [_mapView updateLocationData:userLocation];</div><div class="line">    </div><div class="line">    if (self.userLocation != userLocation) &#123;</div><div class="line">        self.userLocation = userLocation;</div><div class="line">        [self.mapView setCenterCoordinate:userLocation.location.coordinate ];</div><div class="line">        </div><div class="line">        </div><div class="line">        double minDistance = MAXFLOAT;</div><div class="line">        CLLocationCoordinate2D mincoordinate;</div><div class="line">        //获取最近点的距离，然后显示</div><div class="line">        for (BMKPointAnnotation *animation in self.mapView.annotations) &#123;</div><div class="line">            </div><div class="line">            BMKMapPoint point1 =  BMKMapPointForCoordinate(userLocation.location.coordinate);</div><div class="line">            </div><div class="line">              BMKMapPoint point2 = BMKMapPointForCoordinate(animation.coordinate);</div><div class="line">             CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);</div><div class="line">            </div><div class="line">            if (distance &lt;= minDistance) &#123;</div><div class="line">                minDistance= distance;</div><div class="line">                mincoordinate = animation.coordinate; //获得距离最小的经纬度。</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">       </div><div class="line">        //距离</div><div class="line">        self.ditanceLabel.text = [NSString stringWithFormat:@&quot;离我最近%.f 米&quot;,minDistance];</div><div class="line">        </div><div class="line">     //计算最短的距离的时候连线</div><div class="line">        CLLocationCoordinate2D coors[2] = &#123;0&#125;;</div><div class="line">        </div><div class="line">        coors[0].latitude = userLocation.location.coordinate.latitude;</div><div class="line">        coors[0].longitude = userLocation.location.coordinate.longitude;</div><div class="line">        coors[1].latitude = mincoordinate.latitude;</div><div class="line">        coors[1].longitude = mincoordinate.longitude;</div><div class="line">        </div><div class="line">        BMKPolyline* polyline = [BMKPolyline polylineWithCoordinates:coors count:2];</div><div class="line">        [_mapView addOverlay:polyline];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">   </div><div class="line">    //反地理编码</div><div class="line">    BMKReverseGeoCodeOption *reverseOption=[[BMKReverseGeoCodeOption alloc]init];</div><div class="line">    //2.给反向地理编码选项对象的坐标点赋值</div><div class="line">    reverseOption.reverseGeoPoint=userLocation.location.coordinate;</div><div class="line">    //3.执行反地理编码</div><div class="line">    </div><div class="line">  </div><div class="line">    BOOL flag = [self.geocodesearch reverseGeoCode:reverseOption];</div><div class="line">    if(flag)</div><div class="line">    &#123;</div><div class="line">        NSLog(@&quot;反geo检索发送成功&quot;);</div><div class="line">    &#125;</div><div class="line">    else</div><div class="line">    &#123;</div><div class="line">        NSLog(@&quot;反geo检索发送失败&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>计算距离，更新显示–<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#pragma mark---获取反编码的数据---</div><div class="line">-(void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error</div><div class="line">&#123;</div><div class="line">//    BMKAddressComponent *component=[[BMKAddressComponent alloc]init];</div><div class="line">//    component=result.addressDetail;</div><div class="line"> </div><div class="line">    self.geoLabel.text= result.address;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>5.点击其他位置时更新连线（我的位置到点击的大头针的连线， 以及计算距离）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">#pragma mark---点击位置的方法 可屏蔽掉我的位置的气泡--</div><div class="line">- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view&#123;</div><div class="line">//    NSLog(@&quot;%@&quot;,view);</div><div class="line">    </div><div class="line">    if (![view isKindOfClass:NSClassFromString(@&quot;LocationView&quot;)]) &#123;</div><div class="line">        </div><div class="line">        view.canShowCallout = YES;</div><div class="line">        [mapView bringSubviewToFront:view];</div><div class="line">        </div><div class="line">        </div><div class="line">        //下面的是添加折线，（覆盖物）</div><div class="line">        NSArray * array = [NSArray arrayWithArray:_mapView.overlays];</div><div class="line">        [mapView removeOverlays:array];</div><div class="line">        </div><div class="line">        BMKPointAnnotation *animation = view.annotation;</div><div class="line">        //计算最短的距离的时候连线</div><div class="line">        CLLocationCoordinate2D coors[2] = &#123;0&#125;;</div><div class="line">        </div><div class="line">        coors[0].latitude = self.userLocation.location.coordinate.latitude;</div><div class="line">        coors[0].longitude = self.userLocation.location.coordinate.longitude;</div><div class="line">        coors[1].latitude = animation.coordinate.latitude;</div><div class="line">        coors[1].longitude = animation.coordinate.longitude;</div><div class="line">        </div><div class="line">        BMKPolyline* polyline = [BMKPolyline polylineWithCoordinates:coors count:2];</div><div class="line">        [_mapView addOverlay:polyline];</div><div class="line"></div><div class="line">        </div><div class="line">        </div><div class="line">        BMKMapPoint point1 =  BMKMapPointForCoordinate(self.userLocation.location.coordinate);</div><div class="line">        </div><div class="line">        BMKMapPoint point2 = BMKMapPointForCoordinate(animation.coordinate);</div><div class="line">        CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);</div><div class="line">        //距离</div><div class="line">        self.ditanceLabel.text = [NSString stringWithFormat:@&quot;离我距离%.f 米&quot;,distance];</div><div class="line">        [mapView setNeedsDisplay];</div><div class="line">        </div><div class="line">        </div><div class="line">    &#125;else&#123;</div><div class="line">        view.canShowCallout = NO;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>代码需要在真机下运行。<br>demo 地址：<a href="https://github.com/liuxinixn/BaiduTestDemo/tree/master" target="_blank" rel="noopener">百度地图testDemo</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1805,7 +1812,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-count">99</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

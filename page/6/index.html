@@ -262,6 +262,134 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/04/28/封装一个下拉一体效果/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/28/封装一个下拉一体效果/" itemprop="url">iOS封装一个下拉一体效果</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-28T20:19:35+08:00">
+                2017-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://upload-images.jianshu.io/upload_images/1694376-a410f3eb3482518a.gif?imageMogr2/auto-orient/strip" alt="下拉一体‘.gif"></p>
+<p>下拉一体效果，是利用tableview的contentInset。把view添加到tableview上，根据scrollview的滚动实现即可。<br>所以可以封装一个一劳永逸。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#import &lt;Foundation/Foundation.h&gt;</div><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line"></div><div class="line">@interface PullDownZoom : NSObject</div><div class="line">-(instancetype)initWithTableview:(UIScrollView *)tableview headerH:(CGFloat)headerH header:(UIView *)header;</div><div class="line"></div><div class="line">-(void)scrollZoom;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>传入tableview 与需要下拉的view，以及对应的高度,处理如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">#import &quot;PullDownZoom.h&quot;</div><div class="line">#import &quot;UIView+Frame.h&quot;</div><div class="line">@interface PullDownZoom()&lt;UIScrollViewDelegate&gt;</div><div class="line">@property(nonatomic,strong)UIScrollView *tableview;</div><div class="line">@property(nonatomic,assign)CGFloat headerH;</div><div class="line">@property(nonatomic,strong)UIView *header;</div><div class="line">@end</div><div class="line">@implementation PullDownZoom</div><div class="line">-(instancetype)initWithTableview:(UIScrollView *)tableview headerH:(CGFloat)headerH header:(UIView *)header</div><div class="line">&#123;</div><div class="line">    </div><div class="line">    self = [super init];</div><div class="line">    if (self) &#123;</div><div class="line">        self.tableview = tableview;</div><div class="line">        </div><div class="line">      </div><div class="line">        self.tableview.delegate = self;</div><div class="line">        self.headerH = headerH;</div><div class="line">        self.header = header;</div><div class="line">        </div><div class="line">        self.tableview.contentInset = UIEdgeInsetsMake(self.headerH, 0, 0, 0);</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">-(void)scrollZoom&#123;</div><div class="line">    [self scrollViewDidScroll:self.tableview];</div><div class="line">&#125;</div><div class="line">-(void)scrollViewDidScroll:(UIScrollView *)scrollView&#123;</div><div class="line">    </div><div class="line">    CGFloat y = scrollView.contentOffset.y;</div><div class="line">    </div><div class="line">    if ( y  &lt; - self.headerH) &#123;</div><div class="line">        self.header.y  = y;</div><div class="line">        self.header.height = -y;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>####所以只需要两步，即可。</p>
+<p>1、第一步：引入，初始化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">self.zoom =  [[PullDownZoom alloc]initWithTableview:self.tableview headerH:300 header:self.header];</div></pre></td></tr></table></figure></p>
+<p>2、第二步：在scrollview滚动的地方设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-(void)scrollViewDidScroll:(UIScrollView *)scrollView&#123;</div><div class="line"></div><div class="line">    [self.zoom scrollZoom];</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>demo地址：<a href="https://github.com/liuxinixn/pullDownStretch" target="_blank" rel="noopener">下拉一体</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/04/09/iOS-自定义弹框/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1461,143 +1589,6 @@ UIButton *button =[textFild valueForKey:@&quot;_clearButton&quot;];
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/04/使用系统的或TTTAttributedLabel检索网址/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/03/04/使用系统的或TTTAttributedLabel检索网址/" itemprop="url">使用系统的或TTTAttributedLabel检索网址</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T20:19:35+08:00">
-                2017-03-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#####先立个flag，在检测网址链接的过程中，不管是使用 NSDataDetector还是TTTAttributedLabel 做检索网址，其实TTTAttributedLabel也是使用系统的检索网址，先记录一下发现的问题。</p>
-<ul>
-<li><p>如果网址是这样的<br><code>http://www.jianshu.com下雨天的</code><br>检索的结果是不准确的 ，结果检索到的网址是<code>http://www.jianshu.com下雨天的</code></p>
-</li>
-<li><p>如果网址是这样的<br><code>http://www.jianshu.com/下雨天的</code><br>检索结果是一样的，不准确</p>
-</li>
-<li><p>如果网址是这样的去掉了协议头，并且网址和文字中间没有空格，<br><code>www.jianshu.com下雨天的</code><br>#####结果检索到的网址是<code>www.jianshu.com</code> 正确</p>
-</li>
-<li><p>如果网址和文字中间#有#空格，有没有协议头都一样<br><code>http://www.jianshu.com 下雨天的</code><br>#####结果检索到的网址是<code>http://www.jianshu.com</code> 正确</p>
-</li>
-</ul>
-<blockquote>
-<p>发现好多第三方，都是采用系统自带的检测网址或者电话号码， 电话号码还好点但是网址总是检测不准。</p>
-</blockquote>
-<p>正确的姿势应该是这样的：<br>检测网址与电话：<br><code>// url链接的规则
-    NSString *urlPattern = @&quot;((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(((http[s]{0,1}|ftp)://|)((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)&quot;;
-    NSString *phoneNumber =@&quot;\\d{3}-\\d{8}|\\d{4}-\\d{7}|\\d{11}&quot;
-    ;</code><br>下一篇分析下如何利用正则检索网址与电话号码，表情，并且实现富文本的多行与完成显示的切换。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1651,7 +1642,7 @@ UIButton *button =[textFild valueForKey:@&quot;_clearButton&quot;];
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-count">99</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

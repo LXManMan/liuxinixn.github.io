@@ -382,6 +382,143 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/04/使用系统的或TTTAttributedLabel检索网址/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/04/使用系统的或TTTAttributedLabel检索网址/" itemprop="url">使用系统的或TTTAttributedLabel检索网址</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T20:19:35+08:00">
+                2017-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#####先立个flag，在检测网址链接的过程中，不管是使用 NSDataDetector还是TTTAttributedLabel 做检索网址，其实TTTAttributedLabel也是使用系统的检索网址，先记录一下发现的问题。</p>
+<ul>
+<li><p>如果网址是这样的<br><code>http://www.jianshu.com下雨天的</code><br>检索的结果是不准确的 ，结果检索到的网址是<code>http://www.jianshu.com下雨天的</code></p>
+</li>
+<li><p>如果网址是这样的<br><code>http://www.jianshu.com/下雨天的</code><br>检索结果是一样的，不准确</p>
+</li>
+<li><p>如果网址是这样的去掉了协议头，并且网址和文字中间没有空格，<br><code>www.jianshu.com下雨天的</code><br>#####结果检索到的网址是<code>www.jianshu.com</code> 正确</p>
+</li>
+<li><p>如果网址和文字中间#有#空格，有没有协议头都一样<br><code>http://www.jianshu.com 下雨天的</code><br>#####结果检索到的网址是<code>http://www.jianshu.com</code> 正确</p>
+</li>
+</ul>
+<blockquote>
+<p>发现好多第三方，都是采用系统自带的检测网址或者电话号码， 电话号码还好点但是网址总是检测不准。</p>
+</blockquote>
+<p>正确的姿势应该是这样的：<br>检测网址与电话：<br><code>// url链接的规则
+    NSString *urlPattern = @&quot;((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(((http[s]{0,1}|ftp)://|)((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)&quot;;
+    NSString *phoneNumber =@&quot;\\d{3}-\\d{8}|\\d{4}-\\d{7}|\\d{11}&quot;
+    ;</code><br>下一篇分析下如何利用正则检索网址与电话号码，表情，并且实现富文本的多行与完成显示的切换。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/03/如何利用CoreGraphics绘制一个渐变色图片，渐变色仿QQNavBar/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -767,131 +904,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/07/iOS-环信3-2-3-离线推送，坑点/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/02/07/iOS-环信3-2-3-离线推送，坑点/" itemprop="url">iOS -环信3.2.3 离线推送，坑点</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-07T20:19:35+08:00">
-                2017-02-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在使用环信做离线推送时，环信文档后台的扩展消息的格式是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">    &quot;target_type&quot;:&quot;users&quot;,</div><div class="line">    &quot;target&quot;:[</div><div class="line">        &quot;6006&quot;</div><div class="line">    ],</div><div class="line">    &quot;msg&quot;:&#123;</div><div class="line">        &quot;type&quot;:&quot;txt&quot;,</div><div class="line">        &quot;msg&quot;:&quot;hello from rest&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;from&quot;:&quot;6001&quot;,</div><div class="line">    &quot;ext&quot;:&#123;</div><div class="line">        &quot;em_apns_ext&quot;:&quot;扩展内容&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>假如你们公司对ext 进行了扩展，类似下面的的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;em_apns_ext&quot; =     &#123;</div><div class="line">        &quot;em_push_title&quot; = &quot;\U5218\U65b0:testing&quot;;</div><div class="line">        &quot;model_type&quot; = 105002;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>######其中em_apns_ext,以及em_push_title 是必须的，字段名字不能变，后面可以扩展你需要的内容，作为跳转使用。</p>
-<p>然后 看一下 环信文档显示消息的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;aps&quot;:&#123;</div><div class="line">        &quot;alert&quot;:&quot;您有一条新消息&quot;,	 </div><div class="line">        &quot;badge&quot;:1,				 </div><div class="line">        &quot;sound&quot;:&quot;default&quot;		 </div><div class="line">    &#125;,</div><div class="line">    &quot;f&quot;:&quot;6001&quot;,					 </div><div class="line">    &quot;t&quot;:&quot;6006&quot;,					 </div><div class="line">    &quot;e&quot;:&quot;扩展内容&quot;,</div><div class="line">    &quot;m&quot;:&quot;14aec1e00ef&quot;			 </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>后台规定的字段em_push_title，是最终展示在消息通知中 的 alert，消息的具体内容。<br>那么扩展的字段在哪里展示呢？ 在上面的字段<code>e</code> 里，是一个字典，字典e 里的字段就是后台在ext 扩展的字段,意义对应。比如这里e里 只有：<br>{<br> “model_type” = 105002;<br>}</p>
-<p>在线消息的通知我们可以自己来实现，但是离线的字段是固定的。需要注意下。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/07/iOS-环信3-2-3-集成聊天，语音，视频，通话/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -986,6 +998,131 @@
 <p>######最后说一下环信的推送：</p>
 <p>环信的推送应用在后台是不会推送的，需要在接收消息的地方，判断当前应用的活跃状态，然后做本地推送。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">- (void)didReceiveMessages:(NSArray *)aMessages</div><div class="line">&#123;</div><div class="line">    BOOL isRefreshCons = YES;</div><div class="line">    for(EMMessage *message in aMessages)&#123;</div><div class="line">        BOOL needShowNotification = (message.chatType != EMChatTypeChat) ? [self _needShowNotification:message.conversationId] : YES;</div><div class="line">        </div><div class="line"></div><div class="line">        UIApplicationState state = [[UIApplication sharedApplication] applicationState];</div><div class="line">        if (needShowNotification) &#123;</div><div class="line">#if !TARGET_IPHONE_SIMULATOR</div><div class="line">            switch (state) &#123;</div><div class="line">                case UIApplicationStateActive:</div><div class="line">                    [self.mainVC playSoundAndVibration];</div><div class="line">                    break;</div><div class="line">                case UIApplicationStateInactive:</div><div class="line">                    [self.mainVC playSoundAndVibration];</div><div class="line">                    break;</div><div class="line">                case UIApplicationStateBackground:</div><div class="line">                    [self.mainVC showNotificationWithMessage:message];</div><div class="line">                    break;</div><div class="line">                default:</div><div class="line">                    break;</div><div class="line">            &#125;</div><div class="line">#endif</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        if (_chatVC == nil) &#123;</div><div class="line">            _chatVC = [self _getCurrentChatView];</div><div class="line">        &#125;</div><div class="line">        BOOL isChatting = NO;</div><div class="line">        if (_chatVC) &#123;</div><div class="line">            isChatting = [message.conversationId isEqualToString:_chatVC.conversation.conversationId];</div><div class="line">        &#125;</div><div class="line">        if (_chatVC == nil || !isChatting || state == UIApplicationStateBackground) &#123;</div><div class="line">            [self _handleReceivedAtMessage:message];</div><div class="line">            </div><div class="line">            if (self.conversationListVC) &#123;</div><div class="line">                [_conversationListVC refresh];</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            if (self.mainVC) &#123;</div><div class="line">                [_mainVC setupUnreadMessageCount];</div><div class="line">            &#125;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        if (isChatting) &#123;</div><div class="line">            isRefreshCons = NO;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if (isRefreshCons) &#123;</div><div class="line">        if (self.conversationListVC) &#123;</div><div class="line">            [_conversationListVC refresh];</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        if (self.mainVC) &#123;</div><div class="line">            [_mainVC setupUnreadMessageCount];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>好了，基本功能都实现了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/07/iOS-环信3-2-3-离线推送，坑点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/02/07/iOS-环信3-2-3-离线推送，坑点/" itemprop="url">iOS -环信3.2.3 离线推送，坑点</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-07T20:19:35+08:00">
+                2017-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在使用环信做离线推送时，环信文档后台的扩展消息的格式是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">    &quot;target_type&quot;:&quot;users&quot;,</div><div class="line">    &quot;target&quot;:[</div><div class="line">        &quot;6006&quot;</div><div class="line">    ],</div><div class="line">    &quot;msg&quot;:&#123;</div><div class="line">        &quot;type&quot;:&quot;txt&quot;,</div><div class="line">        &quot;msg&quot;:&quot;hello from rest&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;from&quot;:&quot;6001&quot;,</div><div class="line">    &quot;ext&quot;:&#123;</div><div class="line">        &quot;em_apns_ext&quot;:&quot;扩展内容&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>假如你们公司对ext 进行了扩展，类似下面的的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;em_apns_ext&quot; =     &#123;</div><div class="line">        &quot;em_push_title&quot; = &quot;\U5218\U65b0:testing&quot;;</div><div class="line">        &quot;model_type&quot; = 105002;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>######其中em_apns_ext,以及em_push_title 是必须的，字段名字不能变，后面可以扩展你需要的内容，作为跳转使用。</p>
+<p>然后 看一下 环信文档显示消息的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;aps&quot;:&#123;</div><div class="line">        &quot;alert&quot;:&quot;您有一条新消息&quot;,	 </div><div class="line">        &quot;badge&quot;:1,				 </div><div class="line">        &quot;sound&quot;:&quot;default&quot;		 </div><div class="line">    &#125;,</div><div class="line">    &quot;f&quot;:&quot;6001&quot;,					 </div><div class="line">    &quot;t&quot;:&quot;6006&quot;,					 </div><div class="line">    &quot;e&quot;:&quot;扩展内容&quot;,</div><div class="line">    &quot;m&quot;:&quot;14aec1e00ef&quot;			 </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>后台规定的字段em_push_title，是最终展示在消息通知中 的 alert，消息的具体内容。<br>那么扩展的字段在哪里展示呢？ 在上面的字段<code>e</code> 里，是一个字典，字典e 里的字段就是后台在ext 扩展的字段,意义对应。比如这里e里 只有：<br>{<br> “model_type” = 105002;<br>}</p>
+<p>在线消息的通知我们可以自己来实现，但是离线的字段是固定的。需要注意下。</p>
 
           
         
@@ -1404,137 +1541,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/07/09/iOS-内存检测Instruments之Leaks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/07/09/iOS-内存检测Instruments之Leaks/" itemprop="url">iOS -内存检测Instruments之Leaks</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-09T20:19:35+08:00">
-                2016-07-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>动态检测内存工具Leaks，可以和静态分析工具Analyze配合使用。<br><code>cmd + I</code>进入 Leaks 主界面，</p>
-<p>#######第一步：点击左上角的红色录制按钮，会重启模拟器或者手机，点击暂停可以进行测试。<br><img src="http://upload-images.jianshu.io/upload_images/1694376-92dcf784dd366981.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-6a8f6ff5ea01903d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
-<p>#######第二步：然后 点击应用，进入界面，测试，如果出现红X，点击暂停按钮暂停，开始查找内存泄漏的地方。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-9206d4d535f67f4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
-<p>#######第三步：点击Leak Checks按钮，选择要定位的区域，红色❌号标识前后。选择CallTree，会定位到具体的方法。右侧面板配置如图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-01354a2229ee2ec5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
-<p>#######第四步：最后双击需要检测的地方跳转到Xcode，定位代码。</p>
-<blockquote>
-<p>最后简单使用Time Profiler检测耗时的代码.面板配置同Leaks。</p>
-</blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-8f794c0c019ff50f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p>之前用Time Profiler 检测过UIImage 加载两种方式的区别。<a href="http://www.jianshu.com/p/a700dcf27b83" target="_blank" rel="noopener">UIImageview加载动画做内存与耗时</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1588,7 +1594,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-count">99</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

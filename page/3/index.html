@@ -262,6 +262,144 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/11/01/iOS接入百度地图SDK-v3-4-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/01/iOS接入百度地图SDK-v3-4-2/" itemprop="url">iOS -接入百度地图SDK3.4.2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-01T20:19:35+08:00">
+                2017-11-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>效果图:<br><img src="http://upload-images.jianshu.io/upload_images/1694376-00c98c804c033846.gif?imageMogr2/auto-orient/strip" alt="地图.gif"></p>
+<p>在使用cocoapod接入百度地图时候，遇到的一些问题，总结如下。</p>
+<blockquote>
+<p>######首先是网络配置以及环境配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">网络配置</div><div class="line">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;</div><div class="line">	&lt;dict&gt;</div><div class="line">		&lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;</div><div class="line">		&lt;true/&gt;</div><div class="line">	&lt;/dict&gt;</div><div class="line">定位允许</div><div class="line">&lt;key&gt;NSLocationWhenInUseUsageDescription&lt;/key&gt;</div></pre></td></tr></table></figure></p>
+<p>接入流程 配置appkey,需要注意的是，百度地图添加了安全码，bundle ID 以及 appkey ，项目名字是一一对应的，否则地图是加载不出来的:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    </div><div class="line">    _mapManager = [[BMKMapManager alloc]init];</div><div class="line">    // 如果要关注网络及授权验证事件，请设定     generalDelegate参数</div><div class="line">    BOOL ret = [_mapManager start:KBaiduMapKey  generalDelegate:nil];</div><div class="line">    if (!ret) &#123;</div><div class="line">        NSLog(@&quot;manager start failed!&quot;);</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>几个技术点</p>
+</blockquote>
+<p>1.地图的精度圈的处理<br>2.是否隐藏我的位置的气泡以及其他气泡。<br>3.计算离我最近点的距离以及显示。<br>4.计算离我最近点的距离，然后添加折线（覆盖物）<br>5.点击其他位置时更新连线（我的位置到点击的大头针的连线， 以及计算距离）</p>
+<p>1地图的精度圈的处理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">-(BMKMapView *)mapView&#123;</div><div class="line">    if (!_mapView) &#123;</div><div class="line">        _mapView =[[BMKMapView alloc]initWithFrame:CGRectMake(0, 104 , Device_Width , Device_Height - 104)];</div><div class="line">        _mapView.zoomLevel = 15;</div><div class="line">        _mapView.minZoomLevel = 5;</div><div class="line">        _mapView.maxZoomLevel = 17;</div><div class="line">        </div><div class="line">        BMKLocationViewDisplayParam *displayParam = [[BMKLocationViewDisplayParam alloc]init];</div><div class="line">        displayParam.isRotateAngleValid = true;//跟随态旋转角度是否生效</div><div class="line">        displayParam.isAccuracyCircleShow = false;//精度圈是否显示</div><div class="line">        displayParam.locationViewOffsetX = 0;//定位偏移量(经度)</div><div class="line">        displayParam.locationViewOffsetY = 0;//定位偏移量（纬度）</div><div class="line">        [_mapView updateLocationViewWithParam:displayParam];</div><div class="line">    &#125;</div><div class="line">    return _mapView;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2大头针的初始化，<code>annotationView.canShowCallout = NO;//是否显示起泡泡</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">#pragma mark---大头针---</div><div class="line">- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id &lt;BMKAnnotation&gt;)annotation</div><div class="line">&#123;</div><div class="line">    if ([annotation isKindOfClass:[BMKPointAnnotation class]]) &#123;</div><div class="line">        </div><div class="line">        NSString *AnnotationViewID = @&quot;renameMark&quot;;</div><div class="line">        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];</div><div class="line">        if (annotationView == nil) &#123;</div><div class="line">            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];</div><div class="line">             //设置颜色</div><div class="line">                annotationView.pinColor = BMKPinAnnotationColorPurple;</div><div class="line">                // 从天上掉下效果</div><div class="line">                annotationView.animatesDrop = YES;</div><div class="line">                // 设置可拖拽</div><div class="line">                annotationView.draggable = YES;</div><div class="line">//            annotationView.canShowCallout = NO;//是否显示起泡泡</div><div class="line">            annotationView.image =[UIImage imageNamed:@&quot;icon_green&quot;];</div><div class="line">        &#125;</div><div class="line">        return annotationView;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    return nil;</div><div class="line">    </div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上面的方法可以隐藏其他的气泡。但是我的位置的气泡是没办法隐藏的，查看百度的API，在点击大头针的时候首先会调用下面的方法，所以我们需要在下面处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> *当选中一个annotation views时，调用此接口</div><div class="line"> *@param mapView 地图View</div><div class="line"> *@param views 选中的annotation views</div><div class="line"> */</div><div class="line">- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view;</div></pre></td></tr></table></figure>
+<p>处理如下，在点击我的位置的时候可以发现和其他的大头针不一样，是<code>LocationView</code>类型，所以做个判断即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">#pragma mark---点击位置的方法 可屏蔽掉我的位置的气泡--</div><div class="line">- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view&#123;</div><div class="line">//    NSLog(@&quot;%@&quot;,view);</div><div class="line">    </div><div class="line">    if (![view isKindOfClass:NSClassFromString(@&quot;LocationView&quot;)]) &#123;</div><div class="line">        </div><div class="line">        view.canShowCallout = YES;</div><div class="line">        [mapView bringSubviewToFront:view];</div><div class="line">      </div><div class="line">        </div><div class="line">    &#125;else&#123;</div><div class="line">        view.canShowCallout = NO;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3,4.计算离我最近点的距离、显示，以及初始化，最近点的连线。</p>
+<p>在计算离我最近点距离时候，我们需要在每次更新用户位置的时候进行处理。最新的地图API中下面的方法会不停调用，所以判断是否更新了位置，避免计算距离。计算距离用到百度地图的反编码。<code>BMKReverseGeoCodeOption</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">#pragma mark 用户位置更新后，会调用此函数 新的用户位置---</div><div class="line">- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation</div><div class="line">&#123;</div><div class="line">        NSLog(@&quot;didUpdateUserLocation lat %f,long %f&quot;,userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);</div><div class="line">    [_mapView updateLocationData:userLocation];</div><div class="line">    </div><div class="line">    if (self.userLocation != userLocation) &#123;</div><div class="line">        self.userLocation = userLocation;</div><div class="line">        [self.mapView setCenterCoordinate:userLocation.location.coordinate ];</div><div class="line">        </div><div class="line">        </div><div class="line">        double minDistance = MAXFLOAT;</div><div class="line">        CLLocationCoordinate2D mincoordinate;</div><div class="line">        //获取最近点的距离，然后显示</div><div class="line">        for (BMKPointAnnotation *animation in self.mapView.annotations) &#123;</div><div class="line">            </div><div class="line">            BMKMapPoint point1 =  BMKMapPointForCoordinate(userLocation.location.coordinate);</div><div class="line">            </div><div class="line">              BMKMapPoint point2 = BMKMapPointForCoordinate(animation.coordinate);</div><div class="line">             CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);</div><div class="line">            </div><div class="line">            if (distance &lt;= minDistance) &#123;</div><div class="line">                minDistance= distance;</div><div class="line">                mincoordinate = animation.coordinate; //获得距离最小的经纬度。</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">       </div><div class="line">        //距离</div><div class="line">        self.ditanceLabel.text = [NSString stringWithFormat:@&quot;离我最近%.f 米&quot;,minDistance];</div><div class="line">        </div><div class="line">     //计算最短的距离的时候连线</div><div class="line">        CLLocationCoordinate2D coors[2] = &#123;0&#125;;</div><div class="line">        </div><div class="line">        coors[0].latitude = userLocation.location.coordinate.latitude;</div><div class="line">        coors[0].longitude = userLocation.location.coordinate.longitude;</div><div class="line">        coors[1].latitude = mincoordinate.latitude;</div><div class="line">        coors[1].longitude = mincoordinate.longitude;</div><div class="line">        </div><div class="line">        BMKPolyline* polyline = [BMKPolyline polylineWithCoordinates:coors count:2];</div><div class="line">        [_mapView addOverlay:polyline];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">   </div><div class="line">    //反地理编码</div><div class="line">    BMKReverseGeoCodeOption *reverseOption=[[BMKReverseGeoCodeOption alloc]init];</div><div class="line">    //2.给反向地理编码选项对象的坐标点赋值</div><div class="line">    reverseOption.reverseGeoPoint=userLocation.location.coordinate;</div><div class="line">    //3.执行反地理编码</div><div class="line">    </div><div class="line">  </div><div class="line">    BOOL flag = [self.geocodesearch reverseGeoCode:reverseOption];</div><div class="line">    if(flag)</div><div class="line">    &#123;</div><div class="line">        NSLog(@&quot;反geo检索发送成功&quot;);</div><div class="line">    &#125;</div><div class="line">    else</div><div class="line">    &#123;</div><div class="line">        NSLog(@&quot;反geo检索发送失败&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>计算距离，更新显示–<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#pragma mark---获取反编码的数据---</div><div class="line">-(void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error</div><div class="line">&#123;</div><div class="line">//    BMKAddressComponent *component=[[BMKAddressComponent alloc]init];</div><div class="line">//    component=result.addressDetail;</div><div class="line"> </div><div class="line">    self.geoLabel.text= result.address;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>5.点击其他位置时更新连线（我的位置到点击的大头针的连线， 以及计算距离）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">#pragma mark---点击位置的方法 可屏蔽掉我的位置的气泡--</div><div class="line">- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view&#123;</div><div class="line">//    NSLog(@&quot;%@&quot;,view);</div><div class="line">    </div><div class="line">    if (![view isKindOfClass:NSClassFromString(@&quot;LocationView&quot;)]) &#123;</div><div class="line">        </div><div class="line">        view.canShowCallout = YES;</div><div class="line">        [mapView bringSubviewToFront:view];</div><div class="line">        </div><div class="line">        </div><div class="line">        //下面的是添加折线，（覆盖物）</div><div class="line">        NSArray * array = [NSArray arrayWithArray:_mapView.overlays];</div><div class="line">        [mapView removeOverlays:array];</div><div class="line">        </div><div class="line">        BMKPointAnnotation *animation = view.annotation;</div><div class="line">        //计算最短的距离的时候连线</div><div class="line">        CLLocationCoordinate2D coors[2] = &#123;0&#125;;</div><div class="line">        </div><div class="line">        coors[0].latitude = self.userLocation.location.coordinate.latitude;</div><div class="line">        coors[0].longitude = self.userLocation.location.coordinate.longitude;</div><div class="line">        coors[1].latitude = animation.coordinate.latitude;</div><div class="line">        coors[1].longitude = animation.coordinate.longitude;</div><div class="line">        </div><div class="line">        BMKPolyline* polyline = [BMKPolyline polylineWithCoordinates:coors count:2];</div><div class="line">        [_mapView addOverlay:polyline];</div><div class="line"></div><div class="line">        </div><div class="line">        </div><div class="line">        BMKMapPoint point1 =  BMKMapPointForCoordinate(self.userLocation.location.coordinate);</div><div class="line">        </div><div class="line">        BMKMapPoint point2 = BMKMapPointForCoordinate(animation.coordinate);</div><div class="line">        CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);</div><div class="line">        //距离</div><div class="line">        self.ditanceLabel.text = [NSString stringWithFormat:@&quot;离我距离%.f 米&quot;,distance];</div><div class="line">        [mapView setNeedsDisplay];</div><div class="line">        </div><div class="line">        </div><div class="line">    &#125;else&#123;</div><div class="line">        view.canShowCallout = NO;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>代码需要在真机下运行。<br>demo 地址：<a href="https://github.com/liuxinixn/BaiduTestDemo/tree/master" target="_blank" rel="noopener">百度地图testDemo</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/10/09/iOS-通联支付/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1415,129 +1553,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/05/iOS-关乎绘制圆弧的一个细节/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/05/iOS-关乎绘制圆弧的一个细节/" itemprop="url">iOS --关于绘制圆弧的一个细节</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-05T20:19:35+08:00">
-                2017-08-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="http://upload-images.jianshu.io/upload_images/1694376-09b88e5516654b64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">#import &quot;LXBezierPathView.h&quot;</div><div class="line">@interface LXBezierPathView()</div><div class="line">@property(nonatomic,strong)UILabel *lable;</div><div class="line">@end</div><div class="line">@implementation LXBezierPathView</div><div class="line"></div><div class="line">-(instancetype)initWithFrame:(CGRect)frame</div><div class="line">&#123;</div><div class="line">    self = [super initWithFrame:frame];</div><div class="line">    if (self) &#123;</div><div class="line">        </div><div class="line">        </div><div class="line">        self.lable =[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];</div><div class="line">        self.lable.text = @&quot;哈哈哈&quot;;</div><div class="line">        self.lable.textAlignment = NSTextAlignmentCenter;</div><div class="line">        self.lable.center = CGPointMake((frame.size.width )/2, (frame.size.width)/2);</div><div class="line">        </div><div class="line">        [self addSubview:self.lable];</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">-(void)drawRect:(CGRect)rect&#123;</div><div class="line">    CAShapeLayer *shapeLayer =[[CAShapeLayer alloc]init];</div><div class="line">    </div><div class="line">    shapeLayer.frame = CGRectMake(0, 0, rect.size.width, rect.size.width);</div><div class="line">    shapeLayer.lineWidth = 10;</div><div class="line">    </div><div class="line">    shapeLayer.fillColor =[UIColor clearColor].CGColor;</div><div class="line">    shapeLayer.strokeColor =[UIColor redColor].CGColor;</div><div class="line">    </div><div class="line">    </div><div class="line">    CGPoint center =  CGPointMake((rect.size.width )/2, (rect.size.width)/2);</div><div class="line">   </div><div class="line">    UIBezierPath *bezierPath =[UIBezierPath bezierPathWithArcCenter:center radius:(rect.size.width )/2 startAngle:-0.5 *M_PI endAngle:0.5 *M_PI clockwise:YES];</div><div class="line">    shapeLayer.path = bezierPath.CGPath;</div><div class="line">    </div><div class="line">    [self.layer insertSublayer:shapeLayer above:shapeLayer];</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>我们绘制圆弧的时候，会设置贝塞尔曲线的半径为view的一半， 可是真正显示出来，会发现多了一点。这一点的长度刚好是线宽的一般。</p>
-<p>所以需要处理的是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UIBezierPath *bezierPath =[UIBezierPath bezierPathWithArcCenter:center radius:(rect.size.width  - 线宽)/2 startAngle:-0.5 *M_PI endAngle:0.5 *M_PI clockwise:YES];</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1591,7 +1606,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-count">99</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

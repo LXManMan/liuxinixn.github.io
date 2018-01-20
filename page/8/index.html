@@ -262,6 +262,137 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/07/09/iOS-内存检测Instruments之Leaks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/07/09/iOS-内存检测Instruments之Leaks/" itemprop="url">iOS -内存检测Instruments之Leaks</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-09T20:19:35+08:00">
+                2016-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>动态检测内存工具Leaks，可以和静态分析工具Analyze配合使用。<br><code>cmd + I</code>进入 Leaks 主界面，</p>
+<p>#######第一步：点击左上角的红色录制按钮，会重启模拟器或者手机，点击暂停可以进行测试。<br><img src="http://upload-images.jianshu.io/upload_images/1694376-92dcf784dd366981.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-6a8f6ff5ea01903d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p>#######第二步：然后 点击应用，进入界面，测试，如果出现红X，点击暂停按钮暂停，开始查找内存泄漏的地方。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-9206d4d535f67f4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
+<p>#######第三步：点击Leak Checks按钮，选择要定位的区域，红色❌号标识前后。选择CallTree，会定位到具体的方法。右侧面板配置如图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-01354a2229ee2ec5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
+<p>#######第四步：最后双击需要检测的地方跳转到Xcode，定位代码。</p>
+<blockquote>
+<p>最后简单使用Time Profiler检测耗时的代码.面板配置同Leaks。</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-8f794c0c019ff50f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>之前用Time Profiler 检测过UIImage 加载两种方式的区别。<a href="http://www.jianshu.com/p/a700dcf27b83" target="_blank" rel="noopener">UIImageview加载动画做内存与耗时</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/07/05/ios--UITableView三级展开/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -357,128 +488,6 @@
 </blockquote>
 <p>#####所有的展开与收起  额外计算，只需要刷新整体或者刷新分区即可，改变分区个数与分区内对应cell 个数，不需要对cell 做insert 或者delete操作。</p>
 <p>demo 地址：<a href="https://github.com/liuxinixn/Tableview-/tree/master" target="_blank" rel="noopener">UITableview三级展开</a><br>参考文章：<a href="http://www.jianshu.com/p/fc45624603f6" target="_blank" rel="noopener">UITableView分区展开与收起</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/06/03/Coregraphics切反向圆角/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/06/03/Coregraphics切反向圆角/" itemprop="url">CoreGraphices -切反向圆角</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-03T20:19:35+08:00">
-                2016-06-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>效果图<br><img src="http://upload-images.jianshu.io/upload_images/1694376-efefdd1b6916140a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="E1819704-B84B-4741-BB28-4B87A1883EDF.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">    UIImageView *iamgeview =[[UIImageView alloc]initWithFrame:CGRectMake(20, 100, 200, 200)];</div><div class="line">    UIImage *image = [UIImage imageNamed:@&quot;gougou&quot;];</div><div class="line"></div><div class="line">//    iamgeview.image =</div><div class="line">    iamgeview.image = [self addClipWithImage:image];</div><div class="line"></div><div class="line">    [self.view addSubview:iamgeview];</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">-(UIImage *)addClipWithImage:(UIImage *)image&#123;</div><div class="line">    </div><div class="line">    //1、开启上下文</div><div class="line">    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);</div><div class="line">   </div><div class="line">    //2、设置裁剪区域</div><div class="line">    //    UIBezierPath * path = [UIBezierPath bezierPathWithOvalInRect:rect];</div><div class="line"> </div><div class="line">    </div><div class="line">    UIBezierPath * path = [UIBezierPath bezierPathWithRect:CGRectMake(0,0,image.size.width, image.size.height)];</div><div class="line">    </div><div class="line">    [path addArcWithCenter:CGPointMake(image.size.width, 0) radius:10 startAngle:- M_PI  endAngle:-M_2_PI clockwise:NO];</div><div class="line">    [path closePath];</div><div class="line">    [path addClip];</div><div class="line">    //3、绘制图片</div><div class="line">    [image drawAtPoint:CGPointZero];</div><div class="line">    //4、获取新图片</div><div class="line">    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    //5、关闭上下文</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    //6、返回新图片</div><div class="line">    return newImage;</div><div class="line"></div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
           
         
@@ -650,6 +659,128 @@
 <p>替换掉博主的选择相册。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">TZImagePickerController *pickerController = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];</div><div class="line">   </div><div class="line">   NCWS(weakSelf);</div><div class="line">   </div><div class="line">   [pickerController setDidFinishPickingPhotosHandle:^(NSArray&lt;UIImage *&gt; *photo, NSArray *assets, BOOL isSelectOriginalPhoto)&#123;</div><div class="line">       </div><div class="line">       NSLog(@&quot;%@&quot;,photo);</div><div class="line">       </div><div class="line">       UIImage *image = photo[0];</div><div class="line">              // CIDetector(CIDetector可用于人脸识别)进行图片解析，从而使我们可以便捷的从相册中获取到二维码</div><div class="line">       // 声明一个 CIDetector，并设定识别类型 CIDetectorTypeQRCode</div><div class="line">       CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeQRCode context:nil options:@&#123;CIDetectorAccuracy: CIDetectorAccuracyHigh&#125;];</div><div class="line">       </div><div class="line">       // 取得识别结果</div><div class="line">       NSArray *features = [detector featuresInImage:[CIImage imageWithCGImage:image.CGImage]];</div><div class="line">       </div><div class="line">       if (features.count == 0) &#123;</div><div class="line">           </div><div class="line">       &#125;else&#123;</div><div class="line">           for (int index = 0; index &lt; [features count]; index ++) &#123;</div><div class="line">               CIQRCodeFeature *feature = [features objectAtIndex:index];</div><div class="line">               NSString *resultStr = feature.messageString;</div><div class="line">               weakSelf.detectorString = resultStr;</div><div class="line">              </div><div class="line">           &#125;</div><div class="line">           NSString *result = weakSelf.detectorString;</div><div class="line">           </div><div class="line">               if ([result hasPrefix:@&quot;http&quot;]) &#123;</div><div class="line">                   ScanSuccessJumpVC *jumpVC = [[ScanSuccessJumpVC alloc] init];</div><div class="line">                   jumpVC.jump_URL = result;</div><div class="line">                   [self.navigationController pushViewController:jumpVC animated:YES];</div><div class="line">           </div><div class="line">               &#125; else &#123;</div><div class="line">                   ScanSuccessJumpVC *jumpVC = [[ScanSuccessJumpVC alloc] init];</div><div class="line">                   jumpVC.jump_bar_code = result;</div><div class="line">                   [self.navigationController pushViewController:jumpVC animated:YES];</div><div class="line">               &#125;</div><div class="line"></div><div class="line">           </div><div class="line">       &#125;</div><div class="line"></div><div class="line">   &#125;];</div><div class="line">   [self presentViewController:pickerController animated:YES completion:nil];</div></pre></td></tr></table></figure>
 <p>demo地址:<a href="https://github.com/liuxinixn/LXQRCode/tree/master" target="_blank" rel="noopener">二维码制作与图片处理</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/06/03/Coregraphics切反向圆角/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/06/03/Coregraphics切反向圆角/" itemprop="url">CoreGraphices -切反向圆角</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-03T20:19:35+08:00">
+                2016-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>效果图<br><img src="http://upload-images.jianshu.io/upload_images/1694376-efefdd1b6916140a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="E1819704-B84B-4741-BB28-4B87A1883EDF.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">    UIImageView *iamgeview =[[UIImageView alloc]initWithFrame:CGRectMake(20, 100, 200, 200)];</div><div class="line">    UIImage *image = [UIImage imageNamed:@&quot;gougou&quot;];</div><div class="line"></div><div class="line">//    iamgeview.image =</div><div class="line">    iamgeview.image = [self addClipWithImage:image];</div><div class="line"></div><div class="line">    [self.view addSubview:iamgeview];</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">-(UIImage *)addClipWithImage:(UIImage *)image&#123;</div><div class="line">    </div><div class="line">    //1、开启上下文</div><div class="line">    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);</div><div class="line">   </div><div class="line">    //2、设置裁剪区域</div><div class="line">    //    UIBezierPath * path = [UIBezierPath bezierPathWithOvalInRect:rect];</div><div class="line"> </div><div class="line">    </div><div class="line">    UIBezierPath * path = [UIBezierPath bezierPathWithRect:CGRectMake(0,0,image.size.width, image.size.height)];</div><div class="line">    </div><div class="line">    [path addArcWithCenter:CGPointMake(image.size.width, 0) radius:10 startAngle:- M_PI  endAngle:-M_2_PI clockwise:NO];</div><div class="line">    [path closePath];</div><div class="line">    [path addClip];</div><div class="line">    //3、绘制图片</div><div class="line">    [image drawAtPoint:CGPointZero];</div><div class="line">    //4、获取新图片</div><div class="line">    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();</div><div class="line">    //5、关闭上下文</div><div class="line">    UIGraphicsEndImageContext();</div><div class="line">    //6、返回新图片</div><div class="line">    return newImage;</div><div class="line"></div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
           
         
@@ -1677,150 +1808,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/16/CoreAnimation之转场之圆圈缩放动画/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/05/16/CoreAnimation之转场之圆圈缩放动画/" itemprop="url">CoreAnimation转场之圆圈缩放动画</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-16T20:19:35+08:00">
-                2016-05-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>先看动画效果：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-c980b1f7307547e7.gif?imageMogr2/auto-orient/strip" alt="圆圈转场动画.gif"></p>
-<p>间客的APP上之前是有这个动画的，拜读了大神的文章：<a href="http://www.kittenyang.com/pingtransition/" target="_blank" rel="noopener">iOS自定义转场详解03——实现通过圆圈放大缩小的转场动画</a>,博客里面很详细。</p>
-<blockquote>
-<p>因为要自定义转场，所以我们需要一个新的对象集成NSObject，并且遵守转场动画的协议,<code>UIViewControllerAnimatedTransitioning</code></p>
-</blockquote>
-<p>介绍个知识点：</p>
-<p>1、CGRectInsetCGRect<br>    CGRectInset (<br>        CGRect rect,<br>        CGFloat dx,<br>        CGFloat dy);<br>该结构体的应用是以原rect为中心，再参考dx，dy，进行缩放或者放大。
-　　</p>
-<p>2、CGRectOffsetCGRect<br>   CGRectOffset(<br>      CGRect rect,<br>      CGFloat dx,<br>      CGFloat dy);　<br>相对于源矩形原点rect（左上角的点）沿x轴和y轴偏移, 再rect基础上沿x轴和y轴偏移</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// This is used for percent driven interactive transitions, as well as for</div><div class="line">// container controllers that have companion animations that might need to</div><div class="line">// synchronize with the main animation.</div><div class="line">设置转场动画的时间。</div><div class="line">- (NSTimeInterval)transitionDuration:(nullable id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;</div><div class="line"></div><div class="line">// This method can only  be a nop if the transition is interactive and not a percentDriven interactive transition.</div><div class="line">转场的上下文</div><div class="line">- (void)animateTransition:(id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;</div></pre></td></tr></table></figure>
-<p>关于这个参数transitionContext， 该参数是一个实现了 UIViewControllerContextTransitioning可以让我们访问一些实现过渡所必须的对象。<br>    UIViewControllerContextTransitioning 协议中有一些方法：</p>
-<ul>
-<li>(UIView *)containerView;<br>  //转场动画发生的容器</li>
-<li>(UIViewController <em>)viewControllerForKey:(NSString </em>)key;<br>  // 我们可以通过它拿到过渡的两个 ViewController。</li>
-</ul>
-<p>大致思路是这样从，我们画两个内塞尔曲线的圆，第一个小圆的frame和右上角圆形按钮的大小一样，第二个大圆则是覆盖了整个屏幕。然后，去设置view.layer.mask属性，让这个mask从小圆动画到大圆。</p>
-<p>以push 动画为例：pop动画不过是起终点的mask路径相反罢了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">- (void)animateTransition:(id &lt;UIViewControllerContextTransitioning&gt;)transitionContext&#123;</div><div class="line"></div><div class="line">   </div><div class="line">    ViewController * fromVC = (ViewController *)[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];</div><div class="line">    DetailViewController *toVC = (DetailViewController *)[transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];</div><div class="line">    UIView *contView = [transitionContext containerView];</div><div class="line"></div><div class="line">    UIButton *button = fromVC.button;</div><div class="line">    </div><div class="line">    </div><div class="line">    UIBezierPath *maskStartBP =  [UIBezierPath bezierPathWithOvalInRect:button.frame];    </div><div class="line">    [contView addSubview:fromVC.view];</div><div class="line">    [contView addSubview:toVC.view];</div><div class="line"></div><div class="line">    </div><div class="line">    </div><div class="line">    //创建两个圆形的 UIBezierPath 实例；一个是 button 的 size ，另外一个则拥有足够覆盖屏幕的半径。最终的动画则是在这两个贝塞尔路径之间进行的</div><div class="line">    </div><div class="line">    CGPoint finalPoint;</div><div class="line">    //判断触发点在那个象限</div><div class="line">    if(button.frame.origin.x &gt; (toVC.view.bounds.size.width / 2))&#123;</div><div class="line">        if (button.frame.origin.y &lt; (toVC.view.bounds.size.height / 2)) &#123;</div><div class="line">            //第一象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - 0, button.center.y - CGRectGetMaxY(toVC.view.bounds)+30);</div><div class="line">        &#125;else&#123;</div><div class="line">            //第四象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - 0, button.center.y - 0);</div><div class="line">        &#125;</div><div class="line">    &#125;else&#123;</div><div class="line">        if (button.frame.origin.y &lt; (toVC.view.bounds.size.height / 2)) &#123;</div><div class="line">            //第二象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - CGRectGetMaxX(toVC.view.bounds), button.center.y - CGRectGetMaxY(toVC.view.bounds)+30);</div><div class="line">        &#125;else&#123;</div><div class="line">            //第三象限</div><div class="line">            finalPoint = CGPointMake(button.center.x - CGRectGetMaxX(toVC.view.bounds), button.center.y - 0);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">    CGFloat radius = sqrt((finalPoint.x * finalPoint.x) + (finalPoint.y * finalPoint.y));</div><div class="line">    UIBezierPath *maskFinalBP = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(button.frame, -radius, -radius)];</div><div class="line">    </div><div class="line">    </div><div class="line">    //创建一个 CAShapeLayer 来负责展示圆形遮盖</div><div class="line">    CAShapeLayer *maskLayer = [CAShapeLayer layer];</div><div class="line">    maskLayer.path = maskFinalBP.CGPath; //将它的 path 指定为最终的 path 来避免在动画完成后会回弹</div><div class="line">    toVC.view.layer.mask = maskLayer;</div><div class="line">    maskLayer.backgroundColor =[UIColor redColor].CGColor;</div><div class="line">    </div><div class="line">    CABasicAnimation *maskLayerAnimation = [CABasicAnimation animationWithKeyPath:@&quot;path&quot;];</div><div class="line">    maskLayerAnimation.fromValue = (__bridge id)(maskStartBP.CGPath);</div><div class="line">    maskLayerAnimation.toValue = (__bridge id)((maskFinalBP.CGPath));</div><div class="line">    maskLayerAnimation.duration = [self transitionDuration:transitionContext];</div><div class="line">    maskLayerAnimation.timingFunction = [CAMediaTimingFunction  functionWithName:kCAMediaTimingFunctionEaseInEaseOut];</div><div class="line">    maskLayerAnimation.delegate = self;</div><div class="line">    </div><div class="line">    [maskLayer addAnimation:maskLayerAnimation forKey:@&quot;path&quot;];</div></pre></td></tr></table></figure></p>
-<p> 结束动画后设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#pragma mark - CABasicAnimation的Delegate</div><div class="line">- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag&#123;</div><div class="line"></div><div class="line">    //告诉 iOS 这个 transition 完成</div><div class="line">    [self.transitionContext completeTransition:![self. transitionContext transitionWasCancelled]];</div><div class="line">    //清除 fromVC 的 mask</div><div class="line">    [self.transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey].view.layer.mask = nil;</div><div class="line">    [self.transitionContext viewControllerForKey:UITransitionContextToViewControllerKey].view.layer.mask = nil;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>自定义完push 动画后我们需要进行设置，因为所有的子控制器由UINavgationController进行管理，所有我们需要在ViewCotroller中实现代理;</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@interface ViewController ()&lt;UINavigationControllerDelegate&gt;</div></pre></td></tr></table></figure>
-<p>最好在<code>viewWillAppear</code>中设置代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-(void)viewWillAppear:(BOOL)animated&#123;</div><div class="line">    self.navigationController.delegate = self;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>实现代理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">#pragma mark - UINavigationControllerDelegate</div><div class="line">- (id &lt;UIViewControllerAnimatedTransitioning&gt;)navigationController:(UINavigationController *)navigationController</div><div class="line">                                   animationControllerForOperation:(UINavigationControllerOperation)operation</div><div class="line">                                                fromViewController:(UIViewController *)fromVC</div><div class="line">                                                  toViewController:(UIViewController *)toVC&#123;</div><div class="line">    if (operation == UINavigationControllerOperationPush) &#123;</div><div class="line">        </div><div class="line">        PingTransition *ping = [PingTransition new];</div><div class="line">        return ping;</div><div class="line">    &#125;else&#123;</div><div class="line">        return nil;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>本文demo地址：<a href="https://github.com/liuxinixn/CircleZoomView/tree/master" target="_blank" rel="noopener">圆圈转场动画</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1874,7 +1861,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-count">99</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
