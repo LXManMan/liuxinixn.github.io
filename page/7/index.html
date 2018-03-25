@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/04/设置Cell选中的颜色-/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/05/未越狱的手机安装ipa，制作iOS-Ad-Hoc测试线上应用-/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -281,7 +281,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/03/04/设置Cell选中的颜色-/" itemprop="url">设置Cell选中的颜色</a></h1>
+                <a class="post-title-link" href="/2017/03/05/未越狱的手机安装ipa，制作iOS-Ad-Hoc测试线上应用-/" itemprop="url">未越狱的手机安装ipa,制作iOS Ad-hoc测试应用</a></h1>
         
 
         <div class="post-meta">
@@ -293,8 +293,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T20:19:35+08:00">
-                2017-03-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-05T20:19:35+08:00">
+                2017-03-05
               </time>
             
 
@@ -333,7 +333,33 @@
       
         
           
-            <p>需要同时设置高亮与选中状态，先高亮后选择<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (void)setSelected:(BOOL)selected animated:(BOOL)animated &#123;</div><div class="line">    [super setSelected:selected animated:animated];</div><div class="line">    // Configure the view for the selected state</div><div class="line">    </div><div class="line">    if (selected) &#123;</div><div class="line">        self.contentView.backgroundColor = QBBackColor;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated &#123;</div><div class="line">    </div><div class="line">    [super setHighlighted:highlighted animated:animated];</div><div class="line">    if (highlighted) &#123;</div><div class="line">        self.contentView.backgroundColor = QBBackColor;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+            <p>######在上线前通常需要提交给测试，提供ipa，测试待上线的应用，针对未越狱的手机我们可以通过制作一个制作iOS Ad-Hoc测试线上应用 ，xcode 里进行简单配置，然后通过itunes，把描述文件拖进去，点击同步应用即可。 接下来详细说明:</p>
+<blockquote>
+<p>第一步 创建一个Ad-Hoc测试线上应用。</p>
+</blockquote>
+<p>上图： </p>
+<p>###选择环境<br><img src="http://upload-images.jianshu.io/upload_images/1694376-5e34af2404fe2bed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>###添加描述文件<br><img src="http://upload-images.jianshu.io/upload_images/1694376-cdb4697960c0f44d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p>###选择Ad Hoc<br><img src="http://upload-images.jianshu.io/upload_images/1694376-91ce51f74f29d359.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
+<p>###选择你的App ID 套装<br><img src="http://upload-images.jianshu.io/upload_images/1694376-e35bd95ac059be38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
+<p>###选择正确的证书<br><img src="http://upload-images.jianshu.io/upload_images/1694376-661e21dceaec1e8f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5.png"></p>
+<p>###然后选择done ，会生成一个iOS Distribution的Ad Hoc专用描述文件<br><img src="http://upload-images.jianshu.io/upload_images/1694376-443e7b133fe31a59.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.png"></p>
+<blockquote>
+<p>第二步  xcode 的配置：</p>
+</blockquote>
+<h3 id="project配置-，推荐使用Configurations名字：ad-hoc-distribution"><a href="#project配置-，推荐使用Configurations名字：ad-hoc-distribution" class="headerlink" title="project配置 ，推荐使用Configurations名字：ad hoc distribution"></a>project配置 ，推荐使用Configurations名字：ad hoc distribution</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-54a3820dc0c99315.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.png"></p>
+<p>###General 里配置：选择 配置好的描述文件 双击</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-917616d9e11a66d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.png"></p>
+<p>###最后 打包前需要设置 如果是上线 选择release， 上线前测试选择 ad hoc  distribution<br><img src="http://upload-images.jianshu.io/upload_images/1694376-8332d3e6ff3fe63a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="9.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-8f58eaac6e180acb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="10.png"></p>
+<h3 id="选择-device，command-b-编译"><a href="#选择-device，command-b-编译" class="headerlink" title="选择 device，command + b 编译"></a>选择 device，command + b 编译</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-b6aca55e7652f772.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="11.png"></p>
+<h3 id="编译通过后-Product里-app-颜色为黑色-，表示编译通过，然后show-in-finder-，复制到一个-Payload的文件夹里，选择压缩，把zip-后缀改为ipa。"><a href="#编译通过后-Product里-app-颜色为黑色-，表示编译通过，然后show-in-finder-，复制到一个-Payload的文件夹里，选择压缩，把zip-后缀改为ipa。" class="headerlink" title="编译通过后 Product里 app 颜色为黑色 ，表示编译通过，然后show in finder  ，复制到一个 Payload的文件夹里，选择压缩，把zip 后缀改为ipa。"></a>编译通过后 Product里 app 颜色为黑色 ，表示编译通过，然后show in finder  ，复制到一个 Payload的文件夹里，选择压缩，把zip 后缀改为ipa。</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-3f9ca96dc32cbedb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="12.png"></p>
+<h3 id="生成ipa"><a href="#生成ipa" class="headerlink" title="生成ipa"></a>生成ipa</h3><p><img src="http://upload-images.jianshu.io/upload_images/1694376-20ac611478945833.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="13.png"></p>
+<blockquote>
+<p>最后 通过itunes 安装到手机上，准备好 Ad Hoc的描述文件与ipa 包 ，</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-f9e2c1da84b5d1ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="14.png"></p>
+<p>####最后选择手机 ，然后同步应用即可。</p>
 
           
         
@@ -471,6 +497,126 @@
     NSString *urlPattern = @&quot;((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)|(((http[s]{0,1}|ftp)://|)((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&amp;*+?:_/=&lt;&gt;]*)?)&quot;;
     NSString *phoneNumber =@&quot;\\d{3}-\\d{8}|\\d{4}-\\d{7}|\\d{11}&quot;
     ;</code><br>下一篇分析下如何利用正则检索网址与电话号码，表情，并且实现富文本的多行与完成显示的切换。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/03/04/设置Cell选中的颜色-/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/04/设置Cell选中的颜色-/" itemprop="url">设置Cell选中的颜色</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T20:19:35+08:00">
+                2017-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>需要同时设置高亮与选中状态，先高亮后选择<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">- (void)setSelected:(BOOL)selected animated:(BOOL)animated &#123;</div><div class="line">    [super setSelected:selected animated:animated];</div><div class="line">    // Configure the view for the selected state</div><div class="line">    </div><div class="line">    if (selected) &#123;</div><div class="line">        self.contentView.backgroundColor = QBBackColor;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated &#123;</div><div class="line">    </div><div class="line">    [super setHighlighted:highlighted animated:animated];</div><div class="line">    if (highlighted) &#123;</div><div class="line">        self.contentView.backgroundColor = QBBackColor;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
           
         
@@ -904,6 +1050,131 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/07/iOS-环信3-2-3-离线推送，坑点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/02/07/iOS-环信3-2-3-离线推送，坑点/" itemprop="url">iOS -环信3.2.3 离线推送，坑点</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-07T20:19:35+08:00">
+                2017-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在使用环信做离线推送时，环信文档后台的扩展消息的格式是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">    &quot;target_type&quot;:&quot;users&quot;,</div><div class="line">    &quot;target&quot;:[</div><div class="line">        &quot;6006&quot;</div><div class="line">    ],</div><div class="line">    &quot;msg&quot;:&#123;</div><div class="line">        &quot;type&quot;:&quot;txt&quot;,</div><div class="line">        &quot;msg&quot;:&quot;hello from rest&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;from&quot;:&quot;6001&quot;,</div><div class="line">    &quot;ext&quot;:&#123;</div><div class="line">        &quot;em_apns_ext&quot;:&quot;扩展内容&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>假如你们公司对ext 进行了扩展，类似下面的的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;em_apns_ext&quot; =     &#123;</div><div class="line">        &quot;em_push_title&quot; = &quot;\U5218\U65b0:testing&quot;;</div><div class="line">        &quot;model_type&quot; = 105002;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>######其中em_apns_ext,以及em_push_title 是必须的，字段名字不能变，后面可以扩展你需要的内容，作为跳转使用。</p>
+<p>然后 看一下 环信文档显示消息的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;aps&quot;:&#123;</div><div class="line">        &quot;alert&quot;:&quot;您有一条新消息&quot;,	 </div><div class="line">        &quot;badge&quot;:1,				 </div><div class="line">        &quot;sound&quot;:&quot;default&quot;		 </div><div class="line">    &#125;,</div><div class="line">    &quot;f&quot;:&quot;6001&quot;,					 </div><div class="line">    &quot;t&quot;:&quot;6006&quot;,					 </div><div class="line">    &quot;e&quot;:&quot;扩展内容&quot;,</div><div class="line">    &quot;m&quot;:&quot;14aec1e00ef&quot;			 </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>后台规定的字段em_push_title，是最终展示在消息通知中 的 alert，消息的具体内容。<br>那么扩展的字段在哪里展示呢？ 在上面的字段<code>e</code> 里，是一个字典，字典e 里的字段就是后台在ext 扩展的字段,意义对应。比如这里e里 只有：<br>{<br> “model_type” = 105002;<br>}</p>
+<p>在线消息的通知我们可以自己来实现，但是离线的字段是固定的。需要注意下。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/07/iOS-环信3-2-3-集成聊天，语音，视频，通话/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -998,131 +1269,6 @@
 <p>######最后说一下环信的推送：</p>
 <p>环信的推送应用在后台是不会推送的，需要在接收消息的地方，判断当前应用的活跃状态，然后做本地推送。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">- (void)didReceiveMessages:(NSArray *)aMessages</div><div class="line">&#123;</div><div class="line">    BOOL isRefreshCons = YES;</div><div class="line">    for(EMMessage *message in aMessages)&#123;</div><div class="line">        BOOL needShowNotification = (message.chatType != EMChatTypeChat) ? [self _needShowNotification:message.conversationId] : YES;</div><div class="line">        </div><div class="line"></div><div class="line">        UIApplicationState state = [[UIApplication sharedApplication] applicationState];</div><div class="line">        if (needShowNotification) &#123;</div><div class="line">#if !TARGET_IPHONE_SIMULATOR</div><div class="line">            switch (state) &#123;</div><div class="line">                case UIApplicationStateActive:</div><div class="line">                    [self.mainVC playSoundAndVibration];</div><div class="line">                    break;</div><div class="line">                case UIApplicationStateInactive:</div><div class="line">                    [self.mainVC playSoundAndVibration];</div><div class="line">                    break;</div><div class="line">                case UIApplicationStateBackground:</div><div class="line">                    [self.mainVC showNotificationWithMessage:message];</div><div class="line">                    break;</div><div class="line">                default:</div><div class="line">                    break;</div><div class="line">            &#125;</div><div class="line">#endif</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        if (_chatVC == nil) &#123;</div><div class="line">            _chatVC = [self _getCurrentChatView];</div><div class="line">        &#125;</div><div class="line">        BOOL isChatting = NO;</div><div class="line">        if (_chatVC) &#123;</div><div class="line">            isChatting = [message.conversationId isEqualToString:_chatVC.conversation.conversationId];</div><div class="line">        &#125;</div><div class="line">        if (_chatVC == nil || !isChatting || state == UIApplicationStateBackground) &#123;</div><div class="line">            [self _handleReceivedAtMessage:message];</div><div class="line">            </div><div class="line">            if (self.conversationListVC) &#123;</div><div class="line">                [_conversationListVC refresh];</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            if (self.mainVC) &#123;</div><div class="line">                [_mainVC setupUnreadMessageCount];</div><div class="line">            &#125;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        if (isChatting) &#123;</div><div class="line">            isRefreshCons = NO;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if (isRefreshCons) &#123;</div><div class="line">        if (self.conversationListVC) &#123;</div><div class="line">            [_conversationListVC refresh];</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        if (self.mainVC) &#123;</div><div class="line">            [_mainVC setupUnreadMessageCount];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>好了，基本功能都实现了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/02/07/iOS-环信3-2-3-离线推送，坑点/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/02/07/iOS-环信3-2-3-离线推送，坑点/" itemprop="url">iOS -环信3.2.3 离线推送，坑点</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-07T20:19:35+08:00">
-                2017-02-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在使用环信做离线推送时，环信文档后台的扩展消息的格式是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">    &quot;target_type&quot;:&quot;users&quot;,</div><div class="line">    &quot;target&quot;:[</div><div class="line">        &quot;6006&quot;</div><div class="line">    ],</div><div class="line">    &quot;msg&quot;:&#123;</div><div class="line">        &quot;type&quot;:&quot;txt&quot;,</div><div class="line">        &quot;msg&quot;:&quot;hello from rest&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;from&quot;:&quot;6001&quot;,</div><div class="line">    &quot;ext&quot;:&#123;</div><div class="line">        &quot;em_apns_ext&quot;:&quot;扩展内容&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>假如你们公司对ext 进行了扩展，类似下面的的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;em_apns_ext&quot; =     &#123;</div><div class="line">        &quot;em_push_title&quot; = &quot;\U5218\U65b0:testing&quot;;</div><div class="line">        &quot;model_type&quot; = 105002;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>######其中em_apns_ext,以及em_push_title 是必须的，字段名字不能变，后面可以扩展你需要的内容，作为跳转使用。</p>
-<p>然后 看一下 环信文档显示消息的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;aps&quot;:&#123;</div><div class="line">        &quot;alert&quot;:&quot;您有一条新消息&quot;,	 </div><div class="line">        &quot;badge&quot;:1,				 </div><div class="line">        &quot;sound&quot;:&quot;default&quot;		 </div><div class="line">    &#125;,</div><div class="line">    &quot;f&quot;:&quot;6001&quot;,					 </div><div class="line">    &quot;t&quot;:&quot;6006&quot;,					 </div><div class="line">    &quot;e&quot;:&quot;扩展内容&quot;,</div><div class="line">    &quot;m&quot;:&quot;14aec1e00ef&quot;			 </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>后台规定的字段em_push_title，是最终展示在消息通知中 的 alert，消息的具体内容。<br>那么扩展的字段在哪里展示呢？ 在上面的字段<code>e</code> 里，是一个字典，字典e 里的字段就是后台在ext 扩展的字段,意义对应。比如这里e里 只有：<br>{<br> “model_type” = 105002;<br>}</p>
-<p>在线消息的通知我们可以自己来实现，但是离线的字段是固定的。需要注意下。</p>
 
           
         
@@ -1420,127 +1566,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/09/10/iOS-在使用全屏返回手势与UIScrollview的冲突问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/10/iOS-在使用全屏返回手势与UIScrollview的冲突问题/" itemprop="url">iOS -在使用全屏返回手势与UIScrollview的冲突问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-10T20:19:35+08:00">
-                2016-09-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在使用<code>UINavigationController+FDFullscreenPopGesture</code>全屏手势的时候与UIScrollview发生冲突。在官方的demo里 是这么写的:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer &#123;</div><div class="line">    if (self.contentOffset.x &lt;= 0) &#123;</div><div class="line">        if ([otherGestureRecognizer.delegate isKindOfClass:NSClassFromString(@&quot;_FDFullscreenPopGestureRecognizerDelegate&quot;)]) &#123;</div><div class="line">            return YES;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return NO;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>所以我们只需要新建一个UIScrollview分类，把这个方法放进去即可。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1594,7 +1619,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">99</span>
+                <span class="site-state-item-count">100</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

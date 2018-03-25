@@ -262,6 +262,185 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/08/CoreAnimation之动画继承/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/05/08/CoreAnimation之动画继承/" itemprop="url">CoreAnimation之动画继承</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-08T20:19:35+08:00">
+                2016-05-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://upload-images.jianshu.io/upload_images/1694376-5bbcf21b1ece3a71.gif?imageMogr2/auto-orient/strip" alt="1.gif"><br> demo地址 :    <a href="https://github.com/liuxinixn/CoreAnimation-" target="_blank" rel="noopener">属性动画</a><br>在做属性动画的时候，先了解下动画继承关系：</p>
+<p>####CAAnimation ：父类 遵守了<strong>CAMediaTiming</strong>协议</p>
+<blockquote>
+<p>CAMediaTiming媒体时间类协议</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">CAMediaTiming中的协议内容</div><div class="line"> 1.beginTime 动画开始的时间 默认为0</div><div class="line"> 2.duration 动画的持续时间 默认为0 持续时间 受速度的影响 实际动画完成时间 = 持续时间/速度</div><div class="line"> 3.speed 动画的播放速度 默认为1 速度设置为0 可以暂停动画 如果speed 2秒 duration 60秒 那么动画真正播放完成的时间 30秒 </div><div class="line"> 4.timeOffset 动画播放时间的偏移量</div><div class="line"> 5.repeatCount 动画的循环次数 默认是0 只播放一次 </div><div class="line"> 6.repeatDuration 动画循环的持续时间 repeatCount/repeatDuration 只能设置其中的一个属性 </div><div class="line"> 7.autoreverses 是否以动画的形式返回 返回到播放之前的状态 </div><div class="line"> 8.fillMode 设置当前对象在非活动时间段的状态 要想fillMode有效 需设置removedOnCompletion = NO</div><div class="line">  kCAFillModeForwards 当动画结束后，layer会一直保持着动画最后的状态 </div><div class="line">  kCAFillModeBackwards 立即进入动画的初始状态并等待动画开始 </div><div class="line">  kCAFillModeBoth 动画加入后开始之前 layer处于动画初始状态 动画结束后layer保持动画最后的状态</div><div class="line">  kCAFillModeRemoved 默认值 动画结束后 layer会恢复到之前的状态</div></pre></td></tr></table></figure>
+<blockquote>
+<p>CAAnimation动画属性方法介绍</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">1.初始化的方法 animation </div><div class="line">2.timingFunction 速度控制类 控制动画运行的节奏 </div><div class="line">初始化:functionWithName:</div><div class="line"> kCAMediaTimingFunctionLinear 匀速 </div><div class="line">kCAMediaTimingFunctionEaseIn 慢进快出 </div><div class="line">kCAMediaTimingFunctionEaseOut 快进慢出 </div><div class="line">kCAMediaTimingFunctionEaseInEaseOut 慢进慢出 中间加速 </div><div class="line">kCAMediaTimingFunctionDefault 默认 </div><div class="line">3.delegate 代理</div><div class="line">4.removedOnCompletion 完成动画的时候 是否移除动画效果 </div><div class="line">5.代理方法 </div><div class="line">- (void)animationDidStart:(CAAnimation *)anim</div><div class="line">- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag</div></pre></td></tr></table></figure>
+<blockquote>
+<p>#####三个常用个子类</p>
+</blockquote>
+<ul>
+<li><p>CAPropertyAnimation</p>
+<ul>
+<li><p>CABasicAnimation 扩充属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">介绍：通过改变某个属性的值 到某个值 只能设置两个值 产生的动画</div><div class="line">fromValue 开始值 如果不设置不会返回到初始位置</div><div class="line">toValue 结束值</div><div class="line">byValue 通过哪个值</div><div class="line">@property(nullable, strong) id fromValue;</div><div class="line">@property(nullable, strong) id toValue;</div><div class="line">@property(nullable, strong) id byValue;</div></pre></td></tr></table></figure>
+</li>
+<li><p>CAKeyframeAnimation</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> 属性解析：</div><div class="line"></div><div class="line">- values：就是上述的NSArray对象。里面的元素称为”关键帧”(keyframe)。动画对象会在指定的时间(duration)内，依次显示values数组中的每一个关键帧</div><div class="line"></div><div class="line">- path：可以设置一个CGPathRef\CGMutablePathRef,让层跟着路径移动。path只对CALayer的anchorPoint和position起作用。如果你设置了path，那么values将被忽略</div><div class="line"></div><div class="line">- keyTimes：可以为对应的关键帧指定对应的时间点,其取值范围为0到1.0,keyTimes中的每一个时间值都对应values中的每一帧.当keyTimes没有设置的时候,各个关键帧的时间是平分的</div><div class="line"></div><div class="line">- 说明：CABasicAnimation可看做是最多只有2个关键帧的CAKeyframeAnimation</div></pre></td></tr></table></figure>
+<ul>
+<li><p>CAAnimationGroup<br><code>@property(nullable, copy) NSArray&lt;CAAnimation *&gt; *animations;//组动画</code></p>
+</li>
+<li><p>CATransition 提供渐变效果:(推拉push效果,消退fade效果,揭开reveal效果)。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">type：动画过渡的类型</div><div class="line">subtype：动画过渡的方向</div><div class="line">@property(copy) NSString *type;</div><div class="line">@property(nullable, copy) NSString *subtype;</div><div class="line">@property float startProgress;</div><div class="line">@property float endProgress;</div><div class="line"></div><div class="line">/* Common transition types. */</div><div class="line"></div><div class="line">CA_EXTERN NSString * const kCATransitionFade</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionMoveIn</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionPush</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionReveal</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line"></div><div class="line">/* Common transition subtypes. */</div><div class="line"></div><div class="line">CA_EXTERN NSString * const kCATransitionFromRight</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionFromLeft</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionFromTop</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div><div class="line">CA_EXTERN NSString * const kCATransitionFromBottom</div><div class="line">    CA_AVAILABLE_STARTING (10.5, 2.0, 9.0, 2.0);</div></pre></td></tr></table></figure>
+<blockquote>
+<h5 id="keyPath可以使用的key-可以做动画的属性，包括虚拟属性"><a href="#keyPath可以使用的key-可以做动画的属性，包括虚拟属性" class="headerlink" title="keyPath可以使用的key ,可以做动画的属性，包括虚拟属性"></a>keyPath可以使用的key ,可以做动画的属性，包括虚拟属性</h5></blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">- #define angle2Radian(angle) ((angle)/180.0*M_PI)</div><div class="line">- transform.rotation.x 围绕x轴翻转 参数：角度 angle2Radian(4)</div><div class="line"></div><div class="line">transform.rotation.y 围绕y轴翻转 参数：同上</div><div class="line"></div><div class="line">transform.rotation.z 围绕z轴翻转 参数：同上</div><div class="line"></div><div class="line">transform.rotation 默认围绕z轴</div><div class="line"></div><div class="line">transform.scale.x x方向缩放 参数：缩放比例 1.5</div><div class="line"></div><div class="line">transform.scale.y y方向缩放 参数：同上</div><div class="line"></div><div class="line">transform.scale.z z方向缩放 参数：同上</div><div class="line"></div><div class="line">transform.scale 所有方向缩放 参数：同上</div><div class="line"></div><div class="line">transform.translation.x x方向移动 参数：x轴上的坐标 100</div><div class="line"></div><div class="line">transform.translation.y x方向移动 参数：y轴上的坐标</div><div class="line"></div><div class="line">transform.translation.z x方向移动 参数：z轴上的坐标</div><div class="line"></div><div class="line">transform.translation 移动 参数：移动到的点 （100，100）</div><div class="line"></div><div class="line">opacity 透明度 参数：透明度 0.5</div><div class="line"></div><div class="line">backgroundColor 背景颜色 参数：颜色 (id)[[UIColor redColor] CGColor]</div><div class="line"></div><div class="line">cornerRadius 圆角 参数：圆角半径 5</div><div class="line"></div><div class="line">borderWidth 边框宽度 参数：边框宽度 5</div><div class="line"></div><div class="line">bounds 大小 参数：CGRect</div><div class="line"></div><div class="line">contents 内容 参数：CGImage</div><div class="line"></div><div class="line">contentsRect 可视内容 参数：CGRect 值是0～1之间的小数</div><div class="line"></div><div class="line">hidden 是否隐藏</div><div class="line"></div><div class="line">position</div><div class="line"></div><div class="line">shadowColor</div><div class="line"></div><div class="line">shadowOffset</div><div class="line"></div><div class="line">shadowOpacity</div><div class="line"></div><div class="line">shadowRadius</div></pre></td></tr></table></figure>
+<blockquote>
+<p>#####基础动画 基础动画可以看做只有两帧。</p>
+</blockquote>
+<p>经常做的有个  心跳动画，可以尝试一波，有两个方法： </p>
+<ol>
+<li>改变bounds</li>
+<li><p>改变 transform.scale </p>
+<ul>
+<li>第一种</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 创建动画对象</div><div class="line">       CABasicAnimation *anim = [CABasicAnimation animation];</div><div class="line">   </div><div class="line">       anim.keyPath = @&quot;bounds&quot;;  // transform.scale 表示长和宽都缩放</div><div class="line">       anim.fromValue = [NSValue valueWithCGRect:self.subLayer.bounds];</div><div class="line">       anim.toValue = [NSValue valueWithCGRect:CGRectMake(0, 0, self.bounds.size.width , self.bounds.size.height )];                  // @0 缩放到最小</div><div class="line">   </div><div class="line">       anim.duration = 0.5;                // 设置动画执行时间</div><div class="line">       anim.repeatCount = MAXFLOAT;        // MAXFLOAT 表示动画执行次数为无限次</div><div class="line">   </div><div class="line">       anim.autoreverses = YES;            // 控制动画反转 默认情况下动画从尺寸1到0的过程中是有动画的，但是从0到1的过程中是没有动画的，设置autoreverses属性可以让尺寸0到1也是有过程的</div><div class="line">   </div><div class="line">       [self.subLayer addAnimation: anim forKey: nil];</div></pre></td></tr></table></figure>
+<ul>
+<li>第二种<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// 创建动画对象</div><div class="line">       CABasicAnimation *anim = [CABasicAnimation animation];</div><div class="line">   </div><div class="line">       anim.keyPath = @&quot;transform.scale&quot;;  // transform.scale 表示长和宽都缩放</div><div class="line">       anim.toValue = @0;                  // @0 缩放到最小</div><div class="line">   </div><div class="line">       anim.duration = 0.5;                // 设置动画执行时间</div><div class="line">       anim.repeatCount = MAXFLOAT;        // MAXFLOAT 表示动画执行次数为无限次</div><div class="line">   </div><div class="line">       anim.autoreverses = YES;            // 控制动画反转 默认情况下动画从尺寸1到0的过程中是有动画的，但是从0到1的过程中是没有动画的，设置autoreverses属性可以让尺寸0到1也是有过程的</div><div class="line">   </div><div class="line">       [self.icon.layer addAnimation: anim forKey: nil];</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>#####关键帧动画  tranfrom.rotation 其实是虚拟属性</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#define angle2Radio(angle) ((angle) * M_PI / 180.0)</div><div class="line">   CAKeyframeAnimation *animation =[CAKeyframeAnimation animationWithKeyPath:@&quot;transform.rotation&quot;];</div><div class="line">   animation.values = @[@(angle2Radio(-5)), @(angle2Radio(5)), @(angle2Radio(-5))]; // 把度数转换为弧度  度数/180*M_PI</div><div class="line">   animation.repeatCount = HUGE;</div><div class="line">   [self.subLayer addAnimation:animation forKey:nil];</div></pre></td></tr></table></figure>
+<blockquote>
+<p>#####过渡动画  在平常imageview切换时是没有动画的，我们可以在图片切换过程中增加个过渡动画</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">- (IBAction)btnAction:(UIButton *)sender &#123;</div><div class="line">    </div><div class="line">    // 0、切换图片</div><div class="line">    a++;</div><div class="line">    if (a&gt; 3) &#123;</div><div class="line">        a = 1;</div><div class="line">    &#125;</div><div class="line">     sender.userInteractionEnabled = NO;</div><div class="line">    self.icon.image = [UIImage imageNamed: [NSString stringWithFormat: @&quot;%d.jpg&quot;, a]];</div><div class="line">    CATransition *animation =[CATransition animation];</div><div class="line">    animation.type = @&quot;rippleEffect&quot;;</div><div class="line">    animation.duration = 2;</div><div class="line">    animation.delegate = self;</div><div class="line">    animation.timingFunction =[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];</div><div class="line">    [self.icon.layer addAnimation:animation forKey:nil];</div><div class="line">    sender.userInteractionEnabled = NO;</div><div class="line">&#125;</div><div class="line">-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag</div><div class="line">&#123;</div><div class="line">    //动画执行完后打开按钮的交互</div><div class="line">    self.button.userInteractionEnabled = YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2016/05/07/CoreAnimation之变换/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1957,7 +2136,7 @@ favoriteGenres 被声明为一个变量(拥有 var 标示符)而不是一个常�
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">99</span>
+                <span class="site-state-item-count">100</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
