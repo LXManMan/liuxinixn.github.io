@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="概述  Java语言诞生于1995年，由SUN公司推出，2009被ORAClE公司收购。Java介绍：盗一张图如下 基础是Java SE，更上层的有JavaEE，服务于企业，嵌入式开发Java ME，比如安卓手游等等。 何为JVM，英文名Java Vitual Mechine ，俗称虚拟机。 Java开发流程还是以一张图来解释， Java开发是把源文件为.java文件经过编译器（java C）指">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java-前言">
+<meta property="og:url" content="liuxinixn.github.io/2018/04/11/Java-前言/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="概述  Java语言诞生于1995年，由SUN公司推出，2009被ORAClE公司收购。Java介绍：盗一张图如下 基础是Java SE，更上层的有JavaEE，服务于企业，嵌入式开发Java ME，比如安卓手游等等。 何为JVM，英文名Java Vitual Mechine ，俗称虚拟机。 Java开发流程还是以一张图来解释， Java开发是把源文件为.java文件经过编译器（java C）指">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-d8f468a50be325d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-b7a43ff6a58e92c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-e20f2aef5c9b1162.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-85687edd13d041ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-5e1f2025c8e15974.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-c25890a7e6aef98c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-af8aa855214b0df6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-0bf0771233c9ca8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-31870940a66a7825.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-06750d216ab84ae2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-6d123d2b95ce8c5c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-06-19T02:27:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java-前言">
+<meta name="twitter:description" content="概述  Java语言诞生于1995年，由SUN公司推出，2009被ORAClE公司收购。Java介绍：盗一张图如下 基础是Java SE，更上层的有JavaEE，服务于企业，嵌入式开发Java ME，比如安卓手游等等。 何为JVM，英文名Java Vitual Mechine ，俗称虚拟机。 Java开发流程还是以一张图来解释， Java开发是把源文件为.java文件经过编译器（java C）指">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1694376-d8f468a50be325d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2018/04/11/Java-前言/"/>
+
+
+
+
+
+  <title>Java-前言 | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2018/04/11/Java-前言/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java-前言</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-11T08:07:21+08:00">
+                2018-04-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>概述</p>
+</blockquote>
+<p><code>Java</code>语言诞生于<code>1995</code>年，由<code>SUN</code>公司推出，<code>2009</code>被<code>ORAClE</code>公司收购。<br><code>Java</code>介绍：盗一张图如下</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1694376-d8f468a50be325d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180410-222702@2x.png"><br>基础是<code>Java SE</code>，更上层的有<code>JavaEE</code>，服务于企业，嵌入式开发<code>Java ME</code>，比如安卓手游等等。</p>
+<p>何为<code>JVM</code>，英文名<code>Java Vitual Mechine</code> ，俗称虚拟机。</p>
+<p>Java开发流程还是以一张图来解释，<img src="https://upload-images.jianshu.io/upload_images/1694376-b7a43ff6a58e92c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180410-223438@2x.png"></p>
+<p><code>Java</code>开发是把源文件为<code>.java</code>文件经过编译器（java C）指令编译，生成一堆二进制的<code>.class</code>字节码文件，这些文件与平台无关，这些文件经过解释器处理之才是我们的工程文件，而<code>JVM</code>就包含了解释器，这就是<code>JVM</code>使得<code>Java</code>能够跨平台的根源。</p>
+<p>至于<code>JDK</code>，<code>JRE</code>，<code>JVM</code>三者之间的关系，还是一张图来说明：<br><img src="https://upload-images.jianshu.io/upload_images/1694376-e20f2aef5c9b1162.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180410-225132@2x.png"></p>
+<blockquote>
+<p>Java环境的搭建</p>
+</blockquote>
+<p>1、第一步，安装<code>JDK</code><br>下载地址：<a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">JDK下载地址</a></p>
+<p>选择对应的平台安装即可。<br><img src="https://upload-images.jianshu.io/upload_images/1694376-85687edd13d041ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180410-225544@2x.png"></p>
+<p>2、配置环境变量<br><img src="https://upload-images.jianshu.io/upload_images/1694376-5e1f2025c8e15974.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180410-230026@2x.png"></p>
+<p>下面以Mac系统为例</p>
+<p>Mac 不同于Windows系统，下载好dmg后，直接安装。<br>首先查看，电脑上是否成功装了jdk。</p>
+<p>在终端输入 <code>java -version</code><br>如果成功安装如下图：<br><img src="https://upload-images.jianshu.io/upload_images/1694376-c25890a7e6aef98c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180411-110951@2x.png"></p>
+<p>按住opition键，选择系统的资源库，可以看到Java的安装路径。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1694376-af8aa855214b0df6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180411-111145@2x.png"></p>
+<p>安装好JDK之后，就可以配置环境变量了。</p>
+<p>####第一种方式不建议，可以了解<br>首先，在终端输入 <code>sudo vim /etc/profile</code></p>
+<p>如需要密码，就输入密码。按下shift +i，显示insert，进入输入模式。（注： 在终端输入  /usr/libexec/java_home  可以得到JAVA_HOME 的路径）</p>
+<p>按照下面如图配置。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1694376-0bf0771233c9ca8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180411-112037@2x.png"></p>
+<p>要想马上生效，输入 <code>source /etc/profile</code></p>
+<p>运行profile配置。</p>
+<p>最后检查环境。输入 <code>echo $JAVA_HOME</code></p>
+<p>得到配置的路径，说明配置完毕。如图:<img src="https://upload-images.jianshu.io/upload_images/1694376-31870940a66a7825.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180411-112205@2x.png"></p>
+<p>第二种：<br>补充：如果通过上面搭建的环境变量，后期在使用pod，fastlane时会有冲突，所以建议下面这种方式：<br>vi .bash_profile（使用vi编辑器打开）<br>open .bash_profile（使用文本编辑器打开）<br>touch .bash_profile（创建文件）</p>
+<p>如果第一次创建bash_profile，就使用touch .bash_profile，然后打开编辑，如果已经有了，通过vi .bash_profile（使用vi编辑器打开）</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1694376-06750d216ab84ae2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180507-165420@2x.png"></p>
+<p>至此pod fastlane  都是可用的了。<br><img src="https://upload-images.jianshu.io/upload_images/1694376-6d123d2b95ce8c5c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20180507-165529@2x.png"></p>
+<p>至此，Mac版的Java环境已搭建好。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/09/iOS-仿微信扫一扫，相册识别二维码/" rel="next" title="iOS 仿微信扫一扫，相册识别二维码">
+                <i class="fa fa-chevron-left"></i> iOS 仿微信扫一扫，相册识别二维码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/11/使用记事本编写一个Java程序/" rel="prev" title="使用记事本编写一个Java程序">
+                使用记事本编写一个Java程序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

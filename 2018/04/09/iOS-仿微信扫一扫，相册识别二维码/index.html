@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言  扫一扫还是借助原生，原生扫描很强势，封装扫描工具类，闪光灯，扫描View,借助第三方照片选择器TZImagePickerController实现相册选中识别二维码。  代码  扫一扫使用方法： 1、配置1234self.scanManager = [LXQRCodeScanManager sharedManager]; NSArray *arr = @[AVMetadataObjectT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 仿微信扫一扫，相册识别二维码">
+<meta property="og:url" content="liuxinixn.github.io/2018/04/09/iOS-仿微信扫一扫，相册识别二维码/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="前言  扫一扫还是借助原生，原生扫描很强势，封装扫描工具类，闪光灯，扫描View,借助第三方照片选择器TZImagePickerController实现相册选中识别二维码。  代码  扫一扫使用方法： 1、配置1234self.scanManager = [LXQRCodeScanManager sharedManager]; NSArray *arr = @[AVMetadataObjectT">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-e0bcabc0bcad80d3.gif?imageMogr2/auto-orient/strip">
+<meta property="og:updated_time" content="2018-06-19T02:19:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 仿微信扫一扫，相册识别二维码">
+<meta name="twitter:description" content="前言  扫一扫还是借助原生，原生扫描很强势，封装扫描工具类，闪光灯，扫描View,借助第三方照片选择器TZImagePickerController实现相册选中识别二维码。  代码  扫一扫使用方法： 1、配置1234self.scanManager = [LXQRCodeScanManager sharedManager]; NSArray *arr = @[AVMetadataObjectT">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1694376-e0bcabc0bcad80d3.gif?imageMogr2/auto-orient/strip">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2018/04/09/iOS-仿微信扫一扫，相册识别二维码/"/>
+
+
+
+
+
+  <title>iOS 仿微信扫一扫，相册识别二维码 | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2018/04/09/iOS-仿微信扫一扫，相册识别二维码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS 仿微信扫一扫，相册识别二维码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-09T15:29:21+08:00">
+                2018-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>扫一扫还是借助原生，原生扫描很强势，封装扫描工具类，闪光灯，扫描View,借助第三方照片选择器TZImagePickerController实现相册选中识别二维码。</p>
+<blockquote>
+<p>代码</p>
+</blockquote>
+<p>扫一扫使用方法：</p>
+<p>1、配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">self.scanManager = [LXQRCodeScanManager sharedManager];</div><div class="line"> NSArray *arr = @[AVMetadataObjectTypeQRCode, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code];</div><div class="line"> // AVCaptureSessionPreset1920x1080 推荐使用，对于小型的二维码读取率较高</div><div class="line"> [_scanManager setupSessionPreset:AVCaptureSessionPreset1920x1080 metadataObjectTypes:arr currentController:self];`</div></pre></td></tr></table></figure></p>
+<p>2、处理扫描结果回调 以及 光线对闪光灯的控制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">  //扫描结果回调</div><div class="line">    [_scanManager scanResult:^(NSArray *metadataObjects) &#123;</div><div class="line">//        NSLog(@&quot;metadataObjects - - %@&quot;, metadataObjects);</div><div class="line">        </div><div class="line">        if (metadataObjects != nil &amp;&amp; metadataObjects.count &gt; 0) &#123;</div><div class="line">             [weakSelf.scanManager palySoundName:@&quot;sound.caf&quot;];</div><div class="line">             AVMetadataMachineReadableCodeObject *obj = metadataObjects[0];</div><div class="line">            NSString *url =[obj stringValue];</div><div class="line">           </div><div class="line">            LXQRResultController *Vc =[[LXQRResultController alloc]init];</div><div class="line">            Vc.navTitle = @&quot;扫描结果&quot;;</div><div class="line">            if ([url hasPrefix:@&quot;http&quot;]) &#123;</div><div class="line">                Vc.url = url;</div><div class="line">            &#125;</div><div class="line">            [weakSelf.navigationController pushViewController:Vc animated:YES];</div><div class="line">        </div><div class="line">        &#125; else &#123;</div><div class="line">            [NSObject showMessag:@&quot;暂未识别出扫描的二维码&quot; toView:weakSelf.view afterDelay:1];</div><div class="line">        &#125;</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    </div><div class="line">    //光线变化回调</div><div class="line">    [_scanManager brightnessChange:^(CGFloat brightness) &#123;</div><div class="line">        </div><div class="line">        [weakSelf.scanView lightBtnChangeWithBrightnessValue:brightness];</div><div class="line">        </div><div class="line">    &#125;];</div></pre></td></tr></table></figure>
+<p>相册识别二维码跳转：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">#pragma mark---借助第三方相册</div><div class="line">- (void)rightBarButtonItenAction &#123;</div><div class="line">    </div><div class="line">  </div><div class="line">    TZImagePickerController *pickerController = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];</div><div class="line">    </div><div class="line">    WS(weakSelf);</div><div class="line">    </div><div class="line">    [pickerController setDidFinishPickingPhotosHandle:^(NSArray&lt;UIImage *&gt; *photo, NSArray *assets, BOOL isSelectOriginalPhoto)&#123;</div><div class="line">        </div><div class="line">//        NSLog(@&quot;%@&quot;,photo);</div><div class="line">        </div><div class="line">        UIImage *image = photo[0];</div><div class="line">        // CIDetector(CIDetector可用于人脸识别)进行图片解析，从而使我们可以便捷的从相册中获取到二维码</div><div class="line">        // 声明一个 CIDetector，并设定识别类型 CIDetectorTypeQRCode</div><div class="line">        CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeQRCode context:nil options:@&#123;CIDetectorAccuracy: CIDetectorAccuracyHigh&#125;];</div><div class="line">        </div><div class="line">        // 取得识别结果</div><div class="line">        NSArray *features = [detector featuresInImage:[CIImage imageWithCGImage:image.CGImage]];</div><div class="line">        </div><div class="line">        NSString *resultStr;</div><div class="line">        if (features.count == 0) &#123;</div><div class="line">            </div><div class="line">            [NSObject showMessag:@&quot;暂未识别出二维码&quot; toView:self.view afterDelay:1];</div><div class="line">        &#125;else&#123;</div><div class="line">            for (int index = 0; index &lt; [features count]; index ++) &#123;</div><div class="line">                CIQRCodeFeature *feature = [features objectAtIndex:index];</div><div class="line">                resultStr = feature.messageString;</div><div class="line">            &#125;</div><div class="line">            LXQRResultController *Vc =[[LXQRResultController alloc]init];</div><div class="line">            Vc.navTitle = @&quot;扫描结果&quot;;</div><div class="line">            if ([resultStr hasPrefix:@&quot;http&quot;]) &#123;</div><div class="line">                Vc.url = resultStr;</div><div class="line">            &#125;</div><div class="line">            [weakSelf.navigationController pushViewController:Vc animated:YES];</div><div class="line">      </div><div class="line">        &#125;</div><div class="line">        </div><div class="line">    &#125;];</div><div class="line">    [self presentViewController:pickerController animated:YES completion:nil];</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>最后</p>
+</blockquote>
+<p>效果图：<img src="https://upload-images.jianshu.io/upload_images/1694376-e0bcabc0bcad80d3.gif?imageMogr2/auto-orient/strip" alt="2018-04-09 15_13_59.gif"></p>
+<p>demo地址：<a href="https://github.com/liuxinixn/LXQRCodeExample" target="_blank" rel="noopener">LXQRCode</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/04/UIButton-扩展，利用runtime绑定block点击，图片文字展示方式，扩大点击事件/" rel="next" title="UIButton 扩展，利用runtime绑定block点击，图片文字展示方式，扩大点击事件">
+                <i class="fa fa-chevron-left"></i> UIButton 扩展，利用runtime绑定block点击，图片文字展示方式，扩大点击事件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/11/Java-前言/" rel="prev" title="Java-前言">
+                Java-前言 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

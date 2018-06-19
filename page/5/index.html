@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/07/08/ios-关于AFNetworking请求报500/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/18/Strong-与Copy的区别/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -281,7 +281,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/08/ios-关于AFNetworking请求报500/" itemprop="url">iOS --关于AFNetworking请求报500</a></h1>
+                <a class="post-title-link" href="/2017/08/18/Strong-与Copy的区别/" itemprop="url">iOS -Strong 与 Copy的区别</a></h1>
         
 
         <div class="post-meta">
@@ -293,8 +293,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T20:19:35+08:00">
-                2017-07-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-18T20:19:35+08:00">
+                2017-08-18
               </time>
             
 
@@ -333,9 +333,19 @@
       
         
           
-            <p><code>Error Domain=com.alamofire.error.serialization.response Code=-1011 &quot;Request failed: internal server error (500)&quot; UserInfo={NSUnderlyingError=0x7f8608dea390 {Error Domain=com.alamofire.error.serialization.response Code=-1016 &quot;Request failed: unacceptable content-type: text/html&quot; UserInfo={com.alamofire.serialization.response.error.response= { URL: http://120.76.142.118:8080/nursery/api/login/updateheadportrait } { status code: 500, headers</code></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-7387d90cb93af2a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="请求.png"></p>
-<p>   <code>NSString * invoiceId = responseObject[@&quot;data&quot;][@&quot;invoiceId&quot;];</code><br>如果是上面这样处理.<br>阐述一种情况，如上图，请求结果 invoiceid 通过返回的结果我们可以用NSString类型接收，显示也是没有问题，（MJExtension已经处理过）但是如果这个结果需要作为参数传给后台，后台限制类型是字符串，这个时候就会报错500，需要处理的是<br><code>NSString * invoiceId = [NSString stringWithFormat:@&quot;%@&quot;,responseObject[@&quot;data&quot;][@&quot;invoiceId&quot;]];</code></p>
+            <p>什么时候使用Strong与copy一直分不清，其实这个和浅拷贝和深拷贝有关系。参考：<a href="http://www.cocoachina.com/ios/20150512/11805.html" target="_blank" rel="noopener">参考</a>，文章中有一点不足，稍后会做补充。</p>
+<blockquote>
+<p>当对NSString进行strong 与copy 时，会有什么不同呢：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">#import &quot;ViewController.h&quot;</div><div class="line"></div><div class="line">@interface ViewController ()</div><div class="line">@property(nonatomic,strong)NSString *strongString;</div><div class="line">@property(nonatomic,copy)NSString *copyedString;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ViewController</div><div class="line"></div><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line">    [self test];</div><div class="line">&#125;</div><div class="line">-(void)test&#123;</div><div class="line">    NSString *string =[NSString stringWithFormat:@&quot;abcshshsrhjrshsrjhsrhjs&quot;];</div><div class="line"></div><div class="line">    self.strongString = string;</div><div class="line">    self.copyedString = string;</div><div class="line"></div><div class="line">    NSLog(@&quot;%lu&quot;,[string retainCount]);</div><div class="line">    NSLog(@&quot;orign string:%p,%p&quot;,string,&amp;string);</div><div class="line">    NSLog(@&quot;strong string:%p,%p&quot;,_strongString,&amp;_strongString);</div><div class="line">    NSLog(@&quot;copy string:%p,%p&quot;,_copyedString,&amp;_copyedString);</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>打印截图如下：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-ac1e01ce60b34c10.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Nsstring.png"></p>
+<p><strong>可以很直观的看到，引用计数为3 ，strong和copy后指针指向的地址是相同的，所以说对NSString进行操作时，strong与copy都是对字符串进行了浅拷贝，只是拷贝了指针指向。（补充下参考文章中没有指明的一点，亲测, 当format后面的字符串长度大于等于12时, 引用计数为1. 这个现象存在于initWithFormat:和stringWithFormat:方法, 至于有没有其他方法也会有这种情况不敢确定，当只有很少的字符时，引用计数为-1，有兴趣的可以测试下，只是对文章中进行补充）</strong></p>
+<blockquote>
+<p>对不可变字符串进行strong与copy时会有什么不同呢</p>
+</blockquote>
+<p>修改一行代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">NSMutableString *string =[NSMutableString stringWithFormat:@&quot;agagagagagagaegagaga&quot;];</div><div class="line"></div><div class="line">    self.strongString = string;</div><div class="line">    self.copyedString = string;</div><div class="line"></div><div class="line">    NSLog(@&quot;%lu&quot;,[string retainCount]);</div><div class="line">    NSLog(@&quot;%lu&quot;,[_strongString retainCount]);</div><div class="line">    NSLog(@&quot;%lu&quot;,[_copyedString retainCount]);</div><div class="line"></div><div class="line">    NSLog(@&quot;orign string:%p,%p&quot;,string,&amp;string);</div><div class="line">    NSLog(@&quot;strong string:%p,%p&quot;,_strongString,&amp;_strongString);</div><div class="line">    NSLog(@&quot;copy string:%p,%p&quot;,_copyedString,&amp;_copyedString);</div></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-14c6e3c0d50fd789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="MustableStiring2.png"></p>
+<p><strong>可以很明显的看到string 与_strongString的引用计数为2，_copyString的引用计数为1，string 与_strongString的地址是相同的，而_copyString指向的新的地址，所以对于可变字符串，strong使用了浅拷贝，copy使用了深拷贝</strong></p>
 
           
         
@@ -384,7 +394,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/07/06/iOS-给分类添加基本数据类型属性或者其他属性/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/10/ios-关于启动图/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -403,7 +413,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/06/iOS-给分类添加基本数据类型属性或者其他属性/" itemprop="url">iOS --给分类添加基本数据类型属性或者其他属性</a></h1>
+                <a class="post-title-link" href="/2017/08/10/ios-关于启动图/" itemprop="url">iOS --关于启动图</a></h1>
         
 
         <div class="post-meta">
@@ -415,8 +425,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-06T20:19:35+08:00">
-                2017-07-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-10T20:19:35+08:00">
+                2017-08-10
               </time>
             
 
@@ -455,8 +465,14 @@
       
         
           
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@interface Person (AddAttribute)</div><div class="line">@property(nonatomic,strong)NSString *age;</div><div class="line">@property(nonatomic,assign)NSUInteger age2;</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p>基本数据类型需要转换，此外，<code>static NSString *ageKey = @&quot;ageKey&quot;;</code>只需要当做一个地址中转站即可<br>static NSString *ageKey2 = @”ageKey2”;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#import &quot;Person+AddAttribute.h&quot;</div><div class="line">#import &lt;objc/runtime.h&gt;</div><div class="line">static NSString *ageKey = @&quot;ageKey&quot;;</div><div class="line">static NSString *ageKey2 = @&quot;ageKey2&quot;;</div><div class="line">@implementation Person (AddAttribute)</div><div class="line">-(void)setAge:(NSString *)age&#123;</div><div class="line">    objc_setAssociatedObject(self, &amp;ageKey, age, OBJC_ASSOCIATION_RETAIN);</div><div class="line">&#125;</div><div class="line">-(NSString *)age&#123;</div><div class="line">    return objc_getAssociatedObject(self, &amp;ageKey);</div><div class="line">&#125;</div><div class="line">-(void)setAge2:(NSUInteger)age2&#123;</div><div class="line">    objc_setAssociatedObject(self, &amp;ageKey2, @(age2), OBJC_ASSOCIATION_ASSIGN);</div><div class="line">&#125;</div><div class="line">-(NSUInteger)age2&#123;</div><div class="line">    NSNumber *numVaue = objc_getAssociatedObject(self, &amp;ageKey2);</div><div class="line">    return [numVaue integerValue];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+            <p>关于设置APP启动图有两种方式<br>1.旧方式：</p>
+<p>Launch Images Source 添加启动图，Launch Screen File 中删掉“LaunchScreen”,置为空；</p>
+<p>在Assets文件夹里新建一个iOS Launch Image。然后设置好对应的尺寸。<br>LaunchScreen.storyboard取消勾选LaunchScreen。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-6b32738a85ed58f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"><br><img src="http://upload-images.jianshu.io/upload_images/1694376-63d978758808e783.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-b761e165b46d4036.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"></p>
+<p>2.新方式：<br>Launch Images Source 中不需要添加启动图，Launch Screen File 为“ LaunchScreen”（默认）<br>，LaunchScreen.storyboard添加imageView,imageView上放图片，工程中要有对应的 750<em>1334 的@2x图，1242 </em> 2208的@3x图 ，LaunchScreen.storyboard勾选LaunchScreen。</p>
+<p>如果你的模拟器可以加载启动图个，真机启动图加载不来，那么把 750<em>1334 的@2x图，1242 </em> 2208的@3x图 命名为Defult即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-9fb53080b4090fed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="default.png"></p>
 
           
         
@@ -505,7 +521,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/12/ios-利用runtime添加属性改变UITextField的光标起始位置/">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/07/ios-UIImageView不变形/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="雪晟">
@@ -524,7 +540,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/06/12/ios-利用runtime添加属性改变UITextField的光标起始位置/" itemprop="url">iOS -利用runtime添加属性改变UITextField的光标的起始位置</a></h1>
+                <a class="post-title-link" href="/2017/08/07/ios-UIImageView不变形/" itemprop="url">iOS -UIImageView不变形</a></h1>
         
 
         <div class="post-meta">
@@ -536,8 +552,947 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-12T20:19:35+08:00">
-                2017-06-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-07T20:19:35+08:00">
+                2017-08-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>就两行代码：<br><code>self.icon.contentMode = UIViewContentModeScaleAspectFill;
+ self.icon.clipsToBounds = YES;</code><br>设置前效果：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-852d2af3c78bccbd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>设置后：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-be15728eaf3146c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
+<p>不会变形，唯一美中不足的就是不能完全显示了，被切掉了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/05/iOS-关乎绘制圆弧的一个细节/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/05/iOS-关乎绘制圆弧的一个细节/" itemprop="url">iOS --关于绘制圆弧的一个细节</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-05T20:19:35+08:00">
+                2017-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://upload-images.jianshu.io/upload_images/1694376-09b88e5516654b64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">#import &quot;LXBezierPathView.h&quot;</div><div class="line">@interface LXBezierPathView()</div><div class="line">@property(nonatomic,strong)UILabel *lable;</div><div class="line">@end</div><div class="line">@implementation LXBezierPathView</div><div class="line"></div><div class="line">-(instancetype)initWithFrame:(CGRect)frame</div><div class="line">&#123;</div><div class="line">    self = [super initWithFrame:frame];</div><div class="line">    if (self) &#123;</div><div class="line">        </div><div class="line">        </div><div class="line">        self.lable =[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];</div><div class="line">        self.lable.text = @&quot;哈哈哈&quot;;</div><div class="line">        self.lable.textAlignment = NSTextAlignmentCenter;</div><div class="line">        self.lable.center = CGPointMake((frame.size.width )/2, (frame.size.width)/2);</div><div class="line">        </div><div class="line">        [self addSubview:self.lable];</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line">-(void)drawRect:(CGRect)rect&#123;</div><div class="line">    CAShapeLayer *shapeLayer =[[CAShapeLayer alloc]init];</div><div class="line">    </div><div class="line">    shapeLayer.frame = CGRectMake(0, 0, rect.size.width, rect.size.width);</div><div class="line">    shapeLayer.lineWidth = 10;</div><div class="line">    </div><div class="line">    shapeLayer.fillColor =[UIColor clearColor].CGColor;</div><div class="line">    shapeLayer.strokeColor =[UIColor redColor].CGColor;</div><div class="line">    </div><div class="line">    </div><div class="line">    CGPoint center =  CGPointMake((rect.size.width )/2, (rect.size.width)/2);</div><div class="line">   </div><div class="line">    UIBezierPath *bezierPath =[UIBezierPath bezierPathWithArcCenter:center radius:(rect.size.width )/2 startAngle:-0.5 *M_PI endAngle:0.5 *M_PI clockwise:YES];</div><div class="line">    shapeLayer.path = bezierPath.CGPath;</div><div class="line">    </div><div class="line">    [self.layer insertSublayer:shapeLayer above:shapeLayer];</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们绘制圆弧的时候，会设置贝塞尔曲线的半径为view的一半， 可是真正显示出来，会发现多了一点。这一点的长度刚好是线宽的一般。</p>
+<p>所以需要处理的是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UIBezierPath *bezierPath =[UIBezierPath bezierPathWithArcCenter:center radius:(rect.size.width  - 线宽)/2 startAngle:-0.5 *M_PI endAngle:0.5 *M_PI clockwise:YES];</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/05/iOS--友盟最新分享/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/05/iOS--友盟最新分享/" itemprop="url">iOS --友盟最新分享</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-05T20:19:35+08:00">
+                2017-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>步骤：<br>1、HTTPS key 的添加。<br>2、必要白名单的配置。<br>3、URL  Schemes的配置。QQ要添加两个一个是tencent+appID,一个是QQ+（appid 转16进制）</p>
+<p><code>echo &#39;ibase=10;obase=16;1106301422&#39;|bc</code> <strong>替换掉需要转换的appID</strong><br>cocoapods配置（精简版的，QQ ，微信为例）：<br>  pod ‘UMengUShare/Social/ReducedWeChat’<br>  pod ‘UMengUShare/Social/ReducedQQ’</p>
+<p>执行命令：<code>pod update</code></p>
+<p>跳转的配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">// iOS 8 及以下请用这个</div><div class="line">- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation &#123;</div><div class="line">    if ([Pingpp handleOpenURL:url withCompletion:nil]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //6.3的新的API调用，是为了兼容国外平台(例如:新版facebookSDK,VK等)的调用[如果用6.2的api调用会没有回调],对国内平台没有影响</div><div class="line">    </div><div class="line">    if ([[UMSocialManager defaultManager] handleOpenURL:url sourceApplication:sourceApplication annotation:annotation]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">       return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// iOS 9 以上请用这个</div><div class="line">- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options &#123;</div><div class="line">    if ([Pingpp handleOpenURL:url withCompletion:nil]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if ([[UMSocialManager defaultManager]  handleOpenURL:url options:options]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url</div><div class="line">&#123;</div><div class="line">//    BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url];</div><div class="line">//    if (!result) &#123;</div><div class="line">//        // 其他如支付等SDK的回调</div><div class="line">//    &#125;</div><div class="line">//    return result;</div><div class="line">    </div><div class="line">    if ([[UMSocialManager defaultManager] handleOpenURL:url]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>集成步骤：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">/* 设置友盟appkey */</div><div class="line">     [[UMSocialManager defaultManager] setUmSocialAppkey:YOUMENGKEY];</div><div class="line">    </div><div class="line"></div><div class="line">    //设置微信的appKey和appSecret</div><div class="line">//    https://itunes.apple.com/cn/app/id1092469431</div><div class="line">    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@&quot;&quot; appSecret:@&quot;&quot; redirectURL:@&quot;&quot;];</div><div class="line">    //设置分享到QQ互联的appKey和appSecret</div><div class="line">    // U-Share SDK为了兼容大部分平台命名，统一用appKey和appSecret进行参数设置，而QQ平台仅需将appID作为U-Share的appKey参数传进即可。</div><div class="line">    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@&quot;&quot;  appSecret:nil redirectURL:@&quot;&quot;];</div></pre></td></tr></table></figure>
+<p>调用方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">-(void)shareWithType:(UMSocialPlatformType)type&#123;</div><div class="line">    </div><div class="line">    //创建分享消息对象</div><div class="line">    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];</div><div class="line">    </div><div class="line">    //创建网页内容对象</div><div class="line">    NSString* thumbURL =  @&quot;https://mobile.umeng.com/images/pic/home/social/img-1.png&quot;;</div><div class="line">    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:@&quot;欢迎使用【友盟+】社会化组件U-Share&quot; descr:@&quot;欢迎使用【友盟+】社会化组件U-Share，SDK包最小，集成成本最低，助力您的产品开发、运营与推广！&quot; thumImage:thumbURL];</div><div class="line">    //设置网页地址</div><div class="line">    shareObject.webpageUrl = @&quot;http://mobile.umeng.com/social&quot;;</div><div class="line">    </div><div class="line">    //分享消息对象设置分享内容对象</div><div class="line">    messageObject.shareObject = shareObject;</div><div class="line">    </div><div class="line">    //调用分享接口</div><div class="line">    [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) &#123;</div><div class="line"></div><div class="line">        if (error) &#123;</div><div class="line">            [self.view makeToast:@&quot;分享失败&quot; duration:2 position:nil];</div><div class="line">        &#125;else&#123;</div><div class="line">            [self.view makeToast:@&quot;分享成功&quot; duration:2 position:nil];</div><div class="line">            </div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/08/01/iOS-ping++支付/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/01/iOS-ping++支付/" itemprop="url">iOS -ping ++支付</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-01T20:19:35+08:00">
+                2017-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><code>ping++</code>支付不需要你去各个平台去申请，支付宝支付好像现在第一版是不能接入支付的，初版上线才可以。<code>ping++</code>支付接入的大部分平台的支付功能，接入文档也足够简单。</p>
+<p><a href="https://www.pingxx.com/docs/client/sdk/ios" target="_blank" rel="noopener">ios  接入文档</a></p>
+<p>1、<code>pod &#39;Pingpp&#39;, &#39;~&gt; 2.2.13&#39;</code><br>2、默认会包含支付宝、微信、银联，你也可以自己选择渠道。<br>3、如果要加入其他的渠道支付 ，可以如下这样配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pod &apos;Pingpp/Alipay&apos;, &apos;~&gt; 2.2.13&apos;</div><div class="line">pod &apos;Pingpp/UnionPay&apos;, &apos;~&gt; 2.2.13&apos;</div><div class="line">pod &apos;Pingpp/One&apos;, &apos;~&gt; 2.2.13&apos;</div></pre></td></tr></table></figure></p>
+<p>4、配置URL Schemes，后面会用到。便于区分即可</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-1387e64ab8f547c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>5、appdelegate里引入<code>#import &lt;Pingpp.h&gt;</code>,<br>6、两个跳转方法的配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// iOS 8 及以下请用这个</div><div class="line">- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation &#123;</div><div class="line">    if ([Pingpp handleOpenURL:url withCompletion:nil]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return YES;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// iOS 9 以上请用这个</div><div class="line">- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options &#123;</div><div class="line">    if ([Pingpp handleOpenURL:url withCompletion:nil]) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return YES;&#125;</div></pre></td></tr></table></figure></p>
+<p>7、调用支付：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[Pingpp createPayment:charge</div><div class="line">       viewController:viewController</div><div class="line">         appURLScheme:kUrlScheme</div><div class="line">       withCompletion:^(NSString *result, PingppError *error) &#123;</div><div class="line">    if ([result isEqualToString:@&quot;success&quot;]) &#123;</div><div class="line">        // 支付成功</div><div class="line">    &#125; else &#123;</div><div class="line">        // 支付失败或取消</div><div class="line">        NSLog(@&quot;Error: code=%lu msg=%@&quot;, error.code, [error getMsg]);</div><div class="line">    &#125;</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<p>这里面就会用到前面用到的appURLScheme,payment是后台返回的订单字典。</p>
+<p>我们需要给后台传的两个必须的字段是<br> <code>NSDictionary* dict = @{
+        @&quot;channel&quot; : self.channel,
+        @&quot;amount&quot;  : amountStr
+    };</code><br>确切的说这个是后台调用ping++支付时必须传的两个字段。<br>拿到后台返回的payment就可以调用上面的方法了。</p>
+<p>#####这样简单的ping++ 支付继承完毕了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/07/22/Xcode-突然不能自动换行了怎么办/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/22/Xcode-突然不能自动换行了怎么办/" itemprop="url">Xcode--突然不能自动换行了怎么办</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-22T20:19:35+08:00">
+                2017-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>随便找个文件，然后按下图勾选即可。（只能说有时候xcode真的是神经病啊）</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-2778c8369d9dbf0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="F981D67F-D0D4-4CD8-8F5E-788A2F7B50BB.png"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/07/21/pofile-格式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/21/pofile-格式/" itemprop="url">iOS -podfile格式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-21T20:19:35+08:00">
+                2017-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">source &apos;https://github.com/CocoaPods/Specs.git&apos;</div><div class="line"></div><div class="line">platform :ios, ‘8.0’  //冒号与iOS 之间不允许有空格 制定平台</div><div class="line">inhibit_all_warnings! //屏蔽 CocoaPods 库里面的所有警告</div><div class="line"></div><div class="line">xcodeproj ‘TestDemo.xcodeproj’ //制定xcodeproj</div><div class="line"></div><div class="line">target  ‘TestDemo’ do     //制定target</div><div class="line">  pod ‘AFNetworking’</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>vim 使用<br>使用 VIM 编辑器编写</p>
+<p>$vim podfile 创建 Podfile 文件并使用 VIM 编写</p>
+<p>执行命令之后默认是编辑模式，用键盘输入 i，进入输入模式，输入 pod 信息，完成之后按 Esc 键，退出输入模式进入编辑模式，然后再输入 : 号，进入末行模式，在 : 号后边输入 wq 保存退出 Podfile 文件，回到终端，继续进行下一步。</p>
+<p>VIM 介绍</p>
+<p>VIM 是一个类似于 VI 的著名的功能强大、高度可定制的文本编辑器。</p>
+<p>VI：Visual Interface，可视化接口。</p>
+<p>VIM：VI iMproved，VI 增强版全屏编辑器，又叫模式化编辑器。</p>
+<p>VIM 有 3 种模式：</p>
+<pre><code>编辑模式（命令模式）（默认模式）
+输入模式
+末行模式
+</code></pre><p>VIM 3 种模式间的转换：</p>
+<pre><code>编辑 –&gt; 输入：
+
+i：在当前光标所在字符的前面，转换为输入模式
+I：在当前光标所在行的行首，转换为输入模式
+a：在当前光标所在字符的后面，转换为输入模式
+A：在当前光标所在行的行尾，转换为输入模式
+o：在当前光标所在行的下方，新建一行，转换为输入模式
+O：在当前光标所在行的上方，新建一行，转换为输入模式
+
+输入 –&gt; 编辑：
+
+Esc
+
+编辑 –&gt; 末行：
+
+:
+
+末行 –&gt; 编辑：
+
+Esc + ，或者按两次 Esc
+
+输入模式和末行模式之间不能直接切换
+</code></pre><p>使用 VIM 打开文件：</p>
+<pre><code>$vim 文件名 +# 打开文件，并定位于第 # 行
+
+$vim 文件名 +: 打开文件，并定位于最后一行
+</code></pre><p>使用 VIM 关闭文件：</p>
+<pre><code>末行模式下关闭文件
+
+:w –&gt; 保存
+:w! –&gt; 强行保存
+:q –&gt; 退出
+:q! –&gt; 不保存并退出
+:wq –&gt; 保存并退出
+:x –&gt; 保存并退出
+
+编辑模式下关闭文件
+
+ZZ –&gt; 保存并退出
+</code></pre><p>最后推荐一篇安装cocoapods 最详细的步骤：<a href="http://blog.csdn.net/u013396370/article/details/53939280" target="_blank" rel="noopener">Cocoapods最详细安装步骤</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/07/16/iOS-scrollview上拉显示Navbar下拉隐藏/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/16/iOS-scrollview上拉显示Navbar下拉隐藏/" itemprop="url">iOS -scrollview上拉显示Navbar下拉隐藏</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-16T20:19:35+08:00">
+                2017-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>动画效果：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-59a754e78e69f976.gif?imageMogr2/auto-orient/strip" alt="显示隐藏.gif"></p>
+<p>#####关于下拉隐藏Nabbar,上拉显示，有三种方式：推崇第一种，但是做的还是没简书、知乎那样流畅,第一种是对navbar做了平移，第二种，第三种都是隐藏。。</p>
+<blockquote>
+<p>第一种，和第二种处理时机一样，但是效果更好，并没有处理Navbar 的隐藏。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView&#123;</div><div class="line">    oldY = scrollView.contentOffset.y;</div><div class="line">&#125;</div><div class="line">-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate&#123;</div><div class="line">        if (scrollView.contentOffset.y &gt; oldY) &#123;</div><div class="line">  </div><div class="line"></div><div class="line">            [UIView animateWithDuration:0.3 animations:^&#123;</div><div class="line">                self.navigationController.navigationBar.transform =</div><div class="line">                CGAffineTransformMakeTranslation(0, -64);</div><div class="line"></div><div class="line">            &#125;];</div><div class="line"></div><div class="line">           ;</div><div class="line"></div><div class="line">        &#125;else&#123;</div><div class="line">            [UIView animateWithDuration:0.3 animations:^&#123;</div><div class="line">                self.navigationController.navigationBar.transform =</div><div class="line">                CGAffineTransformIdentity;</div><div class="line"></div><div class="line">            &#125;];</div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line">-(void)viewWillDisappear:(BOOL)animated&#123;</div><div class="line">    self.navigationController.navigationBar.transform = CGAffineTransformIdentity;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>第二种：在开始拖拽的时候保存偏移量，结束拖拽的时候比较当前偏移量，判断是否隐藏Navbar。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView&#123;</div><div class="line">    oldY = scrollView.contentOffset.y;</div><div class="line">&#125;</div><div class="line">-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate&#123;</div><div class="line">        if (scrollView.contentOffset.y &gt; oldY) &#123;</div><div class="line">  </div><div class="line">            [CATransaction begin];</div><div class="line">            [CATransaction setAnimationDuration:1.0];</div><div class="line">            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];</div><div class="line">            //set the position</div><div class="line">            [self.navigationController setNavigationBarHidden:YES animated:YES];</div><div class="line">            [CATransaction commit];</div><div class="line">           ;</div><div class="line"></div><div class="line">        &#125;else&#123;</div><div class="line">            [CATransaction begin];</div><div class="line">            [CATransaction setAnimationDuration:1.0];</div><div class="line">            [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];</div><div class="line">             [self.navigationController setNavigationBarHidden:NO animated:YES];</div><div class="line">             [CATransaction commit];</div><div class="line"></div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>第三种： 是根据拖拽的velocity进行判断，很霸道但是效果不如第一种,,隐藏的时机不对你可以做个比较；</p>
+</blockquote>
+<p>这种方法引自文章：<a href="http://lvesli.com/2016/05/25/ScrollView-NavigationBars-scroll-top-hiden-down-show/" target="_blank" rel="noopener">滑动隐藏</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset&#123;</div><div class="line">    </div><div class="line">    if(velocity.y&gt;0)</div><div class="line">        </div><div class="line">    &#123;</div><div class="line">        </div><div class="line">        [self.navigationController setNavigationBarHidden:YES animated:YES];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    else</div><div class="line">        </div><div class="line">    &#123;</div><div class="line">        </div><div class="line">        [self.navigationController setNavigationBarHidden:NO animated:YES];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>最后选择合适的时候恢复Navbar 的状态，建议放在viewWillDisappear里,否则在进入下一个页面里很突兀。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-(void)viewWillDisappear:(BOOL)animated&#123;</div><div class="line">    [self.navigationController setNavigationBarHidden:NO animated:YES];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/07/15/iOS-runtime基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/15/iOS-runtime基础/" itemprop="url">iOS -runtime基础</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-15T20:19:35+08:00">
+                2017-07-15
               </time>
             
 
@@ -577,977 +1532,58 @@
         
           
             <blockquote>
-<p>下图是<code>UITextField</code>光标的起始位置。如果要改变<code>UITextfield</code>的光标的起始位置，我们只有重写它的方法<code>- (CGRect)editingRectForBounds:(CGRect)bounds;</code>可是，对于继承很不方便，扩展一个分类，可以修改UITextfield的光标位置是最方便不过。</p>
+<p>1、概述<br>2、isa ,SEL，IMP， Method 关系<br>3、消息机制 以及消息转发机制<br>4、runtime的使用场景<br>5、参考文章</p>
 </blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-7c8196950d923fa9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
+<p>……</p>
 <blockquote>
-<p>利用runtime 为UITextfield添加一个属性，<code>tintAjust</code>,通过修改<code>tintAjust</code>可以修改编辑区域起始位置。不能重写上面的方法，可以利用UITextfield的leftview做文章，左边主要是一个透明的视图即可。</p>
+<p>概述：</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@interface UITextField (TintAjust)</div><div class="line">@property(nonatomic,assign)CGFloat tintAjust; //扩展属性</div><div class="line">@end</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#import &quot;UITextField+TintAjust.h&quot;</div><div class="line">#import &lt;objc/runtime.h&gt;</div><div class="line"></div><div class="line">static NSString *adjust = @&quot;adjust&quot;;</div><div class="line">@implementation UITextField (TintAjust)</div><div class="line"></div><div class="line">-(void)setTintAjust:(CGFloat )tintAjust&#123;</div><div class="line">    objc_setAssociatedObject(self, &amp;adjust, @(tintAjust), OBJC_ASSOCIATION_ASSIGN);</div><div class="line">    UILabel * leftView = [[UILabel alloc] initWithFrame:CGRectMake(tintAjust,0,tintAjust,self.frame.size.height)];</div><div class="line">    leftView.backgroundColor = [UIColor clearColor];</div><div class="line">    self.leftView = leftView;</div><div class="line">    self.leftViewMode = UITextFieldViewModeAlways;</div><div class="line">&#125;</div><div class="line">-(CGFloat)tintAjust&#123;</div><div class="line">    id  value = objc_getAssociatedObject(self, &amp;adjust);</div><div class="line">    return  [value floatValue ];</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<p><code>runtime</code>：<code>Objective-C</code>是动态语言，它将很多静态语言在编译和链接时做的事放到了运行时，这个运行时系统就是<code>runtime</code>。<br><code>runtime</code>其实就是一个库，它基本上是用C和汇编写的一套API，这个库使C语言有了面向对象的能力。<br><code>OC</code>是动态语言：函数真正调用的时机是在运行时，在运行的时候根据函数的名称找到对应的函数来调用。</p>
 <blockquote>
-<p>使用方法：<code>textField.tintAjust = 30;</code></p>
+<p>isa ,SEL，IMP， Method 关系</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">UITextField *textField =[[UITextField alloc]initWithFrame:CGRectMake(20, 100, 200, 40)];</div><div class="line">   textField.backgroundColor =[UIColor redColor];</div><div class="line">   textField.borderStyle  = UITextBorderStyleNone;</div><div class="line">   textField.placeholder = @&quot;请选择&quot;;</div><div class="line">   [self.view addSubview:textField];</div><div class="line">   </div><div class="line">   textField.tintAjust = 30;</div><div class="line">   NSLog(@&quot;%f&quot;,textField.tintAjust);</div></pre></td></tr></table></figure>
-<p>效果图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-7af4a8a0836ea899.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/07/ios--做一个完整的渐变进度条/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/07/ios--做一个完整的渐变进度条/" itemprop="url">iOS --做一个完整的渐变进度条</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-07T20:19:35+08:00">
-                2017-06-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>效果图：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-9a52e1e072374670.gif?imageMogr2/auto-orient/strip" alt="gif.gif"></p>
-<p>注意点：<br>1、在设置贝塞尔曲线绘制圆环的时候，半径必须减去线宽的一半。<br>2、蒙版的使用。蒙版与蒙版盖住的layer，最终显示的蒙版的颜色与形状，所以蒙版颜色fillColor设置为透明色。</p>
+<p>OC中，类和类的实例在本质上没有区别，都是对象，任何对象都有<code>isa</code>指针，它指向类或元类</p>
+<p>SEL：<code>SEL</code>（选择器）是方法的<code>selector</code>的指针。方法的<code>selector</code>表示运行时方法的名字。<code>OC</code>在编译时，会依据每一个方法的名字、参数，生成一个唯一的整型标识(Int类型的地址)，这个标识就是<code>SEL</code>。</p>
+<p>IMP：IMP是一个函数指针，指向方法最终实现的首地址。SEL就是为了查找方法的最终实现IMP。</p>
+<p>Method：用于表示类定义中的方法，它的结构体中包含一个SEL和IMP，相当于在SEL和IMP之间作了一个映射。</p>
 <blockquote>
-<p>第一步，绘制背景圆环。</p>
+<p>消息机制与消息转发机制</p>
 </blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-7fbe9e95bf39a556.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></p>
-<p>绘制贝塞尔曲线的时候需要注意默认从0 开始，参考坐标系。贴一张图<br><img src="http://upload-images.jianshu.io/upload_images/1694376-1bcda5b66bafdce6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="20160923141208631.png"></p>
-<p>需要注意的是，绘制圆环，填充色设置为透明，描边色需要设置。贝塞尔曲线的开始的位置为 -0.5 <em>M_PI，结束位置为 1.5 </em>M_PI；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//背景灰色</div><div class="line">   CAShapeLayer *shapeLayer =[[CAShapeLayer alloc]init];</div><div class="line">   </div><div class="line">   shapeLayer.frame = CGRectMake(0, 0, rect.size.width, rect.size.width);</div><div class="line">   shapeLayer.lineWidth = _lineWidth; //线宽</div><div class="line">   </div><div class="line">   shapeLayer.fillColor =[UIColor clearColor].CGColor; //填充颜色</div><div class="line">   shapeLayer.strokeColor = LBColor(50, 50, 50, 1).CGColor; //描边颜色</div><div class="line">   </div><div class="line">   </div><div class="line">   CGPoint center =  CGPointMake((rect.size.width )/2, (rect.size.width)/2);</div><div class="line">   </div><div class="line">   UIBezierPath *bezierPath =[UIBezierPath bezierPathWithArcCenter:center radius:(rect.size.width- _lineWidth)/2 startAngle:-0.5 *M_PI endAngle:1.5 *M_PI clockwise:YES];  //一定要减去线宽的一半</div><div class="line">   shapeLayer.path = bezierPath.CGPath;</div><div class="line">   </div><div class="line">   [self.layer addSublayer:shapeLayer];</div></pre></td></tr></table></figure></p>
+<p>既然是运行时机制， 那么处理消息的时机就在运行时的时候处理。消息直到运行时才绑定到方法的实现上。编译器会将消息表达式<code>[receiver message]</code>转化为一个消息函数，即<code>objc_msgSend(receiver, selector)</code>。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1694376-1361c75641cb8c5c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="objc_class的定义.png"></p>
+<p><code>isa</code>指针的作用：当我们向一个对象发送消息时，<code>runtime</code>会根据这个对象的isa指针找到这个对象所属的类，在这个类的方法列表及父类的方法列表中，寻找与消息对应的<code>selector</code>指向的方法，找到后就运行这个方法。</p>
+<p>执行顺序是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">1. 通过对象的`isa`指针获取类的结构体。</div><div class="line"></div><div class="line">2. 在结构体的方法表里查找方法的`selector`。</div><div class="line"></div><div class="line">3. 如果没有找到`selector`，则通过`objc_msgSend`结构体中指向父类的指针找到父类，并在父类的方法表里查找方法的`selector`。</div><div class="line"></div><div class="line">4. 依次会一直找到`NSObject`。</div><div class="line"></div><div class="line">5. 一旦找到`selector`，就会获取到方法实现`IMP`。</div><div class="line"></div><div class="line">6. 传入相应的参数来执行方法的具体实现。</div><div class="line"></div><div class="line">7. 如果最终没有定位到`selector`，就会走消息转发流程。</div></pre></td></tr></table></figure></p>
+<p>接上面最后一步，如果还是没有定位到<code>selector</code>，那么怎么进行消息转发呢。</p>
+<p>消息转发分为三个步骤：</p>
+<p>#####1、动态方法解析，我们可以利用运行时绑定方法。当消息机制触发时,<code>selector</code>为<code>function</code>时那么就会利用运行时库动态添加一个方法,而这个方法的函数实现是我们用<code>C</code>写的一个函数,这个函数的两个参数为<code>self</code>,和<code>_cmd</code>,因为<code>OC</code>方法的本质就是至少包含两个参数的C函数这两个参数便是隐藏的<code>self</code>,和<code>_cmd</code>,前者是消息接受者,后者是一个<code>SEL</code>指针<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">+(BOOL)resolveClassMethod:(SEL)sel&#123;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">+(BOOL)resolveInstanceMethod:(SEL)sel&#123;</div><div class="line">    if (sel == @selector(function)) &#123;</div><div class="line">        class_addMethod(self, sel,(IMP)function , &quot;v@:&quot;);</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    return [super resolveClassMethod:sel];</div><div class="line">&#125;</div><div class="line">void function (id self,SEL _cmd)</div><div class="line">&#123;</div><div class="line">    NSLog(@&quot;绑定方法&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#####2、习惯一般称为备用者。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-(id)forwardingTargetForSelector:(SEL)aSelector&#123;</div><div class="line">    return [NewObject new]; //这个备用对象实现了需要的方法</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>#####3、如果上面两个方法都没有实现，没有进行动态绑定也没有指定备用对象处理，会执行这一步。首先进行签名，然后返回给<code>NSInvocation</code>对象使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">-(NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector&#123;</div><div class="line">    if (aSelector==@selector(function)) &#123;</div><div class="line">        return [NSMethodSignature signatureWithObjCTypes:&quot;v@:&quot;];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    return [super methodSignatureForSelector: aSelector];</div><div class="line">&#125;</div><div class="line">-(void)forwardInvocation:(NSInvocation *)anInvocation &#123;</div><div class="line">    SEL selector =[anInvocation selector];</div><div class="line">    NewObject *new1=[NewObject new];</div><div class="line">    NewObject *new2=[NewObject new];</div><div class="line">    if ([RP1 respondsToSelector:selector]) &#123;</div><div class="line">        </div><div class="line">        [anInvocation invokeWithTarget:new1];</div><div class="line">        </div><div class="line">    &#125; if ([RP2 respondsToSelector:selector])&#123;</div><div class="line">        </div><div class="line">        [anInvocation invokeWithTarget:new2];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>#####可以看到消息可以可以转发给多个对象进行处理.</p>
 <blockquote>
-<p>第二步绘制渐变色</p>
+<p>runtime的使用场景</p>
 </blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-09dcb8aa8e19613c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></p>
-<p>如上面，是从上到下的蓝色渐变。</p>
-<p>关于梯度渐变引用一张图<br><img src="http://upload-images.jianshu.io/upload_images/1694376-0896036805f6b039.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="梯度.png"></p>
-<p>根据需要选择轴向渐变还是径向渐变。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">//渐变色，加蒙版，显示的蒙版的区域</div><div class="line">   CAGradientLayer *gradientLayer =[[CAGradientLayer alloc]init];</div><div class="line">   </div><div class="line">   gradientLayer.frame = self.bounds;</div><div class="line">   </div><div class="line">   gradientLayer.colors = @[(id)[UIColor hexStringToColor:@&quot;#5F98FC&quot;].CGColor,(id)[UIColor hexStringToColor:@&quot;#47BFFC&quot;].CGColor];</div><div class="line">   </div><div class="line">   </div><div class="line">   gradientLayer.startPoint = CGPointMake(0, 0);</div><div class="line">   gradientLayer.endPoint = CGPointMake(0, 1); //径向渐变</div><div class="line">   </div><div class="line">   [self.layer addSublayer:gradientLayer];</div></pre></td></tr></table></figure>
+<p>1、字典转模型等，可以参考<code>MJExtension</code>源码 或者其他<code>JsonModel</code>等。<br>2、方法交换（黑魔法）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">+ (void)methodSwizzlingWithOriginalSelector:(SEL)originalSelector bySwizzledSelector:(SEL)swizzledSelector&#123;</div><div class="line">    </div><div class="line">    Class class = [self class];</div><div class="line">    //原有方法</div><div class="line">    Method originalMethod = class_getInstanceMethod(class, originalSelector);</div><div class="line">    //替换原有方法的新方法</div><div class="line">    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);</div><div class="line">    //先尝试給源SEL添加IMP，这里是为了避免源SEL没有实现IMP的情况</div><div class="line">    BOOL didAddMethod = class_addMethod(class,originalSelector,</div><div class="line">    method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));</div><div class="line">    </div><div class="line">    if (didAddMethod) &#123;</div><div class="line">        //添加成功：说明源SEL没有实现IMP，将源SEL的IMP替换到交换SEL的IMP</div><div class="line">        class_replaceMethod(class,swizzledSelector,</div><div class="line">                            method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));</div><div class="line">    &#125; else &#123;</div><div class="line">            //添加失败：说明源SEL已经有IMP，直接将两个SEL的IMP交换即可</div><div class="line">            method_exchangeImplementations(originalMethod, swizzledMethod); &#125; &#125;</div><div class="line">            </div><div class="line">           </div><div class="line">@end</div><div class="line"></div><div class="line">@implementation UIViewController (LXSwizzling)</div><div class="line">+ (void)load &#123;</div><div class="line">    static dispatch_once_t onceToken;</div><div class="line">    dispatch_once(&amp;onceToken, ^&#123;</div><div class="line">        [self methodSwizzlingWithOriginalSelector:@selector(viewWillDisappear:) bySwizzledSelector:@selector(sure_viewWillDisappear:)];</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line">- (void)sure_viewWillDisappear:(BOOL)animated &#123;</div><div class="line">    [self sure_viewWillDisappear:animated];</div><div class="line">    [MBProgressHUD hideHUDForView:self.view animated:YES];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>######为什么方法交换调用在+load方法中？<br>在<code>Objective-C runtime</code>会自动调用两个类方法，分别为<code>+load</code>与+ <code>initialize</code>。<code>+load</code> 方法是在类被加载的时候调用的，也就是一定会被调用。而<code>+initialize</code>方法是在类或它的子类收到第一条消息之前被调用的，这里所指的消息包括实例方法和类方法的调用。也就是说<code>+initialize</code>方法是以懒加载的方式被调用的，如果程序一直没有给某个类或它的子类发送消息，那么这个类的+initialize方法是永远不会被调用的。此外<code>+load</code>方法还有一个非常重要的特性，那就是子类、父类和分类中的<code>+load</code>方法的实现是被区别对待的。换句话说在<code>Objective-C runtime</code>自动调用<code>+load</code>方法时，分类中的<code>+load</code>方法并不会对主类中的<code>+load</code>方法造成覆盖。综上所述，<code>+load</code>方法是实现 <code>Method Swizzling</code> 逻辑的最佳“场所”。如需更深入理解</p>
+<p>######为什么方法交换要在<code>dispatch_once</code>中执行？<br>方法交换应该要线程安全，而且保证在任何情况下（多线程环境，或者被其他人手动再次调用<code>+load</code>方法）只交换一次，防止再次调用又将方法交换回来。除非只是临时交换使用，在使用完成后又交换回来。 最常用的解决方案是在<code>+load</code>方法中使用<code>dispatch_once</code>来保证交换是安全的。之前有读者反馈<code>+load</code>方法本身即为线程安全，为什么仍需添加<code>dispatch_once</code>，其原因就在于<code>+load</code>方法本身无法保证其中代码只被执行一次。</p>
+<p>3、给分类添加属性</p>
+<p>使用 objc_getAssociatedObject 和 objc_setAssociatedObject 来做到存取方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#import &quot;Person+AddAttribute.h&quot;</div><div class="line">#import &lt;objc/runtime.h&gt;</div><div class="line">static NSString *ageKey = @&quot;ageKey&quot;;</div><div class="line">static NSString *ageKey2 = @&quot;ageKey2&quot;;</div><div class="line">@implementation Person (AddAttribute)</div><div class="line">-(void)setAge:(NSString *)age&#123;</div><div class="line">    objc_setAssociatedObject(self, &amp;ageKey, age, OBJC_ASSOCIATION_RETAIN);</div><div class="line">&#125;</div><div class="line">-(NSString *)age&#123;</div><div class="line">    return objc_getAssociatedObject(self, &amp;ageKey);</div><div class="line">&#125;</div><div class="line">-(void)setAge2:(NSUInteger)age2&#123;</div><div class="line">    objc_setAssociatedObject(self, &amp;ageKey2, @(age2), OBJC_ASSOCIATION_ASSIGN);</div><div class="line">&#125;</div><div class="line">-(NSUInteger)age2&#123;</div><div class="line">    NSNumber *numVaue = objc_getAssociatedObject(self, &amp;ageKey2);</div><div class="line">    return [numVaue integerValue];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>4.关于强制横竖屏的时候有用到。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) &#123;</div><div class="line">                </div><div class="line">                SEL selector = NSSelectorFromString(@&quot;setOrientation:&quot;);</div><div class="line">                </div><div class="line">                NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];</div><div class="line">                </div><div class="line">                [invocation setSelector:selector];</div><div class="line">                </div><div class="line">                [invocation setTarget:[UIDevice currentDevice]];</div><div class="line">                </div><div class="line">                int val = UIInterfaceOrientationPortrait;</div><div class="line">                </div><div class="line">                [invocation setArgument:&amp;val atIndex:2];</div><div class="line">                </div><div class="line">                [invocation invoke];</div><div class="line">                </div><div class="line">              </div><div class="line">            &#125;</div></pre></td></tr></table></figure></p>
+<p>5、获得成员列表与属性列表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">unsigned int count = 0; /** Ivar:表示成员变量类型 */</div><div class="line">   Ivar *ivars = class_copyIvarList([UITextField class], &amp;count);</div><div class="line">   //获得一个指向该类成员变量的指针</div><div class="line">   for (int i =0; i &lt; count; i ++) &#123;</div><div class="line">       //获得Ivar</div><div class="line">       Ivar ivar = ivars[i];</div><div class="line">       //根据ivar获得其成员变量的名称---&gt;C语言的字符串</div><div class="line">       const char *name = ivar_getName(ivar);</div><div class="line">       NSString *key = [NSString stringWithUTF8String:name];</div><div class="line">       NSLog(@&quot;%d----%@&quot;,i,key);</div><div class="line">   &#125;</div><div class="line">   NSLog(@&quot;\n&quot;);</div><div class="line"></div><div class="line">   </div><div class="line">   </div><div class="line">   unsigned int count2 = 0;</div><div class="line">   //属性列表</div><div class="line">   objc_property_t *properties = class_copyPropertyList([UIButton class], &amp;count2);</div><div class="line">   </div><div class="line">   for (int i =0; i&lt;count2; i++) &#123;</div><div class="line">       objc_property_t property = properties[i];</div><div class="line">       const char  *name = property_getName(property);</div><div class="line">       NSString *key = [NSString stringWithUTF8String:name];</div><div class="line">       NSLog(@&quot;%d ----%@&quot;,i,key);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>6、埋点</p>
+<p><a href="http://www.jianshu.com/p/0497afdad36d" target="_blank" rel="noopener">iOS动态性(二)可复用而且高度解耦的用户统计埋点实现</a></p>
 <blockquote>
-<p>为需要添加蒙版的layer添加蒙版</p>
+<p>参考文章</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">self.foreLayer = [CAShapeLayer layer];</div><div class="line">self.foreLayer.frame = self.bounds;</div><div class="line"></div><div class="line">self.foreLayer.fillColor =[UIColor clearColor].CGColor;</div><div class="line"></div><div class="line">self.foreLayer.lineWidth = self.lineWidth;</div><div class="line">self.foreLayer.strokeColor = [UIColor redColor].CGColor; //颜色没用</div><div class="line"></div><div class="line">self.foreLayer.strokeEnd = 0;</div><div class="line">self.foreLayer.lineCap = kCALineCapRound;</div><div class="line"></div><div class="line">self.foreLayer.path = bezierPath.CGPath;</div><div class="line"></div><div class="line">gradientLayer.mask = self.foreLayer;</div></pre></td></tr></table></figure>
+<p><a href="http://www.jianshu.com/p/d6a68575ce10" target="_blank" rel="noopener">http://www.jianshu.com/p/d6a68575ce10</a></p>
+<p><a href="http://www.jianshu.com/p/91708b5b0501" target="_blank" rel="noopener">http://www.jianshu.com/p/91708b5b0501</a></p>
+<p><a href="http://www.jianshu.com/p/f6dad8e1b848" target="_blank" rel="noopener">Runtime Method Swizzling开发实例汇总</a></p>
 <blockquote>
-<p>因为贝塞尔曲线开始的位置是-0.5 *M_PI，strokeEnd 决定了描边的进度。</p>
+<p>打个断点。后续补充</p>
 </blockquote>
-<p>demo 地址：<a href="https://github.com/liuxinixn/LXBezierPath/tree/master" target="_blank" rel="noopener">渐变圆环进度</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/06/iOS--怎么做成和微信一样的一体键盘？/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/06/iOS--怎么做成和微信一样的一体键盘？/" itemprop="url">iOS -- 怎么做成和微信一样的一体键盘？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T20:19:35+08:00">
-                2017-06-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>前言： 在应用中不可避免使用到评论或者聊天输入框，但是或多或少都会出现下面和简书一样的效果，在返回的时候，输入框会被键盘遮挡，这一点微信和支付宝做的不错，对于细节控来说，这个不能忍。</p>
-</blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-1d2c4e1581e8a803.gif?imageMogr2/auto-orient/strip" alt=""></p>
-<p>可以看到，在侧滑返回的时候自定义的输入框会被键盘遮挡，但是微信或者支付宝的键盘看起来就是一体的，如果你是细节控有强迫症，你肯定也想实现这种一体键盘。</p>
-<p>######1、首先还是要了解监听键盘弹出的通知，<a href="http://www.jianshu.com/p/41bed7c19c9f" target="_blank" rel="noopener">键盘通知</a>,这篇文章大概讲述了几个的通知的区别。</p>
-<p>######2、在使用通知UIKeyboardWillChangeFrameNotification 过程中也不可避免出现和简书聊天键盘返回时输入框被键盘遮挡的问题</p>
-<p>看一下效果：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-dc805a6299f91f59.gif?imageMogr2/auto-orient/strip" alt="WillChangFrame.gif"></p>
-<p>可以看到，跟随键盘做到了，但是在返回的时候还是会出现和简书聊天键盘一样的问题。</p>
-<p>######3、再加上一直很好奇，返回时输入框和键盘一体返回是怎么实现的，如果我们在键盘Frame已经改变的时候然后再操作输入框 会不会实现一体的效果呢 ，所以 试了一下UIKeyboardDidChangeFrameNotification这个通知。</p>
-<p>看一下效果:<br><img src="http://upload-images.jianshu.io/upload_images/1694376-274daef9a6316394.gif?imageMogr2/auto-orient/strip" alt="DidChangeFrame.gif"></p>
-<p>效果图不是很明显，在返回的时候做到了和键盘一起返回，假假的一体效果，但是 在进入Viewcontroller的时候，会 出现问题。后来发现是做了动画效果。</p>
-<p>#####4、最终如果要实现既能跟随键盘一起上下，返回的时候也做成假假的一体效果，我们可以 结合两个通知使用下，我们需要使用的是：UIKeyboardWillChangeFrameNotification的进入页面后的效果，以及UIKeyboardDidChangeFrameNotification页面消失后单独处理键盘（不加动画）</p>
-<p>注册两个通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    [super viewDidLoad];</div><div class="line">    // Do any additional setup after loading the view, typically from a nib.</div><div class="line">    </div><div class="line">  </div><div class="line">    self.view.backgroundColor =[UIColor whiteColor];</div><div class="line">    self.textview =[[UITextView alloc]initWithFrame:CGRectMake(20, KScreenH - 40, KScreenW-40, 40)];</div><div class="line">    self.textview.layer.borderColor = [UIColor blueColor].CGColor;</div><div class="line">    self.textview.layer.borderWidth =3;</div><div class="line">    self.textview.layer.cornerRadius = 5;</div><div class="line">    self.textview.layer.masksToBounds = YES;</div><div class="line">    [self.view addSubview:self.textview];</div><div class="line">    </div><div class="line">    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];</div><div class="line">    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboarDidChangeFrame:) name:UIKeyboardDidChangeFrameNotification object:nil];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>给一个是否做动画的标识；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">-(void)viewWillAppear:(BOOL)animated&#123;</div><div class="line">    [super viewWillAppear:animated];</div><div class="line">    _isDisappear = NO;</div><div class="line">&#125;</div><div class="line">-(void)viewWillDisappear:(BOOL)animated&#123;</div><div class="line">    [super viewWillDisappear:animated];</div><div class="line">    _isDisappear = YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>针对是否需要动画对 通知做区分,DidChangeFrame不需要添加动画：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line">-(void)keyboardWillChangeFrame:(NSNotification *)notification&#123;</div><div class="line">//        if (self.picking) return;</div><div class="line">    /**</div><div class="line">     notification.userInfo = @&#123;</div><div class="line">      键盘弹出\隐藏后的frame</div><div class="line">     UIKeyboardFrameEndUserInfoKey = NSRect: &#123;&#123;0, 352&#125;, &#123;320, 216&#125;&#125;,</div><div class="line">      键盘弹出\隐藏所耗费的时间</div><div class="line">     UIKeyboardAnimationDurationUserInfoKey = 0.25,</div><div class="line">      键盘弹出\隐藏动画的执行节奏（先快后慢，匀速）</div><div class="line">     UIKeyboardAnimationCurveUserInfoKey = 7</div><div class="line">     &#125;</div><div class="line">     */</div><div class="line">    </div><div class="line">    NSDictionary *userInfo = notification.userInfo;</div><div class="line">    // 动画的持续时间</div><div class="line">    double duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];</div><div class="line">    // 键盘的frame</div><div class="line">    CGRect keyboardF = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];</div><div class="line">    NSLog(@&quot;%@&quot;,NSStringFromCGRect(keyboardF));</div><div class="line">    // 执行动画</div><div class="line">    if (!_isDisappear) &#123;</div><div class="line">        [UIView animateWithDuration:duration animations:^&#123;</div><div class="line">            // 工具条的Y值 == 键盘的Y值 - 工具条的高度</div><div class="line">            </div><div class="line">            if (keyboardF.origin.y &gt; self.view.height) &#123;</div><div class="line">                self.textview.y = self.view.height- self.textview.height;</div><div class="line">            &#125;else</div><div class="line">            &#123;</div><div class="line">                self.textview.y = keyboardF.origin.y - self.textview.height;</div><div class="line">            &#125;</div><div class="line">            NSLog(@&quot;%f&quot;,self.textview.y);</div><div class="line">        &#125;];</div><div class="line"></div><div class="line">    &#125;</div><div class="line">   </div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void)keyboarDidChangeFrame:(NSNotification *)notification&#123;</div><div class="line">    //    if (self.picking) return;</div><div class="line">    /**</div><div class="line">     notification.userInfo = @&#123;</div><div class="line">     // 键盘弹出\隐藏后的frame</div><div class="line">     UIKeyboardFrameEndUserInfoKey = NSRect: &#123;&#123;0, 352&#125;, &#123;320, 216&#125;&#125;,</div><div class="line">     // 键盘弹出\隐藏所耗费的时间</div><div class="line">     UIKeyboardAnimationDurationUserInfoKey = 0.25,</div><div class="line">     // 键盘弹出\隐藏动画的执行节奏（先快后慢，匀速）</div><div class="line">     UIKeyboardAnimationCurveUserInfoKey = 7</div><div class="line">     &#125;</div><div class="line">     */</div><div class="line">    </div><div class="line">    NSDictionary *userInfo = notification.userInfo;</div><div class="line">    // 动画的持续时间</div><div class="line">//    double duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];</div><div class="line">    // 键盘的frame</div><div class="line">    CGRect keyboardF = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];</div><div class="line">    NSLog(@&quot;%@&quot;,NSStringFromCGRect(keyboardF));</div><div class="line">    // 执行动画</div><div class="line">//    [UIView animateWithDuration:duration animations:^&#123;</div><div class="line">        // 工具条的Y值 == 键盘的Y值 - 工具条的高度</div><div class="line">    </div><div class="line">    if (_isDisappear) &#123;</div><div class="line">       </div><div class="line">            if (keyboardF.origin.y &gt; self.view.height) &#123;</div><div class="line">                            self.textview.y = self.view.height- self.textview.height;</div><div class="line">            &#125;else</div><div class="line">            &#123;</div><div class="line">                self.textview.y = keyboardF.origin.y - self.textview.height;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">      </div><div class="line">    &#125;</div><div class="line"></div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>最后假假的实现了这个效果：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-4417c56c093d6ada.gif?imageMogr2/auto-orient/strip" alt="Amy.gif"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/05/ios--使用TZImagePickerController上传图片处理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/05/ios--使用TZImagePickerController上传图片处理/" itemprop="url">使用TZImagePickerController上传图片处理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-05T20:19:35+08:00">
-                2017-06-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在使用<code>TZImagePickerController</code> 进行上传图片时，需要自己处理然后上传给服务器。</p>
-<p>太大的图片动辄好几兆的图片上传图片时很慢的。<br>所以我们需要对图片进行适当处理。如果可以指定压缩到指定的尺寸，我们使用<code>CoreGraphics</code>的方法重新绘制一个<code>2X</code>的图片即可，这样既满足了显示清晰度，同时也减小了图片的内存。如果不能指定尺寸，我们需要转data，<code>NSData *data = UIImageJPEGRepresentation(image, 0.5);</code> 这种方法会压缩图片内存，但是像素不会减少，改变的只是图片质量。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">TZImagePickerController *pickerController = [[TZImagePickerController alloc]initWithMaxImagesCount:3 delegate:self];</div><div class="line"></div><div class="line">   NCWS(weakSelf);</div><div class="line">   </div><div class="line">   [pickerController setDidFinishPickingPhotosHandle:^(NSArray&lt;UIImage *&gt; *photo, NSArray *assets, BOOL isSelectOriginalPhoto)&#123;</div><div class="line">       </div><div class="line">       </div><div class="line">       if (photo.count) &#123;</div><div class="line">           </div><div class="line">           NSMutableArray *array = [NSMutableArray array];</div><div class="line">           for (__strong UIImage *image in photo) &#123;</div><div class="line">               image =[image scaleToSize:image.size];</div><div class="line">               NSData *data = UIImageJPEGRepresentation(image, 0.5);</div><div class="line">               image =[UIImage imageWithData:data];</div><div class="line">               [array addObject:image];</div><div class="line">               </div><div class="line">           &#125;</div><div class="line">           weakSelf.feedbackView.addImageA = array;</div><div class="line">       &#125;</div><div class="line">   &#125;];</div><div class="line">    [self presentViewController:pickerController animated:YES completion:nil];</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/04/ios--热词或历史记录的封装/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/04/ios--热词或历史记录的封装/" itemprop="url">iOS --热词或历史记录的封装</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-04T20:19:35+08:00">
-                2017-06-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>对于项目中热词以及历史记录的需求做个封装,可动态添加设置标签，配置好需要配置的参数即可。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-8e199869270e76ac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="热词.png"></p>
-<p>设置以及初始化方法如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@interface LXTagsView : UIView</div><div class="line"></div><div class="line">typedef void(^itemClickBlock) (NSInteger index);</div><div class="line">-(instancetype)initWithFrame:(CGRect)frame ItemClick:(itemClickBlock)click;</div><div class="line"></div><div class="line">@property(nonatomic,strong)UIFont *btnFont;//先赋值；</div><div class="line">@property(nonatomic,assign)CGFloat tagInsetSpace;//标签内间距 (左右各间距)</div><div class="line">@property(nonatomic,assign)CGFloat tagsLineSpace;//标签行间距</div><div class="line">@property(nonatomic,assign)CGFloat tagsMargin;//标签之间的间距</div><div class="line">@property(nonatomic,assign)CGFloat tagSpace;// 整体左右边距</div><div class="line"></div><div class="line">@property(nonatomic,strong)NSArray *tagsArray; // 文字标签数组</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">@property(nonatomic,assign)CGFloat totalH; //返回总高度</div></pre></td></tr></table></figure></p>
-<p>使用方法如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">LXWS(weakSelf);</div><div class="line">    self.tagsView  =[[LXTagsView alloc]initWithFrame:CGRectMake(0, 100, 300, 40) ItemClick:^(NSInteger index) &#123;</div><div class="line">        NSLog(@&quot;%ld&quot;,index);</div><div class="line">        UIViewController *vc =[[UIViewController alloc]init];</div><div class="line">        vc.view.backgroundColor = LXRandomColor;</div><div class="line">        [weakSelf.navigationController pushViewController:vc animated:YES];</div><div class="line">        </div><div class="line">    &#125;];</div><div class="line">    self.tagsView.btnFont =[UIFont systemFontOfSize:16];</div><div class="line">    self.tagsView.tagSpace = 10;</div><div class="line">    self.tagsView.tagsMargin = 5;</div><div class="line">    self.tagsView.tagInsetSpace = 15;</div><div class="line">    self.tagsView.tagsLineSpace =10;</div><div class="line">    self.tagsView.tagsArray = @[@&quot;无知安徽噶人噶人家噶加热机噶进入国阿嘎热噶人噶热狗如果&quot;,@&quot;风云变幻&quot;,@&quot;施耐庵&quot;,@&quot;唉&quot;,@&quot;西门吹雪&quot;,@&quot;呵呵哒你没打答题的啊啊噶而过阿哥人argergaergaergag阿嘎人家居然就噶间距根据&quot;,@&quot;他大舅他二舅都是他就&quot;,@&quot;窿窿啦啦&quot;,@&quot;火麒麟&quot;,@&quot;合欢花&quot;,@&quot;暴走大事件&quot;,@&quot;非诚勿扰&quot;,@&quot;呵呵呵&quot;,@&quot;miss&quot;,@&quot;我爱你&quot;,@&quot;thelife&quot;,@&quot;永生&quot;,@&quot;不忘&quot;,@&quot;你&quot;,@&quot;爱好个人拉人给哈尔和老公哈拉尔挂了会考&quot;,@&quot;爱人噶人更好惹过哈儿噶尔 &quot;,@&quot;爱人杆儿隔热管&quot;,@&quot;爱人跟人&quot;];</div><div class="line">    </div><div class="line">    [self.view addSubview:self.tagsView];</div></pre></td></tr></table></figure>
-<p>.m如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div></pre></td><td class="code"><pre><div class="line">#import &quot;LXTagsView.h&quot;</div><div class="line">#import &quot;UIColor+Expanded.h&quot;</div><div class="line">@interface LXTagsView()</div><div class="line">@property(nonatomic,copy)itemClickBlock itemBlock;</div><div class="line">@property(nonatomic,strong)NSMutableArray *tagsFrames;</div><div class="line">@end</div><div class="line">@implementation LXTagsView</div><div class="line"></div><div class="line">-(instancetype)initWithFrame:(CGRect)frame ItemClick:(itemClickBlock)click&#123;</div><div class="line">    self = [super initWithFrame:frame];</div><div class="line">    </div><div class="line">    if (self) &#123;</div><div class="line">        </div><div class="line">        self.itemBlock = click;</div><div class="line">        </div><div class="line">        _tagsLineSpace = 5;</div><div class="line">        _tagsMargin = 10;</div><div class="line">        _tagInsetSpace = 10;</div><div class="line">        _tagSpace = 10;</div><div class="line">         _totalH = 0;</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">-(void)setTagsArray:(NSArray *)tagsArray&#123;</div><div class="line">    </div><div class="line">    _tagsArray  = tagsArray;</div><div class="line">    </div><div class="line">    </div><div class="line">    [self configTagsFrames];</div><div class="line">    </div><div class="line">    [self setupUI];</div><div class="line">    </div><div class="line">&#125;</div><div class="line">#pragma mark--- 设置frame ---</div><div class="line">-(void)configTagsFrames&#123;</div><div class="line">    </div><div class="line">    </div><div class="line">    CGFloat orignHMargin = _tagSpace;// 水平方向左边距</div><div class="line">    CGFloat orignVerMargin = 5;//上边距参考父视图</div><div class="line">    CGFloat btnH = 25;</div><div class="line">    _totalH = 0;</div><div class="line">    </div><div class="line">   </div><div class="line">    [self.tagsFrames removeAllObjects];</div><div class="line">    </div><div class="line">    </div><div class="line">    for (int i = 0; i&lt; _tagsArray.count; i++) &#123;</div><div class="line">        NSString *string = _tagsArray[i];</div><div class="line">        CGFloat btnW = [self stringSizeWithFont:_btnFont string:string height:btnH].width +  2*_tagInsetSpace;</div><div class="line">        //增加个判断，当字符串过长是，超过屏幕总宽度- 两侧间距，重置标签宽度</div><div class="line">        if (btnW + _tagSpace *2 &gt;= KScreenW) &#123;</div><div class="line">            btnW = KScreenW - 2 *_tagSpace;</div><div class="line">        &#125;</div><div class="line">        if ( orignHMargin + btnW + _tagSpace &gt; KScreenW) &#123;</div><div class="line">            orignVerMargin = orignVerMargin + btnH + _tagsLineSpace;</div><div class="line">            orignHMargin = _tagSpace;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        CGRect frame= CGRectMake(orignHMargin, orignVerMargin, btnW, btnH);</div><div class="line">        [self.tagsFrames addObject:NSStringFromCGRect(frame)];</div><div class="line">        </div><div class="line">        //判断是 最后一个标签的时候保存其高度；</div><div class="line">        if (i == _tagsArray.count -1) &#123;</div><div class="line">            _totalH = orignVerMargin + btnH +10;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        orignHMargin = orignHMargin + btnW +_tagsMargin;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //设置整体高度</div><div class="line">     self.height = _totalH;</div><div class="line"></div><div class="line">&#125;</div><div class="line">#pragma mark---设置UI--</div><div class="line">-(void)setupUI&#123;</div><div class="line">    </div><div class="line">     [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) &#123;</div><div class="line">         [obj removeFromSuperview];</div><div class="line">     &#125;];</div><div class="line">    </div><div class="line">    </div><div class="line">    for (int i = 0; i&lt; _tagsFrames.count; i++) &#123;</div><div class="line">        CGRect frame = CGRectFromString(_tagsFrames[i]);</div><div class="line">        </div><div class="line">       </div><div class="line">        LxButton *button =[LxButton LXButtonWithTitle:_tagsArray[i] titleFont:_btnFont Image:nil backgroundImage:nil backgroundColor:[UIColor hexStringToColor:@&quot;f5f5f5&quot;] titleColor:[UIColor blackColor] frame:frame];</div><div class="line">        </div><div class="line">        //对于宽度的处理</div><div class="line">        if (frame.size.width == KScreenW - 2 *_tagSpace) &#123;</div><div class="line">            </div><div class="line">            [button setTitleEdgeInsets:UIEdgeInsetsMake(0, _tagInsetSpace, 0, _tagInsetSpace)];</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        </div><div class="line">        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:button.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(frame.size.height/2, frame.size.height/2)];</div><div class="line">        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];</div><div class="line">        maskLayer.frame = button.bounds;</div><div class="line">        maskLayer.path = maskPath.CGPath;</div><div class="line">        button.layer.mask = maskLayer;</div><div class="line">        button.buttonID = i;</div><div class="line">        </div><div class="line">        [button addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];</div><div class="line">        [self addSubview:button];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void)btnClick:(LxButton *)button</div><div class="line">&#123;</div><div class="line">    if (_itemBlock) &#123;</div><div class="line">        _itemBlock(button.buttonID);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">-(void)setBtnFont:(UIFont *)btnFont</div><div class="line">&#123;</div><div class="line">    _btnFont = btnFont;</div><div class="line">&#125;</div><div class="line">-(void)setTagInsetSpace:(CGFloat)tagInsetSpace</div><div class="line">&#123;</div><div class="line">    _tagInsetSpace = tagInsetSpace;</div><div class="line">&#125;</div><div class="line">-(void)setTagsLineSpace:(CGFloat)tagsLineSpace</div><div class="line">&#123;</div><div class="line">    _tagsLineSpace = tagsLineSpace;</div><div class="line">&#125;</div><div class="line">-(void)setTagsMargin:(CGFloat)tagsMargin</div><div class="line">&#123;</div><div class="line">    _tagsMargin = tagsMargin;</div><div class="line">&#125;</div><div class="line">-(void)setTagSpace:(CGFloat)tagSpace</div><div class="line">&#123;</div><div class="line">    _tagSpace = tagSpace;</div><div class="line">&#125;</div><div class="line">-(NSMutableArray *)tagsFrames&#123;</div><div class="line">    if (!_tagsFrames) &#123;</div><div class="line">        _tagsFrames =[NSMutableArray array];</div><div class="line">    &#125;</div><div class="line">    return _tagsFrames;</div><div class="line">&#125;</div><div class="line">#pragma mark---动态高度---</div><div class="line">-(CGSize)stringSizeWithFont:(UIFont *)font string:(NSString *)string height:(CGFloat)height</div><div class="line">&#123;</div><div class="line">    CGRect rect =[string boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, height) options: NSStringDrawingUsesLineFragmentOrigin attributes:@&#123;NSFontAttributeName:font&#125; context:nil];</div><div class="line">    return rect.size;</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-c367920005f3c8bb.gif?imageMogr2/auto-orient/strip" alt="热词.gif"></p>
-<p>demo 地址：<a href="https://github.com/liuxinixn/LXHotwords" target="_blank" rel="noopener">热词搜索</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/01/如何建立自己的公有pod/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/01/如何建立自己的公有pod/" itemprop="url">如何建立自己的公有pod</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T20:19:35+08:00">
-                2017-06-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>如果在开发过程中，想把自己封装的一些控件、分类打包以pod的形式供自己或团队使用，我们可以建立公有pod或者私有pod。</p>
-<p>以下指示介绍如何打包公有pod供自己使用。</p>
-<blockquote>
-<p>步骤 1.<br>前往githup建立库。</p>
-</blockquote>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-d7e7f537ab28dbb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="cocoapods.png"></p>
-<p>选择MIT 认证（得到cocopods的认证许可。）</p>
-<p>接下来把你需要的上传的工具类放到目录下：<br><img src="http://upload-images.jianshu.io/upload_images/1694376-49d5f9fa7964dff8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="目录.png"></p>
-<blockquote>
-<p>步骤二：</p>
-</blockquote>
-<p>创建<code>.podspec</code>文件。<br>LXUtils 是你新建库的名字。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod spec create LXUtils</div></pre></td></tr></table></figure></p>
-<p>执行完上面的命令，会生成一个<code>.podspec</code>的文件。</p>
-<p>可以编辑打开，我是通过webStorm打开的（不知道为什么，通过默认的编辑器打开后面进行spec文件验证的时候经常提示语法错误，所以建议还是通过工具打开吧）：</p>
-<p>最好还是根据里面的修改。<strong>切记tag选项前面必须添加v</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">s.name         = &quot;LXUtils&quot;</div><div class="line"> s.version      = &quot;0.0.1&quot;</div><div class="line"> s.summary      = &quot;common tools on iOS.&quot;</div><div class="line">s.description  = &lt;&lt;-DESC</div><div class="line">                common tool and category on iOS</div><div class="line">                   DESC</div><div class="line">  s.homepage     = &quot;https://github.com/liuxinixn/LXUtils&quot;</div><div class="line">s.license      = &quot;MIT&quot;</div><div class="line"> s.author             = &#123; &quot;miss李&quot; =&gt; &quot;missli_211@163.com&quot; &#125;</div><div class="line">s.platform     = :ios, &quot;8.0&quot;</div><div class="line"></div><div class="line">s.source       = &#123; :git =&gt; &quot;https://github.com/liuxinixn/LXUtils.git&quot;, :tag =&gt; &quot;v#&#123;s.version&#125;&quot; &#125;</div><div class="line"></div><div class="line">s.source_files  = &quot;LXUtils&quot;, &quot;LXUtils/**/*.&#123;h,m&#125;&quot;</div><div class="line">s.framework  = &quot;UIKit&quot;</div><div class="line">  s.requires_arc = true</div></pre></td></tr></table></figure></p>
-<p>修改好对应的选项之后，验证spec文件的合法性。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod lib lint LXUtils.podspec</div></pre></td></tr></table></figure>
-<p><img src="http://upload-images.jianshu.io/upload_images/1694376-2451430d50684d6f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="验证.png"></p>
-<blockquote>
-<p>步骤3.</p>
-</blockquote>
-<p>绑定tag，然后发布。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git tag &apos;0.0.1&apos;  </div><div class="line">git push --tags  </div><div class="line">git push origin master</div></pre></td></tr></table></figure>
-<p>下面的命令需要你去邮箱进行验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod trunk register jiushu0228@163.com &apos;LXUtils&apos;</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod trunk me</div></pre></td></tr></table></figure>
-<p>验证结果<br><img src="http://upload-images.jianshu.io/upload_images/1694376-ab447eea62a47b42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="邮箱验证.png"></p>
-<p>如果出现下面的问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[!] The spec did not pass validation, due to 1 error.</div><div class="line">[!] The validator for Swift projects uses Swift 3.0 by default, if you are using a different version of swift you can use a `.swift-version` file to set the version for your Pod. For example to use Swift 2.3, run: </div><div class="line">    `echo &quot;2.3&quot; &gt; .swift-version`.</div></pre></td></tr></table></figure></p>
-<p>执行<code>echo &quot;2.3&quot; &gt; .swift-version</code>即可。</p>
-<p>最后一步，发布spec到cocoapods</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod trunk push LXUtils.podspec</div></pre></td></tr></table></figure>
-<p>成功后如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">zhongzhideMini:LXUtils chenergou$ pod trunk push LXUtils.podspec</div><div class="line">Updating spec repo `master`</div><div class="line"></div><div class="line">CocoaPods 1.3.0.beta.3 is available.</div><div class="line">To update use: `sudo gem install cocoapods --pre`</div><div class="line">[!] This is a test version we&apos;d love you to try.</div><div class="line"></div><div class="line">For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3</div><div class="line"></div><div class="line">Validating podspec</div><div class="line"> -&gt; LXUtils (0.0.1)</div><div class="line"></div><div class="line">Updating spec repo `master`</div><div class="line"></div><div class="line">CocoaPods 1.3.0.beta.3 is available.</div><div class="line">To update use: `sudo gem install cocoapods --pre`</div><div class="line">[!] This is a test version we&apos;d love you to try.</div><div class="line"></div><div class="line">For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.3.0.beta.3</div><div class="line"></div><div class="line"></div><div class="line">--------------------------------------------------------------------------------</div><div class="line"> 🎉  Congrats</div><div class="line"></div><div class="line"> 🚀  LXUtils (0.0.1) successfully published</div><div class="line"> 📅  November 8th, 02:45</div><div class="line"> 🌎  https://cocoapods.org/pods/LXUtils</div><div class="line"> 👍  Tell your friends!</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>补充</p>
-</blockquote>
-<p>提交后需要等一段时间，如果搜不到试试下面的方法：<br>根据路径<code>~/Library/Caches/CocoaPods/search_index.json</code>找到这个json文件，然后删除即可。</p>
-<p>重新’pod search LXUtils’</p>
-<p><code>输出：Creating search index for spec repo &#39;master&#39;.. Done!，稍等片刻就会出现所有带RxSwift字段的类库出现。</code></p>
-<blockquote>
-<p>如何更新pod</p>
-</blockquote>
-<p>1.升级版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git tag &apos;v0.0.2&apos;  </div><div class="line">git push --tags  </div><div class="line">git push origin master</div></pre></td></tr></table></figure>
-<p>2.更新到cocoapods<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod trunk push LXUtils.podspec</div></pre></td></tr></table></figure></p>
-<p>成功之后，如果搜索不到执行<code>pod setup</code></p>
-<p>```</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/01/iOS-几种图片或Gif异步加载/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/01/iOS-几种图片或Gif异步加载/" itemprop="url">iOS -几种图片或Gif异步加载</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T20:19:35+08:00">
-                2017-06-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>iOS 加载加载图片的方式主流的有两种（本地图片略过）：<br>1、SDWebImage。<br>2、YYWebImage。</p>
-<p>######区别：主流框架主要使用SDWebImage进行处理图片，这点不用说明，但是SDWebImage在处理Gif的时候不是很友好，在github上SDWebImage 是这样说明的，需要额外pod ‘SDWebImage/Gif’.<br><img src="http://upload-images.jianshu.io/upload_images/1694376-7df605e3a582d996.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="提示.png"></p>
-<p>附上地址：<a href="https://github.com/Flipboard/FLAnimatedImage" target="_blank" rel="noopener">FLAnimatedImage</a></p>
-<p>FLAnimatedImage 加载网络GIF方法:</p>
-<p><code>cell.icon1.animatedImage =[[FLAnimatedImage alloc]initWithAnimatedGIFData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@&quot;http://images2015.cnblogs.com/blog/607542/201601/607542-20160123090832343-133952004.gif&quot;]]];</code><br>icon 的类型是<code>FLAnimatedImageView</code>；</p>
-<p>所以看得出来SDWebImage在支持Gif处理不是很好。</p>
-<p>接下来简单介绍一下YYWebImage：</p>
-<p>YYWebImage 是一个异步图片加载框架 (YYKit 组件之一).<br>其设计目的是试图替代 SDWebImage、PINRemoteImage、FLAnimatedImage 等开源框架，它支持这些开源框架的大部分功能，同时增加了大量新特性、并且有不小的性能提升。<br>它底层用 YYCache 实现了内存和磁盘缓存, 用 YYImage 实现了 WebP/APNG/GIF 动图的解码和播放。你可以查看这些项目以获得更多信息。</p>
-<p>异步的图片加载，支持 HTTP 和本地文件。<br>支持 GIF、APNG、WebP 动画（动态缓存，低内存占用）。<br>支持逐行扫描、隔行扫描、渐进式图像加载。<br>UIImageView、UIButton、MKAnnotationView、CALayer 的 Category 方法支持。<br>常见图片处理：模糊、圆角、大小调整、裁切、旋转、色调等。<br>高性能的内存和磁盘缓存。<br>高性能的图片设置方式，以避免主线程阻塞。<br>每个类和方法都有完善的文档注释。</p>
-<p>从 URL 加载图片：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 加载网络图片</div><div class="line">imageView.yy_imageURL = [NSURL URLWithString:@&quot;http://github.com/logo.png&quot;];</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 加载本地图片</div><div class="line">imageView.yy_imageURL = [NSURL fileURLWithPath:@&quot;/tmp/logo.png&quot;];</div></pre></td></tr></table></figure>
-<p>加载动图<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 只需要把 `UIImageView` 替换为 `YYAnimatedImageView` 即可。</div><div class="line">UIImageView *imageView = [YYAnimatedImageView new];</div><div class="line">imageView.yy_imageURL = [NSURL URLWithString:@&quot;http://github.com/ani.webp&quot;];</div></pre></td></tr></table></figure></p>
-<p>渐进式图片加载<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 渐进式：边下载边显示</div><div class="line">[imageView yy_setImageWithURL:url options:YYWebImageOptionProgressive];</div><div class="line">	</div><div class="line">// 渐进式加载，增加模糊效果和渐变动画 （见本页最上方的GIF演示）</div><div class="line"></div><div class="line">[imageView yy_setImageWithURL:url options:YYWebImageOptionProgressiveBlur ｜ YYWebImageOptionSetImageWithFadeAnimation];</div></pre></td></tr></table></figure></p>
-<p>加载、处理图片</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">// 1. 下载图片</div><div class="line">// 2. 获得图片下载进度</div><div class="line">// 3. 调整图片大小、加圆角</div><div class="line">// 4. 显示图片时增加一个淡入动画，以获得更好的用户体验</div><div class="line">	</div><div class="line">[imageView yy_setImageWithURL:url</div><div class="line">   placeholder:nil</div><div class="line">   options:YYWebImageOptionSetImageWithFadeAnimation</div><div class="line">   progress:^(NSInteger receivedSize, NSInteger expectedSize) &#123;</div><div class="line">       progress = (float)receivedSize / expectedSize;</div><div class="line">   &#125;</div><div class="line">   transform:^UIImage *(UIImage *image, NSURL *url) &#123;</div><div class="line">       image = [image yy_imageByResizeToSize:CGSizeMake(100, 100) contentMode:UIViewContentModeCenter];</div><div class="line">       return [image yy_imageByRoundCornerRadius:10];</div><div class="line">   &#125;</div><div class="line">   completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) &#123;</div><div class="line">       if (from == YYWebImageFromDiskCache) &#123;</div><div class="line">           NSLog(@&quot;load from disk cache&quot;);</div><div class="line">       &#125;</div><div class="line">   &#125;];</div></pre></td></tr></table></figure>
-<p>图片缓存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">YYImageCache *cache = [YYWebImageManager sharedManager].cache;</div><div class="line">    </div><div class="line">// 获取缓存大小</div><div class="line">cache.memoryCache.totalCost;</div><div class="line">cache.memoryCache.totalCount;</div><div class="line">cache.diskCache.totalCost;</div><div class="line">cache.diskCache.totalCount;</div><div class="line">    </div><div class="line">// 清空缓存</div><div class="line">[cache.memoryCache removeAllObjects];</div><div class="line">[cache.diskCache removeAllObjects];</div><div class="line">    </div><div class="line">// 清空磁盘缓存，带进度回调</div><div class="line">[cache.diskCache removeAllObjectsWithProgressBlock:^(int removedCount, int totalCount) &#123;</div><div class="line">   // progress</div><div class="line">&#125; endBlock:^(BOOL error) &#123;</div><div class="line">   // end</div><div class="line">&#125;];</div></pre></td></tr></table></figure></p>
-<p>关于YYWebImage 加载GIF补充一点，如果是加载本地Gif:<br><code>YYImage *image = [YYImage imageNamed:name];
-YYAnimatedImageView *imageView = [[YYAnimatedImageView alloc] initWithImage:image];</code></p>
-<p>加载网络Gif：<br>简单介绍两种：<br>1、同步方法，会卡顿（FLAnimatedImage在处理的时候卡顿会好很多，很流畅）。<br><code>imageView.yy_imageURL = [NSURL URLWithString:@&quot;http://upload-images.jianshu.io/upload_images/1694376-b9646eecf2139f87.gif&quot;];</code><br>2、异步方法：<br>```<br>imageView yy_setImageWithURL:[NSURL URLWithString:@”<a href="http://i.imgur.com/8KHKhxI.gif" target="_blank" rel="noopener">http://i.imgur.com/8KHKhxI.gif</a>“]<br>                          placeholder:nil<br>                              options:YYWebImageOptionProgressiveBlur | YYWebImageOptionShowNetworkActivity | YYWebImageOptionSetImageWithFadeAnimation<br>                             progress:^(NSInteger receivedSize, NSInteger expectedSize) {<br>                                 if (expectedSize &gt; 0 &amp;&amp; receivedSize &gt; 0) {</p>
-<pre><code>      }
-  }
- transform:nil
-completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) {
-
-    NSLog(@&quot;%ld&quot;,stage);
-}];
-</code></pre><p>`</p>
-<p>总结：<br>1、单独加载网络图片SDWebImage基本符合常用需求。<br>2、FLAnimatedImage在处理Gif的时候很流畅。至于SDWebImage配合FLAnimatedImage暂时没有发现，官网demo的事例可以参考一下。FLAnimatedImage到是可以单独加载Gif。<br>3、YYWebImage 可以加载网络图片以及良好的支持Gif，可以自定义多种过渡效果。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2017/06/01/ios--版本比较/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="雪晟">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="雪晟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/01/ios--版本比较/" itemprop="url">iOS  --版本比较</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T20:19:35+08:00">
-                2017-06-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">#define currentVersion  [[NSBundle mainBundle] objectForInfoDictionaryKey:@&quot;CFBundleShortVersionString&quot;]</div><div class="line"></div><div class="line">#pragma mark--判断版本号是不是大于本地版本</div><div class="line">-(BOOL)compareVesionWithServerVersion:(NSString *)version&#123;</div><div class="line">    NSArray *versionArray = [version componentsSeparatedByString:@&quot;.&quot;];//服务器返回版</div><div class="line">    NSArray *currentVesionArray = [currentVersion componentsSeparatedByString:@&quot;.&quot;];//当前版本</div><div class="line">    NSInteger a = (versionArray.count&gt; currentVesionArray.count)?currentVesionArray.count : versionArray.count;</div><div class="line">    </div><div class="line">    if ([version isEqualToString:currentVersion]) &#123;</div><div class="line">        return NO;</div><div class="line">    &#125;</div><div class="line">    for (int i = 0; i&lt; a; i++) &#123;</div><div class="line">        NSInteger a = [[versionArray objectAtIndex:i] integerValue];</div><div class="line">        NSInteger b = [[currentVesionArray objectAtIndex:i] integerValue];</div><div class="line">        if (a &gt; b) &#123;</div><div class="line">            //            NSLog(@&quot;有新版本&quot;);</div><div class="line">            return YES;</div><div class="line">        &#125;else if(a &lt; b)&#123;</div><div class="line">            return NO;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    if (versionArray.count &gt; currentVesionArray.count) &#123;</div><div class="line">        return YES;</div><div class="line">    &#125;</div><div class="line">    if (versionArray.count &lt; currentVesionArray.count ) &#123;</div><div class="line">        return NO;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    return NO;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
           
         
@@ -1587,7 +1623,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1636,7 +1672,7 @@ completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStag
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">100</span>
+                <span class="site-state-item-count">112</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

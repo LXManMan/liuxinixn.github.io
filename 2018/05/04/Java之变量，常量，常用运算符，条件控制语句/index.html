@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言  项目太紧， Java 学习停滞了一些。一般的套路都是关键字，变量，常量，数据类型,运算符，控制语句，数组，方法（也叫函数）等等。所以还是走一遍。  变量，常量  首先每种语言都有自己的关键字，后面的命名是不能用的。 Java的关键字： 不需要全部记住，混个眼熟就行，Java 关键字是区分大小写的哦！ 标识符 何为标识符，标识符就是用于给Java 程序中变量、类、方法等命名的符号。  标识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java之变量，常量，常用运算符，条件控制语句">
+<meta property="og:url" content="liuxinixn.github.io/2018/05/04/Java之变量，常量，常用运算符，条件控制语句/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="前言  项目太紧， Java 学习停滞了一些。一般的套路都是关键字，变量，常量，数据类型,运算符，控制语句，数组，方法（也叫函数）等等。所以还是走一遍。  变量，常量  首先每种语言都有自己的关键字，后面的命名是不能用的。 Java的关键字： 不需要全部记住，混个眼熟就行，Java 关键字是区分大小写的哦！ 标识符 何为标识符，标识符就是用于给Java 程序中变量、类、方法等命名的符号。  标识">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-7b568afd98bb8805.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-48bff790fb57d235.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-0ddf4c0321c85d06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-8d888233ec105431.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-f71ebee70818da47.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-249ae225313bcf33.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-9b7b709339c0fe19.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-991864f5353ca0ca.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1694376-88b589774ac78527.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-f827e45df8dc11b4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-7b3949e8546e8548.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-fe2438342b8319a7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-0c2e1bada0b532d0.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1694376-e60b03b0d69b2450.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-06-19T02:27:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java之变量，常量，常用运算符，条件控制语句">
+<meta name="twitter:description" content="前言  项目太紧， Java 学习停滞了一些。一般的套路都是关键字，变量，常量，数据类型,运算符，控制语句，数组，方法（也叫函数）等等。所以还是走一遍。  变量，常量  首先每种语言都有自己的关键字，后面的命名是不能用的。 Java的关键字： 不需要全部记住，混个眼熟就行，Java 关键字是区分大小写的哦！ 标识符 何为标识符，标识符就是用于给Java 程序中变量、类、方法等命名的符号。  标识">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1694376-7b568afd98bb8805.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2018/05/04/Java之变量，常量，常用运算符，条件控制语句/"/>
+
+
+
+
+
+  <title>Java之变量，常量，常用运算符，条件控制语句 | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2018/05/04/Java之变量，常量，常用运算符，条件控制语句/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java之变量，常量，常用运算符，条件控制语句</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-04T18:18:21+08:00">
+                2018-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>项目太紧， Java 学习停滞了一些。<br>一般的套路都是关键字，变量，常量，数据类型,运算符，控制语句，数组，方法（也叫函数）等等。所以还是走一遍。</p>
+<blockquote>
+<p>变量，常量</p>
+</blockquote>
+<p>首先每种语言都有自己的<code>关键字</code>，后面的命名是不能用的。</p>
+<p>Java的关键字：<img src="https://upload-images.jianshu.io/upload_images/1694376-7b568afd98bb8805.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="53588ce900019bee05190178.jpg"></p>
+<p>不需要全部记住，混个眼熟就行，<code>Java 关键字是区分大小写的哦！</code></p>
+<p><code>标识符</code></p>
+<p>何为标识符，标识符就是用于给<code>Java</code> 程序中变量、类、方法等命名的符号。</p>
+<ol>
+<li><p>标识符可以由字母、数字、下划线（_）、美元符（$）组成，但不能包含 @、%、空格等其它特殊字符，不能以数字开头。譬如：<code>123name</code>就是不合法滴</p>
+<ol>
+<li><p>标识符不能是 <code>Java</code>关键字和保留字（ <code>Java</code>预留的关键字，以后的升级版本中有可能作为关键字），但可以包含关键字和保留字。如：不可以使用 <code>void</code> 作为标识符，但是 <code>Myvoid</code>可以</p>
+</li>
+<li><p>标识符是严格区分大小写的。 所以涅，一定要分清楚 <code>hello</code>和 <code>Hello</code> 是两个不同的标识符哦！</p>
+</li>
+<li><p>标识符的命名最好能反映出其作用，做到见名知意。</p>
+</li>
+</ol>
+</li>
+</ol>
+<p><code>变量</code></p>
+<p>变量就相当于一个容器，你可以放置任何东西。</p>
+<p>在 <code>Java</code>中，我们通过三个元素描述变量：变量类型、变量名以及变量值。</p>
+<p>房间，客人，房间类型三者之间的关系可以类比三个元素的关系。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1694376-48bff790fb57d235.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="535a6c6000015cda02910139.jpg"></p>
+<p>如果我们把变量比作是酒店的房间，要存储的数据就好比要住宿的客人，我们可以根据客人的要求安排其入住“标准间”或者是“总统套房”，并且可以根据房间名字快速查找到入住客人的信息。同理，在<code>Java</code>程序中，我们也可以根据所需要保存的数据的格式，将其保存在指定类型的变量空间中，并且通过变量名快速定位！</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1694376-0ddf4c0321c85d06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="WX20180504-181621@2x.png"></p>
+<p>变量的命名规范：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1694376-8d888233ec105431.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="535a3ad60001057407870199.jpg"></p>
+<p>1、变量名由多单词组成时，第一个单词的首字母小写，其后单词的首字母大写，俗称骆驼式命名法（也称驼峰命名法），如 <code>myAge</code></p>
+<p>2、变量命名时，尽量简短且能清楚的表达变量的作用，做到见名知意。如：定义变量名 <code>stuName</code>保存“学生姓名”信息</p>
+<p>PS： <code>Java</code> 变量名的长度没有限制，但 <code>Java</code> 语言是区分大小写的，所以 <code>price</code> 和 <code>Price</code> 是两个完全不同的变量！</p>
+<p><code>数据类型</code></p>
+<p>通常情况下，为了方便物品的存储，我们会规定每个盒子可以存放的物品种类，就好比在“放臭袜子的盒子”里我们是不会放“面包”的！同理，变量的存储也讲究“分门别类”！</p>
+<p>Java 语言是一种强类型语言。通俗点说就是，在 <code>Java</code> 中存储的数据都是有类型的，而且必须在编译时就确定其类型。 Java` 中有两类数据类型：<br><img src="https://upload-images.jianshu.io/upload_images/1694376-f71ebee70818da47.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="535a6fc10001b8f604930247.jpg"></p>
+<p>常用的基本数据类型有：<img src="https://upload-images.jianshu.io/upload_images/1694376-249ae225313bcf33.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="540d468d000167bd07000130.jpg"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class HelloWorld&#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">		   String   name=&quot;雪晟&quot;;</div><div class="line">		    char  sex=&apos;男&apos;;</div><div class="line">		    int  num=18;</div><div class="line">		   double   price=120.5;</div><div class="line">		   boolean   isOK=true;</div><div class="line">		System.out.println(name);</div><div class="line">		System.out.println(sex);</div><div class="line">		System.out.println(num);</div><div class="line">		System.out.println(price);</div><div class="line">		System.out.println(isOK);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么变量的<code>规则</code>需要说明一下,基本上计算机语言习惯都是酱紫。</p>
+<p>1、<code>Java</code> 中的变量需要先声明后使用<br>2、变量使用时，可以声明变量的同时进行初始化<br>3、变量中每次只能赋一个值，但可以修改多次<br>4、<code>main</code> 方法中定义的变量必须先赋值，然后才能输出<br>5、虽然语法中没有提示错误，但在实际开发中，变量名不建议使用中文，容易产生安全隐患，譬如后期跨平台操作时出现乱码等等</p>
+<p>每种语言都有它的<code>自动类型转换</code>。<br>在 Java 程序中，不同的基本数据类型的数据之间经常需要进行相互转换。例如：<img src="https://upload-images.jianshu.io/upload_images/1694376-9b7b709339c0fe19.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5359d0c70001ffe202530066.jpg"></p>
+<p>代码中<code>int</code>型变量<code>score1</code> 可以直接为<code>double</code>型变量 <code>score2</code> 完成赋值操作，运行结果为：<code>82.0</code></p>
+<p>这种转换称为##自动类型转换##。</p>
+<p>当然自动类型转换是需要满足特定的条件的：</p>
+<ol>
+<li>目标类型能与源类型兼容，如 <code>double</code>型兼容<code>int</code> 型，但是 <code>char</code>型不能兼容<code>int</code> 型</li>
+<li>目标类型大于源类型，如 <code>double</code> 类型长度为 8 字节， int 类型为 4 字节，因此<code>double</code>类型的变量里直接可以存放 <code>int</code> 类型的数据，但反过来就不可以了。</li>
+</ol>
+<p><code>Java中的强制类型转换</code></p>
+<p>当程序中需要将 <code>double</code>型变量的值赋给一个<code>int</code> 型变量，该如何实现呢？</p>
+<p>显然，这种转换是不会自动进行的！因为 <code>int</code> 型的存储范围比<code>double</code> 型的小。此时就需要通过强制类型转换来实现了。<br>语法：( 数据类型 ) 数值<img src="https://upload-images.jianshu.io/upload_images/1694376-991864f5353ca0ca.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="53688a9a0001f73404330109.jpg"></p>
+<p><code>强制类型转换可能会造成数据的丢失哦</code></p>
+<p><code>Java常量的应用</code><br>所谓常量，我们可以理解为是一种特殊的变量，它的值被设定后，在程序运行过程中不允许改变。这个和OC就有一点不同。</p>
+<p>语法：final 常量名 = 值;</p>
+<p><a href="http://img.mukewang.com/53689a880001620703990081.jpg" target="_blank" rel="noopener"><img src="http://upload-images.jianshu.io/upload_images/1694376-88b589774ac78527.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></a></p>
+<p><code>常量名一般使用大写字符</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class HelloWorld&#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">		</div><div class="line">		final String MAN = &quot;男&quot;;</div><div class="line">		final String WOMAN = &quot;女&quot;;</div><div class="line">		System.out.println(MAN);</div><div class="line">		System.out.println(WOMAN);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>运算符</p>
+</blockquote>
+<p>运算符是一种“功能”符号，用以通知 Java 进行相关的运算。<br>通用的运算符有以下几种：<br>1.算术运算符<br><img src="https://upload-images.jianshu.io/upload_images/1694376-f827e45df8dc11b4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5368a1a10001da7603050148.jpg"><br>2.赋值运算符<br><img src="https://upload-images.jianshu.io/upload_images/1694376-7b3949e8546e8548.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5360ebdb0001401b04430144.jpg"></p>
+<p>3.比较运算符</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1694376-fe2438342b8319a7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="536063f00001b7b904350145.jpg"></p>
+<p>4.逻辑运算符<br><img src="https://upload-images.jianshu.io/upload_images/1694376-0c2e1bada0b532d0.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5360ef9700017b9405870095.jpg"><br>5.条件运算符</p>
+<p>条件运算符（ ? : ）也称为 “三元运算符”。</p>
+<p>语法形式：布尔表达式 ？ 表达式1 ：表达式2</p>
+<p>运算过程：如果布尔表达式的值为 <code>true</code> ，则返回 表达式<code>1</code> 的值，否则返回 表达式<code>2</code> 的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public class HelloWorld&#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">		int score=68;</div><div class="line">		String mark = (68 &gt; 60) ? &quot;及格&quot; : &quot;不及格&quot;;</div><div class="line">		System.out.println(&quot;考试成绩如何：&quot;+mark);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Java中运算符的优先级</p>
+<p>所谓优先级，就是在表达式中的运算顺序。Java 中常用的运算符的优先级如下表所示：<br><img src="https://upload-images.jianshu.io/upload_images/1694376-e60b03b0d69b2450.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5360ffb90001b4f002620224.jpg"></p>
+<p><strong>级别为 1 的优先级最高，级别 11 的优先级最低</strong></p>
+<blockquote>
+<p>条件控制语句</p>
+</blockquote>
+<p>基本上都是if ..else ,do while(先执行，后判断do…while 语句保证循环至少被执行一次),for,break(跳出循环，执行后面的语句)， continue（跳过本次循环，执行下一次循环）。基本上没有什么变化。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/13/第一个Java程序/" rel="next" title="第一个Java程序">
+                <i class="fa fa-chevron-left"></i> 第一个Java程序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/08/iOS--接入谷歌地图/" rel="prev" title="iOS 接入谷歌地图">
+                iOS 接入谷歌地图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

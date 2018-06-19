@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言  项目为国外服务，所以需要接入谷歌地图。第一次接入，简单总结下。  谷歌地图接入  同百度，高德地图，先去 谷歌开发者中心注册，拿到key，绑定应用的bundleId. 第一步： 通过pod 集成pod &amp;#39;GoogleMaps&amp;#39; 1234567891011121314151617添加下面的key到plist中，添加定位相关私有信息配置。&amp;lt;key&amp;gt;LSApplic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 接入谷歌地图">
+<meta property="og:url" content="liuxinixn.github.io/2018/05/08/iOS--接入谷歌地图/index.html">
+<meta property="og:site_name" content="雪晟">
+<meta property="og:description" content="前言  项目为国外服务，所以需要接入谷歌地图。第一次接入，简单总结下。  谷歌地图接入  同百度，高德地图，先去 谷歌开发者中心注册，拿到key，绑定应用的bundleId. 第一步： 通过pod 集成pod &amp;#39;GoogleMaps&amp;#39; 1234567891011121314151617添加下面的key到plist中，添加定位相关私有信息配置。&amp;lt;key&amp;gt;LSApplic">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-19T02:21:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 接入谷歌地图">
+<meta name="twitter:description" content="前言  项目为国外服务，所以需要接入谷歌地图。第一次接入，简单总结下。  谷歌地图接入  同百度，高德地图，先去 谷歌开发者中心注册，拿到key，绑定应用的bundleId. 第一步： 通过pod 集成pod &amp;#39;GoogleMaps&amp;#39; 1234567891011121314151617添加下面的key到plist中，添加定位相关私有信息配置。&amp;lt;key&amp;gt;LSApplic">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="liuxinixn.github.io/2018/05/08/iOS--接入谷歌地图/"/>
+
+
+
+
+
+  <title>iOS 接入谷歌地图 | 雪晟</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">雪晟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">十年饮冰，难凉热血。我是雪晟。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="liuxinixn.github.io/2018/05/08/iOS--接入谷歌地图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="雪晟">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雪晟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS 接入谷歌地图</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-08T18:55:21+08:00">
+                2018-05-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>项目为国外服务，所以需要接入谷歌地图。第一次接入，简单总结下。</p>
+<blockquote>
+<p>谷歌地图接入</p>
+</blockquote>
+<p>同百度，高德地图，先去 <a href="https://developers.google.cn/maps/" target="_blank" rel="noopener">谷歌开发者中心注册</a>，拿到key，绑定应用的bundleId.</p>
+<p>第一步：</p>
+<p>通过pod 集成<br><code>pod &#39;GoogleMaps&#39;</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">添加下面的key到plist中，添加定位相关私有信息配置。</div><div class="line">&lt;key&gt;LSApplicationQueriesSchemes&lt;/key&gt;</div><div class="line">&lt;array&gt;</div><div class="line">    &lt;string&gt;googlechromes&lt;/string&gt;</div><div class="line">    &lt;string&gt;comgooglemaps&lt;/string&gt;</div><div class="line">&lt;/array&gt;</div><div class="line">//引入框架</div><div class="line"></div><div class="line">@import GoogleMaps;</div><div class="line"></div><div class="line">AppDelegate 里完成对SDK的注册，完成认证。（key如果异常，地图会加载不出来）</div><div class="line"></div><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line"></div><div class="line">    [GMSServices provideAPIKey:YOUR_API_KEY];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第二步：显示地图。</p>
+<p>引入框架，<code>#import &lt;GoogleMaps/GoogleMaps.h&gt;</code></p>
+<p>谷歌地图的视图通过类<code>GMSMapView</code>来展示。<br><code>GMSMapView</code>初始化方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">+ (instancetype)mapWithFrame:(CGRect)frame camera:(GMSCameraPosition *)camera;</div></pre></td></tr></table></figure></p>
+<p>可以看到camera不能为空，camera可以理解为一个初始定位点，后面我们获得用户的位置之后，可以重新设置用户的位置为定位点。</p>
+<blockquote>
+<p>地图的一些主要属性：</p>
+</blockquote>
+<p>是否启用指南针<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mapView.settings.compassButton = YES;</div></pre></td></tr></table></figure></p>
+<p>仅当启用了<code>My Location</code> 按钮时，<code>My Location</code> 按钮才会出现在屏幕的右下角。 当用户点击该按钮时，如果当前已知用户的位置，摄像头会以动画方式聚焦于用户的当前位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mapView.settings.myLocationButton = YES;</div></pre></td></tr></table></figure>
+<p>是否禁用平移和缩放手势<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mapView.settings.scrollGestures = NO;</div><div class="line"> mapView.settings.zoomGestures = NO;</div></pre></td></tr></table></figure></p>
+<p>然后就是大头针，（谷歌地图成其为标记<code>GMSMarker</code>对象）,要添加标记，请创建一个包含 position 和 title 的 GMSMarker 对象，并设置其 map,您可以通过将 marker.appearAnimation 属性设置为 kGMSMarkerAnimationPop，从而以动画呈现方式将新标记添加到地图中。</p>
+<p>添加标记：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CLLocationCoordinate2D position = CLLocationCoordinate2DMake(10, 10);</div><div class="line">GMSMarker *marker = [GMSMarker markerWithPosition:position];</div><div class="line">marker.title = @&quot;Hello World&quot;;</div><div class="line">marker.map = mapView;</div></pre></td></tr></table></figure>
+<p>删除标记(通过将 <code>GMSMarke</code> 的 <code>map</code> 属性设置为<code>nil</code>，您可以将标记从地图中移除。 或者，您也可以通过调用 <code>GMSMapView</code> 的<code>clear</code> 方法移除目前地图上的所有叠层（包括标记）。)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">marker.map = nil;</div></pre></td></tr></table></figure>
+<p>清除所有标记，叠层<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[mapView clear]</div></pre></td></tr></table></figure></p>
+<p>标记（大头针的一些属性）<br>//更改大头针的图片<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">marker.icon = [GMSMarker markerImageWithColor:[UIColor blackColor]];</div><div class="line">marker.icon = [UIImage imageNamed:@&quot;house&quot;];</div></pre></td></tr></table></figure></p>
+<p>自定义大头针,使用<code>iconView</code>属性,<code>iconView</code> 不会响应用户交互，因为它只是一张视图快照</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">marker.iconView = [[UIImageView alloc] initWithImage:house];</div></pre></td></tr></table></figure>
+<p>添加信息窗口（也就是弹出气泡）</p>
+<p>您可以在用户点按标记时，通过信息窗口向其显示信息。 一次只能显示一个信息窗口。 如果用户点按另一个标记，将隐藏当前窗口，并打开新的信息窗口。</p>
+<p>信息窗口的内容由 <code>title 和 snippet</code>属性定义。 如果 <code>title</code> 和 <code>snippet</code> 属性均为空白或 <code>nil</code>，点击该标记将不会显示信息窗口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CLLocationCoordinate2D position = CLLocationCoordinate2DMake(51.5, -0.127);</div><div class="line">GMSMarker *london = [GMSMarker markerWithPosition:position];</div><div class="line">london.title = @&quot;London&quot;;</div><div class="line">london.map = mapView;</div></pre></td></tr></table></figure>
+<p>使用 `snippet 属性，您可以添加其他文本，该文本将以较小的字体显示在标题下面。 超出信息窗口宽度的字符串将自动换成多行。 特别长的消息可能会被截断</p>
+<p>将信息窗口设置为自动刷新</p>
+<p>如果您希望信息窗口的新属性或内容在更改后立即显示，而不用等待信息窗口先隐藏更改然后再将其显示，请将标记的<code>tracksInfoWindowChanges</code>设为 <code>YES</code> 或<code>true</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">marker.tracksInfoWindowChanges = YES;</div></pre></td></tr></table></figure></p>
+<p>更改信息窗口的位置</p>
+<p>息窗口绘制时朝向设备屏幕的相反方向，在其关联标记的上方居中显示。 您可以通过设置 <code>infoWindowAnchor</code> 属性来更改信息窗口相对于标记的位置。 此属性可接受 <code>CGPoint</code>，它定义为<code>(x,y)</code> 偏移，其中 x 和 y 的范围都介于<code>0.0</code> 和 <code>1.0</code>之间。默认偏移为<code>(0.5, 0.0)</code>，即顶部中心。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">CLLocationCoordinate2D position = CLLocationCoordinate2DMake(51.5, -0.127);</div><div class="line">GMSMarker *london = [GMSMarker markerWithPosition:position];</div><div class="line">london.title = @&quot;London&quot;;</div><div class="line">london.snippet = @&quot;Population: 8,174,100&quot;;</div><div class="line">london.infoWindowAnchor = CGPointMake(0.5, 0.5);</div><div class="line">london.icon = [UIImage imageNamed:@&quot;house&quot;];</div><div class="line">london.map = mapView;</div></pre></td></tr></table></figure></p>
+<p>至于如何定位，获取用户的位置，使用系统的<code>CLLocationManager</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">-(CLLocationManager *)locationManager&#123;</div><div class="line">    if (!_locationManager) &#123;</div><div class="line">        _locationManager = [[CLLocationManager alloc]init];</div><div class="line">        _locationManager.delegate = self;</div><div class="line">        [_locationManager requestAlwaysAuthorization];//授权方式，如果在后台也需要定位，那就选择 requestAlwaysAuthorization。</div><div class="line">        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;//最精确的定位</div><div class="line">        _locationManager.distanceFilter = kCLDistanceFilterNone; // 默认是kCLDistanceFilterNone，也可以设置其他值，表示用户移动的距离小于该范围内就不会接收到通知</div><div class="line">       </div><div class="line">    &#125;</div><div class="line">    return _locationManager;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>遵守协议后，实现下面的代理方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations&#123;</div><div class="line">    CLLocation *curLocation = [locations lastObject];</div><div class="line">    // 通过location  或得到当前位置的经纬度</div><div class="line">    CLLocationCoordinate2D curCoordinate2D = curLocation.coordinate;</div><div class="line">    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:curCoordinate2D.latitude longitude:curCoordinate2D.longitude zoom:6];</div><div class="line"></div><div class="line">    self.mapView.camera = camera;//这句话很重要很重要，将我们获取到的经纬度转成影像并赋值给地图的camera属性</div><div class="line">    [self.locationManager stopUpdatingLocation];//定位成功后停止定位</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>最后看一下<code>&lt;GMSMapViewDelegate&gt;</code> 几个常用协议参考,可以类比一下百度或者高德地图，基本大同小异。</p>
+<p>//地图即将移动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)mapView:(GMSMapView *)mapView willMove:(BOOL)gesture;</div></pre></td></tr></table></figure></p>
+<p>在特定坐标点击手势后调用，但仅在未点击标记时调用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate;</div></pre></td></tr></table></figure></p>
+<p>在点击标记后调用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker;</div></pre></td></tr></table></figure></p>
+<p>在点击标记的信息窗口后调用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)mapView:(GMSMapView *)mapView didTapInfoWindowOfMarker:(GMSMarker *)marker;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>end</p>
+</blockquote>
+<p>电脑，手机都需要翻墙。负责地图会加载不出来。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/04/Java之变量，常量，常用运算符，条件控制语句/" rel="next" title="Java之变量，常量，常用运算符，条件控制语句">
+                <i class="fa fa-chevron-left"></i> Java之变量，常量，常用运算符，条件控制语句
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/10/iOS-GCD线程同步以及AFNetworking多次请求线程依赖/" rel="prev" title="iOS GCD线程同步以及AFNetworking多次请求线程依赖">
+                iOS GCD线程同步以及AFNetworking多次请求线程依赖 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="http://upload.jianshu.io/users/upload_avatars/1694376/4b7e25bd43ee.jpg"
+              alt="雪晟" />
+          
+            <p class="site-author-name" itemprop="name">雪晟</p>
+            <p class="site-description motion-element" itemprop="description">多去尝试你从未尝试的。</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liuxinixn" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/3d7c50f31b88" target="_blank" title="Jianshu">
+                  
+                    <i class="fa fa-fw fa-flag"></i>Jianshu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">雪晟</span>
+
+  
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
